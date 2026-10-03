@@ -1,0 +1,60 @@
+name: speed_to_power
+description: >
+  A developer with a signed tenant and a 2028 deadline. Interconnection wait
+  and permitting risk dominate. Carbon is a constraint on the tenant's side,
+  not the developer's.
+
+facility:
+  mw: 300
+  online_year: 2028
+  cooling: hybrid
+  acres: 150
+
+horizon: 2026
+scenario: rcp85
+
+gates:
+  states_include: []
+  states_exclude: []
+  max_grid_co2_lb_mwh: null
+  min_renewable_share: null
+  max_queue_median_age_years: 3
+  max_water_stress_if_evaporative: 3
+  hazard_percentile_max:
+    nri_inland_flood_score: 90
+    nri_coastal_flood_score: 90
+    nri_wildfire_score: 95
+    nri_hurricane_score: 90
+    nri_tornado_score: null
+  exclude_moratorium_active: true
+  exclude_moratorium_state_active: true
+  min_fiber_share_locations: 0.5
+  max_permitting_risk: 0.6             # model probability; null disables
+  exclude_air_nonattainment: false
+  min_population: 10000
+
+weights:
+  energy_carbon: 0.08
+  water: 0.07
+  climate_resilience: 0.08
+  grid_infrastructure: 0.30
+  land: 0.07
+  community: 0.10
+  permitting: 0.30
+
+pillar_floor_percentile: 10
+
+robustness:
+  samples: 2000
+  concentration: 20
+  top_n: 10
+
+portfolio:
+  sites: 1
+  diversity_keys: [state, grid_subregion]
+  diversity_penalty: 0.3
+
+output:
+  top_n: 10
+  explain: true
+  include_excluded: true

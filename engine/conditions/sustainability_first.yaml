@@ -1,0 +1,60 @@
+name: sustainability_first
+description: >
+  A hyperscaler with a 24/7 carbon-free energy commitment and a water
+  stewardship target. Willing to wait for power. Scores the 2050 horizon
+  because the facility will run for 30 years.
+
+facility:
+  mw: 300
+  online_year: 2030
+  cooling: dry
+  acres: 200
+
+horizon: 2050
+scenario: rcp85
+
+gates:
+  states_include: []
+  states_exclude: []
+  max_grid_co2_lb_mwh: 600
+  min_renewable_share: 0.3
+  max_queue_median_age_years: 6
+  max_water_stress_if_evaporative: 1
+  hazard_percentile_max:
+    nri_inland_flood_score: 85
+    nri_coastal_flood_score: 85
+    nri_wildfire_score: 90
+    nri_hurricane_score: 90
+    nri_tornado_score: null
+  exclude_moratorium_active: true
+  exclude_moratorium_state_active: false
+  min_fiber_share_locations: 0.4
+  max_permitting_risk: null             # model probability; null disables
+  exclude_air_nonattainment: false
+  min_population: 5000
+
+weights:
+  energy_carbon: 0.30
+  water: 0.25
+  climate_resilience: 0.15
+  grid_infrastructure: 0.08
+  land: 0.05
+  community: 0.07
+  permitting: 0.10
+
+pillar_floor_percentile: 25
+
+robustness:
+  samples: 2000
+  concentration: 20
+  top_n: 10
+
+portfolio:
+  sites: 1
+  diversity_keys: [state, grid_subregion]
+  diversity_penalty: 0.3
+
+output:
+  top_n: 10
+  explain: true
+  include_excluded: true

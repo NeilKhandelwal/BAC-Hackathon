@@ -1,0 +1,105 @@
+# Maps county feature columns to scoring pillars.
+# direction: higher_better | lower_better
+# transform: optional, applied before ranking. log1p is the only one supported in v1.
+# horizon_2050: the column to swap in when conditions.horizon is 2050; {scenario} is replaced.
+# Columns missing from the feature table are skipped with a warning.
+
+energy_carbon:
+  - column: grid_co2_lb_mwh
+    direction: lower_better
+  - column: grid_renewable_share
+    direction: higher_better
+  - column: queue_active_mw_clean
+    direction: higher_better
+    transform: log1p
+  - column: queue_operational_mw_5y
+    direction: higher_better
+    transform: log1p
+  - column: solar_ghi_kwh_m2_day
+    direction: higher_better
+  - column: wind_speed_100m_ms
+    direction: higher_better
+
+water:
+  - column: drought_share_weeks_d2plus
+    direction: lower_better
+  - column: nri_drought_score
+    direction: lower_better
+  - column: water_stress_bws
+    direction: lower_better
+    horizon_2050: water_stress_2050
+  - column: grid_water_gal_mwh
+    direction: lower_better
+  - column: cdd_hist                      # fewer cooling degree days means less cooling water and energy
+    direction: lower_better
+    horizon_2050: cdd_2050_{scenario}
+
+climate_resilience:
+  - column: nri_inland_flood_score
+    direction: lower_better
+  - column: nri_coastal_flood_score
+    direction: lower_better
+  - column: nri_wildfire_score
+    direction: lower_better
+  - column: nri_hurricane_score
+    direction: lower_better
+  - column: nri_heat_wave_score
+    direction: lower_better
+  - column: nri_tornado_score
+    direction: lower_better
+  - column: nri_winter_score
+    direction: lower_better
+  - column: days_above_95f_hist
+    direction: lower_better
+    horizon_2050: days_above_95f_2050_{scenario}
+
+grid_infrastructure:
+  - column: queue_median_age_years
+    direction: lower_better
+  - column: queue_withdrawal_rate
+    direction: lower_better
+  - column: fiber_share_locations
+    direction: higher_better
+  - column: dc_existing_count               # existing cluster implies power and fiber exist
+    direction: higher_better
+    transform: log1p
+  - column: saidi_minutes
+    direction: lower_better
+  - column: dist_ixp_km
+    direction: lower_better
+
+land:
+  - column: pop_density_per_sqkm           # low density means land is available
+    direction: lower_better
+    transform: log1p
+  - column: land_area_sqkm
+    direction: higher_better
+    transform: log1p
+  - column: pct_developed
+    direction: lower_better
+  - column: pct_protected
+    direction: lower_better
+  - column: pct_cropland                   # the brief and the opposition data both flag farmland loss
+    direction: lower_better
+
+community:
+  - column: heat_sink_score                # heat-reuse opportunity
+    direction: higher_better
+  - column: greenhouse_acres
+    direction: higher_better
+    transform: log1p
+  - column: population                     # workforce proxy
+    direction: higher_better
+    transform: log1p
+
+permitting:
+  - column: permitting_discretionary_risk  # model output; see docs/permitting.md
+    direction: lower_better
+  - column: air_nonattainment_count
+    direction: lower_better
+  - column: water_permit_risk
+    direction: lower_better
+  - column: state_policy_risk
+    direction: lower_better
+  - column: pct_forest_wetland
+    direction: lower_better
