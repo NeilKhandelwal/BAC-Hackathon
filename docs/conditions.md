@@ -75,29 +75,48 @@ output:
 **Gates** run first and produce a log per county: passed, failed on which
 gate, or unknown because the column is null. Unknown never excludes. The
 results carry the gate log so the UI can show "why not."
+`hazard_percentile_max` caps the national percentile of each hazard score.
+Most hazards are zero for many counties (coastal flood is zero for about
+2,700 inland counties), so a cap below that share excludes every exposed
+county. The report lists `hazard_gate_nonzero_counties` so you can see
+when that happens.
 
 **Horizon** swaps the climate columns. With `horizon: 2050`, `cdd_hist`
 becomes `cdd_2050_<scenario>`, and the same for heating degree days and days
 above 95F. Water stress uses `water_stress_2050` when present. Everything
-else is held at today's values and the deck says so.
+else is held at today's values and the deck says so. `horizon_delta`
+is the 2050 composite minus the 2026 composite. It's relative by
+construction: both are national percentiles, so warming that shifts every
+county equally leaves it near zero. `rank_delta_2050` gives the rank
+movement among gate-passed counties, and `explain` shows the raw change in
+each swapped column.
 
 **Pillars** are defined in `engine/pillars.yaml`, which maps each column to a
 pillar, a direction (higher or lower is better), and an optional
 transformation. Each column becomes a national percentile rank, direction
 adjusted so 100 is always best. A pillar score is the mean of its columns'
 percentiles, ignoring nulls. The composite is the weighted sum of pillar
-scores, subject to the floor rule.
+scores, subject to the floor rule. Percentiles are computed over all
+counties before gates run, so a county's scores don't change between
+presets. A county with every column in a pillar null has a null pillar; its
+composite renormalizes over its other pillars, and `coverage` shows the gap.
 
 **Floor rule.** With `pillar_floor_percentile: 20`, counties are split into
 those with every pillar at or above the 20th percentile and those with at
 least one pillar below it. The first group always ranks above the second,
 and within each group the weighted sum orders them. This enforces the
 brief's "don't optimize for a single metric" without a nonlinear formula.
+The floor compares the national percentile of each pillar score, not the
+raw pillar score, because a mean of percentiles clusters near 50. A null
+pillar never fails the floor.
 
 **Robustness.** For each sample, draw a weight vector from a Dirichlet
 distribution centered on the stated weights, recompute the ranking, and
 record whether each county landed in the top N. The robustness score is the
-share of samples where it did. The headline map shows this, not the point
+share of samples where it did. Draws use alpha = `concentration` times the
+weights times the number of pillars, so the mean draw equals the stated
+weights. The floor rule applies in every draw. Set `robustness.seed`
+(default 0) to change the reproducible draw. The headline map shows this, not the point
 estimate.
 
 **Portfolio.** Greedy. Pick the top county. For each remaining county,
