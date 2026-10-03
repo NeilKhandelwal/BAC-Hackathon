@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T21:33:48+00:00",
+  "built_at": "2026-10-03T21:45:12+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -244,7 +244,8 @@
     "Connecticut's 2010-2020 factor comes from the old county each planning region mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
     "coal_retired_mw sums nameplate MW of coal generators with status RE in the EIA-860 Retired and Canceled sheet. It is 0 for counties with none. Canceled projects are left out. The sheet covers generators retired since EIA-860 began tracking them.",
     "industrial_price_cents_kwh is the 2024 state average industrial retail price (revenue divided by sales, all providers). It is the same for every county in a state and is not the rate a large new load would negotiate.",
-    "water_stress_bws and water_stress_2050 are Aqueduct scores on the 0-5 category scale (bws_score and bau50_ws_x_s), not the raw withdrawal ratio: 0-1 low, 1-2 low-medium, 2-3 medium-high, 3-4 high, 4-5 extremely high. Aqueduct scores 'arid and low water use' basins as 5. Each county takes the area-weighted mean over the part of it that has data. 2050 is the business-as-usual scenario."
+    "water_stress_bws and water_stress_2050 are Aqueduct scores on the 0-5 category scale (bws_score and bau50_ws_x_s), not the raw withdrawal ratio: 0-1 low, 1-2 low-medium, 2-3 medium-high, 3-4 high, 4-5 extremely high. Aqueduct scores 'arid and low water use' basins as 5. Each county takes the area-weighted mean over the part of it that has data. 2050 is the business-as-usual scenario.",
+    "Water stress is flat to 2050 for many counties because the score saturates: 727 of the 1,254 US basins have identical baseline and 2050 scores, and every one of them sits at 0 or at the cap of 5. Elsewhere the raw withdrawal ratio rises by a median of 10 percent. Both layers use the same basins and the same score definition."
   ],
   "joins": {
     "nri": {

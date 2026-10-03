@@ -16,7 +16,11 @@ NOTES = ["water_stress_bws and water_stress_2050 are Aqueduct scores on the 0-5 
          "(bws_score and bau50_ws_x_s), not the raw withdrawal ratio: 0-1 low, 1-2 low-medium, "
          "2-3 medium-high, 3-4 high, 4-5 extremely high. Aqueduct scores 'arid and low water "
          "use' basins as 5. Each county takes the area-weighted mean over the part of it that "
-         "has data. 2050 is the business-as-usual scenario."]
+         "has data. 2050 is the business-as-usual scenario.",
+         "Water stress is flat to 2050 for many counties because the score saturates: 727 of the "
+         "1,254 US basins have identical baseline and 2050 scores, and every one of them sits at "
+         "0 or at the cap of 5. Elsewhere the raw withdrawal ratio rises by a median of 10 "
+         "percent. Both layers use the same basins and the same score definition."]
 
 # layer -> (score field, output column)
 LAYERS = {"baseline_annual": ("bws_score", "water_stress_bws"),
