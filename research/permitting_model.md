@@ -2,8 +2,9 @@
 
 The labels can mark a county negative only if it already has a data center,
 so facility counts encode the label. Without those counts, no feature set
-beats chance at predicting opposition (AUC 0.48 logistic, 0.55 boosted,
-leave-one-state-out).
+beats chance by a useful margin at predicting opposition (AUC 0.48
+logistic, 0.55 boosted, leave-one-state-out). On the counties where either
+label is possible, the best run reaches 0.59, still under the 0.60 bar.
 
 Decision: `permitting_discretionary_risk` and `permitting_drivers` stay
 null. The permitting pillar scores the three sourced columns: air
@@ -42,6 +43,14 @@ Leave-one-state-out, pooled out-of-fold scores, 447 labeled counties.
 | Logistic, the two facility counts alone | 0.693 | 0.753 |
 | Boosted trees, all nine features | 0.790 | 0.879 |
 | Boosted trees, without the two facility counts | 0.553 | 0.712 |
+| Logistic, without the counts, permitted subset | 0.572 | 0.504 |
+| Boosted trees, without the counts, permitted subset | 0.585 | 0.549 |
+
+The permitted subset is the 275 labeled counties that have at least one
+operating, approved, or expanding facility. Both labels are possible there,
+so it is the fairest test. 46 percent of the subset is positive, so a
+random ranking has an average precision of 0.458. The runs beat that by a
+small margin and stay under an AUC of 0.60.
 
 The nine features are population density, existing facility count,
 proposed facility count, drought weeks, NRI drought score, clean queue MW,
@@ -65,7 +74,7 @@ of how the labels are built, not because they predict opposition.
   opposition.
 
 Applied to all counties, the fitted model gives an unlabeled county a
-median score of 0.62, against 0.72 for labeled ones. It says a county with
+median score of 0.62, against 0.72 for labeled ones scored out of fold. It says a county with
 no data center is more likely than not to see opposition. That is the
 two-thirds base rate of the label set, not information about the county.
 The boosted model with isotonic calibration is worse: it scores three
@@ -74,15 +83,16 @@ quarters of all counties at or near 1.0.
 ## Named cases
 
 Percentile of each county among all 3,109 under the full logistic model.
-The method asks for the top third.
+Each labeled county, including these five, takes its out-of-fold score from
+a model that did not see its state. The method asks for the top third.
 
 | County | Percentile | Top third |
 | --- | --- | --- |
-| Pima, AZ | 0.94 | yes |
+| Pima, AZ | 0.93 | yes |
 | Monroe, GA | 0.97 | yes |
-| Porter, IN | 0.97 | yes |
-| Cass, MO | 0.71 | yes |
-| Prince William, VA | 0.08 | no |
+| Porter, IN | 0.98 | yes |
+| Cass, MO | 0.72 | yes |
+| Prince William, VA | 0.00 | no |
 
 Prince William has one of the best-known opposition fights in the country
 and many existing facilities. The model ranks it near the bottom because
@@ -92,7 +102,8 @@ existing facilities push the score down.
 
 `docs/permitting.md` step 3.6 says to drop the model below an AUC of 0.60.
 The AUC that counts is the one without the facility counts: 0.477 and
-0.553. The model is dropped.
+0.553 on all labeled counties, 0.572 and 0.585 on the permitted subset. All
+four are under 0.60. The model is dropped.
 
 The method's fallback is an equal-weighted index of the same features. It
 was built and rejected:

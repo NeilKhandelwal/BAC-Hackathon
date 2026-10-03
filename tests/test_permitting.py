@@ -2,14 +2,12 @@
 
 Reads the committed county table and labels, so it runs on a clean clone.
 """
-from pathlib import Path
-
 import pandas as pd
 import pytest
 
 from etl import permitting
-
-RAW = "data/raw"
+from etl.adapters import tiger_acs
+from tests.conftest import RAW, require_raw
 
 
 @pytest.fixture(scope="module")
@@ -22,9 +20,8 @@ def labels():
     return pd.read_csv(permitting.LABELS, dtype={"fips": str})
 
 
-@pytest.mark.skipif(not Path(RAW, "fractracker/ft_all.csv").exists(),
-                    reason="needs data/raw/fractracker/; run python etl/fetch_fractracker.py")
 def test_committed_labels_match_a_rebuild_from_raw(labels):
+    require_raw("fractracker/ft_all.csv", tiger_acs.RAW)
     rebuilt = permitting.build_labels(RAW)[0]
     pd.testing.assert_frame_equal(rebuilt.reset_index(drop=True), labels)
 
