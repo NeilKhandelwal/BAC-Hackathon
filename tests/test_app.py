@@ -175,3 +175,33 @@ def test_state_moratorium_flag_shows_in_headline_shortlist_and_detail(fake_env):
     assert MORATORIUM_WARNING in open_county(sorted(flagged)[0])
     clear = next(f for f in fake_env["fips"] if f not in flagged)
     assert MORATORIUM_WARNING not in open_county(clear)
+
+
+def load_app_module():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("app_module", Path(__file__).resolve().parents[1] / "app/app.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_raw_2050_change_is_computed_from_the_rounded_cells():
+    # Whitman WA read 0.0 -> 0.5 with a change of 0.4 when each cell rounded on its own.
+    # A judge reading the row must see arithmetic that adds up.
+    app = load_app_module()
+    e = {"horizon_2050_raw": {
+        "water_stress_bws": {"today": 0.04, "water_stress_2050": 0.46, "delta": 0.42},
+        "cdd_hist": {"today": 362.14, "cdd_2050_rcp85": 838.26, "delta": 476.12},
+        "days_above_95f_hist": {"today": 9.1, "days_above_95f_2050_rcp85": None, "delta": None}}}
+    rows = app.raw_2050_rows(e).set_index("metric")
+    water = rows.loc[app.METRIC_LABELS["water_stress_bws"]]
+    assert (water["today"], water["2050"], water["change"]) == (0.0, 0.5, 0.5)
+    assert rows.loc[app.METRIC_LABELS["cdd_hist"], "change"] == 476.2  # 838.3 - 362.1, not round(476.12)
+    assert rows.loc[app.METRIC_LABELS["days_above_95f_hist"]].isna()[["2050", "change"]].all()
+
+
+@pytest.mark.parametrize("fake_env", [True], indirect=True)
+def test_every_rendered_2050_row_adds_up(fake_env):
+    at = started()
+    table = next(d.value for d in at.dataframe if "metric" in d.value.columns).dropna()
+    assert ((table["2050"] - table["today"]).round(1) == table["change"]).all()

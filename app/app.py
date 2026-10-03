@@ -162,6 +162,19 @@ def county_map(df, ranked, excluded, color, geo):
     return fig
 
 
+def raw_2050_rows(e):
+    """The raw 2050 table: readable labels, one decimal, and a change computed from the rounded cells
+    so each row reads consistently (0.0 to 0.5 shows a change of 0.5, not 0.4)."""
+    rows = []
+    for col, d in e["horizon_2050_raw"].items():
+        fut = next(k for k in d if k not in ("today", "delta"))
+        today = None if d["today"] is None else round(d["today"], 1)
+        later = None if d[fut] is None else round(d[fut], 1)
+        change = None if today is None or later is None else round(later - today, 1)
+        rows.append({"metric": METRIC_LABELS.get(col, col), "today": today, "2050": later, "change": change})
+    return pd.DataFrame(rows)
+
+
 def fmt(v, spec):
     return "n/a" if v is None else format(v, spec)
 
@@ -204,12 +217,8 @@ def show_detail(e, path, mtime, conditions):
 
     with right:
         if e["horizon_2050_raw"]:
-            rows = []
-            for col, d in e["horizon_2050_raw"].items():
-                fut = next(k for k in d if k not in ("today", "delta"))
-                rows.append({"metric": METRIC_LABELS.get(col, col), "today": d["today"], "2050": d[fut], "change": d["delta"]})
             st.markdown("**Raw change by 2050**")
-            st.dataframe(pd.DataFrame(rows).round(1), hide_index=True, width="stretch")
+            st.dataframe(raw_2050_rows(e), hide_index=True, width="stretch")
         if "permitting" in e["pillars"]:
             st.markdown("**Permitting**")
             st.dataframe(pd.DataFrame(e["pillars"]["permitting"]["columns"]), hide_index=True,
