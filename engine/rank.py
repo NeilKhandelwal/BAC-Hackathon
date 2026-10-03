@@ -228,6 +228,8 @@ def order(scores, floor_mask, passed):
 def top_reasons(sc, n=3):
     """The n columns adding most to each county's composite, as a semicolon list.
 
+    Only columns above the median count, so the list can be shorter than n.
+
     A column's contribution is its pillar weight times its percentile above
     the median (50), divided by the number of non-null columns in that pillar
     for the county. Measuring from the median keeps a column that is tied for
@@ -238,7 +240,7 @@ def top_reasons(sc, n=3):
         p = sc.pcts[cols] - 50
         parts.append(p.div(p.notna().sum(axis=1), axis=0) * sc.weights[f"pillar_{pillar}"])
     contrib = pd.concat(parts, axis=1)
-    return contrib.apply(lambda r: ";".join(r.dropna().nlargest(n).index), axis=1)
+    return contrib.apply(lambda r: ";".join(r[r > 0].nlargest(n).index), axis=1)  # above-median only
 
 
 def robustness(pillar_scores, w, floor_mask, conditions):

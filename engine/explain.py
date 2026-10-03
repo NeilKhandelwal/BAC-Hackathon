@@ -43,7 +43,7 @@ def explain(df, conditions, pillars, fips):
         "floor_ok": None if row is None else bool(row["floor_ok"]),
         "robustness": None if row is None else _num(row["robustness"]),
         "coverage": _num(sc.scores.at[i, "coverage"]),
-        "top_reasons": None if row is None else row["top_reasons"].split(";"),
+        "top_reasons": None if row is None else [r for r in row["top_reasons"].split(";") if r],
         "pillars": {},
         "horizon_2050_raw": {},
     }

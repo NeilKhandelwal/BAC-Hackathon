@@ -300,3 +300,12 @@ def test_nearby_capacity_gate_without_facility_mw_fails_loudly():
     df = table(plant_capacity_mw_100km=[1000.0])
     with pytest.raises(ValueError, match="facility.mw"):
         apply_gates(df, {"gates": {"min_nearby_capacity_multiple": 5}, "facility": {}})
+
+
+def test_top_reasons_lists_only_columns_above_the_median():
+    # The worst county has nothing lifting it; naming its least-bad column as a "reason" would mislead.
+    df = table(a=[1.0, 2.0, 3.0, 4.0], b=[1.0, 2.0, 3.0, 4.0])
+    pillars = {"p": [{"column": "a"}, {"column": "b"}]}
+    ranked = rank(df, {"weights": {"p": 1}, "gates": {}}, pillars)[0].set_index("fips")
+    assert ranked.loc["00000", "top_reasons"] == ""
+    assert set(ranked.loc["00003", "top_reasons"].split(";")) == {"a", "b"}
