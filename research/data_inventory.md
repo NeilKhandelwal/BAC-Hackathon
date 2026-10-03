@@ -3,11 +3,13 @@
 Scope: contiguous US plus DC, county (FIPS) as the unit of analysis. Every
 layer below ends up as one or more columns in a single county table.
 
-Verification status: compiled 2026-10-02 from official pages and mirrors via
-search. The research sandbox could not fetch the source domains directly, so
-file sizes and a few vintages are marked unverified. Confirm each download on
-a laptop before the ETL person depends on it. No dataset needs payment.
-Three need a free registration: FCC, NREL API, Global Energy Monitor.
+Verification status: direct URLs below returned HTTP 200 from the sandbox on
+2026-10-03 unless marked otherwise. Sizes are from Content-Length. Three
+hosts block this sandbox's IP and still need a laptop check: `www.fema.gov`
+(the NRI ZIP), `broadbandmap.fcc.gov`, and `emp.lbl.gov`. Workarounds are
+listed for each. No dataset needs payment. Registrations: FCC (if you use
+the FCC site rather than the Esri mirror), Global Energy Monitor, IPUMS
+NHGIS (optional NLCD county summaries).
 
 ## Priority tiers
 
@@ -20,20 +22,21 @@ make the systems-thinking story. Tier 3 is only if time allows.
 | 1 | FEMA National Risk Index | flood, wildfire, hurricane, drought, heat wave, tornado, winter weather scores |
 | 1 | EPA eGRID | grid carbon intensity (lb CO2/MWh), fuel mix, renewable share |
 | 1 | NREL solar and wind annual rasters | mean GHI, mean 100 m wind speed |
-| 1 | NOAA Climate Normals | heating and cooling degree days, dew point |
-| 1 | WRI Aqueduct 4.0 | baseline water stress |
-| 1 | LBNL Queued Up | MW in queue by fuel, queue age, congestion proxy |
+| 1 | NOAA Climate Normals | heating and cooling degree days, days above 90F and 100F |
+| 1 | WRI Aqueduct 4.0 | baseline water stress, 2050 projected stress |
+| 1 | LBNL Queued Up | MW in queue by fuel and status, queue age, withdrawal rate |
+| 1 | FracTracker data center tracker | existing and proposed facility count and MW, pushback flag, moratorium flags |
+| 1 | CMRA climate projections | 2050 cooling degree days, days above 95F |
 | 2 | EIA-861 | SAIDI and SAIFI reliability, utility service territory |
 | 2 | EIA-923 Schedule 8D + EIA-860 | grid water withdrawal per MWh by subregion |
-| 2 | USGS Annual NLCD | percent developed, cropland, forest, impervious |
-| 2 | FCC Broadband Map | percent of locations with fiber |
+| 2 | FCC broadband (Esri county layer) | percent of locations with fiber |
 | 2 | US Drought Monitor | percent of weeks in D2 or worse since 2000 |
-| 2 | GDELT + Data Center Watch | community opposition risk (see gdelt_feasibility.md) |
-| 2 | Climate projections (county extracts) | 2050 cooling degree days, days above 95F |
+| 2 | GDELT | local news volume and tone on data centers (see gdelt_feasibility.md) |
+| 2 | USGS Annual NLCD | percent developed, cropland, forest, impervious |
 | 3 | IBTrACS | hurricane track passes within 100 km |
 | 3 | GEM steel and cement trackers | distance to nearest low-carbon mill or plant |
 | 3 | FEMA NFHL | percent area in special flood hazard area |
-| 3 | USFS Wildfire Risk to Communities | redundant with NRI wildfire, use only for detail |
+| 3 | USFS Wildfire Risk to Communities | redundant with NRI wildfire |
 
 Dropped from the brief's list: Freight Analysis Framework, Clean Watersheds
 Needs Survey, Building Transparency, Bloom Energy. None adds a column worth
@@ -43,12 +46,12 @@ the ingestion time. Treat fuel cells as a scenario toggle in the UI.
 
 ### 1. Census TIGER/Line counties and population
 
-- Download: `https://www2.census.gov/geo/tiger/TIGER2024/COUNTY/tl_2024_us_county.zip`.
-  The 500k cartographic file at `https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_county_500k.zip`
-  is smaller and fine for the map.
-- Population: ACS 5-year via `https://api.census.gov/data/2023/acs/acs5?get=NAME,B01003_001E&for=county:*`.
+- Boundaries: `https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_county_500k.zip`
+  (11.6 MB, verified). The full-resolution TIGER file is at
+  `https://www2.census.gov/geo/tiger/TIGER2024/COUNTY/tl_2024_us_county.zip`.
+- Population: ACS 5-year via
+  `https://api.census.gov/data/2023/acs/acs5?get=NAME,B01003_001E&for=county:*`.
   No key needed under 500 requests per day.
-- Format: shapefile, JSON.
 - Unit: county. GEOID is the 5-digit FIPS.
 - Gotchas: filter STATEFP to the 48 states plus DC. Connecticut uses planning
   regions instead of counties since 2022. Pick one convention and apply it to
@@ -56,258 +59,256 @@ the ingestion time. Treat fuel cells as a scenario toggle in the UI.
 
 ### 2. FEMA National Risk Index (NRI)
 
-- Download: `https://hazards.fema.gov/nri/data-resources`. County CSV is
-  `NRI_Table_Counties.zip`, shapefile is `NRI_Shapefile_Counties.zip`.
-  Mirror on data.gov if the page moved. One source says NRI was folded into
-  FEMA's Resilience Analysis and Planning Tool in December 2025. Verify the
-  link first.
-- Format: CSV, shapefile, geodatabase.
-- Unit: county, keyed on `STCOFIPS`. Direct join.
-- Vintage: metadata updated July 2025.
-- Use: 18 hazards with risk scores, expected annual loss, social
-  vulnerability, and community resilience. This one file covers flood,
-  wildfire, hurricane, drought, heat, tornado, and winter weather, which
-  replaces four separate pulls from the brief.
-- Gotchas: scores are relative percentiles. Expected annual loss in dollars
-  scales with what's there to lose, so empty counties look safe. Use the
-  hazard frequency and exposure fields, not just the dollar loss.
+- The NRI moved into FEMA's Resilience Analysis and Planning Tool. Old
+  `hazards.fema.gov/nri` links redirect there.
+- Verified access: ArcGIS feature service, 3,232 county rows in pages of
+  2,000.
+  `https://services.arcgis.com/XG15cJAlne2vxtgt/arcgis/rest/services/National_Risk_Index_Counties/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=json`
+- Official ZIP (blocked from the sandbox, try from a laptop):
+  `https://www.fema.gov/about/reports-and-data/openfema/nri/v120/NRI_Table_Counties.zip`
+- Data dictionary (61 KB CSV, verified):
+  `https://fema.maps.arcgis.com/sharing/rest/content/items/4b9db412e99542029b3c37c37ad714bb/data`
+- Version: v1.20, December 2025.
+- Key: `STCOFIPS`. Scores: `RISK_SCORE`, `DRGT_RISKS`, `HWAV_RISKS`,
+  `WFIR_RISKS`, `HRCN_RISKS`, `CFLD_RISKS`, `IFLD_RISKS`, `TRND_RISKS`,
+  `WNTW_RISKS`.
+- Gotchas: riverine flooding (`RFLD_*`) was replaced by inland flooding
+  (`IFLD_*`) in v1.20. Scores are relative percentiles. Expected annual loss
+  in dollars scales with what's there to lose, so empty counties look safe.
+  Use the hazard frequency and exposure fields, not only the dollar loss.
 
 ### 3. EPA eGRID
 
-- Download: `https://www.epa.gov/egrid/download-data`. Subregion shapefile at
-  `https://www.epa.gov/egrid/egrid-mapping-files`.
-- Format: one XLSX workbook with sheets for units, generators, plants (PLNT),
-  states, balancing authorities, subregions (SRL), and national.
-- Unit: plant with lat/lon and county name; subregion; balancing authority.
-- Vintage: eGRID2023 Rev 2, June 2025. eGRID2024 was due January 2026,
-  unverified whether released.
-- County mapping: spatial join county centroid to subregion shapefile and
-  pull the SRL emission rate. Where subregions overlap, use the "multiple
-  subregions" file. For plant-level work, use PLNT lat/lon.
+- Current edition: eGRID2023 Rev 2, June 2025. The page was updated in
+  September 2026 and does not mention eGRID2024.
+- Data: `https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx`
+  (21.2 MB, verified). Sheets: UNT, GEN, PLNT, ST, BA, SRL, NRL, US.
+- Subregion shapefile:
+  `https://www.epa.gov/system/files/other-files/2025-01/egrid2023_subregions.zip`
+  (57.3 MB, verified).
+- County mapping: spatial join county centroid to the subregion shapefile
+  and pull the SRL emission rate. For plant-level work, PLNT has lat/lon and
+  county name.
 - Gotchas: eGRID has no water-use fields. Water comes from EIA-923. The
   subregion rate is an annual average, not a marginal rate. Say so in the
   methods slide.
 
-### 4. NREL solar (NSRDB) and wind (WIND Toolkit) annual rasters
+### 4. NREL solar and wind annual rasters
 
-- Solar: multiyear annual GHI and DNI GeoTIFF from
-  `https://www.nrel.gov/gis/solar-resource-maps` or ScienceBase item
-  `5f63a09682ce38aaa23affcd`. 4 km grid, 1998 to 2016 average.
-- Wind: "WIND Toolkit Multi-year Annual Average United States" GeoTIFF from
-  ScienceBase item `5f636dda82ce38aaa239d14c`. 2 km grid, 100 m hub height,
-  2007 to 2013 average. Units are km/h, convert to m/s.
-- Format: GeoTIFF. No key for the static rasters.
+- NREL's web presence moved to `nlr.gov`. The `nrel.gov` hosts fail.
+- Solar: `https://www.nlr.gov/docs/libraries/gis/nsrdbv3_ghi.zip` (140 MB,
+  verified). Contains `Annual GHI/nsrdb3_ghi.tif` plus 12 monthly TIFs.
+  4 km grid, 1998 to 2016 average.
+- Wind: `https://www.nlr.gov/docs/libraries/gis/us-wind-data.zip` (185 MB,
+  verified). Contains `us-wind-data/wtk_conus_100m_mean_masked.tif` and
+  other hub heights from 10 to 200 m. 2 km grid.
 - County mapping: zonal mean over county polygons.
-- Gotchas: avoid the NSRDB API. It needs a key, allows 2,000 requests per
-  day, and returns hourly point data you'd have to aggregate yourself. The
-  NREL developer domain reportedly moved in 2026, unverified. A 120 m wind
-  raster was not found pre-aggregated, 100 m is fine.
+- Gotchas: both zips are large. You can pull a single TIF out of a remote
+  zip with HTTP range requests; the scratch scripts `ziplist.py` and
+  `zipget.py` did this during verification and are worth recreating in
+  `etl/`. The ScienceBase items in the brief are metadata only with binned
+  quantile data. Don't use them. Avoid the NSRDB API: it needs a key and
+  returns hourly point data.
 
 ### 5. NOAA U.S. Climate Normals 1991 to 2020
 
-- Download: `https://www.ncei.noaa.gov/data/normals-annual/1991-2020/access/`
-  for annual and seasonal normals, `https://www.ncei.noaa.gov/data/normals-hourly/1991-2020/access/`
-  for hourly.
-- Format: one CSV per station.
-- Unit: station with lat/lon.
-- Fields: annual product gives heating and cooling degree days
-  (`ann-htdd-normal`, `ann-cldd-normal`). Hourly product gives dew point and
-  heat index but covers only a few hundred ASOS stations.
-- County mapping: spatial join station to county, then average. Many counties
-  have no station, so fall back to inverse-distance weighting from the
-  nearest three.
-- Gotchas: wet-bulb temperature is not provided. Compute it from temperature
-  and dew point if you want a free-cooling-hours metric. That's the number
-  that drives the cooling story, so it's worth the effort.
+- Annual and seasonal, per station:
+  `https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/access/`
+  (about 15,600 CSVs, about 77 KB each, verified).
+- Bulk tarball (54.2 MB, verified):
+  `https://www.ncei.noaa.gov/data/normals-annualseasonal/1991-2020/archive/us-climate-normals_1991-2020_v1.0.1_annualseasonal_multivariate_by-station_c20230404.tar.gz`
+- Hourly, per station: `https://www.ncei.noaa.gov/data/normals-hourly/1991-2020/access/`.
+  Hourly tarball is 232 MB and covers only a few hundred ASOS stations.
+- Columns are uppercase: `ANN-HTDD-NORMAL`, `ANN-CLDD-NORMAL`,
+  `ANN-TMAX-AVGNDS-GRTH090`, `ANN-TMAX-AVGNDS-GRTH100`. Des Moines reads
+  6,178 heating and 1,070 cooling degree days.
+- County mapping: spatial join station to county, then average. Many
+  counties have no station, so fall back to inverse-distance weighting from
+  the nearest three.
+- Gotchas: wet-bulb temperature is not provided. Compute it from the hourly
+  temperature and dew point if you want a free-cooling-hours metric. That
+  number drives the cooling story, so it's worth the effort for finalist
+  counties at least.
 
 ### 6. WRI Aqueduct 4.0
 
-- Download: `https://www.wri.org/data/aqueduct-global-maps-40-data`. Docs at
-  `https://github.com/wri/Aqueduct40`.
-- Format: GeoPackage or geodatabase plus CSV. The GeoPackage is several GB,
-  unverified.
-- Unit: HydroBASINS level 6 sub-basin, about 68,000 polygons globally.
-- Vintage: 2023 release. Includes future scenarios for 2030, 2050, 2080.
+- Download: `https://files.wri.org/aqueduct/aqueduct-4-0-water-risk-data.zip`
+  (261.5 MB, verified). Contains baseline annual, monthly, and future CSVs
+  plus a file geodatabase `GDB/Aq40_Y2023D07M05.gdb`. No GeoPackage.
+- The baseline annual CSV is 202 MB uncompressed and has no geometry. Join
+  it to the geodatabase polygons on `pfaf_id` or read the geodatabase
+  directly with geopandas.
+- Unit: HydroBASINS level 6 sub-basin.
 - County mapping: area-weighted overlay of `bws_raw` and `bws_cat` (baseline
-  water stress) onto county polygons. Population weighting is better if you
-  have time.
-- Gotchas: there is no county-level version. Also available on Google Earth
-  Engine as `WRI/Aqueduct_Water_Risk/V4` if someone has GEE set up, which
-  makes the overlay trivial.
+  water stress) onto county polygons. The future file gives 2030, 2050, and
+  2080 under three scenarios, which covers the 2050 horizon for water.
+- Also on Google Earth Engine as `WRI/Aqueduct_Water_Risk/V4`.
 
 ### 7. LBNL Queued Up
 
-- Download: `https://emp.lbl.gov/queues`, data file linked from
-  `https://energyanalysis.lbl.gov/publications/us-interconnection-queue-data`.
-- Format: XLSX with a project-level sheet, a codebook, and summary tabs.
-- Unit: project with state and county name. No lat/lon.
-- Vintage: 2025 edition covering queues through end of 2024.
-- County mapping: normalize county name and join to FIPS. Sum MW by status
-  (active, withdrawn, operational) and by fuel.
-- Derived metrics: active renewable MW per county (decarbonization
-  potential), median queue age (congestion), withdrawal rate (failure rate).
-- Gotchas: county is free text with blanks and multi-county entries. Expect
-  to lose 10 to 20 percent of rows to the join.
+- 2026 edition, queues through end of 2025 (15.6 MB, verified):
+  `https://eta-publications.lbl.gov/sites/default/files/2026-05/lbnl_ix_queue_data_file_thru2025.xlsx`
+- 2025 edition (14.1 MB, verified):
+  `https://eta-publications.lbl.gov/sites/default/files/2025-08/lbnl_ix_queue_data_file_thru2024_v2.xlsx`
+- `emp.lbl.gov` blocks the sandbox. Use the `eta-publications` host.
+- Sheet: `03. Complete Queue Data`, 38,201 rows.
+- 2026 columns: `state`, `county`, `fips_code` (integer, leading zero
+  dropped, so zero-pad to 5), `mw_1` to `mw_3`, `type_clean`, `q_status`
+  (withdrawn, active, operational, suspended, unknown), `q_date`, `q_year`,
+  `IA_phase_clean`. The 2025 file used different names (`mw1`, `type1`,
+  `fips_codes`, `IA_status_clean`).
+- County mapping: `fips_code` is present, so no name join is needed for most
+  rows. Fall back to state plus county name for blanks.
+- Derived metrics: active renewable MW per county, median queue age,
+  withdrawal rate.
 
-### 8. EIA-861
+### 8. FracTracker Alliance US Data Centers Tracker
 
-- Download: `https://www.eia.gov/electricity/data/eia861/zip/f8612024.zip`.
-- Format: ZIP of about 20 XLSX files. Use `Reliability_2024.xlsx` for SAIDI
-  and SAIFI and `Service_Territory_2024.xlsx` for utility-to-county mapping.
-- Unit: utility.
-- County mapping: reliability by utility ID, territory file maps utility ID
-  to state and county name, then customer-weight where several utilities
-  serve one county.
-- Gotchas: county names, not FIPS. Pick one SAIDI method (IEEE vs other) and
-  one treatment of major event days, and use it consistently. Many small
-  utilities don't report. PUDL at `data.catalyst.coop` has a cleaned Parquet
-  version of this and of 860 and 923, which may save a day.
+- Public ArcGIS feature services. Fetch with `etl/fetch_fractracker.py`.
+  Details in `opposition_labels.md`.
+- Facilities layer: 1,701 rows with county, status, MW, cooling type,
+  pushback flag. Moratoria layer: 680 jurisdictions with census GEOID.
+- County mapping: facilities by county name plus state, or by lat/lon;
+  moratoria by GEOID for the 260 county rows.
+- Columns: existing facility count and MW, proposed count and MW, any
+  pushback, active or pending moratorium.
+- License: non-commercial with credit. Put the credit on the data slide.
 
-### 9. EIA-923 Schedule 8D and EIA-860
+### 9. Climate projections for 2050 (CMRA)
 
-- Download: `https://www.eia.gov/electricity/data/eia923/` and
-  `https://www.eia.gov/electricity/data/eia860/`. The 860 plant file is
-  `2___Plant_Y2024.xlsx` with lat/lon and county.
-- Format: ZIP of XLSX.
-- Unit: plant and cooling system.
-- Vintage: 2024 final.
-- County mapping: 923 cooling water by plant ID, join to 860 for lat/lon,
-  spatial join to county, then aggregate to eGRID subregion to get water
-  withdrawal and consumption per MWh of grid power. That's the "water used
-  in generation of grid power" the brief asks for.
-- Gotchas: 8D is only in the final annual release and only for thermoelectric
-  plants of 100 MW or more. Units mix gallons per minute and million gallons.
-  Hydro and renewables report nothing, so a hydro-heavy subregion correctly
-  scores near zero.
+- The brief's NEX-GDDP-CMIP6 is 34 TB. Don't download it.
+- Verified county-level alternative: the CMRA Climate and Coastal Inundation
+  Projections feature service, 3,233 counties.
+  `https://services3.arcgis.com/0Fs3HcaFfvzXvm7w/arcgis/rest/services/Climate_Mapping_Resilience_and_Adaptation_(CMRA)_Climate_and_Coastal_Inundation_Projections/FeatureServer/0/query?where=GEOID%3D%2719161%27&outFields=GEOID,CountyName,HISTORIC_MEAN_CDD,RCP85MID_MEAN_CDD,RCP85MID_MEAN_TMAX95F&returnGeometry=false&f=json`
+- Field pattern: `{HISTORIC|RCP45|RCP85}{EARLY|MID|LATE}_{MIN|MEAN|MAX}_{CDD|HDD|TMAX90F|TMAX95F|TMAX100F}`.
+  MID is mid-century. Sac County, Iowa goes from 820 to 1,519 cooling degree
+  days under RCP8.5 mid-century.
+- Page through once with `where=1=1` and save a static CSV.
+- Alternative: the ACIS grid endpoint that Climate Explorer uses,
+  `https://grid2.rcc-acis.org/GridData`, accepts a JSON `params` query and
+  returns county means per year. Verified for FIPS 19161.
+- Gotchas: both use LOCA-downscaled CMIP5 (RCP4.5 and RCP8.5), not CMIP6.
+  State that on the methods slide rather than claiming CMIP6.
 
-### 10. USGS Annual NLCD
+### 10. EIA-861
 
-- Download: `https://www.mrlc.gov/data` mosaic download, or tiles via
-  EarthExplorer. Also on AWS S3.
-- Format: GeoTIFF, 30 m, Albers projection. CONUS mosaic is several GB.
-- Vintage: 2024.
-- County mapping: zonal histogram of land cover classes per county. Percent
-  developed, percent cropland, percent forest and wetland, and mean
-  fractional impervious surface.
-- Gotchas: this is the heaviest raster. Run it once, cache the county table.
-  Google Earth Engine has it in the community catalog if that's easier.
+- Download: `https://www.eia.gov/electricity/data/eia861/zip/f8612024.zip`
+  (4.6 MB, verified).
+- Files: `Reliability_2024.xlsx` (SAIDI, SAIFI by utility),
+  `Service_Territory_2024.xlsx` (utility ID to state and county name).
+- County mapping: reliability by utility ID, territory file maps to county
+  name, then customer-weight where several utilities serve one county.
+- Gotchas: county names, not FIPS. Pick one SAIDI method and one treatment
+  of major event days. Many small utilities don't report. PUDL at
+  `data.catalyst.coop` has a cleaned version.
 
-### 11. FCC National Broadband Map
+### 11. EIA-923 Schedule 8D and EIA-860
 
-- Download: `https://broadbandmap.fcc.gov/data-download`. Free FCC account
-  required. Public API needs a username and token.
-- Format: CSV of fixed availability by provider and technology, nationwide or
-  per state. Nationwide is multi-GB.
-- Unit: serviceable location with census block GEOID.
-- County mapping: filter technology code 50 (fiber), group by block, county
-  is the first five characters of the block GEOID. Compute percent of
-  locations with fiber.
-- Gotchas: registration is mandatory. Download per state, not nationwide. The
-  latest snapshot date often has no files posted yet, so take the one
-  before it. This measures last-mile fiber, not long-haul backbone, which is
+- EIA-923 2024 final: `https://www.eia.gov/electricity/data/eia923/archive/xls/f923_2024.zip`
+  (22.8 MB, verified). 2025 final also exists at
+  `https://www.eia.gov/electricity/data/eia923/xls/f923_2025.zip`.
+- Cooling water: member file `EIA923_Schedule_8_Annual_Envir_Infor_2024_Final.xlsx`,
+  sheet `8D Cooling System Information`, monthly withdrawal and consumption
+  in million gallons per plant.
+- EIA-860 2024: `https://www.eia.gov/electricity/data/eia860/archive/xls/eia8602024.zip`
+  (22.1 MB, verified). Plant file `2___Plant_Y2024.xlsx` has lat/lon and
+  county. 2025 at `https://www.eia.gov/electricity/data/eia860/xls/eia8602025.zip`.
+- County mapping: 923 water by plant ID, join to 860 for location, spatial
+  join to county, then aggregate to eGRID subregion for water per MWh of
+  grid power.
+- Gotchas: 8D covers only thermoelectric plants of 100 MW or more. Hydro and
+  renewables report nothing, so a hydro-heavy subregion correctly scores
+  near zero.
+
+### 12. FCC broadband
+
+- The FCC site (`broadbandmap.fcc.gov/data-download`) blocks the sandbox
+  and requires a free login. Unverified from here.
+- Verified alternative: Esri Living Atlas county layer, 3,234 counties keyed
+  by `GEOID`, with `TotalBSLs`, `ServedBSLs`, `ServedBSLsFiber`.
+  `https://services8.arcgis.com/peDZJliSvYims39Q/arcgis/rest/services/FCC_Broadband_Data_Collection_December_2024_View/FeatureServer/1`
+  The service name says December 2024; the item title says December 2025.
+  Sac County: 6,600 locations, 6,046 fiber-served.
+- Gotchas: this measures last-mile fiber, not long-haul backbone, which is
   what a data center cares about. Treat it as a proxy and say so.
 
-### 12. US Drought Monitor
+### 13. US Drought Monitor
 
-- REST: `https://usdmdataservices.unl.edu/api/CountyStatistics/GetDroughtSeverityStatisticsByAreaPercent?aoi=us&startdate=1/1/2000&enddate=12/31/2025&statisticsType=1`.
-  Web form at `https://droughtmonitor.unl.edu/DmData/DataDownload/ComprehensiveStatistics.aspx`.
-- Format: CSV or JSON.
-- Unit: county, weekly.
-- County mapping: already FIPS. Compute percent of weeks in D2 or worse.
-- Gotchas: the national pull is large. Pull per state if it times out. No
-  key, no documented rate limit.
+- REST (verified, 12.1 MB for Iowa, 4 seconds):
+  `https://usdmdataservices.unl.edu/api/CountyStatistics/GetDroughtSeverityStatisticsByAreaPercent?aoi=IA&startdate=1/1/2000&enddate=12/31/2025&statisticsType=1`
+- Set the `Accept` header to `text/csv` or `application/json`.
+- Columns: `MapDate, FIPS, County, State, None, D0, D1, D2, D3, D4, ValidStart, ValidEnd`.
+- Gotchas: `aoi=us` returns an empty body. Loop over the 48 states. A single
+  FIPS also works. `statisticsType=1` is cumulative, so D2 already includes
+  D3 and D4.
 
-### 13. Climate projections for 2050
+### 14. USGS Annual NLCD
 
-- The brief's NEX-GDDP-CMIP6 is 34 TB of NetCDF across 35 models. Do not
-  download it.
-- Use county extracts instead: NOAA Climate Explorer at
-  `https://crt-climate-explorer.nemac.org` gives per-county CSV of cooling
-  degree days, heating degree days, and days above 95F under two scenarios.
-  The CMRA Assessment Tool at `https://resilience.climate.gov` exposes similar
-  county data with CSV and GeoJSON export.
-- Gotchas: neither documents a bulk download. Scripting the Climate Explorer
-  endpoint per county is likely but unverified. If it fails, pull a few
-  dozen candidate counties by hand for the finalist comparison and show the
-  2050 shift only for those.
+- 2024 CONUS land cover (1.44 GB, verified):
+  `https://www.mrlc.gov/downloads/sciweb1/shared/mrlc/data-bundles/Annual_NLCD_LndCov_2024_CU_C1V1.zip`
+- The MRLC page renders links with JavaScript, so the URL was confirmed by
+  naming pattern. S3 is requester-pays.
+- County mapping: zonal histogram of class codes per county. Run once and
+  cache.
+- Shortcut: IPUMS NHGIS publishes county NLCD summaries for 2001 to 2021
+  (free account required):
+  `https://secure-assets.ipums.org/nhgis/environmental/nhgis_county2020_tl2020_nlcd_timebycolumn.zip`.
+  2021 is close enough for land cover shares.
 
-### 14. NOAA IBTrACS
+### 15. GDELT
 
-- Download: `https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NA.list.v04r01.csv`.
-- Format: CSV, two header rows.
-- Unit: 3-hourly track points.
-- County mapping: buffer tracks by 100 km, count passes since 1980 per county,
-  record max `USA_WIND`.
-- Gotchas: NRI already has a hurricane score. Use this only if you want the
-  map of tracks for the deck.
+See `gdelt_feasibility.md`. BigQuery path recommended. The search API
+could not be tested from the sandbox because of a shared-IP rate limit.
 
-### 15. Global Energy Monitor steel and cement trackers
+### 16. NOAA IBTrACS
 
-- Download: request form at
+- `https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/ibtracs.NA.list.v04r01.csv`
+- CSV with two header rows. Buffer tracks by 100 km, count passes since
+  1980, record max `USA_WIND`.
+- NRI already has a hurricane score. Use this only for the track map.
+
+### 17. Global Energy Monitor steel and cement trackers
+
+- Request form gates the download at
   `https://globalenergymonitor.org/projects/global-iron-and-steel-tracker/download-data/`
-  and the equivalent cement page. Name, email, and organization gate the
-  link. CC BY 4.0.
-- Format: XLSX with plant lat/lon.
-- County mapping: distance from county centroid to nearest electric arc
-  furnace steel plant and nearest cement plant.
-- Gotchas: US coverage is only steel plants of 0.5 Mtpa or more. The
-  embodied carbon story is weak at county resolution anyway. Low priority.
+  and the cement equivalent. CC BY 4.0.
+- XLSX with plant lat/lon. Distance from county centroid to nearest electric
+  arc furnace and nearest cement plant.
+- Low priority. The embodied carbon story is weak at county resolution.
 
-### 16. USFS Wildfire Risk to Communities
+### 18. FEMA NFHL and USFS Wildfire Risk to Communities
 
-- Download: `https://wildfirerisk.org/download/`, archived at
-  `https://doi.org/10.2737/RDS-2024-0030`.
-- Format: ZIP of spreadsheets by county plus 30 m rasters.
-- Unit: county tabular. Direct FIPS join.
-- Gotchas: two summary sets on different census boundaries. NRI wildfire
-  covers the same ground. Skip unless you want the raster for a detail map.
-
-### 17. FEMA National Flood Hazard Layer
-
-- Download: `https://msc.fema.gov/portal/advanceSearch` by state or county,
-  or the ArcGIS REST service at
-  `https://hazards.fema.gov/arcgis/rest/services/public/NFHL`.
-- Format: file geodatabase or shapefile. State files run hundreds of MB.
-- County mapping: intersect zones A and V with county, compute percent area.
-- Gotchas: large and incomplete. Some counties are unmapped. NRI's inland
-  and coastal flood scores are enough for the gate. Use NFHL only for the
-  finalist sites, where a real floodplain check matters.
-
-### 18. GDELT and Data Center Watch
-
-See `gdelt_feasibility.md`. Summary: GKG 2.1 tags US city mentions with a
-county code. Use BigQuery for geolocation and tone, the DOC API for
-full-text URL search. The DOC API supports date-ranged search up to a year
-back per a later GDELT update, and often further. Data Center Watch
-project list must be hand-coded from the quarterly reports.
+- NFHL: `https://msc.fema.gov/portal/advanceSearch` by county, or the
+  ArcGIS REST service at `https://hazards.fema.gov/arcgis/rest/services/public/NFHL`.
+  Use only for finalist sites where a real floodplain check matters.
+- Wildfire Risk to Communities: `https://wildfirerisk.org/download/`,
+  county spreadsheets. Redundant with NRI wildfire.
 
 ## Cross-cutting gotchas
 
-- **County-name joins** (EIA-861 territory, Queued Up, eGRID plants) need
-  one shared normalization function. Watch "St." vs "Saint", "DeKalb" vs
-  "De Kalb", Virginia independent cities, Louisiana parishes, and
-  Connecticut planning regions. Build this once in `etl/fips.py` and test it
-  against the TIGER name list.
-- **Spatial joins** (Aqueduct, NREL rasters, Normals, NLCD, IBTrACS, plant
-  points) all need the TIGER polygons in the same projection. Use EPSG:5070
-  (CONUS Albers) for area work and EPSG:4326 for the map.
-- **Registration** is needed for FCC, GEM, and the NREL API. Start those
-  signups on day one. FCC approval is not instant.
-- **Too big to download in a hackathon**: NEX-GDDP-CMIP6, FCC nationwide
-  CSV, NLCD CONUS mosaic. Use county extracts, per-state files, and a
-  one-time zonal stats run respectively.
-- **Mirrors worth knowing**: PUDL (`data.catalyst.coop`) for cleaned EIA
-  860, 861, 923. Google Earth Engine for Aqueduct and NLCD. data.gov for
-  NRI if the FEMA page has moved.
-- **Unverified from the sandbox**: file sizes nearly everywhere, whether
-  eGRID2024 has shipped, whether NRI's download URL survived the RAPT
-  migration, the NREL developer domain, and bulk access to Climate Explorer.
+- **County-name joins** (EIA-861 territory, eGRID plants, FracTracker
+  facilities) need one shared normalization function. Watch "St." vs
+  "Saint", "DeKalb" vs "De Kalb", Virginia independent cities, Louisiana
+  parishes, and Connecticut planning regions. Build it once in `etl/fips.py`
+  and test it against the TIGER name list.
+- **Spatial joins** (Aqueduct, NREL rasters, Normals, NLCD, plant points)
+  all need the county polygons in the same projection. Use EPSG:5070 for
+  area work and EPSG:4326 for the map.
+- **ArcGIS feature services** (NRI, CMRA, FCC, FracTracker) all page at
+  1,000 to 2,000 rows. One shared pager function in `etl/arcgis.py` covers
+  all four.
+- **Hosts that block the sandbox**: `www.fema.gov`, `broadbandmap.fcc.gov`,
+  `emp.lbl.gov`, `nrel.gov`, `web.archive.org`. Each has a working
+  alternative above.
+- **Too big to download casually**: NLCD (1.44 GB), NREL zips (140 and
+  185 MB), Aqueduct (262 MB). Assign to one person with good bandwidth and
+  cache the county outputs in `data/processed/`.
 
 ## Suggested division of the download work
 
-- Person A: TIGER, NRI, eGRID, Queued Up, Drought Monitor. All direct
-  county or name joins. Should take half a day.
+- Person A: TIGER, NRI, eGRID, Queued Up, Drought Monitor, FracTracker,
+  CMRA. All direct county joins or paged ArcGIS services. Half a day.
 - Person B: NREL rasters, NLCD, Aqueduct, Normals. All spatial. One day
   including the zonal stats run.
-- Person C: FCC signup, EIA 861 and 923 via PUDL, GDELT via BigQuery, Data
-  Center Watch hand-coding. One day.
+- Person C: EIA 861 and 923 via PUDL or the ZIPs, FCC via the Esri layer,
+  GDELT via BigQuery, hand-verification of the opposition labels. One day.

@@ -33,9 +33,11 @@ Working design decisions so far:
 
 ## Environment notes
 
-- The cloud sandbox network policy allows package registries and GitHub only.
-  Dataset hosts (gdeltproject.org, epa.gov, census.gov, nrel.gov) are blocked
-  from this sandbox. Verify dataset access on a teammate's laptop, not here.
+- The cloud sandbox network policy was opened on 2026-10-03. Most dataset
+  hosts work. These still block the sandbox's shared IP: www.fema.gov,
+  broadbandmap.fcc.gov, emp.lbl.gov, nrel.gov (use nlr.gov), web.archive.org.
+  GDELT's search API rate-limits the shared IP, so test it from a laptop.
+  Working alternatives for each are in research/data_inventory.md.
 - Repo layout (planned):
   - `research/` notes, data inventory, findings
   - `etl/` scripts that build the county table
