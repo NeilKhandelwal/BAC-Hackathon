@@ -17,6 +17,7 @@ gates:
   max_grid_co2_lb_mwh: null
   min_renewable_share: null
   max_queue_median_age_years: 5
+  min_nearby_capacity_multiple: 5     # plant MW within 100 km must be at least this times facility.mw
   max_water_stress_if_evaporative: 2
   hazard_percentile_max:
     nri_inland_flood_score: 90

@@ -270,3 +270,33 @@ def test_report_counts_exposed_counties_for_each_hazard_gate():
     _, _, report = rank(df, cond, {"p": [{"column": "nri_coastal_flood_score"}]})
     assert report["hazard_gate_nonzero_counties"] == {"hazard_percentile_max.nri_coastal_flood_score": 2}
     assert report["gate_failures"]["hazard_percentile_max.nri_coastal_flood_score"] == 2
+
+
+def test_top_reasons_ignores_a_heavy_single_column_pillar_tied_for_most_counties():
+    # Mirrors air_nonattainment_count: alone in a heavy pillar and 0 almost everywhere.
+    # It says nothing about why one clean county beats another, so it must not lead.
+    n = 20
+    df = table(tied=[0.0] * (n - 1) + [2.0], a=np.arange(n, dtype=float), b=np.arange(n, dtype=float))
+    pillars = {"permit": [{"column": "tied", "direction": "lower_better"}],
+               "other": [{"column": "a"}, {"column": "b"}]}
+    ranked, _, _ = rank(df, {"weights": {"permit": 0.5, "other": 0.5}, "gates": {}}, pillars)
+    assert ranked.iloc[0]["top_reasons"].split(";")[0] in ("a", "b")
+
+
+# Power deliverability
+
+def test_nearby_capacity_gate_scales_with_facility_size():
+    # 1,000 MW nearby can plausibly feed a 100 MW campus at 5x but not a 300 MW one.
+    df = table(plant_capacity_mw_100km=[1000.0, 2000.0, np.nan])
+    gates = {"min_nearby_capacity_multiple": 5}
+    small = apply_gates(df, {"gates": gates, "facility": {"mw": 100}})
+    big = apply_gates(df, {"gates": gates, "facility": {"mw": 300}})
+    assert list(small["failed_gates"]) == ["", "", ""]
+    assert list(big["failed_gates"]) == ["min_nearby_capacity_multiple", "", ""]
+    assert big["unknown_gates"][2] == "min_nearby_capacity_multiple"  # null is unknown, not a failure
+
+
+def test_nearby_capacity_gate_without_facility_mw_fails_loudly():
+    df = table(plant_capacity_mw_100km=[1000.0])
+    with pytest.raises(ValueError, match="facility.mw"):
+        apply_gates(df, {"gates": {"min_nearby_capacity_multiple": 5}, "facility": {}})

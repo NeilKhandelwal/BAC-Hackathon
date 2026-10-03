@@ -19,6 +19,9 @@ energy_carbon:
     direction: higher_better
   - column: wind_speed_100m_ms
     direction: higher_better
+  - column: plant_clean_capacity_mw_100km  # clean nameplate MW within 100 km of the centroid
+    direction: higher_better
+    transform: log1p
 
 water:
   - column: drought_share_weeks_d2plus
@@ -67,6 +70,9 @@ grid_infrastructure:
     direction: lower_better
   - column: dist_ixp_km
     direction: lower_better
+  - column: plant_capacity_mw_100km        # nameplate MW within 100 km; proxy for deliverable power
+    direction: higher_better
+    transform: log1p
 
 land:
   - column: pop_density_per_sqkm           # low density means land is available
