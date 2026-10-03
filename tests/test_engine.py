@@ -508,3 +508,35 @@ def test_every_preset_exempts_permitting_and_ships_no_model_gate():
         c = load_yaml(preset)
         assert c["pillar_floor_exempt"] == ["permitting"], preset.stem
         assert c["gates"]["max_permitting_risk"] is None, preset.stem  # the model is dropped
+
+
+# Industrial reuse and economic opportunity
+
+def twin_counties(**changes):
+    """Two fake counties identical in every column except the ones in changes, which county 1 takes."""
+    df = make(n=200, null_share=0.0)
+    df.loc[1, df.columns.drop(["fips", "county_name"])] = df.loc[0, df.columns.drop(["fips", "county_name"])]
+    for col, (v0, v1) in changes.items():
+        df.loc[0, col], df.loc[1, col] = v0, v1
+    sc = score(df, load_yaml(ROOT / "engine/pillars.yaml"), load_yaml(PRESETS[0])["weights"]).scores
+    return sc.loc[0], sc.loc[1]
+
+
+def test_retired_coal_capacity_raises_the_grid_pillar():
+    # A retired plant's interconnection can be reused, so more retired MW means easier power.
+    a, b = twin_counties(coal_retired_mw=(0.0, 800.0))
+    assert b["pillar_grid_infrastructure"] > a["pillar_grid_infrastructure"]
+    assert b["pillar_community"] == a["pillar_community"]  # infrastructure only, no community claim
+
+
+def test_higher_unemployment_raises_the_community_pillar():
+    # Stated value: a campus brings more benefit where jobs are scarce.
+    a, b = twin_counties(unemployment_rate_pct_2023=(2.5, 7.0))
+    assert b["pillar_community"] > a["pillar_community"]
+
+
+def test_steeper_population_decline_raises_the_community_pillar():
+    # Stated value: more benefit, and more available workforce, where population is falling.
+    a, b = twin_counties(pop_change_pct_2010_2024=(10.0, -15.0))
+    assert b["pillar_community"] > a["pillar_community"]
+    assert b["pillar_grid_infrastructure"] == a["pillar_grid_infrastructure"]
