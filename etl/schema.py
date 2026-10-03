@@ -54,4 +54,7 @@ STRETCH = {
     "saidi_minutes": "float64", "dist_ixp_km": "float64",
     "pct_developed": "float64", "pct_cropland": "float64", "pct_forest_wetland": "float64",
     "pct_protected": "float64", "greenhouse_acres": "float64",
+    "mfg_emp_share_2001": "float64", "mfg_loss_share_emp_2001": "float64",
+    "unemployment_rate_pct_2023": "float64", "pop_change_pct_2010_2024": "float64",
+    "coal_retired_mw": "float64",
 }
