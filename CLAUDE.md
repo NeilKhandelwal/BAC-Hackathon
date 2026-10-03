@@ -9,14 +9,22 @@ Presentation, Innovation, Execution, and Theme equally.
 
 Working design decisions so far:
 
-- Spatial unit is the county (FIPS). Everything aggregates to one county table.
-- Hard gates first (floodplain, protected land, no fiber), weighted scores second.
-- Weights are user-adjustable in the demo. Report robustness across weight
-  samples, not a single winner.
-- Score two horizons: present day and 2050.
-- Differentiator is a community-opposition risk layer built from local news
-  (GDELT) and Data Center Watch outcomes.
+- The deliverable is a decision engine, not a single answer: conditions in,
+  ranked and explained shortlist out, repeatable with new data or regions.
+- Primary user is a site-selection lead at a developer or hyperscaler.
+- Spatial unit is the county (FIPS). Everything aggregates to one county
+  table. Schema is in `docs/schema.md`. Conditions format is in
+  `docs/conditions.md`. Pillar mapping is in `engine/pillars.yaml`.
+- Hard gates first, percentile scores per pillar, weighted composite with a
+  pillar floor rule. Robustness by resampling weights. Portfolio mode for
+  multiple sites.
+- Two horizons: today and 2050, selected by the conditions file.
+- The ranking is not ML. ML is used only for the opposition risk model
+  (county features to pushback or cancellation, trained on FracTracker).
+  News sentiment is a minor optional data source, cut from the hackathon
+  build. An LLM may generate explanations but never decides.
 - The demo must not depend on live API calls. Precompute to static files.
+- Time box: hackathon ends Sunday morning. The 20-hour plan is in README.md.
 
 ## Working conventions for Claude
 
@@ -38,7 +46,9 @@ Working design decisions so far:
   broadbandmap.fcc.gov, emp.lbl.gov, nrel.gov (use nlr.gov), web.archive.org.
   GDELT's search API rate-limits the shared IP, so test it from a laptop.
   Working alternatives for each are in research/data_inventory.md.
-- Repo layout (planned):
+- Repo layout:
+  - `docs/` schema and conditions specs
+  - `engine/` pillar mapping, condition presets, engine code
   - `research/` notes, data inventory, findings
   - `etl/` scripts that build the county table
   - `data/raw/` (gitignored) and `data/processed/` (small outputs only)
