@@ -38,7 +38,12 @@ CORE = {
 }
 
 STRETCH = {
-    "grid_subregion": "string", "solar_ghi_kwh_m2_day": "float64", "wind_speed_100m_ms": "float64",
+    "nri_drought_risks": "float64", "nri_inland_flood_risks": "float64",
+    "nri_coastal_flood_risks": "float64", "nri_wildfire_risks": "float64",
+    "nri_hurricane_risks": "float64", "nri_heat_wave_risks": "float64",
+    "nri_tornado_risks": "float64", "nri_winter_risks": "float64",
+    "grid_subregion": "string", "grid_co2_lb_mwh_state": "float64",
+    "grid_renewable_share_state": "float64", "solar_ghi_kwh_m2_day": "float64", "wind_speed_100m_ms": "float64",
     "water_stress_bws": "float64", "water_stress_2050": "float64", "grid_water_gal_mwh": "float64",
     "saidi_minutes": "float64", "dist_ixp_km": "float64",
     "pct_developed": "float64", "pct_cropland": "float64", "pct_forest_wetland": "float64",

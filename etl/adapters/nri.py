@@ -8,7 +8,10 @@ from etl.arcgis import fetch_csv
 SOURCE = {"name": "FEMA NRI", "version": "v1.20",
           "url": "https://services.arcgis.com/XG15cJAlne2vxtgt/arcgis/rest/services/National_Risk_Index_Counties/FeatureServer/0"}
 RAW = "nri/nri_counties.csv"
-NOTES = ["NRI hazard scores rated 'Not Applicable' are written as 0, not null. "
+NOTES = ["nri_*_score hazard columns are national percentiles of the expected annual loss rate "
+         "(*_ALR_NPCTL). The dollar-loss risk scores (*_RISKS) are kept as nri_*_risks. "
+         "nri_risk_score is still the composite RISK_SCORE.",
+         "NRI hazards rated 'Not Applicable' are written as 0, not null. "
          "'Insufficient Data' stays null."]
 
 COLUMNS = {
@@ -33,5 +36,7 @@ def build(raw_dir):
             continue
         # "Not Applicable" means the hazard can't occur there (coastal flooding inland), which is
         # a real zero. "Insufficient Data" stays null.
-        out[column] = nri[f"{hazard}_RISKS"].mask(nri[f"{hazard}_RISKR"] == "Not Applicable", 0.0)
+        not_applicable = nri[f"{hazard}_RISKR"] == "Not Applicable"
+        out[column] = nri[f"{hazard}_ALR_NPCTL"].mask(not_applicable, 0.0)
+        out[column.replace("_score", "_risks")] = nri[f"{hazard}_RISKS"].mask(not_applicable, 0.0)
     return out

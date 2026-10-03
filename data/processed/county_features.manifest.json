@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T20:49:25+00:00",
+  "built_at": "2026-10-03T20:51:16+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -103,7 +103,18 @@
     "moratorium_active",
     "moratorium_pending",
     "moratorium_state_active",
-    "air_nonattainment_count"
+    "air_nonattainment_count",
+    "nri_drought_risks",
+    "nri_inland_flood_risks",
+    "nri_coastal_flood_risks",
+    "nri_wildfire_risks",
+    "nri_hurricane_risks",
+    "nri_heat_wave_risks",
+    "nri_tornado_risks",
+    "nri_winter_risks",
+    "grid_subregion",
+    "grid_co2_lb_mwh_state",
+    "grid_renewable_share_state"
   ],
   "columns_missing": [
     "permitting_discretionary_risk",
@@ -115,7 +126,6 @@
     "state_sales_tax_exemption",
     "state_large_load_tariff",
     "state_policy_risk",
-    "grid_subregion",
     "solar_ghi_kwh_m2_day",
     "wind_speed_100m_ms",
     "water_stress_bws",
@@ -138,13 +148,14 @@
     "heat_sink_score": 65
   },
   "notes": [
-    "NRI hazard scores rated 'Not Applicable' are written as 0, not null. 'Insufficient Data' stays null.",
+    "nri_*_score hazard columns are national percentiles of the expected annual loss rate (*_ALR_NPCTL). The dollar-loss risk scores (*_RISKS) are kept as nri_*_risks. nri_risk_score is still the composite RISK_SCORE.",
+    "NRI hazards rated 'Not Applicable' are written as 0, not null. 'Insufficient Data' stays null.",
     "CMRA reports the 8 old Connecticut counties. Each planning region takes the values of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
     "CMRA has no heating degree days for 65 counties, so hdd_* and heat_sink_score are null there. 51 are the coldest counties (ND, MN, CO, WY, MI, WI); CMRA reports nothing above about 9,000 HDD. 14 are small Virginia independent cities that CMRA leaves blank for HDD only. Neither group is interpolated.",
     "Queue MW columns are 0 for counties with no matching queue entries. Median age and withdrawal rate are null there. Queue age is measured to 2025-12-31.",
     "Queue rows for old Connecticut counties are summed into the planning region that holds most of the county, so two regions show no queue activity.",
     "fiber_share_locations measures last-mile fiber, a proxy for backbone access.",
-    "Grid carbon and renewable share are state averages (ST23 sheet: STCO2RTA, STTRPR), the same for every county in a state. Annual average rates, not marginal.",
+    "Grid carbon and renewable share are eGRID subregion averages (SRL23 sheet: SRCO2RTA, SRTRPR), assigned by the county's internal point. Annual average rates, not marginal. State averages are kept in the *_state columns.",
     "drought_share_weeks_d2plus is the mean weekly percent of county area in D2 or worse, so it weights weeks by area.",
     "Facility counts and MW are 0 for counties with no tracked facility. Facilities join by county name, then by lat/lon when the name fails.",
     "moratorium_active and moratorium_pending count FracTracker categories 'moratorium' and 'ban' only, not zoning restrictions, and skip entries whose end_date has passed. Municipal and tribal moratoria are not rolled up to the county.",

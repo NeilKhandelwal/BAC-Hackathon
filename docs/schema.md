@@ -36,9 +36,11 @@ Rules:
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
-| `grid_co2_lb_mwh` | float | eGRID2023 ST sheet, state output emission rate | core | lower is better. State-level until the subregion join lands. |
-| `grid_renewable_share` | float 0-1 | eGRID2023 ST sheet, renewable generation share | core | includes hydro. Confirm the exact field in the workbook; names changed between editions. |
-| `grid_subregion` | str | eGRID subregion shapefile | stretch | replaces state-level rates when available |
+| `grid_co2_lb_mwh` | float | eGRID2023 SRL sheet `SRCO2RTA`, subregion output emission rate | core | lower is better. Falls back to the state rate if a county has no subregion. |
+| `grid_renewable_share` | float 0-1 | eGRID2023 SRL sheet `SRTRPR`, subregion renewable generation share | core | includes hydro |
+| `grid_subregion` | str | eGRID2023 subregion shapefile, county internal point | stretch | nearest subregion when the point falls outside every polygon |
+| `grid_co2_lb_mwh_state` | float | eGRID2023 ST sheet `STCO2RTA` | stretch | for comparison only; not scored |
+| `grid_renewable_share_state` | float 0-1 | eGRID2023 ST sheet `STTRPR` | stretch | for comparison only; not scored |
 | `queue_active_mw_total` | float | LBNL Queued Up 2026, `q_status == active` | core | sum of `mw_1` |
 | `queue_active_mw_clean` | float | LBNL, active and `type_clean` in solar, wind, storage, hybrid | core | decarbonization signal |
 | `queue_median_age_years` | float | LBNL, active projects, years since `q_date` | core | congestion proxy. Higher is worse. |
@@ -52,7 +54,7 @@ Rules:
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
 | `drought_share_weeks_d2plus` | float 0-1 | US Drought Monitor 2000-2025, cumulative `D2` | core | area-weighted share of weeks |
-| `nri_drought_score` | float 0-100 | FEMA NRI `DRGT_RISKS` | core | |
+| `nri_drought_score` | float 0-100 | FEMA NRI `DRGT_ALR_NPCTL` | core | loss-rate percentile; see the note under climate resilience |
 | `water_stress_bws` | float 0-5 | WRI Aqueduct 4.0 `bws_raw`, area-weighted | stretch | gate input for evaporative cooling |
 | `water_stress_2050` | float 0-5 | Aqueduct 4.0 future, 2050 business-as-usual | stretch | |
 | `grid_water_gal_mwh` | float | EIA-923 8D + EIA-860, by eGRID subregion | stretch | water embedded in grid power |
@@ -61,14 +63,15 @@ Rules:
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
-| `nri_risk_score` | float 0-100 | FEMA NRI `RISK_SCORE` | core | composite |
-| `nri_inland_flood_score` | float 0-100 | NRI `IFLD_RISKS` | core | v1.20 name; was RFLD |
-| `nri_coastal_flood_score` | float 0-100 | NRI `CFLD_RISKS` | core | |
-| `nri_wildfire_score` | float 0-100 | NRI `WFIR_RISKS` | core | |
-| `nri_hurricane_score` | float 0-100 | NRI `HRCN_RISKS` | core | |
-| `nri_heat_wave_score` | float 0-100 | NRI `HWAV_RISKS` | core | |
-| `nri_tornado_score` | float 0-100 | NRI `TRND_RISKS` | core | |
-| `nri_winter_score` | float 0-100 | NRI `WNTW_RISKS` | core | |
+| `nri_risk_score` | float 0-100 | FEMA NRI `RISK_SCORE` | core | composite, dollar-loss based. Not scored. |
+| `nri_inland_flood_score` | float 0-100 | NRI `IFLD_ALR_NPCTL` | core | v1.20 name; was RFLD |
+| `nri_coastal_flood_score` | float 0-100 | NRI `CFLD_ALR_NPCTL` | core | |
+| `nri_wildfire_score` | float 0-100 | NRI `WFIR_ALR_NPCTL` | core | |
+| `nri_hurricane_score` | float 0-100 | NRI `HRCN_ALR_NPCTL` | core | |
+| `nri_heat_wave_score` | float 0-100 | NRI `HWAV_ALR_NPCTL` | core | |
+| `nri_tornado_score` | float 0-100 | NRI `TRND_ALR_NPCTL` | core | |
+| `nri_winter_score` | float 0-100 | NRI `WNTW_ALR_NPCTL` | core | |
+| `nri_<hazard>_risks` | float 0-100 | NRI `<HAZARD>_RISKS` | stretch | the eight hazard columns as dollar-loss risk scores, such as `nri_inland_flood_risks`. For comparison only; not scored. |
 | `cdd_hist` | float | CMRA `HISTORIC_MEAN_CDD` | core | cooling degree days, base 65F |
 | `cdd_2050_rcp45` | float | CMRA `RCP45MID_MEAN_CDD` | core | |
 | `cdd_2050_rcp85` | float | CMRA `RCP85MID_MEAN_CDD` | core | |
@@ -76,6 +79,11 @@ Rules:
 | `hdd_2050_rcp85` | float | CMRA `RCP85MID_MEAN_HDD` | core | |
 | `days_above_95f_hist` | float | CMRA `HISTORIC_MEAN_TMAX95F` | core | |
 | `days_above_95f_2050_rcp85` | float | CMRA `RCP85MID_MEAN_TMAX95F` | core | |
+
+The `nri_*_score` hazard columns are national percentiles of the expected
+annual loss rate, which is loss divided by exposure. The NRI risk scores
+(`*_RISKS`) track dollar losses, so they rate populous counties as hazardous
+because there is more to lose.
 
 NRI hazard scores are the one exception to "null never means zero." Where NRI
 rates a hazard "Not Applicable" for a county, such as coastal flooding

@@ -71,5 +71,23 @@ def test_known_counties_look_right(table):
     row = table.set_index("fips")
     assert table.loc[table.dc_existing_count.idxmax(), "fips"] == "51107"  # Loudoun, VA
     assert row.cdd_2050_rcp85["04013"] > row.cdd_hist["04013"] > row.cdd_hist["19161"]  # Maricopa warms
-    assert row.grid_co2_lb_mwh["50001"] < 100 < 1500 < row.grid_co2_lb_mwh["54001"]  # VT vs WV
+    assert row.moratorium_state_active["36061"] == row.moratorium_state_active["36001"]  # state flag broadcasts
+
+
+def test_grid_rates_describe_the_subregion_not_the_state(table):
+    # A 300 MW load in Vermont draws from the New England grid, not Vermont's own hydro.
+    row = table.set_index("fips")
+    assert row.grid_subregion["50001"] == "NEWE"
+    assert row.grid_co2_lb_mwh_state["50001"] < 100 < row.grid_co2_lb_mwh["50001"]
+    assert row.grid_co2_lb_mwh["50001"] == row.grid_co2_lb_mwh["25025"]   # Vermont and Boston share a grid
+    assert row.grid_co2_lb_mwh["36061"] > 2 * row.grid_co2_lb_mwh["36001"]  # NYC vs upstate
+    assert table.grid_subregion.notna().all()
+
+
+def test_hazard_scores_do_not_punish_counties_for_being_large(table):
+    # Dollar-loss risk rates Dallas and Polk County, Iowa as flood-prone because there is a lot
+    # to lose. The loss-rate percentile that the engine gates on must not.
+    row = table.set_index("fips")
+    for fips in ("48113", "19153", "51107"):
+        assert row.nri_inland_flood_risks[fips] > 80 > 50 > row.nri_inland_flood_score[fips]
     assert row.moratorium_state_active["36061"] == row.moratorium_state_active["36001"]  # state flag broadcasts
