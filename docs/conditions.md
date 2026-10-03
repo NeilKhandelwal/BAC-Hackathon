@@ -39,16 +39,18 @@ gates:                            # hard exclusions, applied before scoring
   exclude_moratorium_active: true
   exclude_moratorium_state_active: false
   min_fiber_share_locations: 0.4
-  max_opposition_risk: null       # 0-1; null disables
+  max_permitting_risk: null       # 0-1, applied to permitting_discretionary_risk; null disables
+  exclude_air_nonattainment: false   # true excludes counties with any ozone or PM2.5 nonattainment
   min_population: 5000            # proxy for workforce until a labor layer exists
 
 weights:                          # must sum to 1; the engine renormalizes and warns
-  energy_carbon: 0.20
-  water: 0.15
-  climate_resilience: 0.15
-  grid_infrastructure: 0.20
-  land: 0.10
-  community: 0.20
+  energy_carbon: 0.18
+  water: 0.14
+  climate_resilience: 0.14
+  grid_infrastructure: 0.18
+  land: 0.08
+  community: 0.10
+  permitting: 0.18
 
 pillar_floor_percentile: 20       # a county below this percentile on any pillar can't rank above a county that isn't. Set 0 to disable.
 
@@ -109,8 +111,8 @@ toggle demo.
 | File | Intended user | What's different |
 | --- | --- | --- |
 | `balanced.yaml` | default demo | the values above |
-| `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.35, community 0.25, energy_carbon 0.10; queue gate 3 years; opposition gate 0.6 |
-| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25; carbon gate 600 lb/MWh; evaporative cooling disallowed above water stress 1; horizon 2050 |
+| `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.30, permitting 0.30; queue gate 3 years; permitting risk gate 0.6; state moratorium excluded |
+| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25, permitting 0.10; carbon gate 600 lb/MWh; evaporative cooling disallowed above water stress 1; horizon 2050 |
 
 ## CLI
 
@@ -127,7 +129,7 @@ network call.
 `rank` returns one row per county that passed the gates, sorted by
 composite, with columns: `rank`, `fips`, `county_name`, `state`,
 `composite`, one `pillar_<name>` column per pillar, `robustness`,
-`coverage`, `floor_ok`, `opposition_risk`, `horizon_delta` (composite under
+`coverage`, `floor_ok`, `permitting_discretionary_risk`, `permitting_pathway`, `horizon_delta` (composite under
 2050 minus composite under 2026, when both can be computed), and
 `top_reasons` (the three columns that contributed most). Excluded counties
 are returned separately with `failed_gate`.

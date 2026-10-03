@@ -83,16 +83,23 @@ land:
     direction: lower_better
 
 community:
-  - column: opposition_risk
-    direction: lower_better
-  - column: dc_pushback_count
-    direction: lower_better
-    transform: log1p
   - column: heat_sink_score                # heat-reuse opportunity
     direction: higher_better
-  - column: population                     # workforce proxy
-    direction: higher_better
-    transform: log1p
   - column: greenhouse_acres
     direction: higher_better
     transform: log1p
+  - column: population                     # workforce proxy
+    direction: higher_better
+    transform: log1p
+
+permitting:
+  - column: permitting_discretionary_risk  # model output; see docs/permitting.md
+    direction: lower_better
+  - column: air_nonattainment_count
+    direction: lower_better
+  - column: water_permit_risk
+    direction: lower_better
+  - column: state_policy_risk
+    direction: lower_better
+  - column: pct_forest_wetland
+    direction: lower_better

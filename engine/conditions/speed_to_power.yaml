@@ -29,16 +29,18 @@ gates:
   exclude_moratorium_active: true
   exclude_moratorium_state_active: true
   min_fiber_share_locations: 0.5
-  max_opposition_risk: 0.6
+  max_permitting_risk: 0.6             # model probability; null disables
+  exclude_air_nonattainment: false
   min_population: 10000
 
 weights:
-  energy_carbon: 0.10
-  water: 0.10
-  climate_resilience: 0.10
-  grid_infrastructure: 0.35
-  land: 0.10
-  community: 0.25
+  energy_carbon: 0.08
+  water: 0.07
+  climate_resilience: 0.08
+  grid_infrastructure: 0.30
+  land: 0.07
+  community: 0.10
+  permitting: 0.30
 
 pillar_floor_percentile: 10
 

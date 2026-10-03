@@ -17,14 +17,16 @@ Working design decisions so far:
   `docs/conditions.md`. Pillar mapping is in `engine/pillars.yaml`.
 - Hard gates first, percentile scores per pillar, weighted composite with a
   pillar floor rule. Robustness by resampling weights. Portfolio mode for
-  multiple sites.
+  multiple sites is a stretch goal.
+- Seven pillars: energy and carbon, water, climate resilience, grid and
+  infrastructure, land, community, permitting.
 - Two horizons: today and 2050, selected by the conditions file.
-- The ranking is not ML. ML is used only for the opposition risk model
-  (county features to pushback or cancellation, trained on FracTracker).
-  News sentiment is a minor optional data source, cut from the hackathon
-  build. An LLM may generate explanations but never decides.
+- The ranking is not ML. ML is used only for the discretionary-approval part
+  of the permitting pillar, trained on FracTracker outcomes. Method in
+  `docs/permitting.md`. News sentiment is an optional model feature, cut
+  from the hackathon build. An LLM may generate explanations but never decides.
 - The demo must not depend on live API calls. Precompute to static files.
-- Time box: hackathon ends Sunday morning. The 20-hour plan is in README.md.
+- Time box: hackathon ends Sunday morning. Build procedure is in `docs/plan.md`.
 
 ## Working conventions for Claude
 

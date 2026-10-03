@@ -106,16 +106,34 @@ and `land_area_sqkm` only.
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
-| `dc_pushback_count` | int | FracTracker, `community_pushback == Yes` | core | |
-| `dc_pushback_any` | bool | derived | core | |
-| `moratorium_active` | bool | FracTracker moratoria, county level, status active | core | by GEOID |
-| `moratorium_pending` | bool | FracTracker moratoria, county level, status pending | core | |
-| `moratorium_state_active` | bool | FracTracker moratoria, state level | core | broadcast to all counties in the state |
-| `moratorium_municipal_count` | int | FracTracker moratoria, municipal rows within county | stretch | needs place-to-county crosswalk |
-| `opposition_risk` | float 0-1 | Person C's model | core | probability of pushback or cancellation. Null until the model runs. |
-| `opposition_dominant_reason` | str | Person C, from news classification | stretch | one of the reason vocabulary in `research/opposition_labels.md` |
+| `median_household_income` | float | ACS 5-year B19013 | core | also a permitting model feature |
 | `heat_sink_score` | float | derived: `hdd_hist * log1p(pop_density_per_sqkm)` | core | v1 heat-reuse proxy |
 | `greenhouse_acres` | float | USDA Census of Agriculture 2022 | stretch | real heat-sink input |
+
+## Permitting
+
+Method is in `docs/permitting.md`. Power interconnection is not repeated
+here; it's scored in grid and infrastructure.
+
+| Column | Type | Source | Tier | Notes |
+| --- | --- | --- | --- | --- |
+| `dc_pushback_count` | int | FracTracker, `community_pushback == Yes` | core | label input only; not scored, to avoid double counting with the model |
+| `dc_pushback_any` | bool | derived | core | label input only |
+| `moratorium_active` | bool | FracTracker moratoria, county level, status active | core | by GEOID; gate |
+| `moratorium_pending` | bool | FracTracker moratoria, county level, status pending | core | |
+| `moratorium_state_active` | bool | FracTracker moratoria, state level | core | broadcast to all counties in the state |
+| `permitting_discretionary_risk` | float 0-1 | Person C's model | core | probability a project meets opposition that delays or kills it. Null until the model runs. |
+| `permitting_drivers` | str | Person C's model | core | top three features by contribution, semicolon list |
+| `air_nonattainment_count` | int 0-2 | EPA Green Book, county in nonattainment for 8-hour ozone, PM2.5 | core | constrains diesel backup generation |
+| `water_rights_regime` | str | hand-coded state table | core | `prior_appropriation`, `riparian`, or `hybrid` |
+| `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | |
+| `water_permit_risk` | int 0-2 | derived: 0 riparian, 1 hybrid or prior appropriation, 2 if also a managed groundwater area | core | |
+| `state_dc_bill_pending` | bool | hand-coded from NCSL and FracTracker state layer | core | moratorium or restriction bill filed in the current session |
+| `state_sales_tax_exemption` | bool | hand-coded state table | core | data center equipment exemption in force |
+| `state_large_load_tariff` | bool | hand-coded state table | core | utility large-load tariff with minimum bills in force |
+| `state_policy_risk` | int 0-3 | derived: bill pending + no exemption + tariff | core | |
+| `pct_forest_wetland` | float 0-1 | NLCD | stretch | wetland and habitat permit exposure; listed under Land as well |
+| `permitting_pathway` | str | derived by the engine, not the ETL | n/a | see `docs/permitting.md` |
 
 ## Coverage
 
