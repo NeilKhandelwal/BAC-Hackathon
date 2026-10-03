@@ -1,0 +1,50 @@
+state,water_rights_regime,source_url,confidence,notes
+AL,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; registration/reporting only
+AZ,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+AR,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; registration
+CA,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R/PA
+CO,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+CT,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit >50k gpd)
+DE,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit >50k gpd)
+FL,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,medium,no common-law rights; regulated riparian via water mgmt district permits
+GA,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit >100k gpd)
+ID,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+IL,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; permits for GW only
+IN,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; registration only
+IA,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+KS,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,medium,NALC lists PA; vested pre-1945 riparian rights recognized
+KY,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit >10k gpd)
+LA,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,medium,civil-law riparian; NALC: R
+ME,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R
+MD,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+MA,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+MI,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; Great Lakes Compact large-withdrawal rules
+MN,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+MS,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,low,"NALC: ""PA?""; permit system since 1956 over riparian base"
+MO,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; no permit system
+MT,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+NE,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,medium,NALC: PA with limited early riparian rights
+NV,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+NH,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R
+NJ,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+NM,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+NY,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+NC,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+ND,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,medium,NALC lists PA; vested riparian rights recognized
+OH,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+OK,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R/PA
+OR,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,medium,NALC: PA; some historical riparian rights recognized
+PA,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; river basin commissions regulate
+RI,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R
+SC,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+SD,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R/PA
+TN,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; registration only
+TX,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,medium,NALC lists PA; pre-1967 riparian claims adjudicated
+UT,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+VT,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R
+VA,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+WA,hybrid,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA/R
+WV,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: R; registration only
+WI,riparian,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,regulated riparian (permit)
+WY,prior_appropriation,https://nationalaglawcenter.org/wp-content/uploads/2017/03/2016.10.31-Water-Rights-Tables.pdf,high,NALC: PA
+DC,riparian,https://media.cadc.uscourts.gov/opinions/docs/2011/01/09-5363-1287248.pdf,low,common-law riparian per DC Cir. case law; not in NALC table

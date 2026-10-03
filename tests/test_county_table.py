@@ -91,3 +91,30 @@ def test_hazard_scores_do_not_punish_counties_for_being_large(table):
     for fips in ("48113", "19153", "51107"):
         assert row.nri_inland_flood_risks[fips] > 80 > 50 > row.nri_inland_flood_score[fips]
     assert row.moratorium_state_active["36061"] == row.moratorium_state_active["36001"]  # state flag broadcasts
+
+
+def test_unknown_policy_inputs_give_null_risk_not_a_low_score(table):
+    # Filling an unknown flag with false would make an unresearched state look permissive.
+    inputs = table[["state_dc_bill_pending", "state_sales_tax_exemption", "state_large_load_tariff"]]
+    assert (table.state_policy_risk.isna() == inputs.isna().any(axis=1)).all()
+    known = table.dropna(subset="state_policy_risk")
+    expected = (known.state_dc_bill_pending.astype(int) + (~known.state_sales_tax_exemption).astype(int)
+                + known.state_large_load_tariff.astype(int))
+    assert (known.state_policy_risk == expected).all()
+
+
+def test_water_permit_risk_follows_the_schema(table):
+    riparian = table.water_rights_regime == "riparian"
+    managed = table.groundwater_managed_area.fillna(False)
+    assert table.water_permit_risk.notna().all()  # an unresearched managed flag must not null the risk
+    assert (table.water_permit_risk[riparian] == 0).all()
+    assert (table.water_permit_risk[~riparian & managed] == 2).all()
+    assert (table.water_permit_risk[~riparian & ~managed] == 1).all()
+    assert table.set_index("fips").water_permit_risk["04013"] == 2  # Maricopa: Phoenix AMA
+
+
+def test_wind_raster_is_oriented_north_up(table):
+    # The source raster is stored south-up. A missed flip would swap North Dakota with Texas.
+    row = table.set_index("fips")
+    assert row.wind_speed_100m_ms["38015"] > 7.5 > 6 > row.wind_speed_100m_ms["22071"]  # Bismarck vs New Orleans
+    assert row.wind_speed_100m_ms["48375"] > 7.5 > 6.5 > row.wind_speed_100m_ms["12095"]  # Amarillo vs Orlando

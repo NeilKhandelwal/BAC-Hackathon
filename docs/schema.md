@@ -45,9 +45,9 @@ Rules:
 | `queue_active_mw_clean` | float | LBNL, active and `type_clean` in solar, wind, storage, hybrid | core | decarbonization signal |
 | `queue_median_age_years` | float | LBNL, active projects, years since `q_date` | core | congestion proxy. Higher is worse. |
 | `queue_withdrawal_rate` | float 0-1 | LBNL, withdrawn / (withdrawn + active + operational), `q_year >= 2019` | core | higher is worse |
-| `queue_operational_mw_5y` | float | LBNL, operational with `q_year >= 2019` | core | evidence the queue delivers |
+| `queue_operational_mw_5y` | float | LBNL, operational with `q_year >= 2019`, or with no `q_year` and `on_date` in 2021 or later | core | evidence the queue delivers |
 | `solar_ghi_kwh_m2_day` | float | NREL NSRDB annual raster, zonal mean | stretch | |
-| `wind_speed_100m_ms` | float | NREL WIND Toolkit 100 m raster, zonal mean | stretch | km/h in source, convert |
+| `wind_speed_100m_ms` | float | NREL WIND Toolkit 100 m raster, zonal mean | stretch | source is already m/s |
 
 ## Water
 
@@ -98,6 +98,8 @@ inland, the ETL writes 0. "Insufficient Data" stays null.
 | `dc_existing_mw` | float | FracTracker, same filter, sum `mw` | core | nulls in source treated as 0 for the sum |
 | `dc_proposed_count` | int | FracTracker, status in Proposed, Approved, Pre-proposal | core | |
 | `dc_proposed_mw` | float | FracTracker, same filter | core | |
+| `plant_capacity_mw_100km` | float | eGRID2023 PLNT sheet `NAMEPCAP`, `LAT`, `LON` | stretch | nameplate MW of power plants within 100 km (great circle) of the county internal point. A naive check that the nearby grid can carry the facility. |
+| `plant_clean_capacity_mw_100km` | float | eGRID2023 PLNT sheet, `PLFUELCT` in WIND, SOLAR, HYDRO, NUCLEAR, GEOTHERMAL | stretch | same radius, by plant primary fuel category |
 | `saidi_minutes` | float | EIA-861 reliability, customer-weighted | stretch | |
 | `dist_ixp_km` | float | PeeringDB, nearest internet exchange | stretch | backbone proxy |
 
@@ -137,7 +139,7 @@ here; it's scored in grid and infrastructure.
 | `permitting_drivers` | str | permitting model | core | top three features by contribution, semicolon list |
 | `air_nonattainment_count` | int 0-2 | EPA Green Book, county in nonattainment for 8-hour ozone, PM2.5 | core | constrains diesel backup generation |
 | `water_rights_regime` | str | hand-coded state table | core | `prior_appropriation`, `riparian`, or `hybrid` |
-| `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | |
+| `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | researched for AZ, TX, CO. Null in other prior-appropriation and hybrid states. |
 | `water_permit_risk` | int 0-2 | derived: 0 riparian, 1 hybrid or prior appropriation, 2 if also a managed groundwater area | core | |
 | `state_dc_bill_pending` | bool | hand-coded from NCSL and FracTracker state layer | core | moratorium or restriction bill filed in the current session |
 | `state_sales_tax_exemption` | bool | hand-coded state table | core | data center equipment exemption in force |

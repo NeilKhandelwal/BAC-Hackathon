@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T20:51:16+00:00",
+  "built_at": "2026-10-03T20:55:10+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -55,6 +55,18 @@
       "version": "county nonattainment history, export 2026-09-30",
       "url": "https://www3.epa.gov/airquality/greenbook/downld/phistory.xls",
       "fetched_at": "2026-10-03T20:44:59+00:00"
+    },
+    {
+      "name": "Hand-coded state permitting tables",
+      "version": "see source_url per row",
+      "url": "data/processed/state_policy.csv",
+      "fetched_at": "2026-10-03T20:53:15+00:00"
+    },
+    {
+      "name": "NREL WIND Toolkit",
+      "version": "CONUS 100 m mean wind speed, 2 km grid",
+      "url": "https://www.nlr.gov/docs/libraries/gis/us-wind-data.zip",
+      "fetched_at": "2026-10-03T20:48:51+00:00"
     }
   ],
   "columns_present": [
@@ -104,6 +116,13 @@
     "moratorium_pending",
     "moratorium_state_active",
     "air_nonattainment_count",
+    "water_rights_regime",
+    "groundwater_managed_area",
+    "water_permit_risk",
+    "state_dc_bill_pending",
+    "state_sales_tax_exemption",
+    "state_large_load_tariff",
+    "state_policy_risk",
     "nri_drought_risks",
     "nri_inland_flood_risks",
     "nri_coastal_flood_risks",
@@ -114,20 +133,15 @@
     "nri_winter_risks",
     "grid_subregion",
     "grid_co2_lb_mwh_state",
-    "grid_renewable_share_state"
+    "grid_renewable_share_state",
+    "wind_speed_100m_ms",
+    "plant_capacity_mw_100km",
+    "plant_clean_capacity_mw_100km"
   ],
   "columns_missing": [
     "permitting_discretionary_risk",
     "permitting_drivers",
-    "water_rights_regime",
-    "groundwater_managed_area",
-    "water_permit_risk",
-    "state_dc_bill_pending",
-    "state_sales_tax_exemption",
-    "state_large_load_tariff",
-    "state_policy_risk",
     "solar_ghi_kwh_m2_day",
-    "wind_speed_100m_ms",
     "water_stress_bws",
     "water_stress_2050",
     "grid_water_gal_mwh",
@@ -145,7 +159,12 @@
     "hdd_hist": 65,
     "hdd_2050_rcp85": 65,
     "median_household_income": 2,
-    "heat_sink_score": 65
+    "heat_sink_score": 65,
+    "groundwater_managed_area": 811,
+    "state_dc_bill_pending": 105,
+    "state_sales_tax_exemption": 203,
+    "state_large_load_tariff": 414,
+    "state_policy_risk": 722
   },
   "notes": [
     "nri_*_score hazard columns are national percentiles of the expected annual loss rate (*_ALR_NPCTL). The dollar-loss risk scores (*_RISKS) are kept as nri_*_risks. nri_risk_score is still the composite RISK_SCORE.",
@@ -153,13 +172,18 @@
     "CMRA reports the 8 old Connecticut counties. Each planning region takes the values of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
     "CMRA has no heating degree days for 65 counties, so hdd_* and heat_sink_score are null there. 51 are the coldest counties (ND, MN, CO, WY, MI, WI); CMRA reports nothing above about 9,000 HDD. 14 are small Virginia independent cities that CMRA leaves blank for HDD only. Neither group is interpolated.",
     "Queue MW columns are 0 for counties with no matching queue entries. Median age and withdrawal rate are null there. Queue age is measured to 2025-12-31.",
+    "queue_operational_mw_5y also counts operational projects with no q_year that came online in 2021 or later. That raised counties with operational MW from 339 to 353 and the total from 65.7 GW to 72.0 GW.",
     "Queue rows for old Connecticut counties are summed into the planning region that holds most of the county, so two regions show no queue activity.",
     "fiber_share_locations measures last-mile fiber, a proxy for backbone access.",
     "Grid carbon and renewable share are eGRID subregion averages (SRL23 sheet: SRCO2RTA, SRTRPR), assigned by the county's internal point. Annual average rates, not marginal. State averages are kept in the *_state columns.",
+    "plant_capacity_mw_100km sums eGRID plant nameplate MW within 100 km of the county internal point. Clean means the plant's primary fuel category is wind, solar, hydro, nuclear, or geothermal. It measures nearby generation, not spare capacity.",
     "drought_share_weeks_d2plus is the mean weekly percent of county area in D2 or worse, so it weights weeks by area.",
     "Facility counts and MW are 0 for counties with no tracked facility. Facilities join by county name, then by lat/lon when the name fails.",
     "moratorium_active and moratorium_pending count FracTracker categories 'moratorium' and 'ban' only, not zoning restrictions, and skip entries whose end_date has passed. Municipal and tribal moratoria are not rolled up to the county.",
-    "air_nonattainment_count counts ozone and PM2.5 once each when any part of the county is in nonattainment in 2026 under a standard that is not revoked."
+    "air_nonattainment_count counts ozone and PM2.5 once each when any part of the county is in nonattainment in 2026 under a standard that is not revoked.",
+    "groundwater_managed_area was researched for Arizona, Texas, and Colorado only. It is null in the other prior-appropriation and hybrid states, and false in riparian states. Low-confidence rows (small partial overlaps) count as not managed. A null flag does not raise water_permit_risk.",
+    "state_policy_risk is null for the 13 states where any of its three inputs is unknown.",
+    "Water regimes come from a 2016 National Agricultural Law Center table. KS, ND, NE, OR, and TX are coded hybrid although that source lists them as prior appropriation. A Texas priority groundwater area triggers a conservation district; it does not restrict pumping by itself. A false large-load tariff flag is weaker for states outside the EEI utility list. Most state policy rows are medium or low confidence; see the confidence column in data/processed/state_policy.csv."
   ],
   "joins": {
     "nri": {
@@ -201,11 +225,19 @@
       "rows": 3109,
       "fips_not_in_table": [],
       "counties_without_data": 0
+    },
+    "state_tables": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "nrel_wind": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
     }
   },
-  "errors": {
-    "state_tables": "FileNotFoundError: [Errno 2] No such file or directory: 'data/processed/state_water_regime.csv'"
-  },
+  "errors": {},
   "unmatched_name_rows": {
     "lbnl_queue": 623
   }

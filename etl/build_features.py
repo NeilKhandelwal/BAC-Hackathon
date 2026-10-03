@@ -23,7 +23,7 @@ from etl.schema import CORE, STRETCH
 RAW_DIR = Path("data/raw")
 OUT_DIR = Path("data/processed")
 ADAPTERS = ["tiger_acs", "nri", "cmra", "lbnl_queue", "fcc_fiber", "egrid", "drought_monitor",
-            "fractracker", "air_nonattainment", "state_tables"]  # tiger_acs must be first: it defines the rows
+            "fractracker", "air_nonattainment", "state_tables", "nrel_wind"]  # tiger_acs must be first: it defines the rows
 
 
 def _mtime(path):

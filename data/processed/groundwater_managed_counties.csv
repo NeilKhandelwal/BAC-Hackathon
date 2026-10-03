@@ -1,0 +1,63 @@
+fips,state,county_name,designation,source_url,confidence,notes
+04013,AZ,Maricopa County,Phoenix AMA; Pinal AMA; Harquahala INA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,high,partial by area (~58%) but covers Phoenix metro
+04021,AZ,Pinal County,"Phoenix, Pinal and Tucson AMAs",https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,high,partial (~71% of area)
+04019,AZ,Pima County,Tucson AMA; Pinal AMA; Santa Cruz AMA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,high,partial (~50% of area) incl. Tucson metro
+04023,AZ,Santa Cruz County,Santa Cruz AMA; Tucson AMA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,medium,partial (~56% of area)
+04003,AZ,Cochise County,Willcox AMA (2025); Douglas AMA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,medium,partial (~40% of area)
+04012,AZ,La Paz County,Ranegras Plain AMA (Jan 2026); Harquahala INA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,medium,partial (~26% of area); INA limits irrigation only
+04009,AZ,Graham County,Willcox AMA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,low,partial (~8% of area)
+04015,AZ,Mohave County,Hualapai Valley INA (2022),https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,low,partial (~9%); INA limits new irrigation only
+04025,AZ,Yavapai County,Prescott AMA; Phoenix AMA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,low,partial (~7% of area) but includes Prescott area
+04017,AZ,Navajo County,Joseph City INA,https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/AMA_INA_2024/FeatureServer,low,partial (~2%); INA limits new irrigation only
+48019,TX,Bandera County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48031,TX,Blanco County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48171,TX,Gillespie County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48259,TX,Kendall County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48265,TX,Kerr County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48035,TX,Bosque County,Central Texas Trinity Aquifer PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48099,TX,Coryell County,Central Texas Trinity Aquifer PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48217,TX,Hill County,Central Texas Trinity Aquifer PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48309,TX,McLennan County,Central Texas Trinity Aquifer PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48425,TX,Somervell County,Central Texas Trinity Aquifer PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48085,TX,Collin County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48097,TX,Cooke County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48113,TX,Dallas County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48121,TX,Denton County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48139,TX,Ellis County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48147,TX,Fannin County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48181,TX,Grayson County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48221,TX,Hood County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48251,TX,Johnson County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48337,TX,Montague County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48367,TX,Parker County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48439,TX,Tarrant County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48497,TX,Wise County,North-Central Texas Trinity and Woodbine PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48437,TX,Swisher County,Briscoe/Hale/Swisher PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,high,"whole county; PGMA prompts GCD creation, GCDs permit wells"
+48383,TX,Reagan County,Reagan/Upton/Midland PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48461,TX,Upton County,Reagan/Upton/Midland PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial; no GCD created in PGMA part
+48329,TX,Midland County,Reagan/Upton/Midland PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial; no GCD created in PGMA part
+48045,TX,Briscoe County,Briscoe/Hale/Swisher PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48189,TX,Hale County,Briscoe/Hale/Swisher PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48111,TX,Dallam County,Dallam County PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48141,TX,El Paso County,El Paso County PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48091,TX,Comal County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48209,TX,Hays County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48453,TX,Travis County,Hill Country PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+48029,TX,Bexar County,Hill Country PGMA; Northern Bexar PGMA,https://www.tceq.texas.gov/groundwater/groundwater-planning-assessment/pgma.html,medium,partial
+08095,CO,Phillips County,Colorado designated ground water basin: Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,high,whole county
+08125,CO,Yuma County,Colorado designated ground water basin: Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,high,whole county
+08063,CO,Kit Carson County,Colorado designated ground water basin: Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,high,whole county
+08009,CO,Baca County,Colorado designated ground water basin: Southern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,high,partial (~90% of area)
+08039,CO,Elbert County,Colorado designated ground water basin: Kiowa-Bijou; Upper Big Sandy,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,medium,partial (~67% of area)
+08121,CO,Washington County,Colorado designated ground water basin: Northern High Plains; Camp Creek,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,medium,partial (~66% of area)
+08115,CO,Sedgwick County,Colorado designated ground water basin: Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,medium,partial (~53% of area)
+08001,CO,Adams County,Colorado designated ground water basin: Kiowa-Bijou; Lost Creek,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,medium,partial (~51% of area)
+08005,CO,Arapahoe County,Colorado designated ground water basin: Kiowa-Bijou; Lost Creek,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,medium,partial (~50% of area)
+08017,CO,Cheyenne County,Colorado designated ground water basin: Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,medium,partial (~46% of area)
+08073,CO,Lincoln County,Colorado designated ground water basin: Northern High Plains; Upper Big Sandy,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,low,partial (~27% of area)
+08041,CO,El Paso County,Colorado designated ground water basin: Upper Black Squirrel Creek; Upper Big Sandy; Kiowa-Bijou,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,low,partial (~24% of area)
+08075,CO,Logan County,Colorado designated ground water basin: Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,low,partial (~21% of area)
+08061,CO,Kiowa County,Colorado designated ground water basin: Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,low,partial (~21% of area)
+08099,CO,Prowers County,Colorado designated ground water basin: Southern High Plains; Northern High Plains,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,low,partial (~15% of area)
+08123,CO,Weld County,Colorado designated ground water basin: Upper Crow Creek; Lost Creek; Kiowa-Bijou,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,low,partial (~15% of area)
+08087,CO,Morgan County,Colorado designated ground water basin: Kiowa-Bijou; Camp Creek,https://gisdnr.state.co.us/arcgis/rest/services/CSLB_External/Water/MapServer/0,low,partial (~13% of area)

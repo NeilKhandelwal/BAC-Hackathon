@@ -11,6 +11,9 @@ SOURCE = {"name": "LBNL Queued Up", "version": "2026 edition, queues through 202
 RAW = "lbnl/lbnl_ix_queue_data_file_thru2025.xlsx"
 NOTES = ["Queue MW columns are 0 for counties with no matching queue entries. Median age and "
          "withdrawal rate are null there. Queue age is measured to 2025-12-31.",
+         "queue_operational_mw_5y also counts operational projects with no q_year that came "
+         "online in 2021 or later. That raised counties with operational MW from 339 to 353 "
+         "and the total from 65.7 GW to 72.0 GW.",
          "Queue rows for old Connecticut counties are summed into the planning region that "
          "holds most of the county, so two regions show no queue activity."]
 
@@ -47,7 +50,10 @@ def build(raw_dir):
     out = pd.DataFrame({"fips": tiger.GEOID}).set_index("fips")
     out["queue_active_mw_total"] = active.groupby("fips").mw_1.sum()
     out["queue_active_mw_clean"] = clean.groupby("fips").mw_1.sum()
-    out["queue_operational_mw_5y"] = recent[recent.q_status == "operational"].groupby("fips").mw_1.sum()
+    # 236 operational projects have no q_year. Count those that came online in 2021 or later.
+    online = pd.to_datetime(q.on_date, errors="coerce") >= "2021-01-01"
+    delivered = q[(q.q_status == "operational") & ((q.q_year >= 2019) | (q.q_year.isna() & online))]
+    out["queue_operational_mw_5y"] = delivered.groupby("fips").mw_1.sum()
     out = out.fillna(0.0)
     age_years = (AS_OF - active.q_date).dt.days / 365.25
     out["queue_median_age_years"] = age_years.groupby(active.fips).median()
