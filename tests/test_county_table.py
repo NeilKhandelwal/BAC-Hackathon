@@ -63,6 +63,13 @@ def test_inapplicable_hazard_is_zero_not_null(table):
 def test_undefined_queue_metrics_are_null_not_zero(table):
     # A zero median age would rank a county with no queue as the least congested in the country.
     assert table.queue_median_age_years.isna().sum() > 1000
+
+
+def test_queue_statistics_need_at_least_three_projects(table):
+    # The engine gates on queue age. One stale application must not exclude a county.
+    thin = table[table.queue_active_count < 3]
+    assert len(thin) > 500 and thin.queue_median_age_years.isna().all()
+    assert set(table.queue_withdrawal_rate.dropna().unique()) != {0.0, 1.0}
     assert (table.queue_median_age_years.dropna() > 0).all()
     assert (table.queue_active_mw_clean <= table.queue_active_mw_total + 1e-9).all()
 

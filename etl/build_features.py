@@ -43,6 +43,9 @@ def build(fetch=True):
                 raise ValueError(f"columns not in docs/schema.md: {sorted(unknown)}")
             if df.fips.duplicated().any():
                 raise ValueError("duplicate fips")
+            overlap = set(df.columns) & set(table.columns if table is not None else []) - {"fips"}
+            if overlap:
+                raise ValueError(f"repeats columns from an earlier adapter: {sorted(overlap)}")
         except Exception as exc:
             if table is None:
                 raise

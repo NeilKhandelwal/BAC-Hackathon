@@ -42,9 +42,10 @@ Rules:
 | `grid_co2_lb_mwh_state` | float | eGRID2023 ST sheet `STCO2RTA` | stretch | for comparison only; not scored |
 | `grid_renewable_share_state` | float 0-1 | eGRID2023 ST sheet `STTRPR` | stretch | for comparison only; not scored |
 | `queue_active_mw_total` | float | LBNL Queued Up 2026, `q_status == active` | core | sum of `mw_1` |
-| `queue_active_mw_clean` | float | LBNL, active and `type_clean` in solar, wind, storage, hybrid | core | decarbonization signal |
-| `queue_median_age_years` | float | LBNL, active projects, years since `q_date` | core | congestion proxy. Higher is worse. |
-| `queue_withdrawal_rate` | float 0-1 | LBNL, withdrawn / (withdrawn + active + operational), `q_year >= 2019` | core | higher is worse |
+| `queue_active_count` | int | LBNL, number of projects with `q_status == active` | stretch | sample size behind the queue statistics |
+| `queue_active_mw_clean` | float | LBNL, active and every component of `type_clean` is clean | core | decarbonization signal. Clean means carbon-free generation or storage: solar, wind, hydro, nuclear, geothermal, battery, other storage. |
+| `queue_median_age_years` | float | LBNL, active projects, years since `q_date` | core | congestion proxy. Higher is worse. Null when fewer than 3 active projects have a queue date. |
+| `queue_withdrawal_rate` | float 0-1 | LBNL, withdrawn / (withdrawn + active + operational), `q_year >= 2019` | core | higher is worse. Null when the denominator is under 3. |
 | `queue_operational_mw_5y` | float | LBNL, operational with `q_year >= 2019`, or with no `q_year` and `on_date` in 2021 or later | core | evidence the queue delivers |
 | `solar_ghi_kwh_m2_day` | float | NREL NSRDB annual raster, zonal mean | stretch | |
 | `wind_speed_100m_ms` | float | NREL WIND Toolkit 100 m raster, zonal mean | stretch | source is already m/s |
@@ -99,7 +100,7 @@ inland, the ETL writes 0. "Insufficient Data" stays null.
 | `dc_proposed_count` | int | FracTracker, status in Proposed, Approved, Pre-proposal | core | |
 | `dc_proposed_mw` | float | FracTracker, same filter | core | |
 | `plant_capacity_mw_100km` | float | eGRID2023 PLNT sheet `NAMEPCAP`, `LAT`, `LON` | stretch | nameplate MW of power plants within 100 km (great circle) of the county internal point. A naive check that the nearby grid can carry the facility. |
-| `plant_clean_capacity_mw_100km` | float | eGRID2023 PLNT sheet, `PLFUELCT` in WIND, SOLAR, HYDRO, NUCLEAR, GEOTHERMAL | stretch | same radius, by plant primary fuel category |
+| `plant_clean_capacity_mw_100km` | float | eGRID2023 PLNT sheet, `PLFUELCT` is clean | stretch | same radius, by plant primary fuel category. Same definition of clean as `queue_active_mw_clean`; eGRID has no storage category. |
 | `saidi_minutes` | float | EIA-861 reliability, customer-weighted | stretch | |
 | `dist_ixp_km` | float | PeeringDB, nearest internet exchange | stretch | backbone proxy |
 

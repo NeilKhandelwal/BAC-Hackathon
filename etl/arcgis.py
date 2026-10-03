@@ -11,9 +11,11 @@ def query_all(layer_url, where="1=1", out_fields="*", page=1000, timeout=120):
     while True:
         params = dict(where=where, outFields=out_fields, returnGeometry="false", f="json",
                       resultOffset=offset, resultRecordCount=page, orderByFields="OBJECTID")
-        d = requests.get(layer_url + "/query", params=params, timeout=timeout).json()
+        r = requests.get(layer_url + "/query", params=params, timeout=timeout)
+        r.raise_for_status()
+        d = r.json()
         if "error" in d:
-            raise RuntimeError(f"{layer_url}: {d['error']}")
+            raise RuntimeError(f"{layer_url} at offset {offset}: {d['error']}")
         feats = d.get("features", [])
         rows += [f["attributes"] for f in feats]
         if not feats or not d.get("exceededTransferLimit"):

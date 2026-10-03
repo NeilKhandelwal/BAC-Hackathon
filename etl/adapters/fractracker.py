@@ -17,12 +17,14 @@ RAW = "fractracker/ft_all.csv"
 NOTES = ["Facility counts and MW are 0 for counties with no tracked facility. Facilities join by "
          "county name, then by lat/lon when the name fails.",
          "moratorium_active and moratorium_pending count FracTracker categories 'moratorium' and "
-         "'ban' only, not zoning restrictions, and skip entries whose end_date has passed. "
+         "'ban' only, not zoning restrictions, and skip entries whose end_date is before "
+         "2026-10-03. "
          "Municipal and tribal moratoria are not rolled up to the county."]
 
 EXISTING = {"Operating", "Expanding"}
 PROPOSED = {"Proposed", "Approved/Permitted/Under construction", "Pre-proposal"}
 BLOCKING = {"moratorium", "ban"}
+AS_OF = pd.Timestamp("2026-10-03")  # fixed so that a rebuild of the same raw files can't change
 UNMATCHED = []
 
 
@@ -67,7 +69,7 @@ def build(raw_dir):
     out["dc_pushback_any"] = out.dc_pushback_count > 0
 
     m = pd.read_csv(raw / "ft_moratoria.csv", dtype=str)
-    ended = pd.to_datetime(m.end_date, errors="coerce") < pd.Timestamp.now().normalize()
+    ended = pd.to_datetime(m.end_date, errors="coerce") < AS_OF
     m = m[m.category.isin(BLOCKING) & ~ended]
 
     def flagged(level, status):

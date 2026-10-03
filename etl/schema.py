@@ -37,7 +37,12 @@ CORE = {
     "state_large_load_tariff": "boolean", "state_policy_risk": "Int64",
 }
 
+# Carbon-free generation or storage. One definition for queue projects and existing plants.
+CLEAN_SOURCES = {"solar", "wind", "offshore wind", "hydro", "nuclear", "geothermal", "battery",
+                 "other storage"}
+
 STRETCH = {
+    "queue_active_count": "Int64",
     "nri_drought_risks": "float64", "nri_inland_flood_risks": "float64",
     "nri_coastal_flood_risks": "float64", "nri_wildfire_risks": "float64",
     "nri_hurricane_risks": "float64", "nri_heat_wave_risks": "float64",
