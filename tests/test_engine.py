@@ -270,3 +270,15 @@ def test_report_counts_exposed_counties_for_each_hazard_gate():
     _, _, report = rank(df, cond, {"p": [{"column": "nri_coastal_flood_score"}]})
     assert report["hazard_gate_nonzero_counties"] == {"hazard_percentile_max.nri_coastal_flood_score": 2}
     assert report["gate_failures"]["hazard_percentile_max.nri_coastal_flood_score"] == 2
+
+
+def test_top_reasons_ignores_a_heavy_single_column_pillar_tied_for_most_counties():
+    # Mirrors air_nonattainment_count: alone in a heavy pillar and 0 almost everywhere.
+    # It says nothing about why one clean county beats another, so it must not lead.
+    n = 20
+    df = table(tied=[0.0] * (n - 1) + [2.0], a=np.arange(n, dtype=float), b=np.arange(n, dtype=float))
+    pillars = {"permit": [{"column": "tied", "direction": "lower_better"}],
+               "other": [{"column": "a"}, {"column": "b"}]}
+    ranked, _, _ = rank(df, {"weights": {"permit": 0.5, "other": 0.5}, "gates": {}}, pillars)
+    assert ranked.iloc[0]["top_reasons"].split(";")[0] in ("a", "b")
+
