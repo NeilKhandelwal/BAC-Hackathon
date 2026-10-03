@@ -58,4 +58,7 @@ STRETCH = {
     "mfg_emp_share_2001": "float64", "mfg_loss_share_emp_2001": "float64",
     "unemployment_rate_pct_2023": "float64", "pop_change_pct_2010_2024": "float64",
     "coal_retired_mw": "float64",
+    "pop_change_pct_since_peak": "float64", "mfg_emp_share_1969": "float64",
+    "mfg_emp_share_change_1969_2022": "float64",
+    "energy_community_coal_closure": "boolean", "energy_community_ffe": "boolean",
 }
