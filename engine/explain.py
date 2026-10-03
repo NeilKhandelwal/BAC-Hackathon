@@ -4,6 +4,22 @@ import pandas as pd
 from engine.rank import floor_exempt, parse_horizon, pillar_percentiles, rank, score
 
 
+MORATORIUM_WARNING = "State moratorium in effect. A facility this size can't get state permits today."
+# Unscored facts shown beside the scores. Label -> column.
+FACTS = {
+    "IRA energy community: coal closure tract": "energy_community_coal_closure",
+    "IRA energy community: fossil employment area": "energy_community_ffe",
+    "State moratorium in effect": "moratorium_state_active",
+}
+
+
+def _flag(df, i, column):
+    """True, False, or None when the column is absent or null."""
+    if column not in df.columns or pd.isna(df.at[i, column]):
+        return None
+    return bool(df.at[i, column])
+
+
 def _num(v):
     return None if pd.isna(v) else (v.item() if hasattr(v, "item") else v)
 
@@ -50,6 +66,8 @@ def explain(df, conditions, pillars, fips, result=None):
         "robustness": None if row is None else _num(row["robustness"]),
         "coverage": _num(sc.scores.at[i, "coverage"]),
         "pillar_floor_exempt": exempt,
+        "facts": {label: _flag(df, i, col) for label, col in FACTS.items() if col in df.columns},
+        "warnings": [MORATORIUM_WARNING] if _flag(df, i, "moratorium_state_active") else [],
         "top_reasons": None if row is None else [r for r in row["top_reasons"].split(";") if r],
         "pillars": {},
         "horizon_2050_raw": {},
@@ -89,6 +107,10 @@ def format_text(e):
         lines.append(f"excluded by: {', '.join(e['failed_gates'])}")
     if e["unknown_gates"]:
         lines.append(f"unknown (null, not excluded): {', '.join(e['unknown_gates'])}")
+    for w in e["warnings"]:
+        lines.append(f"warning: {w}")
+    for label, v in e["facts"].items():
+        lines.append(f"{label}: {'n/a' if v is None else 'yes' if v else 'no'}")
     if e["pillar_floor_exempt"]:
         lines.append(f"exempt from the floor: {', '.join(e['pillar_floor_exempt'])}")
     for p, d in e["pillars"].items():

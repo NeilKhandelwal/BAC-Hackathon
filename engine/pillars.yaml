@@ -104,12 +104,15 @@ community:
     transform: log1p
   # Economic opportunity. A stated value choice, not a prediction: the brief lists economic
   # development under community impact, and a campus brings more benefit, and finds more
-  # available workforce, where jobs are scarce and population is falling. The opposition model
-  # found no dependable link between these columns and pushback (research/economic_development.md).
+  # available workforce, where jobs are scarce and the county has declined against its own
+  # history. The opposition model found no dependable link between these columns and pushback
+  # (research/economic_development.md).
   - column: unemployment_rate_pct_2023
     direction: higher_better
-  - column: pop_change_pct_2010_2024
+  - column: pop_change_pct_since_peak      # 0 at peak, negative below it; further below peak scores higher
     direction: lower_better
+  - column: mfg_emp_share_1969             # manufacturing share of jobs in 1969: industrial legacy
+    direction: higher_better
 
 permitting:
   - column: permitting_discretionary_risk  # model output; see docs/permitting.md

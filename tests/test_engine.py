@@ -535,11 +535,24 @@ def test_higher_unemployment_raises_the_community_pillar():
     assert b["pillar_community"] > a["pillar_community"]
 
 
-def test_steeper_population_decline_raises_the_community_pillar():
-    # Stated value: more benefit, and more available workforce, where population is falling.
-    a, b = twin_counties(pop_change_pct_2010_2024=(10.0, -15.0))
+def test_a_county_further_below_its_population_peak_scores_higher_on_community():
+    # Stated value, measured against the county's own history: a long decline from its peak
+    # means more benefit from a campus and more available workforce.
+    a, b = twin_counties(pop_change_pct_since_peak=(0.0, -30.0))
     assert b["pillar_community"] > a["pillar_community"]
     assert b["pillar_grid_infrastructure"] == a["pillar_grid_infrastructure"]
+
+
+def test_a_larger_1969_manufacturing_share_scores_higher_on_community():
+    # Industrial legacy: the 1969 share puts Wayne MI and Mahoning OH in the top fifth.
+    a, b = twin_counties(mfg_emp_share_1969=(0.05, 0.40))
+    assert b["pillar_community"] > a["pillar_community"]
+
+
+def test_recent_population_change_no_longer_scores():
+    # Replaced by the long-run measure; the 2010-2024 change must not move the score.
+    a, b = twin_counties(pop_change_pct_2010_2024=(10.0, -15.0))
+    assert b["pillar_community"] == a["pillar_community"]
 
 
 def test_balanced_floor_keeps_a_county_moderately_weak_on_one_pillar():
@@ -561,3 +574,36 @@ def test_balanced_floor_keeps_a_county_moderately_weak_on_one_pillar():
     assert rank(df, cond, pillars)[0].set_index("fips").loc["00000", "floor_ok"]
     stricter = rank(df, {**cond, "pillar_floor_percentile": 20}, pillars)[0].set_index("fips").loc["00000"]
     assert not stricter["floor_ok"]
+
+
+
+# State moratorium flag
+
+def moratorium_table():
+    df = make(n=150, null_share=0.0)
+    df["moratorium_state_active"] = pd.array([True] + [False] * (len(df) - 1), dtype="boolean")
+    df["moratorium_active"] = pd.array([False] * len(df), dtype="boolean")
+    return df
+
+
+def test_state_moratorium_flag_reaches_ranked_output_and_report():
+    # A user must see the flag next to the score; it doesn't exclude unless the gate is on.
+    df = moratorium_table()
+    cond = {**load_yaml(PRESETS[0]), "gates": {}}  # balanced weights, no gates
+    ranked, _, report = rank(df, cond, load_yaml(ROOT / "engine/pillars.yaml"))
+    flags = ranked.set_index("fips")["moratorium_state_active"]
+    assert bool(flags[df.fips[0]]) and not flags.drop(df.fips[0]).astype(bool).any()
+    assert report["moratorium_state_active_ranked"] == 1
+
+
+def test_explain_warns_only_for_a_flagged_county_and_lists_energy_community_facts():
+    from engine.explain import MORATORIUM_WARNING, explain
+    df = moratorium_table()
+    df["energy_community_coal_closure"] = pd.array([True] * len(df), dtype="boolean")
+    cond = {**load_yaml(PRESETS[0]), "gates": {}, "robustness": {"samples": 0}}
+    pillars = load_yaml(ROOT / "engine/pillars.yaml")
+    flagged, clear = explain(df, cond, pillars, df.fips[0]), explain(df, cond, pillars, df.fips[1])
+    assert flagged["warnings"] == [MORATORIUM_WARNING] and clear["warnings"] == []
+    assert flagged["facts"]["IRA energy community: coal closure tract"] is True
+    assert set(flagged["facts"]) >= {"IRA energy community: coal closure tract",
+                                     "IRA energy community: fossil employment area"}

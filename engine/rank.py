@@ -36,6 +36,8 @@ SPECIAL_GATES = {
     "hazard_percentile_max": None,
 }
 HORIZONS = (2026, 2050)
+# Unscored columns carried into ranked output so a user sees them next to the score.
+FLAG_COLUMNS = ("moratorium_state_active",)
 
 
 def parse_horizon(value):
@@ -393,7 +395,8 @@ def rank(df, conditions, pillars):
     report["warnings"] += warns
 
     ids = [c for c in ("fips", "county_name", "state") if c in df.columns]
-    full = pd.concat([df[ids], scores, log], axis=1)
+    flags = [c for c in FLAG_COLUMNS if c in df.columns]
+    full = pd.concat([df[ids + flags], scores, log], axis=1)
     full["rank"] = order(scores, scores["floor_ok"], passed)
     ranked = full[passed].sort_values("rank")
     ranked = ranked[["rank"] + [c for c in ranked.columns if c != "rank"]]
@@ -415,6 +418,8 @@ def rank(df, conditions, pillars):
         gate_failures=gate_counts,
         hazard_gate_nonzero_counties=exposed,
         floor_ok=int(ranked["floor_ok"].sum()),
+        moratorium_state_active_ranked=(int(ranked["moratorium_state_active"].fillna(False).astype(bool).sum())
+                                        if "moratorium_state_active" in ranked else None),
         pillars=[c.removeprefix("pillar_") for c in sc.pillar_cols],
         pillar_floor_exempt=exempt,
         weights_used={c.removeprefix("pillar_"): round(float(v), 4) for c, v in sc.weights.items()},
