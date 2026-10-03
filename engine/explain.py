@@ -1,7 +1,7 @@
 """Per-county breakdown. Returns a plain dict so the CLI and the app share it."""
 import pandas as pd
 
-from engine.rank import parse_horizon, pillar_percentiles, rank, score
+from engine.rank import floor_exempt, parse_horizon, pillar_percentiles, rank, score
 
 
 def _num(v):
@@ -20,6 +20,7 @@ def explain(df, conditions, pillars, fips, result=None):
         raise KeyError(f"fips {fips} not in the feature table")
     i = hits[0]
     horizon = parse_horizon(conditions.get("horizon", 2026))
+    exempt = floor_exempt(conditions, pillars)
     scenario = conditions.get("scenario", "rcp85")
     sc = score(df, pillars, conditions.get("weights") or {}, horizon, scenario)
     ranked, excluded, _ = result if result is not None else rank(df, conditions, pillars)
@@ -48,6 +49,7 @@ def explain(df, conditions, pillars, fips, result=None):
         "floor_ok": None if row is None else bool(row["floor_ok"]),
         "robustness": None if row is None else _num(row["robustness"]),
         "coverage": _num(sc.scores.at[i, "coverage"]),
+        "pillar_floor_exempt": exempt,
         "top_reasons": None if row is None else [r for r in row["top_reasons"].split(";") if r],
         "pillars": {},
         "horizon_2050_raw": {},
@@ -58,6 +60,7 @@ def explain(df, conditions, pillars, fips, result=None):
             "score": _num(sc.scores.at[i, pc]),
             "national_percentile": _num(pillar_pct.at[i, pc]),
             "weight": float(sc.weights[pc]),
+            "floor_exempt": pillar in exempt,
             "columns": [{"column": c, "raw": _num(df.at[i, c]), "percentile": _num(sc.pcts.at[i, c]),
                          "direction": directions.get(c)} for c in cols],
         }
@@ -86,8 +89,10 @@ def format_text(e):
         lines.append(f"excluded by: {', '.join(e['failed_gates'])}")
     if e["unknown_gates"]:
         lines.append(f"unknown (null, not excluded): {', '.join(e['unknown_gates'])}")
+    if e["pillar_floor_exempt"]:
+        lines.append(f"exempt from the floor: {', '.join(e['pillar_floor_exempt'])}")
     for p, d in e["pillars"].items():
-        lines.append(f"\n{p}: score {_fmt(d['score'], '.1f')}, national pctl {_fmt(d['national_percentile'], '.1f')}, "
+        lines.append(f"\n{p}{' (floor exempt)' if d['floor_exempt'] else ''}: score {_fmt(d['score'], '.1f')}, national pctl {_fmt(d['national_percentile'], '.1f')}, "
                      f"weight {d['weight']:.3f}")
         for c in d["columns"]:
             pct = "null" if c["percentile"] is None else f"{c['percentile']:.1f}"

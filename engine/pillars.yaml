@@ -73,6 +73,8 @@ grid_infrastructure:
   - column: plant_capacity_mw_100km        # nameplate MW within 100 km; proxy for deliverable power
     direction: higher_better
     transform: log1p
+  - column: industrial_price_cents_kwh     # state industrial electricity price
+    direction: lower_better
 
 land:
   - column: pop_density_per_sqkm           # low density means land is available

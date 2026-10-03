@@ -439,3 +439,72 @@ def test_cli_explain_unknown_fips_exits_2(tmp_path, capsys):
         main(["explain", "--conditions", str(PRESETS[0]), "--features", str(tmp_path / "f.parquet"), "--fips", "99999"])
     assert exit_info.value.code == 2
     assert capsys.readouterr().err.strip() == "error: fips 99999 not in the feature table"
+
+
+# Floor exemption
+
+def exempt_setup():
+    # County 0 leads the composite but sits at the bottom of the permitting pillar only.
+    n = 10
+    a = np.linspace(40, 90, n)
+    permit = np.linspace(90, 40, n)
+    a[0], permit[0] = 100.0, 0.0
+    df = table(a=a, permit=permit)
+    pillars = {"pa": [{"column": "a"}], "permitting": [{"column": "permit"}]}
+    cond = {"weights": {"pa": 0.8, "permitting": 0.2}, "gates": {}, "pillar_floor_percentile": 20,
+            "robustness": {"samples": 300, "top_n": 2}}
+    return df, pillars, cond
+
+
+def test_a_county_below_the_floor_only_on_an_exempt_pillar_stays_in_the_floor_passing_group():
+    # Permitting is three coarse state-level integers; one step must not drop a strong county
+    # below every floor-passing county. Without the exemption it does.
+    df, pillars, cond = exempt_setup()
+    ranked = rank(df, cond, pillars)[0]
+    strict = ranked.set_index("fips").loc["00000"]
+    assert not strict["floor_ok"] and strict["rank"] > ranked["floor_ok"].sum()  # below every floor-passer
+    exempt = rank(df, {**cond, "pillar_floor_exempt": ["permitting"]}, pillars)[0].set_index("fips").loc["00000"]
+    assert exempt["floor_ok"] and exempt["rank"] == 1
+
+
+def test_floor_exemption_flows_through_to_robustness():
+    df, pillars, cond = exempt_setup()
+    strict = rank(df, cond, pillars)[0].set_index("fips")["robustness"]
+    exempt = rank(df, {**cond, "pillar_floor_exempt": ["permitting"]}, pillars)[0].set_index("fips")["robustness"]
+    assert strict["00000"] == 0 and exempt["00000"] > 0.9
+
+
+def test_rank_delta_2050_uses_the_same_floor_exemption():
+    # rank_delta_2050 must equal the rank movement you'd see running each horizon on its own.
+    df, _, cond = exempt_setup()
+    df["cdd_hist"] = np.linspace(100, 1000, len(df))
+    df["cdd_2050_rcp85"] = np.linspace(1000, 100, len(df))
+    pillars = {"pa": [{"column": "a"}], "climate": HORIZON_PILLARS["climate"], "permitting": [{"column": "permit"}]}
+    cond = {**cond, "weights": {"pa": 0.6, "climate": 0.2, "permitting": 0.2}, "pillar_floor_exempt": ["permitting"]}
+    both = rank(df, cond, pillars)[0].set_index("fips")
+    r26 = rank(df, {**cond, "horizon": 2026}, pillars)[0].set_index("fips")["rank"]
+    r50 = rank(df, {**cond, "horizon": 2050}, pillars)[0].set_index("fips")["rank"]
+    assert (both["rank_delta_2050"] == (r50 - r26).reindex(both.index)).all()
+
+
+def test_floor_exempt_rejects_unknown_pillar_names_and_non_lists():
+    df, pillars, cond = exempt_setup()
+    with pytest.raises(ValueError, match="unknown pillars: permiting"):
+        rank(df, {**cond, "pillar_floor_exempt": ["permiting"]}, pillars)
+    with pytest.raises(ValueError, match="must be a list"):
+        rank(df, {**cond, "pillar_floor_exempt": "permitting"}, pillars)
+
+
+def test_explain_marks_exempt_pillars():
+    from engine.explain import explain, format_text
+    df, pillars, cond = exempt_setup()
+    e = explain(df, {**cond, "name": "t", "pillar_floor_exempt": ["permitting"]}, pillars, "00000")
+    assert e["pillar_floor_exempt"] == ["permitting"] and e["pillars"]["permitting"]["floor_exempt"]
+    assert "permitting (floor exempt)" in format_text(e)
+
+
+def test_every_preset_exempts_permitting_and_ships_no_model_gate():
+    for preset in PRESETS:
+        c = load_yaml(preset)
+        assert c["pillar_floor_exempt"] == ["permitting"], preset.stem
+        assert c["gates"]["max_permitting_risk"] is None, preset.stem  # the model is dropped

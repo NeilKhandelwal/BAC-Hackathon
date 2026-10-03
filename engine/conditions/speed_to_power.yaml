@@ -29,8 +29,8 @@ gates:
     nri_tornado_score: null
   exclude_moratorium_active: true
   exclude_moratorium_state_active: true
-  min_fiber_share_locations: 0.5
-  max_permitting_risk: 0.6             # model probability; null disables
+  min_fiber_share_locations: 0.3       # share of FCC broadband locations, mostly homes, with last-mile fiber; a weak proxy for backbone
+  max_permitting_risk: null             # needs permitting_discretionary_risk; no model ships, so keep null
   exclude_air_nonattainment: false
   min_population: 10000
 
@@ -44,6 +44,7 @@ weights:
   permitting: 0.30
 
 pillar_floor_percentile: 10
+pillar_floor_exempt: [permitting]       # three coarse state-level integers; one step moved a county 380 ranks
 
 robustness:
   samples: 2000

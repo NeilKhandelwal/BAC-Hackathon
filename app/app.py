@@ -113,7 +113,8 @@ def sidebar():
             "Exclude state moratoria", bool(g.get("exclude_moratorium_state_active")), key=k + "mors")
         c["pillar_floor_percentile"] = st.slider(
             "Pillar floor percentile", 0, 50, int(c.get("pillar_floor_percentile", 0)), 5, key=k + "floor",
-            help="A county below this percentile on any pillar ranks below every county that isn't.")
+            help="A county below this percentile on any pillar ranks below every county that isn't. "
+                 f"Exempt from the floor: {', '.join(c.get('pillar_floor_exempt') or []) or 'none'}.")
 
     edited = c != load_yaml(PRESETS[preset])
     if edited:
