@@ -29,6 +29,7 @@ gates:                            # hard exclusions, applied before scoring
   max_grid_co2_lb_mwh: null       # null disables the gate
   min_renewable_share: null
   max_queue_median_age_years: 5   # a county whose active projects have waited longer is out
+  min_nearby_capacity_multiple: 5 # plant MW within 100 km must be at least this times facility.mw
   max_water_stress_if_evaporative: 2   # Aqueduct bws_raw category; only applies when cooling is evaporative or hybrid
   hazard_percentile_max:          # exclude counties above this national percentile on each hazard
     nri_inland_flood_score: 90
@@ -80,6 +81,14 @@ Most hazards are zero for many counties (coastal flood is zero for about
 2,700 inland counties), so a cap below that share excludes every exposed
 county. The report lists `hazard_gate_nonzero_counties` so you can see
 when that happens.
+
+`min_nearby_capacity_multiple` is the only gate whose threshold depends on
+the facility. A county fails when `plant_capacity_mw_100km`, the nameplate
+capacity of power plants within 100 km of its centroid, is below the
+multiple times `facility.mw`. With the default 5 and a 300 MW facility, a
+county needs 1,500 MW nearby. It's a proxy for transmission and substation
+capacity, not a load-flow study: it says power is generated nearby, not
+that the grid can deliver it to a new 300 MW load.
 
 **Horizon** swaps the climate columns. With `horizon: 2050`, `cdd_hist`
 becomes `cdd_2050_<scenario>`, and the same for heating degree days and days

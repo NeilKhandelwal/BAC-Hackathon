@@ -104,6 +104,16 @@ def apply_gates(df, conditions):
             v = pd.to_numeric(values(column).astype("float"), errors="coerce")
             record(name, column, v > 0)
 
+    # The first gate whose threshold comes from the facility: nearby plant capacity must
+    # be at least `multiple` times the facility's MW.
+    mult = gates.get("min_nearby_capacity_multiple")
+    if mult is not None:
+        mw = (conditions.get("facility") or {}).get("mw")
+        if mw is None:
+            raise ValueError("gates.min_nearby_capacity_multiple needs facility.mw")
+        v = pd.to_numeric(values("plant_capacity_mw_100km"), errors="coerce")
+        record("min_nearby_capacity_multiple", "plant_capacity_mw_100km", v < mult * mw)
+
     cooling = (conditions.get("facility") or {}).get("cooling", "dry")
     t = gates.get("max_water_stress_if_evaporative")
     if t is not None and cooling in ("evaporative", "hybrid"):

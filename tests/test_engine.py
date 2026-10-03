@@ -282,3 +282,21 @@ def test_top_reasons_ignores_a_heavy_single_column_pillar_tied_for_most_counties
     ranked, _, _ = rank(df, {"weights": {"permit": 0.5, "other": 0.5}, "gates": {}}, pillars)
     assert ranked.iloc[0]["top_reasons"].split(";")[0] in ("a", "b")
 
+
+# Power deliverability
+
+def test_nearby_capacity_gate_scales_with_facility_size():
+    # 1,000 MW nearby can plausibly feed a 100 MW campus at 5x but not a 300 MW one.
+    df = table(plant_capacity_mw_100km=[1000.0, 2000.0, np.nan])
+    gates = {"min_nearby_capacity_multiple": 5}
+    small = apply_gates(df, {"gates": gates, "facility": {"mw": 100}})
+    big = apply_gates(df, {"gates": gates, "facility": {"mw": 300}})
+    assert list(small["failed_gates"]) == ["", "", ""]
+    assert list(big["failed_gates"]) == ["min_nearby_capacity_multiple", "", ""]
+    assert big["unknown_gates"][2] == "min_nearby_capacity_multiple"  # null is unknown, not a failure
+
+
+def test_nearby_capacity_gate_without_facility_mw_fails_loudly():
+    df = table(plant_capacity_mw_100km=[1000.0])
+    with pytest.raises(ValueError, match="facility.mw"):
+        apply_gates(df, {"gates": {"min_nearby_capacity_multiple": 5}, "facility": {}})
