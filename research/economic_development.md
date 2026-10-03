@@ -4,6 +4,11 @@ Date: 2026-10-03. Purpose: test whether a county's economic trajectory
 changes how readily it accepts a data center, and add features to the
 permitting model so the engine can use the answer.
 
+**Result: the data doesn't support it.** On the permitting model's labels,
+the economic features don't separate counties that saw opposition from those
+that didn't, and they add no predictive skill. See "Second check" below. The
+claim rests on case studies and published research, not on our data.
+
 ## The claim
 
 The starting idea: deindustrializing counties are more willing to host a
@@ -85,37 +90,64 @@ withdrew, or delayed a project, and 58 where projects were only approved.
 | Population change 2010-2024 (%) | 7.2 | 6.6 | 0.68 |
 | Any retired coal | 17% | 21% | 0.58 |
 
-Every feature points the way the claim predicts. Opposition succeeds less
-often in counties with more manufacturing history and more job loss. Only
-the two manufacturing features come near significance. An in-sample logistic
-regression that controls for density and income keeps every economic
-coefficient negative, the largest being manufacturing share at -0.29 per
-standard deviation. That fit isn't cross-validated, so don't quote it as a
-result.
+Every feature pointed the way the claim predicts, but only the two
+manufacturing features came near significance. This check compared counties
+with different facility histories, so the second check supersedes it.
 
 Read this with the label caveats in `research/opposition_labels.md`. The
 approved class is noisy, and the labels show which fights succeed, not where
 fights start.
 
-## How to test it properly
+## Second check: the permitting model labels
 
-1. Add the five columns as candidate features in `docs/permitting.md`.
-   Clip `mfg_loss_share_emp_2001` to [-1, 1] and use `coal_retired_mw > 0`
-   or `log1p`.
-2. Refit with leave-one-state-out folds. Keep the features only if pooled
-   AUC rises by 0.02 or more, the same rule as the news features.
-3. Report the sign of each coefficient after controlling for density and
-   cropland. The claim holds only if manufacturing loss lowers predicted
-   risk with those controls in.
-4. If AUC doesn't move, say so in the deck. "Economic distress doesn't
-   predict opposition once you control for rurality" is a finding too.
+The permitting model (`research/permitting_model.md`) labels 447 counties:
+298 positive (opposition recorded) and 149 negative. A county can be
+negative only if it already has a facility, so comparing all labeled
+counties mixes "had opposition" with "has no data center yet." The fair
+comparison is among the 184 labeled counties with at least one existing
+facility, where either label is possible: 76 positive, 108 negative.
+
+| Feature | Positive, median | Negative, median | Mann-Whitney p |
+| --- | --- | --- | --- |
+| Manufacturing share 2001 | 0.128 | 0.123 | 0.78 |
+| Manufacturing loss share (clipped) | 0.019 | 0.023 | 0.22 |
+| Unemployment 2023 (%) | 3.4 | 3.5 | 0.30 |
+| Population change 2010-2024 (%) | 10.8 | 7.5 | 0.06 |
+| Any retired coal | 0% | 0% | 0.26 |
+
+Leave-one-state-out AUC in the same 184 counties:
+
+| Features | AUC |
+| --- | --- |
+| The five economic features alone | 0.48 |
+| Density, income, heating degree days | 0.57 |
+| Those three plus the five economic features | 0.50 |
+
+The manufacturing signal from the first look is gone. Across all 447
+labeled counties it reverses: counties with opposition had a higher 2001
+manufacturing share (0.149 against 0.127, p = 0.11). The economic features
+have no skill alone and make the base features worse. The only hint left is
+that faster-growing counties saw more opposition. That fits the "rich growth
+counties push back" half of the claim, but p = 0.06 among the 15 rank tests in this brief is
+what chance produces.
+
+Limits: 184 counties is small, and FracTracker records pushback as Yes or
+Unknown, never No. A negative county has no recorded opposition. It isn't
+confirmed acceptance.
 
 ## How to use it in the presentation
 
-The angle: the places most willing to host a data center gain the least
-from it. The engine can show both sides at once: lower permitting risk and
-faster power on one side, thin local job spillover on the other. That makes
-community benefit a real decision input, not a footnote.
+Use it on the "what we tested" slide, not as a headline. The honest version:
+
+- The idea: deindustrializing counties accept data centers more readily.
+  Case studies support it: Mount Pleasant, Lordstown, Homer City.
+- We built five county features and tested them against opposition
+  outcomes. They don't predict opposition once you compare like with like.
+- The other half, that rural counties gain the least, comes from the 2026
+  study cited above, not from our data.
+
+That a plausible story didn't hold up on the data is itself a result worth
+showing.
 
 ## Sources
 
