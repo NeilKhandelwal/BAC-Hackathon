@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T20:57:58+00:00",
+  "built_at": "2026-10-03T20:58:36+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -60,7 +60,7 @@
       "name": "Hand-coded state permitting tables",
       "version": "see source_url per row",
       "url": "data/processed/state_policy.csv",
-      "fetched_at": "2026-10-03T20:53:15+00:00"
+      "fetched_at": "2026-10-03T20:58:13+00:00"
     },
     {
       "name": "NREL WIND Toolkit",

@@ -142,7 +142,7 @@ here; it's scored in grid and infrastructure.
 | `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | researched for AZ, TX, CO. Null in other prior-appropriation and hybrid states. |
 | `water_permit_risk` | int 0-2 | derived: 0 riparian, 1 hybrid or prior appropriation, 2 if also a managed groundwater area | core | |
 | `state_dc_bill_pending` | bool | hand-coded from NCSL and FracTracker state layer | core | moratorium or restriction bill filed in the current session |
-| `state_sales_tax_exemption` | bool | hand-coded state table | core | data center equipment exemption in force |
+| `state_sales_tax_exemption` | bool | hand-coded state table | core | data center equipment exemption in force. States with no general sales tax (DE, MT, NH, OR) count as exempt. |
 | `state_large_load_tariff` | bool | hand-coded state table | core | utility large-load tariff with minimum bills in force |
 | `state_policy_risk` | int 0-3 | derived: bill pending + no exemption + tariff | core | |
 | `pct_forest_wetland` | float 0-1 | NLCD | stretch | wetland and habitat permit exposure; listed under Land as well |

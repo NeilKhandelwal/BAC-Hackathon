@@ -118,3 +118,12 @@ def test_wind_raster_is_oriented_north_up(table):
     row = table.set_index("fips")
     assert row.wind_speed_100m_ms["38015"] > 7 > 6.5 > row.wind_speed_100m_ms["22071"]  # Bismarck vs New Orleans
     assert row.wind_speed_100m_ms["48375"] > 7.5 > 6 > row.wind_speed_100m_ms["12095"]  # Amarillo vs Orlando
+
+
+def test_states_without_a_sales_tax_count_as_exempt(table):
+    # The risk point means "sales tax applies to data center equipment". With no sales tax it can't.
+    no_sales_tax = table[table.state.isin(["DE", "MT", "NH", "OR"])]
+    assert no_sales_tax.state_sales_tax_exemption.all()
+    oregon = table[table.state == "OR"]
+    assert (oregon.state_policy_risk == oregon.state_dc_bill_pending.astype(int)
+            + oregon.state_large_load_tariff.astype(int)).all()
