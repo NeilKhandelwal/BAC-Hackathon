@@ -47,9 +47,11 @@ Use 1 if the DOC API cooperates, otherwise 2. The SQL supports both.
 
 ### Path B: DOC 2.0 search API
 
-Endpoint: `https://api.gdeltproject.org/api/v2/doc/doc`. Full-text search
-over the last 3 months officially. Older date ranges via `startdatetime` and
-`enddatetime` often still work but are not guaranteed. Max 250 records per
+Endpoint: `https://api.gdeltproject.org/api/v2/doc/doc`. Full-text search.
+The `gdeltdoc` client README says 3 months officially, but a later GDELT
+blog post ("DOC/GEO 2.0 API updates: full year searching") extended it to
+about a year via `startdatetime` and `enddatetime`. Older ranges often still
+work but are not guaranteed. Max 250 records per
 call. No key. Unofficial rate limit; the client community uses about one
 request every 5 seconds.
 
