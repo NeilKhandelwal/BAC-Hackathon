@@ -1,6 +1,7 @@
 # raw datasets are not committed
 data/raw/
 *.parquet
+!data/processed/county_features.parquet
 *.zip
 *.tif
 *.gpkg

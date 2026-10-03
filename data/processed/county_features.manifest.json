@@ -1,0 +1,248 @@
+{
+  "built_at": "2026-10-03T21:03:24+00:00",
+  "rows": 3109,
+  "sources": [
+    {
+      "name": "Census TIGER and ACS 5-year",
+      "version": "TIGER 2024, ACS 2019-2023",
+      "url": "https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_county_500k.zip",
+      "fetched_at": "2026-10-03T20:39:26+00:00"
+    },
+    {
+      "name": "FEMA NRI",
+      "version": "v1.20",
+      "url": "https://services.arcgis.com/XG15cJAlne2vxtgt/arcgis/rest/services/National_Risk_Index_Counties/FeatureServer/0",
+      "fetched_at": "2026-10-03T20:39:32+00:00"
+    },
+    {
+      "name": "CMRA climate projections",
+      "version": "LOCA CMIP5, mid-century 2036-2065",
+      "url": "https://services3.arcgis.com/0Fs3HcaFfvzXvm7w/arcgis/rest/services/Climate_Mapping_Resilience_and_Adaptation_(CMRA)_Climate_and_Coastal_Inundation_Projections/FeatureServer/0",
+      "fetched_at": "2026-10-03T20:39:42+00:00"
+    },
+    {
+      "name": "LBNL Queued Up",
+      "version": "2026 edition, queues through 2025",
+      "url": "https://eta-publications.lbl.gov/sites/default/files/2026-05/lbnl_ix_queue_data_file_thru2025.xlsx",
+      "fetched_at": "2026-10-03T20:39:26+00:00"
+    },
+    {
+      "name": "FCC Broadband Data Collection (Esri Living Atlas county layer)",
+      "version": "December 2024",
+      "url": "https://services8.arcgis.com/peDZJliSvYims39Q/arcgis/rest/services/FCC_Broadband_Data_Collection_December_2024_View/FeatureServer/1",
+      "fetched_at": "2026-10-03T20:39:43+00:00"
+    },
+    {
+      "name": "EPA eGRID",
+      "version": "eGRID2023 Rev 2",
+      "url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+      "fetched_at": "2026-10-03T20:39:25+00:00"
+    },
+    {
+      "name": "US Drought Monitor",
+      "version": "weekly county statistics, 2000-2025",
+      "url": "https://usdmdataservices.unl.edu/api/CountyStatistics/GetDroughtSeverityStatisticsByAreaPercent",
+      "fetched_at": "2026-10-03T20:46:16+00:00"
+    },
+    {
+      "name": "FracTracker Alliance US Data Centers Tracker",
+      "version": "live feature service",
+      "url": "https://www.fractracker.org/data-centers",
+      "fetched_at": "2026-10-03T20:44:09+00:00"
+    },
+    {
+      "name": "EPA Green Book",
+      "version": "county nonattainment history, export 2026-09-30",
+      "url": "https://www3.epa.gov/airquality/greenbook/downld/phistory.xls",
+      "fetched_at": "2026-10-03T20:44:59+00:00"
+    },
+    {
+      "name": "Hand-coded state permitting tables",
+      "version": "see source_url per row",
+      "url": "data/processed/state_policy.csv",
+      "fetched_at": "2026-10-03T20:58:13+00:00"
+    },
+    {
+      "name": "NREL WIND Toolkit",
+      "version": "CONUS 100 m mean wind speed, 2 km grid",
+      "url": "https://www.nlr.gov/docs/libraries/gis/us-wind-data.zip",
+      "fetched_at": "2026-10-03T20:48:51+00:00"
+    }
+  ],
+  "columns_present": [
+    "fips",
+    "county_name",
+    "state",
+    "state_fips",
+    "population",
+    "land_area_sqkm",
+    "pop_density_per_sqkm",
+    "centroid_lat",
+    "centroid_lon",
+    "grid_co2_lb_mwh",
+    "grid_renewable_share",
+    "queue_active_mw_total",
+    "queue_active_mw_clean",
+    "queue_median_age_years",
+    "queue_withdrawal_rate",
+    "queue_operational_mw_5y",
+    "drought_share_weeks_d2plus",
+    "nri_drought_score",
+    "nri_risk_score",
+    "nri_inland_flood_score",
+    "nri_coastal_flood_score",
+    "nri_wildfire_score",
+    "nri_hurricane_score",
+    "nri_heat_wave_score",
+    "nri_tornado_score",
+    "nri_winter_score",
+    "cdd_hist",
+    "cdd_2050_rcp45",
+    "cdd_2050_rcp85",
+    "hdd_hist",
+    "hdd_2050_rcp85",
+    "days_above_95f_hist",
+    "days_above_95f_2050_rcp85",
+    "fiber_share_locations",
+    "dc_existing_count",
+    "dc_existing_mw",
+    "dc_proposed_count",
+    "dc_proposed_mw",
+    "median_household_income",
+    "heat_sink_score",
+    "dc_pushback_count",
+    "dc_pushback_any",
+    "moratorium_active",
+    "moratorium_pending",
+    "moratorium_state_active",
+    "air_nonattainment_count",
+    "water_rights_regime",
+    "groundwater_managed_area",
+    "water_permit_risk",
+    "state_dc_bill_pending",
+    "state_sales_tax_exemption",
+    "state_large_load_tariff",
+    "state_policy_risk",
+    "queue_active_count",
+    "nri_drought_risks",
+    "nri_inland_flood_risks",
+    "nri_coastal_flood_risks",
+    "nri_wildfire_risks",
+    "nri_hurricane_risks",
+    "nri_heat_wave_risks",
+    "nri_tornado_risks",
+    "nri_winter_risks",
+    "grid_subregion",
+    "grid_co2_lb_mwh_state",
+    "grid_renewable_share_state",
+    "wind_speed_100m_ms",
+    "plant_capacity_mw_100km",
+    "plant_clean_capacity_mw_100km"
+  ],
+  "columns_missing": [
+    "permitting_discretionary_risk",
+    "permitting_drivers",
+    "solar_ghi_kwh_m2_day",
+    "water_stress_bws",
+    "water_stress_2050",
+    "grid_water_gal_mwh",
+    "saidi_minutes",
+    "dist_ixp_km",
+    "pct_developed",
+    "pct_cropland",
+    "pct_forest_wetland",
+    "pct_protected",
+    "greenhouse_acres"
+  ],
+  "null_counts": {
+    "queue_median_age_years": 2185,
+    "queue_withdrawal_rate": 1541,
+    "hdd_hist": 65,
+    "hdd_2050_rcp85": 65,
+    "median_household_income": 2,
+    "heat_sink_score": 65,
+    "groundwater_managed_area": 811,
+    "state_dc_bill_pending": 105,
+    "state_sales_tax_exemption": 203,
+    "state_large_load_tariff": 414,
+    "state_policy_risk": 722
+  },
+  "notes": [
+    "nri_*_score hazard columns are national percentiles of the expected annual loss rate (*_ALR_NPCTL). The dollar-loss risk scores (*_RISKS) are kept as nri_*_risks. nri_risk_score is still the composite RISK_SCORE.",
+    "NRI hazards rated 'Not Applicable' are written as 0, not null. 'Insufficient Data' stays null.",
+    "CMRA reports the 8 old Connecticut counties. Each planning region takes the values of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
+    "CMRA has no heating degree days for 65 counties, so hdd_* and heat_sink_score are null there. 51 are the coldest counties (ND, MN, CO, WY, MI, WI); CMRA reports nothing above about 9,000 HDD. 14 are small Virginia independent cities that CMRA leaves blank for HDD only. Neither group is interpolated.",
+    "Queue MW columns and queue_active_count are 0 for counties with no matching queue entries. Queue age is measured to 2025-12-31.",
+    "queue_median_age_years and queue_withdrawal_rate are null when their sample is under 3 projects, so one stale application can't decide a gate.",
+    "queue_operational_mw_5y also counts operational projects with no q_year that came online in 2021 or later. That raised counties with operational MW from 339 to 353 and the total from 65.7 GW to 72.0 GW.",
+    "Queue rows for old Connecticut counties are summed into the planning region that holds most of the county, so two regions show no queue activity.",
+    "fiber_share_locations measures last-mile fiber, a proxy for backbone access.",
+    "Grid carbon and renewable share are eGRID subregion averages (SRL23 sheet: SRCO2RTA, SRTRPR), assigned by the county's internal point. Annual average rates, not marginal. State averages are kept in the *_state columns.",
+    "plant_capacity_mw_100km sums eGRID plant nameplate MW within 100 km of the county internal point. Clean means the plant's primary fuel category is wind, solar, hydro, nuclear, or geothermal. It measures nearby generation, not spare capacity.",
+    "eGRID lists US plants only, so the 100 km sum is truncated for counties near Canada or Mexico and understates their nearby capacity.",
+    "0 counties fell back to the state grid rates for lack of a subregion.",
+    "drought_share_weeks_d2plus is the mean weekly percent of county area in D2 or worse, so it weights weeks by area.",
+    "Facility counts and MW are 0 for counties with no tracked facility. Facilities join by county name, then by lat/lon when the name fails.",
+    "moratorium_active and moratorium_pending count FracTracker categories 'moratorium' and 'ban' only, not zoning restrictions, and skip entries whose end_date is before 2026-10-03. Municipal and tribal moratoria are not rolled up to the county.",
+    "air_nonattainment_count counts ozone and PM2.5 once each when any part of the county is in nonattainment in 2026 under a standard that is not revoked.",
+    "groundwater_managed_area was researched for Arizona, Texas, and Colorado only. It is null in the other prior-appropriation and hybrid states, and false in riparian states. Low-confidence rows (small partial overlaps) count as not managed. A null flag does not raise water_permit_risk.",
+    "state_policy_risk is null for the 13 states where any of its three inputs is unknown.",
+    "Water regimes come from a 2016 National Agricultural Law Center table. KS, ND, NE, OR, and TX are coded hybrid although that source lists them as prior appropriation. A Texas priority groundwater area triggers a conservation district; it does not restrict pumping by itself. A false large-load tariff flag is weaker for states outside the EEI utility list. Most state policy rows are medium or low confidence; see the confidence column in data/processed/state_policy.csv."
+  ],
+  "joins": {
+    "nri": {
+      "rows": 3232,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "cmra": {
+      "rows": 3234,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "lbnl_queue": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fcc_fiber": {
+      "rows": 3235,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "egrid": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "drought_monitor": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fractracker": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "air_nonattainment": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "state_tables": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "nrel_wind": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    }
+  },
+  "errors": {},
+  "unmatched_name_rows": {
+    "lbnl_queue": 623
+  }
+}

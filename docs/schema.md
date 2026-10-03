@@ -36,23 +36,26 @@ Rules:
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
-| `grid_co2_lb_mwh` | float | eGRID2023 ST sheet, state output emission rate | core | lower is better. State-level until the subregion join lands. |
-| `grid_renewable_share` | float 0-1 | eGRID2023 ST sheet, renewable generation share | core | includes hydro. Confirm the exact field in the workbook; names changed between editions. |
-| `grid_subregion` | str | eGRID subregion shapefile | stretch | replaces state-level rates when available |
+| `grid_co2_lb_mwh` | float | eGRID2023 SRL sheet `SRCO2RTA`, subregion output emission rate | core | lower is better. Falls back to the state rate if a county has no subregion. |
+| `grid_renewable_share` | float 0-1 | eGRID2023 SRL sheet `SRTRPR`, subregion renewable generation share | core | includes hydro |
+| `grid_subregion` | str | eGRID2023 subregion shapefile, county internal point | stretch | nearest subregion when the point falls outside every polygon |
+| `grid_co2_lb_mwh_state` | float | eGRID2023 ST sheet `STCO2RTA` | stretch | for comparison only; not scored |
+| `grid_renewable_share_state` | float 0-1 | eGRID2023 ST sheet `STTRPR` | stretch | for comparison only; not scored |
 | `queue_active_mw_total` | float | LBNL Queued Up 2026, `q_status == active` | core | sum of `mw_1` |
-| `queue_active_mw_clean` | float | LBNL, active and `type_clean` in solar, wind, storage, hybrid | core | decarbonization signal |
-| `queue_median_age_years` | float | LBNL, active projects, years since `q_date` | core | congestion proxy. Higher is worse. |
-| `queue_withdrawal_rate` | float 0-1 | LBNL, withdrawn / (withdrawn + active + operational), `q_year >= 2019` | core | higher is worse |
-| `queue_operational_mw_5y` | float | LBNL, operational with `q_year >= 2019` | core | evidence the queue delivers |
+| `queue_active_count` | int | LBNL, number of projects with `q_status == active` | stretch | sample size behind the queue statistics |
+| `queue_active_mw_clean` | float | LBNL, active and every component of `type_clean` is clean | core | decarbonization signal. Clean means carbon-free generation or storage: solar, wind, hydro, nuclear, geothermal, battery, other storage. |
+| `queue_median_age_years` | float | LBNL, active projects, years since `q_date` | core | congestion proxy. Higher is worse. Null when fewer than 3 active projects have a queue date. |
+| `queue_withdrawal_rate` | float 0-1 | LBNL, withdrawn / (withdrawn + active + operational), `q_year >= 2019` | core | higher is worse. Null when the denominator is under 3. |
+| `queue_operational_mw_5y` | float | LBNL, operational with `q_year >= 2019`, or with no `q_year` and `on_date` in 2021 or later | core | evidence the queue delivers |
 | `solar_ghi_kwh_m2_day` | float | NREL NSRDB annual raster, zonal mean | stretch | |
-| `wind_speed_100m_ms` | float | NREL WIND Toolkit 100 m raster, zonal mean | stretch | km/h in source, convert |
+| `wind_speed_100m_ms` | float | NREL WIND Toolkit 100 m raster, zonal mean | stretch | source is already m/s |
 
 ## Water
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
 | `drought_share_weeks_d2plus` | float 0-1 | US Drought Monitor 2000-2025, cumulative `D2` | core | area-weighted share of weeks |
-| `nri_drought_score` | float 0-100 | FEMA NRI `DRGT_RISKS` | core | |
+| `nri_drought_score` | float 0-100 | FEMA NRI `DRGT_ALR_NPCTL` | core | loss-rate percentile; see the note under climate resilience |
 | `water_stress_bws` | float 0-5 | WRI Aqueduct 4.0 `bws_raw`, area-weighted | stretch | gate input for evaporative cooling |
 | `water_stress_2050` | float 0-5 | Aqueduct 4.0 future, 2050 business-as-usual | stretch | |
 | `grid_water_gal_mwh` | float | EIA-923 8D + EIA-860, by eGRID subregion | stretch | water embedded in grid power |
@@ -61,14 +64,15 @@ Rules:
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
-| `nri_risk_score` | float 0-100 | FEMA NRI `RISK_SCORE` | core | composite |
-| `nri_inland_flood_score` | float 0-100 | NRI `IFLD_RISKS` | core | v1.20 name; was RFLD |
-| `nri_coastal_flood_score` | float 0-100 | NRI `CFLD_RISKS` | core | |
-| `nri_wildfire_score` | float 0-100 | NRI `WFIR_RISKS` | core | |
-| `nri_hurricane_score` | float 0-100 | NRI `HRCN_RISKS` | core | |
-| `nri_heat_wave_score` | float 0-100 | NRI `HWAV_RISKS` | core | |
-| `nri_tornado_score` | float 0-100 | NRI `TRND_RISKS` | core | |
-| `nri_winter_score` | float 0-100 | NRI `WNTW_RISKS` | core | |
+| `nri_risk_score` | float 0-100 | FEMA NRI `RISK_SCORE` | core | composite, dollar-loss based. Not scored. |
+| `nri_inland_flood_score` | float 0-100 | NRI `IFLD_ALR_NPCTL` | core | v1.20 name; was RFLD |
+| `nri_coastal_flood_score` | float 0-100 | NRI `CFLD_ALR_NPCTL` | core | |
+| `nri_wildfire_score` | float 0-100 | NRI `WFIR_ALR_NPCTL` | core | |
+| `nri_hurricane_score` | float 0-100 | NRI `HRCN_ALR_NPCTL` | core | |
+| `nri_heat_wave_score` | float 0-100 | NRI `HWAV_ALR_NPCTL` | core | |
+| `nri_tornado_score` | float 0-100 | NRI `TRND_ALR_NPCTL` | core | |
+| `nri_winter_score` | float 0-100 | NRI `WNTW_ALR_NPCTL` | core | |
+| `nri_<hazard>_risks` | float 0-100 | NRI `<HAZARD>_RISKS` | stretch | the eight hazard columns as dollar-loss risk scores, such as `nri_inland_flood_risks`. For comparison only; not scored. |
 | `cdd_hist` | float | CMRA `HISTORIC_MEAN_CDD` | core | cooling degree days, base 65F |
 | `cdd_2050_rcp45` | float | CMRA `RCP45MID_MEAN_CDD` | core | |
 | `cdd_2050_rcp85` | float | CMRA `RCP85MID_MEAN_CDD` | core | |
@@ -76,6 +80,15 @@ Rules:
 | `hdd_2050_rcp85` | float | CMRA `RCP85MID_MEAN_HDD` | core | |
 | `days_above_95f_hist` | float | CMRA `HISTORIC_MEAN_TMAX95F` | core | |
 | `days_above_95f_2050_rcp85` | float | CMRA `RCP85MID_MEAN_TMAX95F` | core | |
+
+The `nri_*_score` hazard columns are national percentiles of the expected
+annual loss rate, which is loss divided by exposure. The NRI risk scores
+(`*_RISKS`) track dollar losses, so they rate populous counties as hazardous
+because there is more to lose.
+
+NRI hazard scores are the one exception to "null never means zero." Where NRI
+rates a hazard "Not Applicable" for a county, such as coastal flooding
+inland, the ETL writes 0. "Insufficient Data" stays null.
 
 ## Grid and infrastructure
 
@@ -86,6 +99,8 @@ Rules:
 | `dc_existing_mw` | float | FracTracker, same filter, sum `mw` | core | nulls in source treated as 0 for the sum |
 | `dc_proposed_count` | int | FracTracker, status in Proposed, Approved, Pre-proposal | core | |
 | `dc_proposed_mw` | float | FracTracker, same filter | core | |
+| `plant_capacity_mw_100km` | float | eGRID2023 PLNT sheet `NAMEPCAP`, `LAT`, `LON` | stretch | nameplate MW of power plants within 100 km (great circle) of the county internal point. A naive check that the nearby grid can carry the facility. |
+| `plant_clean_capacity_mw_100km` | float | eGRID2023 PLNT sheet, `PLFUELCT` is clean | stretch | same radius, by plant primary fuel category. Same definition of clean as `queue_active_mw_clean`; eGRID has no storage category. |
 | `saidi_minutes` | float | EIA-861 reliability, customer-weighted | stretch | |
 | `dist_ixp_km` | float | PeeringDB, nearest internet exchange | stretch | backbone proxy |
 
@@ -125,10 +140,10 @@ here; it's scored in grid and infrastructure.
 | `permitting_drivers` | str | permitting model | core | top three features by contribution, semicolon list |
 | `air_nonattainment_count` | int 0-2 | EPA Green Book, county in nonattainment for 8-hour ozone, PM2.5 | core | constrains diesel backup generation |
 | `water_rights_regime` | str | hand-coded state table | core | `prior_appropriation`, `riparian`, or `hybrid` |
-| `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | |
+| `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | researched for AZ, TX, CO. Null in other prior-appropriation and hybrid states. |
 | `water_permit_risk` | int 0-2 | derived: 0 riparian, 1 hybrid or prior appropriation, 2 if also a managed groundwater area | core | |
 | `state_dc_bill_pending` | bool | hand-coded from NCSL and FracTracker state layer | core | moratorium or restriction bill filed in the current session |
-| `state_sales_tax_exemption` | bool | hand-coded state table | core | data center equipment exemption in force |
+| `state_sales_tax_exemption` | bool | hand-coded state table | core | data center equipment exemption in force. States with no general sales tax (DE, MT, NH, OR) count as exempt. |
 | `state_large_load_tariff` | bool | hand-coded state table | core | utility large-load tariff with minimum bills in force |
 | `state_policy_risk` | int 0-3 | derived: bill pending + no exemption + tariff | core | |
 | `pct_forest_wetland` | float 0-1 | NLCD | stretch | wetland and habitat permit exposure; listed under Land as well |
