@@ -142,3 +142,13 @@ def test_industrial_price_is_a_state_value_in_cents(table):
     assert (table.groupby("state").industrial_price_cents_kwh.nunique() == 1).all()
     price = table.groupby("state").industrial_price_cents_kwh.first()
     assert price["CA"] > 2 * price["TX"]  # California industrial power costs several times Texas
+
+
+def test_water_stress_is_on_the_category_scale(table):
+    # The evaporative-cooling gate compares these to thresholds of 1 to 3. The raw withdrawal
+    # ratio would sit almost entirely below 1 and the gate would never fire.
+    row = table.set_index("fips")
+    for column in ("water_stress_bws", "water_stress_2050"):
+        assert table[column].dropna().between(0, 5).all()
+        assert (table[column] > 2).sum() > 500
+        assert row[column]["04013"] > 4 > 1 > row[column]["36019"]  # Maricopa AZ vs Clinton NY

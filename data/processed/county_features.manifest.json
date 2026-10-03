@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T21:21:02+00:00",
+  "built_at": "2026-10-03T21:33:48+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -97,6 +97,12 @@
       "version": "2024, total electric industry",
       "url": "https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx",
       "fetched_at": "2026-10-03T21:19:48+00:00"
+    },
+    {
+      "name": "WRI Aqueduct 4.0",
+      "version": "2023-07-05 release",
+      "url": "https://files.wri.org/aqueduct/aqueduct-4-0-water-risk-data.zip",
+      "fetched_at": "2026-10-03T21:19:29+00:00"
     }
   ],
   "columns_present": [
@@ -166,6 +172,8 @@
     "grid_co2_lb_mwh_state",
     "grid_renewable_share_state",
     "wind_speed_100m_ms",
+    "water_stress_bws",
+    "water_stress_2050",
     "plant_capacity_mw_100km",
     "plant_clean_capacity_mw_100km",
     "industrial_price_cents_kwh",
@@ -179,8 +187,6 @@
     "permitting_discretionary_risk",
     "permitting_drivers",
     "solar_ghi_kwh_m2_day",
-    "water_stress_bws",
-    "water_stress_2050",
     "grid_water_gal_mwh",
     "saidi_minutes",
     "dist_ixp_km",
@@ -237,7 +243,8 @@
     "Population change chains two vintages: 2010 census to the July 2020 estimate (Vintage 2020), then the 2020 base to July 2024 (Vintage 2024).",
     "Connecticut's 2010-2020 factor comes from the old county each planning region mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
     "coal_retired_mw sums nameplate MW of coal generators with status RE in the EIA-860 Retired and Canceled sheet. It is 0 for counties with none. Canceled projects are left out. The sheet covers generators retired since EIA-860 began tracking them.",
-    "industrial_price_cents_kwh is the 2024 state average industrial retail price (revenue divided by sales, all providers). It is the same for every county in a state and is not the rate a large new load would negotiate."
+    "industrial_price_cents_kwh is the 2024 state average industrial retail price (revenue divided by sales, all providers). It is the same for every county in a state and is not the rate a large new load would negotiate.",
+    "water_stress_bws and water_stress_2050 are Aqueduct scores on the 0-5 category scale (bws_score and bau50_ws_x_s), not the raw withdrawal ratio: 0-1 low, 1-2 low-medium, 2-3 medium-high, 3-4 high, 4-5 extremely high. Aqueduct scores 'arid and low water use' basins as 5. Each county takes the area-weighted mean over the part of it that has data. 2050 is the business-as-usual scenario."
   ],
   "joins": {
     "nri": {
@@ -311,6 +318,11 @@
       "counties_without_data": 0
     },
     "eia_price": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "aqueduct": {
       "rows": 3109,
       "fips_not_in_table": [],
       "counties_without_data": 0

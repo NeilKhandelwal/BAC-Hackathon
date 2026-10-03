@@ -56,8 +56,8 @@ Rules:
 | --- | --- | --- | --- | --- |
 | `drought_share_weeks_d2plus` | float 0-1 | US Drought Monitor 2000-2025, cumulative `D2` | core | area-weighted share of weeks |
 | `nri_drought_score` | float 0-100 | FEMA NRI `DRGT_ALR_NPCTL` | core | loss-rate percentile; see the note under climate resilience |
-| `water_stress_bws` | float 0-5 | WRI Aqueduct 4.0 `bws_raw`, area-weighted | stretch | gate input for evaporative cooling |
-| `water_stress_2050` | float 0-5 | Aqueduct 4.0 future, 2050 business-as-usual | stretch | |
+| `water_stress_bws` | float 0-5 | WRI Aqueduct 4.0 `bws_score`, area-weighted in EPSG:5070 | stretch | gate input for evaporative cooling. The 0-5 category scale, not `bws_raw`, which is a withdrawal ratio: 0-1 low, 1-2 low-medium, 2-3 medium-high, 3-4 high, 4-5 extremely high. Arid, low-water-use basins score 5. |
+| `water_stress_2050` | float 0-5 | Aqueduct 4.0 future `bau50_ws_x_s`, 2050 business as usual, area-weighted | stretch | same scale as `water_stress_bws` |
 | `grid_water_gal_mwh` | float | EIA-923 8D + EIA-860, by eGRID subregion | stretch | water embedded in grid power |
 
 ## Climate resilience
