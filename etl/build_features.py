@@ -5,6 +5,7 @@ Usage: python -m etl.build_features [--no-fetch]
 Each adapter in etl/adapters/ exposes SOURCE, RAW, fetch(raw_dir), and build(raw_dir), where
 build returns a DataFrame keyed by fips with schema column names only. A failing adapter is
 reported, recorded in the manifest, and its columns stay null. The exit code is then 1.
+An adapter marked OPTIONAL whose input file is absent only warns.
 """
 import argparse
 import importlib
@@ -30,7 +31,7 @@ def _mtime(path):
 
 
 def build(fetch=True):
-    table, sources, joins, errors, notes, unmatched = None, [], {}, {}, [], []
+    table, sources, joins, errors, notes, unmatched, failed = None, [], {}, {}, [], [], []
     for name in ADAPTERS:
         try:
             mod = importlib.import_module(f"etl.adapters.{name}")
@@ -45,9 +46,13 @@ def build(fetch=True):
         except Exception as exc:
             if table is None:
                 raise
+            errors[name] = f"{type(exc).__name__}: {exc}"
+            if isinstance(exc, FileNotFoundError) and getattr(mod, "OPTIONAL", False):
+                print(f"WARNING: {name} skipped, input not there yet: {exc}", file=sys.stderr)
+                continue
+            failed.append(name)
             traceback.print_exc()
             print(f"ERROR: adapter {name} failed; its columns stay null", file=sys.stderr)
-            errors[name] = f"{type(exc).__name__}: {exc}"
             continue
         if table is None:
             table = df
@@ -92,18 +97,18 @@ def build(fetch=True):
     manifest["unmatched_name_rows"] = {k: int(v) for k, v in unmatched.groupby("source").rows.sum().items()}
     table.to_parquet(OUT_DIR / "county_features.parquet", index=False)
     (OUT_DIR / "county_features.manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
-    return table, manifest
+    return table, manifest, failed
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-fetch", action="store_true", help="use data/raw as is")
-    table, manifest = build(fetch=not parser.parse_args().no_fetch)
+    table, manifest, failed = build(fetch=not parser.parse_args().no_fetch)
     print(f"rows: {manifest['rows']}")
     print(f"columns present: {len(manifest['columns_present'])}, missing: {manifest['columns_missing']}")
     for name, j in manifest["joins"].items():
         print(f"{name}: {j['rows']} rows, {len(j['fips_not_in_table'])} unmatched fips, "
               f"{j['counties_without_data']} counties without data")
-    if manifest["errors"]:
-        print(f"FAILED ADAPTERS: {manifest['errors']}", file=sys.stderr)
+    if failed:
+        print(f"FAILED ADAPTERS: {failed}", file=sys.stderr)
         sys.exit(1)

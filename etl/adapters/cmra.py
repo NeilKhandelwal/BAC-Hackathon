@@ -11,8 +11,10 @@ SOURCE = {"name": "CMRA climate projections", "version": "LOCA CMIP5, mid-centur
 RAW = "cmra/cmra_counties.csv"
 NOTES = ["CMRA reports the 8 old Connecticut counties. Each planning region takes the values "
          "of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
-         "CMRA has no heating degree days for 65 of the coldest counties (ND, MN, CO, and "
-         "others). hdd_* and heat_sink_score are null there."]
+         "CMRA has no heating degree days for 65 counties, so hdd_* and heat_sink_score are null "
+         "there. 51 are the coldest counties (ND, MN, CO, WY, MI, WI); CMRA reports nothing "
+         "above about 9,000 HDD. 14 are small Virginia independent cities that CMRA leaves "
+         "blank for HDD only. Neither group is interpolated."]
 
 COLUMNS = {
     "HISTORIC_MEAN_CDD": "cdd_hist", "RCP45MID_MEAN_CDD": "cdd_2050_rcp45",

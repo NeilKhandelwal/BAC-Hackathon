@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T20:47:11+00:00",
+  "built_at": "2026-10-03T20:49:25+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -140,7 +140,7 @@
   "notes": [
     "NRI hazard scores rated 'Not Applicable' are written as 0, not null. 'Insufficient Data' stays null.",
     "CMRA reports the 8 old Connecticut counties. Each planning region takes the values of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
-    "CMRA has no heating degree days for 65 of the coldest counties (ND, MN, CO, and others). hdd_* and heat_sink_score are null there.",
+    "CMRA has no heating degree days for 65 counties, so hdd_* and heat_sink_score are null there. 51 are the coldest counties (ND, MN, CO, WY, MI, WI); CMRA reports nothing above about 9,000 HDD. 14 are small Virginia independent cities that CMRA leaves blank for HDD only. Neither group is interpolated.",
     "Queue MW columns are 0 for counties with no matching queue entries. Median age and withdrawal rate are null there. Queue age is measured to 2025-12-31.",
     "Queue rows for old Connecticut counties are summed into the planning region that holds most of the county, so two regions show no queue activity.",
     "fiber_share_locations measures last-mile fiber, a proxy for backbone access.",

@@ -12,6 +12,7 @@ from etl.fips import load_tiger
 SOURCE = {"name": "Hand-coded state permitting tables", "version": "see source_url per row",
           "url": "data/processed/state_policy.csv"}
 RAW = "../processed/state_policy.csv"
+OPTIONAL = True  # until the tables are committed, the build warns and leaves the columns null
 
 TABLES = Path("data/processed")
 POLICY = ["state_dc_bill_pending", "state_sales_tax_exemption", "state_large_load_tariff"]
