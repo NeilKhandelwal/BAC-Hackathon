@@ -4,6 +4,6 @@ pyarrow>=15
 pyyaml>=6
 requests>=2.31
 scikit-learn>=1.4
-streamlit>=1.35
-plotly>=5.20
+streamlit>=1.65  # tested version; app uses width="stretch" and dataframe row selection
+plotly>=5.24  # choropleth_map
 openpyxl>=3.1
