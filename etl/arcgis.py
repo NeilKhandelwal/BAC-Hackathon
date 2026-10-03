@@ -5,12 +5,13 @@ import pandas as pd
 import requests
 
 
-def query_all(layer_url, where="1=1", out_fields="*", page=1000, timeout=120):
-    """Return every row's attributes from a feature layer. No geometry."""
+def query_all(layer_url, where="1=1", out_fields="*", page=1000, timeout=120, order_by="OBJECTID"):
+    """Return every row's attributes from a feature layer. No geometry. Some servers name the
+    ID field in lowercase; pass it as order_by."""
     rows, offset = [], 0
     while True:
         params = dict(where=where, outFields=out_fields, returnGeometry="false", f="json",
-                      resultOffset=offset, resultRecordCount=page, orderByFields="OBJECTID")
+                      resultOffset=offset, resultRecordCount=page, orderByFields=order_by)
         r = requests.get(layer_url + "/query", params=params, timeout=timeout)
         r.raise_for_status()
         d = r.json()
