@@ -1,6 +1,6 @@
 # Permitting risk: method
 
-Owner: Person C. Output: the permitting columns in `docs/schema.md`.
+Output: the permitting columns in `docs/schema.md`.
 
 ## Scope
 
