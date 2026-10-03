@@ -49,6 +49,17 @@ def parse_horizon(value):
     return h
 
 
+def floor_exempt(conditions, pillars):
+    """The pillar_floor_exempt list, checked against the pillar names in pillars.yaml."""
+    exempt = conditions.get("pillar_floor_exempt") or []
+    if not isinstance(exempt, (list, tuple)):
+        raise ValueError(f"pillar_floor_exempt must be a list of pillar names, got {exempt!r}")
+    unknown = [p for p in exempt if p not in pillars]
+    if unknown:
+        raise ValueError(f"pillar_floor_exempt names unknown pillars: {', '.join(map(str, unknown))}")
+    return list(exempt)
+
+
 def check_gates(df, conditions):
     """Warnings for gate settings that would silently do nothing or mark every county unknown."""
     gates = conditions.get("gates") or {}
@@ -265,13 +276,13 @@ def pillar_percentiles(scores, pillar_cols):
     return scores[pillar_cols].rank(pct=True, method="average") * 100
 
 
-def floor_ok(scores, pillar_cols, floor, w=None):
+def floor_ok(scores, pillar_cols, floor, w=None, exempt=()):
     """True where every non-null pillar with positive weight is at or above the floor.
 
     The floor compares the national percentile of the pillar score. A pillar
-    the user weights at zero doesn't count.
+    the user weights at zero, or lists in exempt, doesn't count.
     """
-    cols = [c for c in pillar_cols if w is None or w.get(c, 0) > 0]
+    cols = [c for c in pillar_cols if (w is None or w.get(c, 0) > 0) and c.removeprefix("pillar_") not in exempt]
     if not floor or not cols:
         return pd.Series(True, index=scores.index)
     return ~(pillar_percentiles(scores, cols) < floor).any(axis=1)
@@ -352,6 +363,7 @@ def rank(df, conditions, pillars):
     scenario = conditions.get("scenario", "rcp85")
     weights = conditions.get("weights") or {}
     floor = conditions.get("pillar_floor_percentile", 0)
+    exempt = floor_exempt(conditions, pillars)
 
     report["warnings"] += check_gates(df, conditions)
     log = apply_gates(df, conditions)
@@ -359,7 +371,7 @@ def rank(df, conditions, pillars):
     sc = score(df, pillars, weights, horizon, scenario)
     report["warnings"] += sc.warnings
     scores = sc.scores
-    scores["floor_ok"] = floor_ok(scores, sc.pillar_cols, floor, sc.weights)
+    scores["floor_ok"] = floor_ok(scores, sc.pillar_cols, floor, sc.weights, exempt)  # robustness reuses this mask
 
     # Horizon comparison. horizon_delta is a difference of national
     # percentiles, so it shows relative change only; rank_delta_2050 is the
@@ -368,7 +380,7 @@ def rank(df, conditions, pillars):
     s2026, s2050 = (other, sc) if horizon == 2050 else (sc, other)
     if s2050.swapped:
         scores["horizon_delta"] = s2050.scores["composite"] - s2026.scores["composite"]
-        r2026, r2050 = (order(s.scores, floor_ok(s.scores, s.pillar_cols, floor, s.weights), passed)
+        r2026, r2050 = (order(s.scores, floor_ok(s.scores, s.pillar_cols, floor, s.weights, exempt), passed)
                         for s in (s2026, s2050))
         scores["rank_delta_2050"] = r2050 - r2026
     else:
@@ -404,6 +416,7 @@ def rank(df, conditions, pillars):
         hazard_gate_nonzero_counties=exposed,
         floor_ok=int(ranked["floor_ok"].sum()),
         pillars=[c.removeprefix("pillar_") for c in sc.pillar_cols],
+        pillar_floor_exempt=exempt,
         weights_used={c.removeprefix("pillar_"): round(float(v), 4) for c, v in sc.weights.items()},
     )
     return ranked.reset_index(drop=True), excluded.reset_index(drop=True), report
