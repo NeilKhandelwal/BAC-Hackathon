@@ -41,7 +41,8 @@ weights:
   community: 0.10
   permitting: 0.18
 
-pillar_floor_percentile: 20
+pillar_floor_percentile: 10            # guards against a county that fails badly on one pillar; at 20 it turned small
+                                       # value-choice differences into drops of hundreds of ranks
 pillar_floor_exempt: [permitting]       # three coarse state-level integers; one step moved a county 380 ranks
 
 robustness:
