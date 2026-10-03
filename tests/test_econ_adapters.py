@@ -1,5 +1,7 @@
 """Economic development adapters. A wrong FIPS remap or a misread flag silently moves jobs or
 capacity onto the wrong county, and the permitting model would learn from it."""
+from pathlib import Path
+
 import pandas as pd
 import pytest
 
@@ -9,20 +11,31 @@ from etl.fips import load_tiger
 RAW = "data/raw"
 
 
+def require_raw(*files):
+    """Skip, with the reason in the report, when raw downloads are absent. Never download.
+
+    The demo machine may be offline. Run `python -m etl.build_features` once to fetch them.
+    """
+    missing = [f for f in files if not (Path(RAW) / f).exists()]
+    if missing:
+        pytest.skip(f"raw files absent, run python -m etl.build_features to fetch: {missing}")
+
+
 @pytest.fixture(scope="module")
 def tiger():
-    tiger_acs.fetch(RAW)
+    require_raw(tiger_acs.RAW)
     return load_tiger(RAW)
 
 
 @pytest.fixture(scope="module")
 def cbp():
-    cbp_manufacturing.fetch(RAW)
+    require_raw("cbp/cbp01co.zip", cbp_manufacturing.RAW, tiger_acs.RAW)
     return cbp_manufacturing.build(RAW).set_index("fips")
 
 
 @pytest.fixture(scope="module")
 def raw_2001():
+    require_raw("cbp/cbp01co.zip")
     d = pd.read_csv(f"{RAW}/cbp/cbp01co.zip", dtype=str, usecols=["fipstate", "fipscty", "naics", "emp"])
     d["fips"] = d.fipstate + d.fipscty
     return d.set_index(["fips", "naics"]).emp.astype(float)
@@ -58,7 +71,7 @@ def test_2001_size_class_is_imputed_but_2022_noise_flag_is_not(tmp_path):
 
 
 def test_unemployment_has_only_counties(tiger):
-    ers_unemployment.fetch(RAW)
+    require_raw(ers_unemployment.RAW)
     df = ers_unemployment.build(RAW)
     # State and US rows end in 000. One leaking in would give a county its state's rate.
     assert not df.fips.str.endswith("000").any()
@@ -68,7 +81,7 @@ def test_unemployment_has_only_counties(tiger):
 
 
 def test_retired_coal_is_zero_not_null_and_every_generator_is_placed(tiger):
-    eia860_coal.fetch(RAW)
+    require_raw(eia860_coal.RAW)
     df = eia860_coal.build(RAW).set_index("fips")
     # A renamed county in a future EIA edition would drop MW. Fail loudly instead.
     assert eia860_coal.UNMATCHED == []
