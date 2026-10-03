@@ -27,6 +27,50 @@ FLAG_GATES = {
     "exclude_moratorium_state_active": "moratorium_state_active",
     "exclude_air_nonattainment": "air_nonattainment_count",
 }
+# Gates handled by their own code in apply_gates, with the column each reads.
+SPECIAL_GATES = {
+    "states_include": "state",
+    "states_exclude": "state",
+    "min_nearby_capacity_multiple": "plant_capacity_mw_100km",
+    "max_water_stress_if_evaporative": "water_stress_bws",
+    "hazard_percentile_max": None,
+}
+HORIZONS = (2026, 2050)
+
+
+def parse_horizon(value):
+    """Return 2026 or 2050 from an int or numeric string; raise on anything else."""
+    try:
+        h = int(str(value).strip())
+    except ValueError:
+        h = None
+    if h not in HORIZONS:
+        raise ValueError(f"horizon must be 2026 or 2050, got {value!r}")
+    return h
+
+
+def check_gates(df, conditions):
+    """Warnings for gate settings that would silently do nothing or mark every county unknown."""
+    gates = conditions.get("gates") or {}
+    warnings = []
+    known = set(SIMPLE_GATES) | set(FLAG_GATES) | set(SPECIAL_GATES)
+    for key in gates:
+        if key not in known:
+            warnings.append(f"gates.{key} is not a known gate and was ignored")
+    cooling = (conditions.get("facility") or {}).get("cooling", "dry")
+    active = {name: col for name, (col, _) in SIMPLE_GATES.items() if gates.get(name) is not None}
+    active.update({name: col for name, col in FLAG_GATES.items() if gates.get(name)})
+    if gates.get("min_nearby_capacity_multiple") is not None:
+        active["min_nearby_capacity_multiple"] = "plant_capacity_mw_100km"
+    if gates.get("max_water_stress_if_evaporative") is not None and cooling in ("evaporative", "hybrid"):
+        active["max_water_stress_if_evaporative"] = "water_stress_bws"
+    for column, pmax in (gates.get("hazard_percentile_max") or {}).items():
+        if pmax is not None:
+            active[f"hazard_percentile_max.{column}"] = column
+    for name, column in active.items():
+        if column not in df.columns:
+            warnings.append(f"gate {name}: column {column} is not in the table, so every county is unknown")
+    return warnings
 
 
 def load_yaml(path):
@@ -88,6 +132,9 @@ def apply_gates(df, conditions):
 
     include = gates.get("states_include") or []
     exclude = gates.get("states_exclude") or []
+    for name, v in (("states_include", include), ("states_exclude", exclude)):
+        if not isinstance(v, (list, tuple)):
+            raise ValueError(f"gates.{name} must be a list of state abbreviations, got {v!r}")
     if include:
         record("states_include", "state", ~values("state").isin(include))
     if exclude:
@@ -173,6 +220,7 @@ class Scores(NamedTuple):
 
 def score(df, pillars, weights, horizon=2026, scenario="rcp85"):
     """Pillar scores and the weighted composite for every county."""
+    horizon = parse_horizon(horizon)
     resolved, warnings, swapped = resolve_columns(df, pillars, horizon, scenario)
     out = pd.DataFrame(index=df.index)
     pcts, columns = {}, {}
@@ -192,7 +240,9 @@ def score(df, pillars, weights, horizon=2026, scenario="rcp85"):
         warnings.append(f"weights renormalized over {len(pillar_cols)} pillars (dropped: {', '.join(dropped) or 'none'})")
     out["composite"] = composite(out[pillar_cols], w)
     pcts = pd.DataFrame(pcts, index=df.index)
-    out["coverage"] = pcts.notna().mean(axis=1) if len(pcts.columns) else 0.0
+    # Coverage counts every column in pillars.yaml, so absent columns lower it.
+    n_total = sum(len(ms) for ms in pillars.values())
+    out["coverage"] = pcts.notna().sum(axis=1) / n_total if n_total else 0.0
     return Scores(out, pillar_cols, warnings, swapped, pcts, columns, w)
 
 
@@ -210,12 +260,21 @@ def composite(pillar_scores, w):
     return pillar_scores.fillna(0).mul(w, axis=1).sum(axis=1) / avail.replace(0, np.nan)
 
 
-def floor_ok(scores, pillar_cols, floor):
-    """True where every non-null pillar is at or above the floor, as a national percentile of the pillar score."""
-    if not floor:
+def pillar_percentiles(scores, pillar_cols):
+    """National percentile of each pillar score."""
+    return scores[pillar_cols].rank(pct=True, method="average") * 100
+
+
+def floor_ok(scores, pillar_cols, floor, w=None):
+    """True where every non-null pillar with positive weight is at or above the floor.
+
+    The floor compares the national percentile of the pillar score. A pillar
+    the user weights at zero doesn't count.
+    """
+    cols = [c for c in pillar_cols if w is None or w.get(c, 0) > 0]
+    if not floor or not cols:
         return pd.Series(True, index=scores.index)
-    pp = scores[pillar_cols].rank(pct=True, method="average") * 100
-    return ~(pp < floor).any(axis=1)
+    return ~(pillar_percentiles(scores, cols) < floor).any(axis=1)
 
 
 def order(scores, floor_mask, passed):
@@ -225,8 +284,10 @@ def order(scores, floor_mask, passed):
     return pd.Series(np.arange(1, len(idx) + 1), index=idx).reindex(scores.index)
 
 
-def top_reasons(sc, n=3):
-    """The n columns adding most to each county's composite, as a semicolon list.
+def top_reasons(sc, rows, n=3):
+    """The n columns adding most to the composite of each county in rows, as a semicolon list.
+
+    Only columns above the median count, so the list can be shorter than n.
 
     A column's contribution is its pillar weight times its percentile above
     the median (50), divided by the number of non-null columns in that pillar
@@ -235,10 +296,16 @@ def top_reasons(sc, n=3):
     """
     parts = []
     for pillar, cols in sc.columns.items():
-        p = sc.pcts[cols] - 50
+        p = sc.pcts.loc[rows, cols] - 50
         parts.append(p.div(p.notna().sum(axis=1), axis=0) * sc.weights[f"pillar_{pillar}"])
     contrib = pd.concat(parts, axis=1)
-    return contrib.apply(lambda r: ";".join(r.dropna().nlargest(n).index), axis=1)
+    a = contrib.to_numpy()
+    a = np.where(a > 0, a, -np.inf)  # above-median only; NaN compares False
+    k = min(n, a.shape[1])
+    idx = np.argsort(-a, axis=1, kind="stable")[:, :k]
+    keep = np.take_along_axis(a, idx, axis=1) > -np.inf
+    names = contrib.columns.to_numpy()
+    return pd.Series([";".join(names[i][m]) for i, m in zip(idx, keep)], index=contrib.index, dtype=object)
 
 
 def robustness(pillar_scores, w, floor_mask, conditions):
@@ -247,12 +314,20 @@ def robustness(pillar_scores, w, floor_mask, conditions):
     Draws use alpha = concentration * weights * number of pillars, so the
     mean draw equals the stated weights. Pillar scores and floor membership
     don't depend on weights, so only the composite is recomputed per draw.
-    Zero-weight pillars stay at zero.
+    Zero-weight pillars stay at zero. Only floor-passing counties with a
+    composite can be hits. When that field has top_n counties or fewer,
+    every one of them would score 1.0, so robustness is null with a warning.
+    Returns (robustness, warnings).
     """
     cfg = conditions.get("robustness") or {}
     samples, top_n = int(cfg.get("samples", 2000)), int(cfg.get("top_n", 10))
+    null = pd.Series(np.nan, index=pillar_scores.index)
     if samples <= 0 or len(pillar_scores) == 0:
-        return pd.Series(np.nan, index=pillar_scores.index)
+        return null, []
+    eligible = floor_mask.to_numpy(dtype=bool) & pillar_scores[w.index[w > 0]].notna().any(axis=1).to_numpy()
+    if eligible.sum() <= top_n:
+        return null, [f"robustness not computed: {int(eligible.sum())} counties pass the gates and the floor, "
+                      f"not more than top_n ({top_n})"]
     rng = np.random.default_rng(cfg.get("seed", 0))
     pos = w > 0
     draws = np.zeros((samples, len(w)))
@@ -262,27 +337,29 @@ def robustness(pillar_scores, w, floor_mask, conditions):
     num = np.nan_to_num(vals) @ draws.T                          # counties x samples
     den = (~np.isnan(vals)).astype(float) @ draws.T
     comp = np.divide(num, den, out=np.full_like(num, -np.inf), where=den > 0)
-    comp = np.where(np.isnan(comp), -np.inf, comp) + floor_mask.to_numpy()[:, None] * 1000.0  # floor group first
-    k = min(top_n, len(comp))
-    top = np.argpartition(-comp, k - 1, axis=0)[:k]               # k x samples
-    hits = np.bincount(top.ravel(), minlength=len(comp))
-    return pd.Series(hits / samples, index=pillar_scores.index)
+    comp[~eligible] = -np.inf  # floor-failing and null-composite counties never count as hits
+    comp = np.where(np.isnan(comp), -np.inf, comp)
+    top = np.argpartition(-comp, top_n - 1, axis=0)[:top_n]       # top_n x samples
+    hit = np.take_along_axis(comp, top, axis=0) > -np.inf
+    hits = np.bincount(top[hit], minlength=len(comp))
+    return pd.Series(hits / samples, index=pillar_scores.index), []
 
 
 def rank(df, conditions, pillars):
     """Run the engine. Returns (ranked, excluded, report)."""
     report = {"warnings": []}
-    horizon = conditions.get("horizon", 2026)
+    horizon = parse_horizon(conditions.get("horizon", 2026))
     scenario = conditions.get("scenario", "rcp85")
     weights = conditions.get("weights") or {}
     floor = conditions.get("pillar_floor_percentile", 0)
 
+    report["warnings"] += check_gates(df, conditions)
     log = apply_gates(df, conditions)
     passed = log["failed_gates"] == ""
     sc = score(df, pillars, weights, horizon, scenario)
     report["warnings"] += sc.warnings
     scores = sc.scores
-    scores["floor_ok"] = floor_ok(scores, sc.pillar_cols, floor)
+    scores["floor_ok"] = floor_ok(scores, sc.pillar_cols, floor, sc.weights)
 
     # Horizon comparison. horizon_delta is a difference of national
     # percentiles, so it shows relative change only; rank_delta_2050 is the
@@ -291,15 +368,17 @@ def rank(df, conditions, pillars):
     s2026, s2050 = (other, sc) if horizon == 2050 else (sc, other)
     if s2050.swapped:
         scores["horizon_delta"] = s2050.scores["composite"] - s2026.scores["composite"]
-        r2026, r2050 = (order(s.scores, floor_ok(s.scores, s.pillar_cols, floor), passed) for s in (s2026, s2050))
+        r2026, r2050 = (order(s.scores, floor_ok(s.scores, s.pillar_cols, floor, s.weights), passed)
+                        for s in (s2026, s2050))
         scores["rank_delta_2050"] = r2050 - r2026
     else:
         scores["horizon_delta"] = scores["rank_delta_2050"] = np.nan
 
-    scores["top_reasons"] = top_reasons(sc)
     p = passed.to_numpy()
-    scores["robustness"] = robustness(scores.loc[p, sc.pillar_cols], sc.weights,
-                                      scores.loc[p, "floor_ok"], conditions).reindex(scores.index)
+    scores["top_reasons"] = top_reasons(sc, scores.index[p]).reindex(scores.index)
+    robust, warns = robustness(scores.loc[p, sc.pillar_cols], sc.weights, scores.loc[p, "floor_ok"], conditions)
+    scores["robustness"] = robust.reindex(scores.index)
+    report["warnings"] += warns
 
     ids = [c for c in ("fips", "county_name", "state") if c in df.columns]
     full = pd.concat([df[ids], scores, log], axis=1)

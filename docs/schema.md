@@ -9,7 +9,7 @@ Rules:
 - Key is `fips`, a 5-character zero-padded string. Never an integer.
 - Every column is a plain number, string, or boolean. No nested values.
 - Null means "not available for this county." It never means zero. The
-  engine treats null as pillar-neutral (median percentile) and counts it in
+  engine leaves null columns out of the pillar mean and counts them against
   `coverage`. A gate never fails on null; it flags instead.
 - Units are in the column name where they matter.
 - Columns marked **core** must exist in the first delivery, even if some
@@ -141,8 +141,8 @@ here; it's scored in grid and infrastructure.
 | `moratorium_active` | bool | FracTracker moratoria, county level, status active | core | by GEOID; gate |
 | `moratorium_pending` | bool | FracTracker moratoria, county level, status pending | core | |
 | `moratorium_state_active` | bool | FracTracker moratoria, state level | core | broadcast to all counties in the state |
-| `permitting_discretionary_risk` | float 0-1 | permitting model | core | probability a project meets opposition that delays or kills it. Null until the model runs. |
-| `permitting_drivers` | str | permitting model | core | top three features by contribution, semicolon list |
+| `permitting_discretionary_risk` | float 0-1 | permitting model | core | null: model tested and dropped, see `research/permitting_model.md` |
+| `permitting_drivers` | str | permitting model | core | null: model tested and dropped, see `research/permitting_model.md` |
 | `air_nonattainment_count` | int 0-2 | EPA Green Book, county in nonattainment for 8-hour ozone, PM2.5 | core | constrains diesel backup generation |
 | `water_rights_regime` | str | hand-coded state table | core | `prior_appropriation`, `riparian`, or `hybrid` |
 | `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | researched for AZ, TX, CO. Null in other prior-appropriation and hybrid states. |
@@ -158,7 +158,7 @@ here; it's scored in grid and infrastructure.
 
 | Column | Type | Notes |
 | --- | --- | --- |
-| `coverage` | float 0-1 | share of core scored columns that are non-null for this county. Computed by the engine, not the ETL. |
+| `coverage` | float 0-1 | share of all columns mapped in `engine/pillars.yaml` that are non-null for this county, counting columns absent from the table as null. Computed by the engine, not the ETL. |
 
 ## Manifest
 

@@ -1,16 +1,22 @@
 """County name joins. A wrong or colliding key silently puts one county's data on another."""
+import pandas as pd
 import pytest
 
 from etl.adapters import tiger_acs
 from etl.fips import build_lookup, load_tiger, normalize_county, to_fips
+from tests.conftest import RAW, require_raw
 
-RAW = "data/raw"
+NAMES = "tests/fixtures/tiger_names.csv"  # GEOID, NAMELSAD, STUSPS from the TIGER 2024 county file
 
 
 @pytest.fixture(scope="module")
 def tiger():
-    tiger_acs.fetch(RAW)
-    return load_tiger(RAW)
+    return pd.read_csv(NAMES, dtype=str)
+
+
+def test_committed_name_list_matches_tiger(tiger):
+    require_raw(tiger_acs.RAW)
+    pd.testing.assert_frame_equal(load_tiger(RAW)[["GEOID", "NAMELSAD", "STUSPS"]], tiger)
 
 
 def test_table_is_contiguous_us_plus_dc(tiger):

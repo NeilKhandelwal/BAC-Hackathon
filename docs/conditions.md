@@ -76,6 +76,10 @@ output:
 **Gates** run first and produce a log per county: passed, failed on which
 gate, or unknown because the column is null. Unknown never excludes. The
 results carry the gate log so the UI can show "why not."
+A gate key the engine doesn't recognize, or a gate whose column is missing
+from the table, adds a warning to the report instead of passing silently.
+`states_include` and `states_exclude` must be lists.
+
 `hazard_percentile_max` caps the national percentile of each hazard score.
 Most hazards are zero for many counties (coastal flood is zero for about
 2,700 inland counties), so a cap below that share excludes every exposed
@@ -92,7 +96,8 @@ that the grid can deliver it to a new 300 MW load. It measures installed
 generation, not spare capacity, so a county that just clears the gate still
 scores low on the grid pillar.
 
-**Horizon** swaps the climate columns. With `horizon: 2050`, `cdd_hist`
+**Horizon** swaps the climate columns. It must be 2026 or 2050, as a number
+or numeric string; any other value is an error. With `horizon: 2050`, `cdd_hist`
 becomes `cdd_2050_<scenario>`, and the same for heating degree days and days
 above 95F. Water stress uses `water_stress_2050` when present. Everything
 else is held at today's values and the deck says so. `horizon_delta`
@@ -111,6 +116,8 @@ scores, subject to the floor rule. Percentiles are computed over all
 counties before gates run, so a county's scores don't change between
 presets. A county with every column in a pillar null has a null pillar; its
 composite renormalizes over its other pillars, and `coverage` shows the gap.
+`coverage` is the share of every column mapped in `engine/pillars.yaml` that
+is non-null for the county, so columns absent from the table lower it too.
 
 **Floor rule.** With `pillar_floor_percentile: 20`, counties are split into
 those with every pillar at or above the 20th percentile and those with at
@@ -119,7 +126,7 @@ and within each group the weighted sum orders them. This enforces the
 brief's "don't optimize for a single metric" without a nonlinear formula.
 The floor compares the national percentile of each pillar score, not the
 raw pillar score, because a mean of percentiles clusters near 50. A null
-pillar never fails the floor.
+pillar never fails the floor, and neither does a pillar weighted zero.
 
 **Robustness.** For each sample, draw a weight vector from a Dirichlet
 distribution centered on the stated weights, recompute the ranking, and
@@ -127,7 +134,10 @@ record whether each county landed in the top N. The robustness score is the
 share of samples where it did. Draws use alpha = `concentration` times the
 weights times the number of pillars, so the mean draw equals the stated
 weights. The floor rule applies in every draw. Set `robustness.seed`
-(default 0) to change the reproducible draw. The headline map shows this, not the point
+(default 0) to change the reproducible draw. Only counties that pass the
+gates and the floor can count as top N hits. When that field has `top_n`
+counties or fewer, every one would score 1.0, so `robustness` is null and
+the report warns. The headline map shows this, not the point
 estimate.
 
 **Portfolio.** Greedy. Pick the top county. For each remaining county,
@@ -156,10 +166,24 @@ network call.
 
 ## Output
 
-`rank` returns one row per county that passed the gates, sorted by
-composite, with columns: `rank`, `fips`, `county_name`, `state`,
-`composite`, one `pillar_<name>` column per pillar, `robustness`,
-`coverage`, `floor_ok`, `permitting_discretionary_risk`, `permitting_pathway`, `horizon_delta` (composite under
-2050 minus composite under 2026, when both can be computed), and
-`top_reasons` (the three columns that contributed most). Excluded counties
-are returned separately with `failed_gate`.
+`rank` returns one row per county that passed the gates. Rows sort by floor
+group first (every county with `floor_ok` true ranks above every county
+without), then by composite. Columns:
+
+- `rank`, `fips`, `county_name`, `state`
+- one `pillar_<name>` column per pillar with data, then `composite` and
+  `coverage`
+- `floor_ok`
+- `horizon_delta` (composite under 2050 minus composite under 2026) and
+  `rank_delta_2050` (rank under 2050 minus rank under 2026 among
+  gate-passed counties), both null when no 2050 column exists
+- `top_reasons`: up to three columns above the national median that add
+  most to the composite, as a semicolon list. It can be empty.
+- `robustness`, null when too few counties pass the gates and the floor
+- `failed_gates` (always empty here) and `unknown_gates`, semicolon lists
+
+The CLI writes these rows to `<out>.csv`, excluded counties with
+`failed_gates` and `unknown_gates` to `<out>_excluded.csv`, and the run
+summary (per-gate counts, `hazard_gate_nonzero_counties`, `weights_used`,
+warnings) to `<out>_report.json`. The engine doesn't emit a permitting
+pathway or a permitting model score.
