@@ -5,7 +5,9 @@ answering a site-selection lead's question, then a different answer when one
 condition changes: the cooling technology.
 
 Checked against the live app on `main` at commit `c43828c`, with the
-committed `data/processed/county_features.parquet` (3,109 counties). If the
+committed `data/processed/county_features.parquet` (3,109 counties). The
+counts, ranks, and exclusions were rechecked with the engine on `91f496a`,
+and the labeled 2050 table on PR #18's branch. If the
 table or presets change, rerun the click path and update the numbers before
 you rehearse.
 
@@ -57,9 +59,12 @@ honest limitation: the gate counts nearby generation, not transmission.
   table yet, such as NREL solar, NLCD land cover, and EIA reliability. The
   engine skips them and shows the gap as lower coverage, which is why
   coverage is 76%.
-- **Why does Grant's water stress not change by 2050?** Aqueduct's 2050
-  business-as-usual projection is nearly flat for that basin. The engine
-  reports the source value as is.
+- **Why does Grant's water stress not change by 2050?** Water is the pillar
+  that moves least under the 2050 switch. Aqueduct's score saturates: 727
+  of 1,254 US basins have the same baseline and 2050 business-as-usual
+  score, all at 0 or at the cap of 5, so county averages over them stay
+  flat. The horizon story is carried by cooling degree days and days above
+  95°F.
 - **Is the water gate too blunt?** It's a threshold on a basin-level score,
   set by the conditions file. Raise it to 4 and Grant passes and ranks
   seventh; that's the point of making it a condition rather than a fixed rule.
