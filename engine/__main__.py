@@ -36,7 +36,10 @@ def cmd_rank(args):
 
 def cmd_explain(args):
     df, _ = load_features(args.features)
-    e = explain(df, load_yaml(args.conditions), load_yaml(args.pillars), args.fips)
+    try:
+        e = explain(df, load_yaml(args.conditions), load_yaml(args.pillars), args.fips)
+    except KeyError as err:
+        sys.exit(f"error: {err.args[0]}")
     print(json.dumps(e, indent=2) if args.json else format_text(e))
 
 
