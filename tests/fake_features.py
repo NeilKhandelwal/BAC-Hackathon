@@ -26,6 +26,9 @@ NUMERIC = {
     "drought_share_weeks_d2plus": lambda r, n: r.uniform(0, 0.6, n),
     "fiber_share_locations": lambda r, n: r.uniform(0, 1, n),
     "plant_capacity_mw_100km": lambda r, n: r.lognormal(8, 1.2, n),
+    "coal_retired_mw": lambda r, n: np.where(r.random(n) < 0.1, r.lognormal(6, 1, n), 0.0),  # mostly 0, like the real table
+    "unemployment_rate_pct_2023": lambda r, n: r.normal(3.6, 1.2, n).clip(0.3),
+    "pop_change_pct_2010_2024": lambda r, n: r.normal(3, 14, n),
     "plant_clean_capacity_mw_100km": lambda r, n: r.lognormal(7, 1.3, n),
     "dc_existing_count": lambda r, n: r.poisson(0.5, n),
     "dc_existing_mw": lambda r, n: r.exponential(20, n),
