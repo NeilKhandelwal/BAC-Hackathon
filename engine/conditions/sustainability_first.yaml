@@ -16,9 +16,17 @@ scenario: rcp85
 gates:
   states_include: []
   states_exclude: []
-  max_grid_co2_lb_mwh: 600
-  min_renewable_share: 0.3
+  # Carbon sits in a gap between eGRID2023 subregion values, not a hair off one:
+  # NWPP is 632 lb/MWh and the next grid, AZNM, is 704, so 670 is mid-gap. Six of
+  # 22 subregions pass: NYUP, CAMX, NEWE, SRVC, RFCE, NWPP.
+  # The renewable gate is off. Any gap-respecting value (0.15 or 0.33) leaves 29 to
+  # 41 counties once the fixed hazard, fiber and capacity gates apply, and it drops
+  # nuclear-led SRVC and RFCE, which a 24/7 carbon-free buyer counts as clean.
+  # Renewable share still scores in the energy_carbon pillar.
+  max_grid_co2_lb_mwh: 670
+  min_renewable_share: null
   max_queue_median_age_years: 6
+  min_nearby_capacity_multiple: 5     # plant MW within 100 km must be at least this times facility.mw
   max_water_stress_if_evaporative: 1
   hazard_percentile_max:
     nri_inland_flood_score: 85

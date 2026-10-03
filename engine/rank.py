@@ -104,6 +104,16 @@ def apply_gates(df, conditions):
             v = pd.to_numeric(values(column).astype("float"), errors="coerce")
             record(name, column, v > 0)
 
+    # The first gate whose threshold comes from the facility: nearby plant capacity must
+    # be at least `multiple` times the facility's MW.
+    mult = gates.get("min_nearby_capacity_multiple")
+    if mult is not None:
+        mw = (conditions.get("facility") or {}).get("mw")
+        if mw is None:
+            raise ValueError("gates.min_nearby_capacity_multiple needs facility.mw")
+        v = pd.to_numeric(values("plant_capacity_mw_100km"), errors="coerce")
+        record("min_nearby_capacity_multiple", "plant_capacity_mw_100km", v < mult * mw)
+
     cooling = (conditions.get("facility") or {}).get("cooling", "dry")
     t = gates.get("max_water_stress_if_evaporative")
     if t is not None and cooling in ("evaporative", "hybrid"):
@@ -218,12 +228,14 @@ def order(scores, floor_mask, passed):
 def top_reasons(sc, n=3):
     """The n columns adding most to each county's composite, as a semicolon list.
 
-    A column's contribution is its pillar weight times its percentile, divided
-    by the number of non-null columns in that pillar for the county.
+    A column's contribution is its pillar weight times its percentile above
+    the median (50), divided by the number of non-null columns in that pillar
+    for the county. Measuring from the median keeps a column that is tied for
+    most counties, or alone in its pillar, from topping every county's list.
     """
     parts = []
     for pillar, cols in sc.columns.items():
-        p = sc.pcts[cols]
+        p = sc.pcts[cols] - 50
         parts.append(p.div(p.notna().sum(axis=1), axis=0) * sc.weights[f"pillar_{pillar}"])
     contrib = pd.concat(parts, axis=1)
     return contrib.apply(lambda r: ";".join(r.dropna().nlargest(n).index), axis=1)
