@@ -126,9 +126,9 @@ and `land_area_sqkm` only.
 | `greenhouse_acres` | float | USDA Census of Agriculture 2022 | stretch | real heat-sink input |
 | `mfg_emp_share_2001` | float 0-1 | Census CBP 2001, NAICS 31-33 / all industries | stretch | industrial legacy. Permitting model candidate feature. |
 | `mfg_loss_share_emp_2001` | float | Census CBP 2001 and 2022 | stretch | (manufacturing jobs 2001 - 2022) / all jobs 2001. Positive means jobs lost. Model candidate. |
-| `unemployment_rate_pct_2023` | float 0-100 | BLS LAUS 2023 via USDA ERS | stretch | model candidate |
-| `pop_change_pct_2010_2024` | float | Census population estimates, Vintage 2020 and 2024 | stretch | model candidate |
-| `coal_retired_mw` | float | EIA-860 2025, retired coal generators, nameplate MW | stretch | 0 where none. Reusable grid connection proxy. Model candidate. |
+| `unemployment_rate_pct_2023` | float 0-100 | BLS LAUS 2023 via USDA ERS | stretch | scored in community, higher better; a stated value choice, not a prediction |
+| `pop_change_pct_2010_2024` | float | Census population estimates, Vintage 2020 and 2024 | stretch | scored in community, lower better; a stated value choice, not a prediction |
+| `coal_retired_mw` | float | EIA-860 2025, retired coal generators, nameplate MW | stretch | 0 where none. Reusable grid connection proxy, scored in grid and infrastructure. |
 | `pop_change_pct_since_peak` | float, <= 0 | Census decennial counts 1950-2020 (Forstall table via NBER mirror, 2000 and 2020 estimates bases) and Vintage 2024 | stretch | July 2024 population against the highest census count since 1950. 0 at peak. Long-run decline. |
 | `mfg_emp_share_1969` | float 0-1 | BEA CAEMP25S 1969, SIC manufacturing / total employment | stretch | industrial legacy before the Rust Belt collapse |
 | `mfg_emp_share_change_1969_2022` | float | BEA CAEMP25S 1969 and CAEMP25N 2022 | stretch | 2022 share minus 1969 share. Negative means manufacturing shrank. Null where BEA withholds either year. |

@@ -53,7 +53,7 @@ weights:                          # must sum to 1; the engine renormalizes and w
   community: 0.10
   permitting: 0.18
 
-pillar_floor_percentile: 20       # a county below this percentile on any pillar can't rank above a county that isn't. Set 0 to disable.
+pillar_floor_percentile: 10       # a county below this percentile on any pillar can't rank above a county that isn't. Set 0 to disable.
 pillar_floor_exempt: [permitting] # pillars that score in the composite but never fail the floor
 
 robustness:
@@ -120,14 +120,31 @@ composite renormalizes over its other pillars, and `coverage` shows the gap.
 `coverage` is the share of every column mapped in `engine/pillars.yaml` that
 is non-null for the county, so columns absent from the table lower it too.
 
-**Floor rule.** With `pillar_floor_percentile: 20`, counties are split into
-those with every pillar at or above the 20th percentile and those with at
+**Industrial reuse and economic opportunity** are two separate additions.
+`coal_retired_mw` scores in grid and infrastructure: a retired coal plant's
+grid interconnection can be reused, which lets a project skip the queue for
+a new high-voltage connection. It makes no claim about community attitudes.
+`unemployment_rate_pct_2023` (higher is better) and
+`pop_change_pct_2010_2024` (lower is better) score in community. This is a
+stated value choice, not a prediction: the brief lists economic development
+opportunities under community impact, and a campus brings more benefit, and
+finds more available workforce, where jobs are scarce and population is
+falling. The opposition model found no dependable link between these columns
+and community pushback (`research/economic_development.md`), so the engine
+doesn't use them to predict acceptance.
+
+**Floor rule.** With `pillar_floor_percentile: 10`, counties are split into
+those with every pillar at or above the 10th percentile and those with at
 least one pillar below it. The first group always ranks above the second,
 and within each group the weighted sum orders them. This enforces the
 brief's "don't optimize for a single metric" without a nonlinear formula.
 The floor compares the national percentile of each pillar score, not the
 raw pillar score, because a mean of percentiles clusters near 50. A null
-pillar never fails the floor, and neither does a pillar weighted zero.
+pillar never fails the floor, and neither does a pillar weighted zero. A
+lower floor trades protection against lopsided counties for stability: at
+20, small differences on a value-choice column moved counties across the
+floor and hundreds of ranks, so `balanced` uses 10. `speed_to_power` also
+uses 10, and `sustainability_first` keeps 25 as the strict preset.
 
 `pillar_floor_exempt` lists pillars that still score in the composite but
 can't fail a county on the floor. Robustness and `rank_delta_2050` use the
