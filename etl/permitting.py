@@ -50,7 +50,8 @@ NAMED_CASES = {"04019": "Pima AZ", "51153": "Prince William VA", "13207": "Monro
 
 
 def build_labels(raw_dir):
-    """Return (labels, unmatched). labels has fips and label: 1 opposition, 0 none recorded."""
+    """Return (labels, unmatched). labels has fips, label (1 opposition, 0 none recorded), and
+    has_permitted_facility, which marks the counties where either label is possible."""
     tiger = load_tiger(raw_dir)
     lookup = build_lookup(tiger)
     ft = pd.read_csv(Path(raw_dir) / "fractracker/ft_all.csv", low_memory=False)
@@ -61,9 +62,10 @@ def build_labels(raw_dir):
     unmatched = seed[[f is None for f in seed_fips]][["state", "county", "project_name"]]
 
     positive = set(ft[ft.community_pushback.str.lower() == "yes"].fips.dropna()) | set(filter(None, seed_fips))
-    negative = set(ft[ft.status.isin(NEGATIVE_STATUS)].fips.dropna()) - positive
-    labels = pd.DataFrame({"fips": sorted(positive | negative)})
+    permitted = set(ft[ft.status.isin(NEGATIVE_STATUS)].fips.dropna())
+    labels = pd.DataFrame({"fips": sorted(positive | permitted)})
     labels["label"] = labels.fips.isin(positive).astype(int)
+    labels["has_permitted_facility"] = labels.fips.isin(permitted)
     return labels, unmatched
 
 
@@ -95,6 +97,7 @@ def validate(table, labels):
     labeled = labels.merge(table[["fips", "state", "dc_existing_count", "dc_proposed_count"]], on="fips")
     X_all = feature_matrix(table)
     X, y, states = X_all.loc[labeled.fips], labeled.label.values, labeled.state.values
+    both = labeled.has_permitted_facility.values  # counties where a negative label is possible
     others = [c for c in X.columns if c not in EXPOSURE]
     logit = LogisticRegression(C=1.0, max_iter=1000)
     boosted = HistGradientBoostingClassifier(random_state=0)
@@ -103,22 +106,31 @@ def validate(table, labels):
             "logistic_dc_counts_only": (logit, EXPOSURE),
             "boosted_all_features": (boosted, list(X.columns)),
             "boosted_without_dc_counts": (boosted, others)}
-    metrics = {}
+    metrics, out_of_fold = {}, {}
     for name, (model, columns) in runs.items():
-        scores = loso_scores(model, X[columns], y, states)
+        out_of_fold[name] = scores = loso_scores(model, X[columns], y, states)
         metrics[name] = {"auc": round(float(roc_auc_score(y, scores)), 3),
                          "average_precision": round(float(average_precision_score(y, scores)), 3)}
+    # The cleanest test: only counties where both labels are possible, and no count features.
+    for name, model in (("logistic", logit), ("boosted", boosted)):
+        scores = loso_scores(model, X[others][both], y[both], states[both])
+        metrics[f"{name}_without_dc_counts_permitted_subset"] = {
+            "auc": round(float(roc_auc_score(y[both], scores)), 3),
+            "average_precision": round(float(average_precision_score(y[both], scores)), 3)}
 
     # What the full logistic model would say about every county, to show why it can't ship.
+    # Labeled counties take their out-of-fold score, so no county is scored by a model that saw it.
     logit.fit(X, y)
     score = pd.Series(logit.predict_proba(X_all)[:, 1], index=X_all.index)
+    score.loc[labeled.fips] = out_of_fold["logistic_all_features"]
     percentile = score.rank(pct=True)
     is_labeled = X_all.index.isin(labeled.fips)
     no_facility = labeled[(labeled.dc_existing_count == 0) & (labeled.dc_proposed_count == 0)]
-    best = max(metrics["logistic_without_dc_counts"]["auc"], metrics["boosted_without_dc_counts"]["auc"])
+    best = max(m["auc"] for name, m in metrics.items() if "without_dc_counts" in name)
     return {
         "labels": {"positive": int(y.sum()), "negative": int((1 - y).sum()),
                    "states": int(len(set(states))), "positive_share": round(float(y.mean()), 3)},
+        "permitted_subset": {"counties": int(both.sum()), "positive_share": round(float(y[both].mean()), 3)},
         "features": list(X.columns),
         "leave_one_state_out": metrics,
         "logistic_coefficients": {k: round(float(v), 3) for k, v in zip(X.columns, logit.coef_[0])},

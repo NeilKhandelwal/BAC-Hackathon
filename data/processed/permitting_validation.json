@@ -5,6 +5,10 @@
     "states": 46,
     "positive_share": 0.667
   },
+  "permitted_subset": {
+    "counties": 275,
+    "positive_share": 0.458
+  },
   "features": [
     "pop_density",
     "dc_existing",
@@ -36,6 +40,14 @@
     "boosted_without_dc_counts": {
       "auc": 0.553,
       "average_precision": 0.712
+    },
+    "logistic_without_dc_counts_permitted_subset": {
+      "auc": 0.572,
+      "average_precision": 0.504
+    },
+    "boosted_without_dc_counts_permitted_subset": {
+      "auc": 0.585,
+      "average_precision": 0.549
     }
   },
   "logistic_coefficients": {
@@ -54,15 +66,15 @@
     "positive_share": 1.0
   },
   "named_case_percentile": {
-    "Pima AZ": 0.941,
-    "Prince William VA": 0.076,
-    "Monroe GA": 0.973,
-    "Porter IN": 0.974,
-    "Cass MO": 0.714
+    "Pima AZ": 0.931,
+    "Prince William VA": 0.004,
+    "Monroe GA": 0.971,
+    "Porter IN": 0.978,
+    "Cass MO": 0.72
   },
-  "median_score_labeled": 0.72,
+  "median_score_labeled": 0.722,
   "median_score_unlabeled": 0.618,
-  "auc_without_dc_counts": 0.553,
+  "auc_without_dc_counts": 0.585,
   "decision": "dropped",
   "unplaced_seed_rows": [
     {
