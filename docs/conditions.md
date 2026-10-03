@@ -39,8 +39,8 @@ gates:                            # hard exclusions, applied before scoring
     nri_tornado_score: null
   exclude_moratorium_active: true
   exclude_moratorium_state_active: false
-  min_fiber_share_locations: 0.4
-  max_permitting_risk: null       # 0-1, applied to permitting_discretionary_risk; null disables
+  min_fiber_share_locations: 0.2 # share of broadband locations, mostly homes, with last-mile fiber; a weak proxy for backbone
+  max_permitting_risk: null       # needs permitting_discretionary_risk; no model ships, so keep null
   exclude_air_nonattainment: false   # true excludes counties with any ozone or PM2.5 nonattainment
   min_population: 5000            # proxy for workforce until a labor layer exists
 
@@ -54,6 +54,7 @@ weights:                          # must sum to 1; the engine renormalizes and w
   permitting: 0.18
 
 pillar_floor_percentile: 20       # a county below this percentile on any pillar can't rank above a county that isn't. Set 0 to disable.
+pillar_floor_exempt: [permitting] # pillars that score in the composite but never fail the floor
 
 robustness:
   samples: 2000                   # Dirichlet draws around the weights
@@ -128,6 +129,13 @@ The floor compares the national percentile of each pillar score, not the
 raw pillar score, because a mean of percentiles clusters near 50. A null
 pillar never fails the floor, and neither does a pillar weighted zero.
 
+`pillar_floor_exempt` lists pillars that still score in the composite but
+can't fail a county on the floor. Robustness and `rank_delta_2050` use the
+same rule. An unknown pillar name is an error. All three presets exempt
+`permitting`, because the pillar is three coarse state-level integers (air
+nonattainment, water permit risk, and state policy risk), and one step on
+one of them moved a county 380 ranks.
+
 **Robustness.** For each sample, draw a weight vector from a Dirichlet
 distribution centered on the stated weights, recompute the ranking, and
 record whether each county landed in the top N. The robustness score is the
@@ -151,7 +159,7 @@ toggle demo.
 | File | Intended user | What's different |
 | --- | --- | --- |
 | `balanced.yaml` | default demo | the values above |
-| `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.30, permitting 0.30; queue gate 3 years; permitting risk gate 0.6; state moratorium excluded |
+| `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.30, permitting 0.30; queue gate 3 years; fiber gate 0.3 instead of 0.2; state moratorium excluded |
 | `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25, permitting 0.10; carbon gate 670 lb/MWh, set in the gap between eGRID subregions NWPP (632) and AZNM (704), with no renewable-share gate so nuclear-led grids count as clean; evaporative cooling disallowed above water stress 1; horizon 2050 |
 
 ## CLI

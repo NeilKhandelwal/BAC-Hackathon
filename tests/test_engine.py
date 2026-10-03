@@ -502,3 +502,9 @@ def test_explain_marks_exempt_pillars():
     assert e["pillar_floor_exempt"] == ["permitting"] and e["pillars"]["permitting"]["floor_exempt"]
     assert "permitting (floor exempt)" in format_text(e)
 
+
+def test_every_preset_exempts_permitting_and_ships_no_model_gate():
+    for preset in PRESETS:
+        c = load_yaml(preset)
+        assert c["pillar_floor_exempt"] == ["permitting"], preset.stem
+        assert c["gates"]["max_permitting_risk"] is None, preset.stem  # the model is dropped
