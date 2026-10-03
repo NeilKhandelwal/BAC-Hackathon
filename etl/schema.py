@@ -51,6 +51,7 @@ STRETCH = {
     "grid_renewable_share_state": "float64", "solar_ghi_kwh_m2_day": "float64", "wind_speed_100m_ms": "float64",
     "water_stress_bws": "float64", "water_stress_2050": "float64", "grid_water_gal_mwh": "float64",
     "plant_capacity_mw_100km": "float64", "plant_clean_capacity_mw_100km": "float64",
+    "industrial_price_cents_kwh": "float64",
     "saidi_minutes": "float64", "dist_ixp_km": "float64",
     "pct_developed": "float64", "pct_cropland": "float64", "pct_forest_wetland": "float64",
     "pct_protected": "float64", "greenhouse_acres": "float64",

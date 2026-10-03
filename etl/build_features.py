@@ -24,7 +24,7 @@ RAW_DIR = Path("data/raw")
 OUT_DIR = Path("data/processed")
 ADAPTERS = ["tiger_acs", "nri", "cmra", "lbnl_queue", "fcc_fiber", "egrid", "drought_monitor",
             "fractracker", "air_nonattainment", "state_tables", "nrel_wind", "cbp_manufacturing",
-            "ers_unemployment", "popest", "eia860_coal"]  # tiger_acs must be first: it defines the rows
+            "ers_unemployment", "popest", "eia860_coal", "eia_price", "aqueduct"]  # tiger_acs must be first: it defines the rows
 
 
 def _mtime(path):
