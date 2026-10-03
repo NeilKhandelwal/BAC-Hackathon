@@ -88,7 +88,9 @@ capacity of power plants within 100 km of its centroid, is below the
 multiple times `facility.mw`. With the default 5 and a 300 MW facility, a
 county needs 1,500 MW nearby. It's a proxy for transmission and substation
 capacity, not a load-flow study: it says power is generated nearby, not
-that the grid can deliver it to a new 300 MW load.
+that the grid can deliver it to a new 300 MW load. It measures installed
+generation, not spare capacity, so a county that just clears the gate still
+scores low on the grid pillar.
 
 **Horizon** swaps the climate columns. With `horizon: 2050`, `cdd_hist`
 becomes `cdd_2050_<scenario>`, and the same for heating degree days and days
@@ -140,7 +142,7 @@ toggle demo.
 | --- | --- | --- |
 | `balanced.yaml` | default demo | the values above |
 | `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.30, permitting 0.30; queue gate 3 years; permitting risk gate 0.6; state moratorium excluded |
-| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25, permitting 0.10; carbon gate 600 lb/MWh; evaporative cooling disallowed above water stress 1; horizon 2050 |
+| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25, permitting 0.10; carbon gate 670 lb/MWh, set in the gap between eGRID subregions NWPP (632) and AZNM (704), with no renewable-share gate so nuclear-led grids count as clean; evaporative cooling disallowed above water stress 1; horizon 2050 |
 
 ## CLI
 
