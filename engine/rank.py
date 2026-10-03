@@ -121,41 +121,73 @@ def apply_gates(df, conditions):
     }, index=df.index)
 
 
-def score(df, pillars, weights):
-    """Pillar scores, pillar percentiles, and the weighted composite for every county."""
-    warnings = []
-    out = pd.DataFrame(index=df.index)
-    used_columns = []
+def resolve_columns(df, pillars, horizon=2026, scenario="rcp85"):
+    """Pick the column each metric scores on for this horizon.
+
+    Returns ({pillar: [(column, metric)]}, warnings, swapped). A metric whose
+    column is absent is skipped. Under horizon 2050, a metric with a
+    horizon_2050 key scores on that column, or falls back to today's column
+    with a warning when the 2050 column is absent.
+    """
+    warnings, swapped, resolved = [], [], {}
     for pillar, metrics in pillars.items():
-        pcts = []
+        cols = []
         for m in metrics:
             col = m["column"]
+            future = m.get("horizon_2050")
+            if horizon == 2050 and future:
+                future = future.format(scenario=scenario)
+                if future in df.columns:
+                    swapped.append(future)
+                    col = future
+                elif col in df.columns:
+                    warnings.append(f"{pillar}: {future} missing, scoring {col} for 2050")
             if col not in df.columns:
                 warnings.append(f"{pillar}: column {col} missing, skipped")
                 continue
-            pcts.append(percentile(df[col], m.get("direction", "higher_better"), m.get("transform")))
-            used_columns.append(col)
-        if not pcts:
+            cols.append((col, m))
+        resolved[pillar] = cols
+    return resolved, warnings, swapped
+
+
+def score(df, pillars, weights, horizon=2026, scenario="rcp85"):
+    """Pillar scores and the weighted composite for every county.
+
+    Returns (scores, pillar_cols, warnings, swapped).
+    """
+    resolved, warnings, swapped = resolve_columns(df, pillars, horizon, scenario)
+    out = pd.DataFrame(index=df.index)
+    used_columns = []
+    for pillar, cols in resolved.items():
+        if not cols:
             warnings.append(f"{pillar}: no available columns, pillar dropped")
             continue
+        pcts = [percentile(df[c], m.get("direction", "higher_better"), m.get("transform")) for c, m in cols]
+        used_columns += [c for c, _ in cols]
         out[f"pillar_{pillar}"] = pd.concat(pcts, axis=1).mean(axis=1, skipna=True)
 
     pillar_cols = [c for c in out.columns if c.startswith("pillar_")]
-    w = pd.Series({c: float(weights.get(c.removeprefix("pillar_"), 0) or 0) for c in pillar_cols})
+    w = pillar_weights(weights, pillar_cols)
     dropped = [p for p in weights if f"pillar_{p}" not in pillar_cols and weights[p]]
+    if dropped or not np.isclose(sum(float(v or 0) for v in weights.values()), 1.0):
+        warnings.append(f"weights renormalized over {len(pillar_cols)} pillars (dropped: {', '.join(dropped) or 'none'})")
+    out["composite"] = composite(out[pillar_cols], w)
+    out["coverage"] = df[used_columns].notna().mean(axis=1) if used_columns else 0.0
+    return out, pillar_cols, warnings, swapped
+
+
+def pillar_weights(weights, pillar_cols):
+    """Weights for the pillars that have data, renormalized to sum to 1."""
+    w = pd.Series({c: float(weights.get(c.removeprefix("pillar_"), 0) or 0) for c in pillar_cols})
     if w.sum() <= 0:
         raise ValueError("no pillar with positive weight has any data")
-    if dropped or not np.isclose(w.sum(), 1.0):
-        warnings.append(f"weights renormalized over {len(pillar_cols)} pillars (dropped: {', '.join(dropped) or 'none'})")
-    w = w / w.sum()
+    return w / w.sum()
 
-    # A county with every column null in a pillar has a null pillar; its
-    # composite renormalizes over the pillars it does have.
-    vals = out[pillar_cols]
-    avail = vals.notna().mul(w, axis=1).sum(axis=1)
-    out["composite"] = vals.fillna(0).mul(w, axis=1).sum(axis=1) / avail.replace(0, np.nan)
-    out["coverage"] = df[used_columns].notna().mean(axis=1) if used_columns else 0.0
-    return out, pillar_cols, warnings
+
+def composite(pillar_scores, w):
+    """Weighted sum of pillars. A county with a null pillar renormalizes over the pillars it has."""
+    avail = pillar_scores.notna().mul(w, axis=1).sum(axis=1)
+    return pillar_scores.fillna(0).mul(w, axis=1).sum(axis=1) / avail.replace(0, np.nan)
 
 
 def floor_ok(scores, pillar_cols, floor):
@@ -169,13 +201,18 @@ def floor_ok(scores, pillar_cols, floor):
 def rank(df, conditions, pillars):
     """Run the engine. Returns (ranked, excluded, report)."""
     report = {"warnings": []}
-    if conditions.get("horizon", 2026) != 2026:
-        report["warnings"].append(
-            f"horizon {conditions['horizon']} not implemented in v0; scoring today's columns")
+    horizon = conditions.get("horizon", 2026)
+    scenario = conditions.get("scenario", "rcp85")
+    weights = conditions.get("weights") or {}
 
     log = apply_gates(df, conditions)
-    scores, pillar_cols, warns = score(df, pillars, conditions.get("weights") or {})
+    scores, pillar_cols, warns, swapped = score(df, pillars, weights, horizon, scenario)
     report["warnings"] += warns
+
+    # horizon_delta: composite under 2050 minus under 2026. Null when no 2050 column exists.
+    other, _, _, other_swapped = score(df, pillars, weights, 2026 if horizon == 2050 else 2050, scenario)
+    s2026, s2050 = (other, scores) if horizon == 2050 else (scores, other)
+    scores["horizon_delta"] = s2050["composite"] - s2026["composite"] if (swapped or other_swapped) else np.nan
     scores["floor_ok"] = floor_ok(scores, pillar_cols, conditions.get("pillar_floor_percentile", 0))
 
     ids = [c for c in ("fips", "county_name", "state") if c in df.columns]

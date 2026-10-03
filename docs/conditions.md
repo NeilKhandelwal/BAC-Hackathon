@@ -86,13 +86,19 @@ pillar, a direction (higher or lower is better), and an optional
 transformation. Each column becomes a national percentile rank, direction
 adjusted so 100 is always best. A pillar score is the mean of its columns'
 percentiles, ignoring nulls. The composite is the weighted sum of pillar
-scores, subject to the floor rule.
+scores, subject to the floor rule. Percentiles are computed over all
+counties before gates run, so a county's scores don't change between
+presets. A county with every column in a pillar null has a null pillar; its
+composite renormalizes over its other pillars, and `coverage` shows the gap.
 
 **Floor rule.** With `pillar_floor_percentile: 20`, counties are split into
 those with every pillar at or above the 20th percentile and those with at
 least one pillar below it. The first group always ranks above the second,
 and within each group the weighted sum orders them. This enforces the
 brief's "don't optimize for a single metric" without a nonlinear formula.
+The floor compares the national percentile of each pillar score, not the
+raw pillar score, because a mean of percentiles clusters near 50. A null
+pillar never fails the floor.
 
 **Robustness.** For each sample, draw a weight vector from a Dirichlet
 distribution centered on the stated weights, recompute the ranking, and
