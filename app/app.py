@@ -24,6 +24,12 @@ from engine.rank import load_features, load_yaml, rank  # noqa: E402
 PRESETS = {p.stem: p for p in sorted((ROOT / "engine/conditions").glob("*.yaml"))}
 PILLARS = load_yaml(ROOT / "engine/pillars.yaml")
 GREY = "#c8c8c8"
+# Labels for the "Raw change by 2050" table, keyed by today's column. Unmapped columns show their raw name.
+METRIC_LABELS = {
+    "water_stress_bws": "Water stress (Aqueduct, 0 to 5)",
+    "cdd_hist": "Cooling degree days",
+    "days_above_95f_hist": "Days above 95°F",
+}
 
 
 def paths():
@@ -197,9 +203,9 @@ def show_detail(e, path, mtime, conditions):
             rows = []
             for col, d in e["horizon_2050_raw"].items():
                 fut = next(k for k in d if k not in ("today", "delta"))
-                rows.append({"metric": col, "today": d["today"], "2050": d[fut], "change": d["delta"]})
+                rows.append({"metric": METRIC_LABELS.get(col, col), "today": d["today"], "2050": d[fut], "change": d["delta"]})
             st.markdown("**Raw change by 2050**")
-            st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+            st.dataframe(pd.DataFrame(rows).round(1), hide_index=True, width="stretch")
         if "permitting" in e["pillars"]:
             st.markdown("**Permitting**")
             st.dataframe(pd.DataFrame(e["pillars"]["permitting"]["columns"]), hide_index=True,
@@ -271,4 +277,5 @@ def main():
     show_detail(detail(fpath, mtime, cjson, options[choice]), fpath, mtime, conditions)
 
 
-main()
+if __name__ == "__main__":  # streamlit runs the script as __main__; tests import it for METRIC_LABELS
+    main()
