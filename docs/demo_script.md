@@ -5,7 +5,9 @@ answering a site-selection lead's question, then a different answer when one
 condition changes: the cooling technology.
 
 Checked against the live app on `main` at commit `c43828c`, with the
-committed `data/processed/county_features.parquet` (3,109 counties). If the
+committed `data/processed/county_features.parquet` (3,109 counties). The
+counts, ranks, and exclusions were rechecked with the engine on `91f496a`,
+and the labeled 2050 table on PR #18's branch. If the
 table or presets change, rerun the click path and update the numbers before
 you rehearse.
 
@@ -30,7 +32,7 @@ you rehearse.
 | 1:40 | In **Find a county**, type `53025` and pick `Grant, WA (53025)`. | `Rank 7 of 1565 · composite 63.6 · passes the floor · robustness 79% · coverage 76%`. Top reasons: state policy risk, land area, population. | "Quincy is a strong site for an air-cooled campus: favorable state policy, room to build, and 16,000 MW of plants within 100 km, mostly Columbia River hydro." |
 | 2:10 | In the sidebar, under **Facility and horizon**, set **Cooling** to `evaporative`. | Headline: `balanced_edited (edited) · 826 of 3,109 counties pass the gates · 309 pass the pillar floor`. More counties turn grey on the map. | "Now the operator wants evaporative cooling. It uses far less power than chillers, but it consumes water. One condition changes, and it switches on a water stress gate: no county above 2 on the 0 to 5 Aqueduct scale. 739 counties drop out." |
 | 2:40 | Scroll to **Shortlist**. | Grant WA is gone. Washington OR moves up to 7th; Clark WA enters at 10th. | "The rest of the top 10 holds, because those counties already have low water stress. The one that leaves is the most famous name on the list." |
-| 3:00 | In **Find a county**, pick `Grant, WA (53025)` again. | Red box: `Excluded by: max_water_stress_if_evaporative`. **Raw change by 2050** shows `water_stress_bws` 3.6207 today. | "Grant scores 3.6 of 5 for water stress, which is high. The engine won't put an evaporatively cooled campus there, and it tells you exactly why. Switch back to dry cooling and Grant is seventh again. Cooling technology is a siting decision." |
+| 3:00 | In **Find a county**, pick `Grant, WA (53025)` again. | Red box: `Excluded by: max_water_stress_if_evaporative`. **Raw change by 2050** shows Water stress (Aqueduct, 0 to 5) at 3.6 today. | "Grant scores 3.6 of 5 for water stress, which is high. The engine won't put an evaporatively cooled campus there, and it tells you exactly why. Switch back to dry cooling and Grant is seventh again. Cooling technology is a siting decision." |
 | 3:40 | In **Find a county**, type `41067` and pick `Washington, OR (41067)`. | `Rank 7 of 826 · composite 62.9 · passes the floor · robustness 71% · coverage 76%`. Top reasons include water stress. **Raw change by 2050**: water stress 0 today and in 2050; cooling degree days 214 to 575. | "Hillsboro, Oregon, west of the Cascades, scores 0 for water stress, so the same operator can stay in the Pacific Northwest. Its cooling load more than doubles by 2050 under RCP 8.5, which a 30-year facility has to plan for." |
 | 4:20 | In the sidebar, open **Conditions YAML**. | The YAML shows `name: balanced_edited` and `cooling: evaporative`. **Download conditions YAML** sits above it. | "Everything you just changed is a plain conditions file. Download it, rerun it from the command line, and you get the same shortlist. The conditions file is the product's interface." |
 | 4:50 | Stop. | | "Conditions in, a ranked and explained shortlist out, repeatable with new data. That's the decision engine." |
@@ -57,9 +59,12 @@ honest limitation: the gate counts nearby generation, not transmission.
   table yet, such as NREL solar, NLCD land cover, and EIA reliability. The
   engine skips them and shows the gap as lower coverage, which is why
   coverage is 76%.
-- **Why does Grant's water stress not change by 2050?** Aqueduct's 2050
-  business-as-usual projection is nearly flat for that basin. The engine
-  reports the source value as is.
+- **Why does Grant's water stress not change by 2050?** Water is the pillar
+  that moves least under the 2050 switch. Aqueduct's score saturates: 727
+  of 1,254 US basins have the same baseline and 2050 business-as-usual
+  score, all at 0 or at the cap of 5, so county averages over them stay
+  flat. The horizon story is carried by cooling degree days and days above
+  95°F.
 - **Is the water gate too blunt?** It's a threshold on a basin-level score,
   set by the conditions file. Raise it to 4 and Grant passes and ranks
   seventh; that's the point of making it a condition rather than a fixed rule.
