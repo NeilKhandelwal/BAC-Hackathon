@@ -77,6 +77,10 @@ Rules:
 | `days_above_95f_hist` | float | CMRA `HISTORIC_MEAN_TMAX95F` | core | |
 | `days_above_95f_2050_rcp85` | float | CMRA `RCP85MID_MEAN_TMAX95F` | core | |
 
+NRI hazard scores are the one exception to "null never means zero." Where NRI
+rates a hazard "Not Applicable" for a county, such as coastal flooding
+inland, the ETL writes 0. "Insufficient Data" stays null.
+
 ## Grid and infrastructure
 
 | Column | Type | Source | Tier | Notes |
