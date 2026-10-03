@@ -38,8 +38,8 @@ def cmd_explain(args):
     df, _ = load_features(args.features)
     try:
         e = explain(df, load_yaml(args.conditions), load_yaml(args.pillars), args.fips)
-    except KeyError as err:
-        sys.exit(f"error: {err.args[0]}")
+    except KeyError as err:  # unknown fips; other KeyErrors are bugs and keep their traceback
+        raise ValueError(err.args[0]) from err
     print(json.dumps(e, indent=2) if args.json else format_text(e))
 
 
@@ -60,7 +60,11 @@ def main(argv=None):
     e.add_argument("--json", action="store_true")
     e.set_defaults(func=cmd_explain)
     args = p.parse_args(argv)
-    args.func(args)
+    try:
+        args.func(args)
+    except ValueError as err:  # bad conditions or input, such as horizon 2040; exit 2 like argparse
+        print(f"error: {err}", file=sys.stderr)
+        sys.exit(2)
 
 
 if __name__ == "__main__":
