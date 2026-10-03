@@ -263,10 +263,18 @@ Lake County isn't uniformly welcoming either. Residents sued over an
 approved Amazon data center in Hobart. **[C]** The ruling is unconfirmed.
 **[U]** ([FOX 32](https://www.fox32chicago.com/news/lawsuit-seeks-block-amazon-data-center-permit-hobart-ind))
 
-What the pair shows: the coal plant site won approval with little friction,
-and every Porter County proposal failed after local opposition. But the
-Hammond expansion stalled anyway, for reasons other than opposition, and the
-Burns Harbor case shows industrial land isn't a shield.
+What the pair shows, and how to say it on a slide:
+
+> The one built project sits on a retired coal plant site, and four
+> proposals next door all failed, one of them on industrial land.
+
+Don't say "brownfield built, greenfield fought." Two facts make it wrong:
+
+- **The Hammond expansion lapsed.** The 180 MW CoreWeave agreement on the
+  coal plant site expired unbuilt on June 30, 2026. The city gave no reason,
+  and nothing shows opposition caused it.
+- **Porter County fought industrial land too.** Burns Harbor was on
+  Worthington Steel land and still drew organized opposition.
 
 ### More brownfield reuse
 
@@ -311,8 +319,9 @@ didn't prevent it.
 Use it on the "what we tested" slide, not as a headline. The honest version:
 
 - The idea: deindustrializing counties accept data centers more readily.
-  Case studies support it: Mount Pleasant, Lordstown, Homer City, and the
-  Hammond and Porter County pair. Burns Harbor and Memphis cut against it.
+  Case studies support it: Mount Pleasant, Lordstown, Homer City, Widows
+  Creek. The Hammond and Porter County pair partly supports it, with the two
+  corrections in "Case pairs." Burns Harbor and Memphis cut against it.
 - We built five county features and tested them against opposition
   outcomes. They don't predict opposition once you compare like with like.
 - The other half, that rural counties gain the least, comes from the 2026
