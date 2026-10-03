@@ -78,7 +78,7 @@ def test_lower_better_gives_the_smallest_value_the_top_percentile():
 def test_pillar_mean_ignores_null_columns():
     df = table(a=[1.0, 2.0, 3.0], b=[3.0, np.nan, 1.0])
     pillars = {"p": [{"column": "a", "direction": "higher_better"}, {"column": "b", "direction": "higher_better"}]}
-    out, _, _, _ = score(df, pillars, {"p": 1})
+    out = score(df, pillars, {"p": 1}).scores
     # County 1 has b null, so its pillar is its percentile on a alone, not dragged to zero or the median.
     assert out["pillar_p"][1] == pytest.approx(percentile(df["a"])[1])
 
@@ -90,7 +90,7 @@ def test_missing_column_is_skipped_and_empty_pillar_dropped_with_weights_renorma
         "p2": [{"column": "also_not_there", "direction": "higher_better"}],
         "p3": [{"column": "c", "direction": "higher_better"}],
     }
-    out, cols, warns, _ = score(df, pillars, {"p1": 0.25, "p2": 0.5, "p3": 0.25})
+    out, cols, warns, *_ = score(df, pillars, {"p1": 0.25, "p2": 0.5, "p3": 0.25})
     assert cols == ["pillar_p1", "pillar_p3"]
     assert any("not_there" in w for w in warns)
     assert any("p2: no available columns" in w for w in warns)
@@ -163,7 +163,7 @@ def test_2050_scores_on_the_scenario_column_not_today():
     # Today county 0 is coolest; by 2050 under rcp85 it is the hottest. A 30-year asset should see that.
     df = table(cdd_hist=[100.0, 200.0, 300.0], cdd_2050_rcp85=[900.0, 400.0, 500.0], cdd_2050_rcp45=[1.0, 2.0, 3.0])
     today, *_ = score(df, HORIZON_PILLARS, {"climate": 1}, 2026)
-    future, _, _, swapped = score(df, HORIZON_PILLARS, {"climate": 1}, 2050, "rcp85")
+    future, _, _, swapped, *_ = score(df, HORIZON_PILLARS, {"climate": 1}, 2050, "rcp85")
     assert today["composite"].idxmax() == 0
     assert future["composite"].idxmin() == 0
     assert swapped == ["cdd_2050_rcp85"]
@@ -171,7 +171,7 @@ def test_2050_scores_on_the_scenario_column_not_today():
 
 def test_2050_falls_back_to_today_with_a_warning_when_the_future_column_is_absent():
     df = table(cdd_hist=[100.0, 200.0])
-    out, _, warns, swapped = score(df, HORIZON_PILLARS, {"climate": 1}, 2050, "rcp45")
+    out, _, warns, swapped, *_ = score(df, HORIZON_PILLARS, {"climate": 1}, 2050, "rcp45")
     assert swapped == []
     assert any("cdd_2050_rcp45 missing, scoring cdd_hist" in w for w in warns)
     assert out["composite"].notna().all()
@@ -185,3 +185,88 @@ def test_horizon_delta_is_2050_minus_2026_and_null_without_future_data():
     assert d["00000"] < 0 < d["00001"]  # county 0 loses its edge by 2050, county 1 gains
     ranked, _, _ = rank(df.drop(columns="cdd_2050_rcp85"), conditions, HORIZON_PILLARS)
     assert ranked["horizon_delta"].isna().all()
+
+
+def test_rank_delta_2050_tracks_rank_movement_among_gate_passed_counties():
+    df = table(cdd_hist=[100.0, 200.0, 300.0], cdd_2050_rcp85=[900.0, 400.0, 500.0])
+    ranked, _, _ = rank(df, {"weights": {"climate": 1}, "gates": {}}, HORIZON_PILLARS)
+    d = ranked.set_index("fips")["rank_delta_2050"]
+    assert d["00000"] == 2  # first today, third by 2050
+    assert d["00001"] == -1
+
+
+# Explanations
+
+def test_top_reasons_names_the_columns_that_lift_the_composite():
+    # County 0 is best on a and worst on b; with a weighted heavily, a must lead its reasons.
+    df = table(a=[3.0, 2.0, 1.0], b=[1.0, 2.0, 3.0])
+    pillars = {"pa": [{"column": "a"}], "pb": [{"column": "b"}]}
+    ranked, _, _ = rank(df, {"weights": {"pa": 0.9, "pb": 0.1}, "gates": {}}, pillars)
+    assert ranked.set_index("fips").loc["00000", "top_reasons"].split(";")[0] == "a"
+
+
+def test_explain_returns_raw_values_percentiles_gates_and_raw_2050_change():
+    from engine.explain import explain
+    df = table(cdd_hist=[100.0, 200.0, 300.0], cdd_2050_rcp85=[900.0, 400.0, 500.0],
+               fiber_share_locations=[0.9, np.nan, 0.1])
+    cond = {"name": "t", "weights": {"climate": 1}, "gates": {"min_fiber_share_locations": 0.4}}
+    e = explain(df, cond, HORIZON_PILLARS, "1")
+    assert e["passed_gates"] and e["unknown_gates"] == ["min_fiber_share_locations"]
+    assert e["pillars"]["climate"]["columns"][0]["raw"] == 200.0
+    # Raw change is what tells the 2050 story; percentiles alone hide uniform warming.
+    assert e["horizon_2050_raw"]["cdd_hist"]["delta"] == 200.0
+    e2 = explain(df, cond, HORIZON_PILLARS, "00002")
+    assert not e2["passed_gates"] and e2["rank"] is None and e2["failed_gates"] == ["min_fiber_share_locations"]
+
+
+# Robustness
+
+def robust_setup(**kw):
+    # County 0 wins under heavy weight on a; county 1 under heavy weight on b.
+    rng = np.random.default_rng(1)
+    a, b = rng.uniform(0, 50, 30), rng.uniform(0, 50, 30)
+    a[0], b[0] = 100.0, 60.0
+    a[1], b[1] = 60.0, 100.0
+    df = table(a=a, b=b)
+    pillars = {"pa": [{"column": "a"}], "pb": [{"column": "b"}]}
+    cond = {"weights": {"pa": 0.8, "pb": 0.2}, "gates": {},
+            "robustness": {"samples": 500, "concentration": 20, "top_n": 1, **kw}}
+    return df, pillars, cond
+
+
+def test_robustness_rewards_the_county_that_wins_under_most_plausible_weights():
+    df, pillars, cond = robust_setup()
+    r = rank(df, cond, pillars)[0].set_index("fips")["robustness"]
+    assert r["00000"] > 0.9 and r["00001"] < 0.1
+    assert r.sum() == pytest.approx(1.0)  # top_n=1, so each draw credits exactly one county
+
+
+def test_robustness_is_reproducible_with_a_seed_and_loosens_with_low_concentration():
+    df, pillars, cond = robust_setup()
+    r1 = rank(df, cond, pillars)[0]["robustness"]
+    r2 = rank(df, cond, pillars)[0]["robustness"]
+    assert r1.equals(r2)
+    df, pillars, loose = robust_setup(concentration=0.5)
+    r = rank(df, loose, pillars)[0].set_index("fips")["robustness"]
+    assert r["00001"] > 0.1  # wide draws sometimes favor b
+
+
+def test_robustness_respects_the_floor_rule():
+    # County 0 has the top composite in every draw but fails the floor, so it is never in the top 1.
+    n = 10
+    a, b = np.linspace(10, 90, n), np.linspace(90, 10, n)
+    a[0], b[0] = 100.0, 0.0
+    a[1], b[1] = 60.0, 60.0
+    df = table(a=a, b=b)
+    cond = {"weights": {"pa": 0.9, "pb": 0.1}, "gates": {}, "pillar_floor_percentile": 20,
+            "robustness": {"samples": 200, "top_n": 1}}
+    r = rank(df, cond, {"pa": [{"column": "a"}], "pb": [{"column": "b"}]})[0].set_index("fips")["robustness"]
+    assert r["00000"] == 0
+
+
+def test_report_counts_exposed_counties_for_each_hazard_gate():
+    df = table(nri_coastal_flood_score=[0.0] * 8 + [5.0, 50.0])
+    cond = {"weights": {"p": 1}, "gates": {"hazard_percentile_max": {"nri_coastal_flood_score": 85}}}
+    _, _, report = rank(df, cond, {"p": [{"column": "nri_coastal_flood_score"}]})
+    assert report["hazard_gate_nonzero_counties"] == {"hazard_percentile_max.nri_coastal_flood_score": 2}
+    assert report["gate_failures"]["hazard_percentile_max.nri_coastal_flood_score"] == 2

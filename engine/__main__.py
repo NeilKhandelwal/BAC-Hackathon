@@ -4,6 +4,7 @@ import json
 import sys
 from pathlib import Path
 
+from engine.explain import explain, format_text
 from engine.rank import load_features, load_yaml, rank
 
 PILLARS = Path(__file__).with_name("pillars.yaml")
@@ -28,9 +29,15 @@ def cmd_rank(args):
     for gate, n in sorted(report["gate_failures"].items(), key=lambda kv: -kv[1]):
         print(f"  failed {gate}: {n}")
     top_n = (conditions.get("output") or {}).get("top_n", 10)
-    cols = ["rank", "fips", "county_name", "state", "composite", "floor_ok"] + \
+    cols = ["rank", "fips", "county_name", "state", "composite", "robustness", "rank_delta_2050", "floor_ok"] + \
         [c for c in ranked.columns if c.startswith("pillar_")]
     print(ranked[[c for c in cols if c in ranked.columns]].head(top_n).to_string(index=False, float_format="%.1f"))
+
+
+def cmd_explain(args):
+    df, _ = load_features(args.features)
+    e = explain(df, load_yaml(args.conditions), load_yaml(args.pillars), args.fips)
+    print(json.dumps(e, indent=2) if args.json else format_text(e))
 
 
 def main(argv=None):
@@ -42,6 +49,13 @@ def main(argv=None):
     r.add_argument("--out", required=True)
     r.add_argument("--pillars", default=str(PILLARS))
     r.set_defaults(func=cmd_rank)
+    e = sub.add_parser("explain", help="per-county breakdown")
+    e.add_argument("--conditions", required=True)
+    e.add_argument("--fips", required=True)
+    e.add_argument("--features", default="data/processed/county_features.parquet")
+    e.add_argument("--pillars", default=str(PILLARS))
+    e.add_argument("--json", action="store_true")
+    e.set_defaults(func=cmd_explain)
     args = p.parse_args(argv)
     args.func(args)
 
