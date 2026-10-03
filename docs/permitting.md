@@ -2,6 +2,11 @@
 
 Output: the permitting columns in `docs/schema.md`.
 
+Status: the discretionary-approval model in steps 1 to 4 was built, failed
+validation, and is not shipped. `permitting_discretionary_risk` and
+`permitting_drivers` are null. See `research/permitting_model.md`. The
+steps stay here as the record of what was tested.
+
 ## Scope
 
 Permitting risk is the chance that required approvals delay or block a
@@ -34,8 +39,10 @@ Inputs: `data/raw/fractracker/ft_all.csv`, `data/processed/opposition_seed_label
 4. Map county names to FIPS with `etl/fips.py`. Log unmatched names.
 5. Write `data/processed/permitting_labels.csv` with `fips, label`.
 
-Check: roughly 300 positives and 400 to 500 negatives. If either is under
-150, stop and report.
+Check: 298 positives and 149 negatives. If either is under 150, stop and
+report. Negatives are scarce because FracTracker records pushback as Yes or
+Unknown, never No, so a county is negative only if it has an operating or
+approved facility and no recorded opposition.
 
 ### 2. Features (30 minutes)
 
@@ -104,9 +111,12 @@ assumptions from industry reporting, not model output.
 
 | Tier | Condition | Assumed duration |
 | --- | --- | --- |
-| established | `dc_existing_count >= 3` and risk below 0.33 | 6 to 12 months |
-| discretionary | not established and risk below 0.66 | 12 to 24 months |
-| contested | risk 0.66 or above, or nonattainment, or `water_permit_risk == 2`, or `state_policy_risk >= 2` | 24 months or more, denial possible |
+| contested | nonattainment, or `water_permit_risk == 2`, or `state_policy_risk >= 2` | 24 months or more, denial possible |
+| established | not contested and `dc_existing_count >= 3` | 6 to 12 months |
+| discretionary | everything else | 12 to 24 months |
+
+The tiers no longer use the discretionary risk score, because the model
+that produced it is not shipped.
 
 ## Mitigation map
 

@@ -1,0 +1,111 @@
+{
+  "labels": {
+    "positive": 298,
+    "negative": 149,
+    "states": 46,
+    "positive_share": 0.667
+  },
+  "permitted_subset": {
+    "counties": 275,
+    "positive_share": 0.458
+  },
+  "features": [
+    "pop_density",
+    "dc_existing",
+    "dc_proposed",
+    "drought_weeks",
+    "nri_drought",
+    "queue_clean_mw",
+    "state_moratorium",
+    "income",
+    "heating_degree_days"
+  ],
+  "leave_one_state_out": {
+    "logistic_all_features": {
+      "auc": 0.721,
+      "average_precision": 0.791
+    },
+    "logistic_without_dc_counts": {
+      "auc": 0.477,
+      "average_precision": 0.636
+    },
+    "logistic_dc_counts_only": {
+      "auc": 0.693,
+      "average_precision": 0.753
+    },
+    "boosted_all_features": {
+      "auc": 0.79,
+      "average_precision": 0.879
+    },
+    "boosted_without_dc_counts": {
+      "auc": 0.553,
+      "average_precision": 0.712
+    },
+    "logistic_without_dc_counts_permitted_subset": {
+      "auc": 0.572,
+      "average_precision": 0.504
+    },
+    "boosted_without_dc_counts_permitted_subset": {
+      "auc": 0.585,
+      "average_precision": 0.549
+    }
+  },
+  "logistic_coefficients": {
+    "pop_density": 0.176,
+    "dc_existing": -0.431,
+    "dc_proposed": 0.391,
+    "drought_weeks": 0.072,
+    "nri_drought": -0.262,
+    "queue_clean_mw": -0.158,
+    "state_moratorium": 0.032,
+    "income": 0.255,
+    "heating_degree_days": 0.114
+  },
+  "labeled_counties_with_no_facility": {
+    "count": 63,
+    "positive_share": 1.0
+  },
+  "named_case_percentile": {
+    "Pima AZ": 0.931,
+    "Prince William VA": 0.004,
+    "Monroe GA": 0.971,
+    "Porter IN": 0.978,
+    "Cass MO": 0.72
+  },
+  "median_score_labeled": 0.722,
+  "median_score_unlabeled": 0.618,
+  "auc_without_dc_counts": 0.585,
+  "decision": "dropped",
+  "unplaced_seed_rows": [
+    {
+      "state": "GA",
+      "county": "Carroll and Haralson",
+      "project_name": "Project Bus"
+    },
+    {
+      "state": "KS",
+      "county": "Ogle",
+      "project_name": "LFF Industrial"
+    },
+    {
+      "state": "NJ",
+      "county": "",
+      "project_name": "American Tower Data Center"
+    },
+    {
+      "state": "PA",
+      "county": "",
+      "project_name": "Silver Spring Township Data Center"
+    },
+    {
+      "state": "TX",
+      "county": "",
+      "project_name": "Priority Power Management Data Center"
+    },
+    {
+      "state": "WI",
+      "county": "",
+      "project_name": "Microsoft Project Nova"
+    }
+  ]
+}

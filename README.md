@@ -31,10 +31,12 @@ Conditions format and presets: `docs/conditions.md`, `engine/conditions/`.
 
 ## Where ML is used
 
-Only in the permitting pillar. A logistic regression predicts whether a
-project in a county meets opposition that delays or kills it, trained on
-FracTracker outcomes and validated leave-one-state-out. Everything else is
-transparent scoring. Method: `docs/permitting.md`.
+Nowhere in the shipped ranking. A model that predicts whether a project in
+a county meets opposition was trained on FracTracker outcomes and validated
+leave-one-state-out. It failed: its skill came from features that encode
+how the labels are built. The permitting pillar uses three sourced columns
+instead, and every score is transparent. Findings:
+`research/permitting_model.md`. Method: `docs/permitting.md`.
 
 ## Plan
 

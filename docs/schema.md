@@ -141,8 +141,8 @@ here; it's scored in grid and infrastructure.
 | `moratorium_active` | bool | FracTracker moratoria, county level, status active | core | by GEOID; gate |
 | `moratorium_pending` | bool | FracTracker moratoria, county level, status pending | core | |
 | `moratorium_state_active` | bool | FracTracker moratoria, state level | core | broadcast to all counties in the state |
-| `permitting_discretionary_risk` | float 0-1 | permitting model | core | probability a project meets opposition that delays or kills it. Null until the model runs. |
-| `permitting_drivers` | str | permitting model | core | top three features by contribution, semicolon list |
+| `permitting_discretionary_risk` | float 0-1 | permitting model | core | null: model tested and dropped, see `research/permitting_model.md` |
+| `permitting_drivers` | str | permitting model | core | null: model tested and dropped, see `research/permitting_model.md` |
 | `air_nonattainment_count` | int 0-2 | EPA Green Book, county in nonattainment for 8-hour ozone, PM2.5 | core | constrains diesel backup generation |
 | `water_rights_regime` | str | hand-coded state table | core | `prior_appropriation`, `riparian`, or `hybrid` |
 | `groundwater_managed_area` | bool | hand-coded: Arizona AMAs and equivalent state designations | core | researched for AZ, TX, CO. Null in other prior-appropriation and hybrid states. |
