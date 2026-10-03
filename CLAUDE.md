@@ -21,10 +21,12 @@ Working design decisions so far:
 - Seven pillars: energy and carbon, water, climate resilience, grid and
   infrastructure, land, community, permitting.
 - Two horizons: today and 2050, selected by the conditions file.
-- The ranking is not ML. ML is used only for the discretionary-approval part
-  of the permitting pillar, trained on FracTracker outcomes. Method in
-  `docs/permitting.md`. News sentiment is an optional model feature, cut
-  from the hackathon build. An LLM may generate explanations but never decides.
+- The ranking is not ML, and no ML output ships. A model for the
+  discretionary-approval part of the permitting pillar was trained on
+  FracTracker outcomes, tested, and dropped: it had no skill once facility
+  counts were removed. Findings in `research/permitting_model.md`. The
+  permitting pillar scores three sourced columns and is exempt from the
+  pillar floor. An LLM may generate explanations but never decides.
 - The demo must not depend on live API calls. Precompute to static files.
 - Time box: hackathon ends Sunday morning. Build procedure is in `docs/plan.md`.
 
