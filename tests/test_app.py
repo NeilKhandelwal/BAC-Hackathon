@@ -1,5 +1,6 @@
 """Smoke test for the Streamlit app on the fake table: every demo interaction must rerun without an exception."""
 import json
+from pathlib import Path
 
 import pytest
 from streamlit.testing.v1 import AppTest
@@ -119,3 +120,25 @@ def test_downloaded_conditions_reproduce_the_shortlist(fake_env):
     df, _ = load_features(fake_env.attrs["path"])
     ranked = rank(df, exported, load_yaml("engine/pillars.yaml"))[0]
     assert ranked["county_name"].head(len(shown)).tolist() == shown["county_name"].tolist()
+
+
+@pytest.mark.parametrize("fake_env", [True], indirect=True)
+def test_raw_2050_table_uses_readable_labels_from_the_mapping(fake_env):
+    # A judge reads this table; raw column names like cdd_hist mean nothing on a projector.
+    import importlib.util
+    import yaml
+
+    spec = importlib.util.spec_from_file_location("app_module", Path(__file__).resolve().parents[1] / "app/app.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    labels = module.METRIC_LABELS
+    swapped = {m["column"] for ms in yaml.safe_load(open("engine/pillars.yaml")).values() for m in ms
+               if m.get("horizon_2050")}
+    assert swapped <= set(labels), "every column with a 2050 swap needs a label"
+
+    at = started()
+    table = next(d.value for d in at.dataframe if "metric" in d.value.columns)
+    assert set(table["metric"]) <= set(labels.values())
+    assert not set(table["metric"]) & swapped  # no raw column names leak through
+    numeric = table[["today", "2050", "change"]].dropna().to_numpy().ravel()
+    assert (abs(numeric * 10 - (numeric * 10).round()) < 1e-6).all()  # one decimal
