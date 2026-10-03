@@ -540,3 +540,24 @@ def test_steeper_population_decline_raises_the_community_pillar():
     a, b = twin_counties(pop_change_pct_2010_2024=(10.0, -15.0))
     assert b["pillar_community"] > a["pillar_community"]
     assert b["pillar_grid_infrastructure"] == a["pillar_grid_infrastructure"]
+
+
+def test_balanced_floor_keeps_a_county_moderately_weak_on_one_pillar():
+    # The floor guards against a county that fails badly on something. A county at the 15th
+    # percentile on one pillar and strong elsewhere is not that, so it must stay in the
+    # floor-passing group under balanced; at the old floor of 20 it dropped below every passer.
+    balanced = load_yaml(ROOT / "engine/conditions/balanced.yaml")
+    n = 100
+    rng = np.random.default_rng(3)
+    cols = {c: rng.permutation(np.arange(n, dtype=float)) for c in ("a", "b", "permit")}
+    cols["a"][0], cols["permit"][0] = n, n  # county 0: best on a and permitting
+    cols["b"][cols["b"] == 14.0] = cols["b"][0]
+    cols["b"][0] = 14.0  # 15th of 100 on b
+    df = table(**cols)
+    pillars = {"pa": [{"column": "a"}], "pb": [{"column": "b"}], "permitting": [{"column": "permit"}]}
+    cond = {"weights": {"pa": 1, "pb": 1, "permitting": 1}, "gates": {}, "robustness": {"samples": 0},
+            "pillar_floor_percentile": balanced["pillar_floor_percentile"],
+            "pillar_floor_exempt": balanced["pillar_floor_exempt"]}
+    assert rank(df, cond, pillars)[0].set_index("fips").loc["00000", "floor_ok"]
+    stricter = rank(df, {**cond, "pillar_floor_percentile": 20}, pillars)[0].set_index("fips").loc["00000"]
+    assert not stricter["floor_ok"]
