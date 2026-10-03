@@ -32,7 +32,8 @@
     "hazard_percentile_max.nri_wildfire_score": 3109,
     "hazard_percentile_max.nri_hurricane_score": 2225
   },
-  "floor_ok": 492,
+  "floor_ok": 993,
+  "moratorium_state_active_ranked": 30,
   "pillars": [
     "energy_carbon",
     "water",
