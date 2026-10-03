@@ -1,0 +1,17 @@
+# raw datasets are not committed
+data/raw/
+*.parquet
+*.zip
+*.tif
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.nc
+__pycache__/
+.venv/
+.env
+.DS_Store
+.ipynb_checkpoints/
