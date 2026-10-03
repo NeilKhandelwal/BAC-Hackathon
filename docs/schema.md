@@ -9,7 +9,7 @@ Rules:
 - Key is `fips`, a 5-character zero-padded string. Never an integer.
 - Every column is a plain number, string, or boolean. No nested values.
 - Null means "not available for this county." It never means zero. The
-  engine treats null as pillar-neutral (median percentile) and counts it in
+  engine leaves null columns out of the pillar mean and counts them against
   `coverage`. A gate never fails on null; it flags instead.
 - Units are in the column name where they matter.
 - Columns marked **core** must exist in the first delivery, even if some
@@ -153,7 +153,7 @@ here; it's scored in grid and infrastructure.
 
 | Column | Type | Notes |
 | --- | --- | --- |
-| `coverage` | float 0-1 | share of core scored columns that are non-null for this county. Computed by the engine, not the ETL. |
+| `coverage` | float 0-1 | share of all columns mapped in `engine/pillars.yaml` that are non-null for this county, counting columns absent from the table as null. Computed by the engine, not the ETL. |
 
 ## Manifest
 
