@@ -1,0 +1,57 @@
+{
+  "warnings": [
+    "manifest lists 11 missing columns: permitting_discretionary_risk, permitting_drivers, solar_ghi_kwh_m2_day, grid_water_gal_mwh, saidi_minutes, dist_ixp_km, pct_developed, pct_cropland, pct_forest_wetland, pct_protected, greenhouse_acres",
+    "energy_carbon: column solar_ghi_kwh_m2_day missing, skipped",
+    "water: column grid_water_gal_mwh missing, skipped",
+    "grid_infrastructure: column saidi_minutes missing, skipped",
+    "grid_infrastructure: column dist_ixp_km missing, skipped",
+    "land: column pct_developed missing, skipped",
+    "land: column pct_protected missing, skipped",
+    "land: column pct_cropland missing, skipped",
+    "community: column greenhouse_acres missing, skipped",
+    "permitting: column permitting_discretionary_risk missing, skipped",
+    "permitting: column pct_forest_wetland missing, skipped"
+  ],
+  "counties": 3109,
+  "passed": 1565,
+  "excluded": 1544,
+  "gate_failures": {
+    "hazard_percentile_max.nri_coastal_flood_score": 311,
+    "hazard_percentile_max.nri_hurricane_score": 156,
+    "min_fiber_share_locations": 305,
+    "hazard_percentile_max.nri_inland_flood_score": 311,
+    "max_queue_median_age_years": 132,
+    "exclude_moratorium_active": 152,
+    "min_nearby_capacity_multiple": 526,
+    "hazard_percentile_max.nri_wildfire_score": 156,
+    "min_population": 305
+  },
+  "hazard_gate_nonzero_counties": {
+    "hazard_percentile_max.nri_inland_flood_score": 3109,
+    "hazard_percentile_max.nri_coastal_flood_score": 424,
+    "hazard_percentile_max.nri_wildfire_score": 3109,
+    "hazard_percentile_max.nri_hurricane_score": 2225
+  },
+  "floor_ok": 492,
+  "pillars": [
+    "energy_carbon",
+    "water",
+    "climate_resilience",
+    "grid_infrastructure",
+    "land",
+    "community",
+    "permitting"
+  ],
+  "pillar_floor_exempt": [
+    "permitting"
+  ],
+  "weights_used": {
+    "energy_carbon": 0.18,
+    "water": 0.14,
+    "climate_resilience": 0.14,
+    "grid_infrastructure": 0.18,
+    "land": 0.08,
+    "community": 0.1,
+    "permitting": 0.18
+  }
+}
