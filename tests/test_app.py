@@ -22,6 +22,7 @@ def fake_env(tmp_path, monkeypatch, request):
     (tmp_path / "counties.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": feats}))
     monkeypatch.setenv("BAC_FEATURES", str(tmp_path / "county_features.parquet"))
     monkeypatch.setenv("BAC_GEOJSON", str(tmp_path / ("counties.geojson" if request.param else "absent.geojson")))
+    df.attrs["path"] = tmp_path / "county_features.parquet"
     return df
 
 
@@ -85,3 +86,36 @@ def test_a_bigger_facility_shrinks_the_shortlist(fake_env):
     at.sidebar.number_input(key="balanced:mw").set_value(3000).run()
     assert not at.exception
     assert passed() < small
+
+
+@pytest.mark.parametrize("fake_env", [True], indirect=True)
+def test_all_weights_at_zero_shows_an_error_not_a_traceback(fake_env):
+    at = started()
+    for slider in at.sidebar.slider:
+        if slider.key and slider.key.startswith("balanced:w:"):
+            slider.set_value(0.0)
+    at.run()
+    assert not at.exception
+    assert any("can't rank" in e.value for e in at.error)
+
+
+@pytest.mark.parametrize("fake_env", [True], indirect=True)
+def test_downloaded_conditions_reproduce_the_shortlist(fake_env):
+    # The conditions file is the product's interface: what the app exports must rerun to the same answer.
+    import pandas as pd
+    import yaml
+
+    from engine.rank import load_features, load_yaml, rank
+
+    at = started()
+    at.sidebar.slider(key="balanced:w:water").set_value(0.6).run()
+    at.sidebar.checkbox(key="balanced:fiber:on").uncheck().run()
+    at.sidebar.number_input(key="balanced:mw").set_value(800).run()
+    assert not at.exception
+    exported = yaml.safe_load(at.sidebar.code[0].value)
+    assert exported["name"] == "balanced_edited" and exported["facility"]["mw"] == 800
+
+    shown = next(d.value for d in at.dataframe if "rank" in d.value.columns)
+    df, _ = load_features(fake_env.attrs["path"])
+    ranked = rank(df, exported, load_yaml("engine/pillars.yaml"))[0]
+    assert ranked["county_name"].head(len(shown)).tolist() == shown["county_name"].tolist()

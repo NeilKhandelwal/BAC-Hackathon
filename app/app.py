@@ -55,7 +55,7 @@ def run(path, mtime, conditions_json):
 @st.cache_data(show_spinner=False)
 def detail(path, mtime, conditions_json, fips):
     df, _ = features(path, mtime)
-    return explain(df, json.loads(conditions_json), PILLARS, fips)
+    return explain(df, json.loads(conditions_json), PILLARS, fips, result=run(path, mtime, conditions_json))
 
 
 def optional_slider(label, value, lo, hi, step, key, help=None):
@@ -118,8 +118,10 @@ def sidebar():
     edited = c != load_yaml(PRESETS[preset])
     if edited:
         c["name"] = f"{preset}_edited"
-    s.download_button("Download conditions YAML", yaml.safe_dump(c, sort_keys=False),
-                      file_name=f"{c['name']}.yaml", mime="text/yaml")
+    text = yaml.safe_dump(c, sort_keys=False)
+    s.download_button("Download conditions YAML", text, file_name=f"{c['name']}.yaml", mime="text/yaml")
+    with s.expander("Conditions YAML"):
+        st.code(text, language="yaml")
     return c, edited
 
 
@@ -153,13 +155,18 @@ def county_map(df, ranked, excluded, color, geo):
     return fig
 
 
+def fmt(v, spec):
+    return "n/a" if v is None else format(v, spec)
+
+
 def show_detail(e, path, mtime, conditions):
     st.subheader(f"{e['county_name']}, {e['state']} ({e['fips']})")
     if e["passed_gates"]:
         floor = "passes the floor" if e["floor_ok"] else "below the floor on at least one pillar"
-        st.markdown(f"**Rank {e['rank']} of {e['of']}** · composite {e['composite']:.1f} · {floor} · "
-                    f"robustness {e['robustness']:.0%} · coverage {e['coverage']:.0%}")
-        st.markdown("**Top reasons:** " + ", ".join(r.replace("_", " ") for r in e["top_reasons"]))
+        st.markdown(f"**Rank {e['rank']} of {e['of']}** · composite {fmt(e['composite'], '.1f')} · {floor} · "
+                    f"robustness {fmt(e['robustness'], '.0%')} · coverage {fmt(e['coverage'], '.0%')}")
+        st.markdown("**Top reasons:** " + (", ".join(r.replace("_", " ") for r in e["top_reasons"])
+                                           or "no column above the national median"))
     else:
         st.error("Excluded by: " + ", ".join(e["failed_gates"]))
     if e["unknown_gates"]:
@@ -168,7 +175,7 @@ def show_detail(e, path, mtime, conditions):
     # Floor crossing between horizons, from a cached rank under each horizon.
     floors = {}
     for h in (2026, 2050):
-        r, _, _ = run(path, mtime, json.dumps({**conditions, "horizon": h}))
+        r, _, _ = run(path, mtime, json.dumps({**conditions, "horizon": h}, sort_keys=True))
         hit = r.loc[r["fips"] == e["fips"], "floor_ok"]
         floors[h] = bool(hit.iloc[0]) if len(hit) else None
     if floors[2026] and floors[2050] is False:
@@ -214,7 +221,11 @@ def main():
 
     conditions, edited = sidebar()
     cjson = json.dumps(conditions, sort_keys=True)
-    ranked, excluded, report = run(fpath, mtime, cjson)
+    try:
+        ranked, excluded, report = run(fpath, mtime, cjson)
+    except ValueError as err:  # for example, every pillar with data has weight 0
+        st.error(f"The engine can't rank with these conditions: {err}")
+        st.stop()
 
     st.title("Where to build a sustainable AI data center")
     st.markdown(f"**{conditions['name']}**{' (edited)' if edited else ''} · horizon {conditions['horizon']} · "

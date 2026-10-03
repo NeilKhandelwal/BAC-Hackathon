@@ -300,3 +300,116 @@ def test_nearby_capacity_gate_without_facility_mw_fails_loudly():
     df = table(plant_capacity_mw_100km=[1000.0])
     with pytest.raises(ValueError, match="facility.mw"):
         apply_gates(df, {"gates": {"min_nearby_capacity_multiple": 5}, "facility": {}})
+
+
+def test_top_reasons_lists_only_columns_above_the_median():
+    # The worst county has nothing lifting it; naming its least-bad column as a "reason" would mislead.
+    df = table(a=[1.0, 2.0, 3.0, 4.0], b=[1.0, 2.0, 3.0, 4.0])
+    pillars = {"p": [{"column": "a"}, {"column": "b"}]}
+    ranked = rank(df, {"weights": {"p": 1}, "gates": {}}, pillars)[0].set_index("fips")
+    assert ranked.loc["00000", "top_reasons"] == ""
+    assert set(ranked.loc["00003", "top_reasons"].split(";")) == {"a", "b"}
+
+
+# Review fixes from PR #4
+
+def test_horizon_accepts_numeric_strings_and_rejects_unsupported_years():
+    # A UI or JSON round trip turns 2050 into "2050"; that must not silently score today's climate.
+    df = table(cdd_hist=[100.0, 200.0, 300.0], cdd_2050_rcp85=[900.0, 400.0, 500.0])
+    base = {"weights": {"climate": 1}, "gates": {}}
+    as_int = rank(df, {**base, "horizon": 2050}, HORIZON_PILLARS)[0]
+    as_str = rank(df, {**base, "horizon": "2050"}, HORIZON_PILLARS)[0]
+    assert as_int["composite"].tolist() == as_str["composite"].tolist()
+    for bad in (2040, "soon", None):
+        with pytest.raises(ValueError, match="horizon"):
+            rank(df, {**base, "horizon": bad}, HORIZON_PILLARS)
+
+
+def test_floor_ignores_pillars_weighted_zero():
+    # All weight on a: the best county on a must rank first even though it is worst on b,
+    # which the user said doesn't matter.
+    n = 10
+    a, b = np.linspace(10, 90, n), np.linspace(90, 10, n)
+    a[0], b[0] = 100.0, 0.0
+    df = table(a=a, b=b)
+    cond = {"weights": {"pa": 1.0, "pb": 0.0}, "gates": {}, "pillar_floor_percentile": 20,
+            "robustness": {"samples": 0}}
+    ranked = rank(df, cond, {"pa": [{"column": "a"}], "pb": [{"column": "b"}]})[0]
+    assert ranked.iloc[0]["fips"] == "00000" and ranked.iloc[0]["floor_ok"]
+
+
+def test_robustness_is_null_with_a_warning_when_the_field_is_not_larger_than_top_n():
+    # With 5 eligible counties and top_n 10, every county would read 1.0, which says nothing.
+    df = table(a=np.arange(5, dtype=float))
+    cond = {"weights": {"p": 1}, "gates": {}, "robustness": {"samples": 100, "top_n": 10}}
+    ranked, _, report = rank(df, cond, {"p": [{"column": "a"}]})
+    assert ranked["robustness"].isna().all()
+    assert any("robustness not computed" in w for w in report["warnings"])
+
+
+def test_floor_failing_counties_never_fill_empty_top_n_slots():
+    # 7 counties pass the floor and top_n is 8. The old code filled the eighth slot with a
+    # floor-failing county in every draw, crediting it as robust. Now the field is too small
+    # to say anything, so every county is null, failers included.
+    a = np.array([100.0] * 3 + [50.0] * 7)                     # failers lead on the heavy pillar
+    b = np.array([0.0, -1.0, -2.0] + list(np.linspace(40, 90, 7)))  # failers sit at pctl 10-30 on b
+    df = table(a=a, b=b)
+    cond = {"weights": {"pa": 0.9, "pb": 0.1}, "gates": {}, "pillar_floor_percentile": 35,
+            "robustness": {"samples": 200, "top_n": 8}}
+    ranked, _, report = rank(df, cond, {"pa": [{"column": "a"}], "pb": [{"column": "b"}]})
+    assert ranked["floor_ok"].sum() == 7
+    assert ranked["robustness"].isna().all()
+    cond["robustness"]["top_n"] = 2  # a field larger than top_n: hits go to floor-passers only
+    r = rank(df, cond, {"pa": [{"column": "a"}], "pb": [{"column": "b"}]})[0].set_index("fips")
+    assert (r.loc[["00000", "00001", "00002"], "robustness"] == 0).all()
+    assert r["robustness"].sum() == pytest.approx(2.0)
+
+
+def test_explain_text_survives_null_robustness_and_composite():
+    from engine.explain import explain, format_text
+    df = table(a=[1.0, 2.0, 3.0])
+    cond = {"name": "t", "weights": {"p": 1}, "gates": {}, "robustness": {"samples": 0}}
+    text = format_text(explain(df, cond, {"p": [{"column": "a"}]}, "00001"))
+    assert "robustness n/a" in text
+
+
+def test_unknown_gate_keys_and_missing_gate_columns_warn():
+    # A misspelled hard exclusion that excludes nothing is a silent wrong answer.
+    df = table(nri_wildfire_score=[1.0, 2.0])
+    cond = {"weights": {"p": 1}, "gates": {"max_grid_co2": 100,
+                                           "hazard_percentile_max": {"nri_wildfire": 50}}}
+    _, _, report = rank(df, cond, {"p": [{"column": "nri_wildfire_score"}]})
+    assert any("gates.max_grid_co2 is not a known gate" in w for w in report["warnings"])
+    assert any("nri_wildfire is not in the table" in w for w in report["warnings"])
+
+
+def test_scalar_states_include_raises_a_clear_error():
+    df = table(population=[1, 2])
+    with pytest.raises(ValueError, match="states_include must be a list"):
+        apply_gates(df, {"gates": {"states_include": "IA"}})
+
+
+def test_coverage_counts_scored_columns_absent_from_the_table():
+    # Two of four mapped columns don't exist, so no county can claim full coverage.
+    df = table(a=[1.0, 2.0], b=[1.0, np.nan])
+    pillars = {"p": [{"column": "a"}, {"column": "b"}, {"column": "c"}, {"column": "d"}]}
+    out = score(df, pillars, {"p": 1}).scores
+    assert out["coverage"].tolist() == [0.5, 0.25]
+
+
+def test_explain_with_a_precomputed_result_matches_a_fresh_run():
+    # The app passes its cached rank result; that shortcut must not change the answer.
+    from engine.explain import explain
+    df = make(n=120)
+    cond = load_yaml(PRESETS[0])
+    pillars = load_yaml(ROOT / "engine/pillars.yaml")
+    result = rank(df, cond, pillars)
+    for fips in (result[0]["fips"].iloc[0], result[1]["fips"].iloc[0]):  # one ranked, one excluded
+        assert explain(df, cond, pillars, fips, result=result) == explain(df, cond, pillars, fips)
+
+
+def test_top_reasons_are_computed_for_ranked_counties_only():
+    df = make(n=120)
+    ranked, excluded, _ = rank(df, load_yaml(PRESETS[0]), load_yaml(ROOT / "engine/pillars.yaml"))
+    assert ranked["top_reasons"].map(lambda v: isinstance(v, str)).all()
+    assert "top_reasons" not in excluded.columns
