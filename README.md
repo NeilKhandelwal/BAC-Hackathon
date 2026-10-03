@@ -58,7 +58,11 @@ app/              Streamlit UI
 pip install -r requirements.txt
 python etl/fetch_fractracker.py
 python etl/build_seed_labels.py
+python -m etl.build_features   # downloads to data/raw/, writes the county table and manifest
 ```
+
+`build_features` caches every download. Pass `--no-fetch` to rebuild from
+`data/raw/` without network calls. Delete a file under `data/raw/` to refetch it.
 
 Engine and app commands are added as they're built.
 

@@ -1,0 +1,75 @@
+"""Checks on the built county table. The engine trusts these properties without re-checking.
+
+Run `python -m etl.build_features` first.
+"""
+import json
+
+import pandas as pd
+import pytest
+
+from etl.schema import CORE, STRETCH
+
+OUT = "data/processed/county_features"
+
+
+@pytest.fixture(scope="module")
+def table():
+    return pd.read_parquet(OUT + ".parquet")
+
+
+@pytest.fixture(scope="module")
+def manifest():
+    with open(OUT + ".manifest.json") as fh:
+        return json.load(fh)
+
+
+def test_one_row_per_county_keyed_by_string_fips(table):
+    assert len(table) == 3109
+    assert table.fips.is_unique
+    assert (table.fips.str.len() == 5).all()  # an integer key would drop Alabama's leading zero
+    assert "11001" in set(table.fips) and not table.fips.str.startswith("02").any()
+
+
+def test_every_core_column_exists_with_schema_dtype(table):
+    actual = {c: "string" if pd.api.types.is_string_dtype(table[c]) else str(table[c].dtype) for c in CORE}
+    assert actual == CORE
+
+
+def test_manifest_missing_columns_match_the_table(table, manifest):
+    empty = {c for c in table.columns if table[c].isna().all()}
+    absent = set(STRETCH) - set(table.columns)
+    assert set(manifest["columns_missing"]) == empty | absent
+    assert set(manifest["columns_present"]) == set(table.columns) - empty
+
+
+@pytest.mark.parametrize("column", ["grid_renewable_share", "queue_withdrawal_rate",
+                                    "drought_share_weeks_d2plus", "fiber_share_locations"])
+def test_shares_are_fractions_not_percents(table, column):
+    assert table[column].dropna().between(0, 1).all()
+    assert table[column].max() > 0.2  # all-tiny values would mean a double division by 100
+
+
+def test_nri_scores_are_0_to_100(table):
+    for column in [c for c in table.columns if c.startswith("nri_")]:
+        assert table[column].dropna().between(0, 100).all(), column
+
+
+def test_inapplicable_hazard_is_zero_not_null(table):
+    row = table.set_index("fips")
+    assert row.nri_coastal_flood_score["19161"] == 0   # Sac County, Iowa: no coast
+    assert row.nri_coastal_flood_score["12086"] > 50   # Miami-Dade
+
+
+def test_undefined_queue_metrics_are_null_not_zero(table):
+    # A zero median age would rank a county with no queue as the least congested in the country.
+    assert table.queue_median_age_years.isna().sum() > 1000
+    assert (table.queue_median_age_years.dropna() > 0).all()
+    assert (table.queue_active_mw_clean <= table.queue_active_mw_total + 1e-9).all()
+
+
+def test_known_counties_look_right(table):
+    row = table.set_index("fips")
+    assert table.loc[table.dc_existing_count.idxmax(), "fips"] == "51107"  # Loudoun, VA
+    assert row.cdd_2050_rcp85["04013"] > row.cdd_hist["04013"] > row.cdd_hist["19161"]  # Maricopa warms
+    assert row.grid_co2_lb_mwh["50001"] < 100 < 1500 < row.grid_co2_lb_mwh["54001"]  # VT vs WV
+    assert row.moratorium_state_active["36061"] == row.moratorium_state_active["36001"]  # state flag broadcasts

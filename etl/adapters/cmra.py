@@ -10,7 +10,9 @@ SOURCE = {"name": "CMRA climate projections", "version": "LOCA CMIP5, mid-centur
           "url": "https://services3.arcgis.com/0Fs3HcaFfvzXvm7w/arcgis/rest/services/Climate_Mapping_Resilience_and_Adaptation_(CMRA)_Climate_and_Coastal_Inundation_Projections/FeatureServer/0"}
 RAW = "cmra/cmra_counties.csv"
 NOTES = ["CMRA reports the 8 old Connecticut counties. Each planning region takes the values "
-         "of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD)."]
+         "of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
+         "CMRA has no heating degree days for 65 of the coldest counties (ND, MN, CO, and "
+         "others). hdd_* and heat_sink_score are null there."]
 
 COLUMNS = {
     "HISTORIC_MEAN_CDD": "cdd_hist", "RCP45MID_MEAN_CDD": "cdd_2050_rcp45",

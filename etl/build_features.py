@@ -21,7 +21,8 @@ from etl.schema import CORE, STRETCH
 
 RAW_DIR = Path("data/raw")
 OUT_DIR = Path("data/processed")
-ADAPTERS = ["tiger_acs", "nri", "cmra"]  # tiger_acs must be first: it defines the rows
+ADAPTERS = ["tiger_acs", "nri", "cmra", "lbnl_queue", "fcc_fiber", "egrid", "drought_monitor",
+            "fractracker", "air_nonattainment", "state_tables"]  # tiger_acs must be first: it defines the rows
 
 
 def _mtime(path):
@@ -29,7 +30,7 @@ def _mtime(path):
 
 
 def build(fetch=True):
-    table, sources, joins, errors, notes = None, [], {}, {}, []
+    table, sources, joins, errors, notes, unmatched = None, [], {}, {}, [], []
     for name in ADAPTERS:
         try:
             mod = importlib.import_module(f"etl.adapters.{name}")
@@ -60,6 +61,7 @@ def build(fetch=True):
             table = table.merge(df, on="fips", how="left", validate="one_to_one")
         sources.append({**mod.SOURCE, "fetched_at": _mtime(RAW_DIR / mod.RAW)})
         notes += getattr(mod, "NOTES", [])
+        unmatched += [(name, *row) for row in getattr(mod, "UNMATCHED", [])]
 
     if {"hdd_hist", "pop_density_per_sqkm"} <= set(table.columns):
         table["heat_sink_score"] = table.hdd_hist * np.log1p(table.pop_density_per_sqkm)
@@ -84,6 +86,10 @@ def build(fetch=True):
         "errors": errors,
     }
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    # Name joins that failed, logged rather than dropped silently.
+    unmatched = pd.DataFrame(unmatched, columns=["source", "state", "county", "rows"])
+    unmatched.to_csv(OUT_DIR / "unmatched_names.csv", index=False)
+    manifest["unmatched_name_rows"] = {k: int(v) for k, v in unmatched.groupby("source").rows.sum().items()}
     table.to_parquet(OUT_DIR / "county_features.parquet", index=False)
     (OUT_DIR / "county_features.manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     return table, manifest
