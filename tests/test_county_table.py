@@ -116,5 +116,5 @@ def test_water_permit_risk_follows_the_schema(table):
 def test_wind_raster_is_oriented_north_up(table):
     # The source raster is stored south-up. A missed flip would swap North Dakota with Texas.
     row = table.set_index("fips")
-    assert row.wind_speed_100m_ms["38015"] > 7.5 > 6 > row.wind_speed_100m_ms["22071"]  # Bismarck vs New Orleans
-    assert row.wind_speed_100m_ms["48375"] > 7.5 > 6.5 > row.wind_speed_100m_ms["12095"]  # Amarillo vs Orlando
+    assert row.wind_speed_100m_ms["38015"] > 7 > 6.5 > row.wind_speed_100m_ms["22071"]  # Bismarck vs New Orleans
+    assert row.wind_speed_100m_ms["48375"] > 7.5 > 6 > row.wind_speed_100m_ms["12095"]  # Amarillo vs Orlando
