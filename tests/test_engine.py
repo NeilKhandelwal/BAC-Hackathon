@@ -413,3 +413,29 @@ def test_top_reasons_are_computed_for_ranked_counties_only():
     ranked, excluded, _ = rank(df, load_yaml(PRESETS[0]), load_yaml(ROOT / "engine/pillars.yaml"))
     assert ranked["top_reasons"].map(lambda v: isinstance(v, str)).all()
     assert "top_reasons" not in excluded.columns
+
+
+# CLI errors
+
+@pytest.mark.parametrize("cmd", ["rank", "explain"])
+def test_cli_reports_bad_conditions_in_one_line_and_exits_2(tmp_path, capsys, cmd):
+    # A user editing a conditions file needs the reason, not a stack trace.
+    make(n=50).to_parquet(tmp_path / "f.parquet", index=False)
+    cond = load_yaml(PRESETS[0])
+    cond["horizon"] = 2040
+    (tmp_path / "c.yaml").write_text(__import__("yaml").safe_dump(cond))
+    extra = ["--out", str(tmp_path / "o.csv")] if cmd == "rank" else ["--fips", "01001"]
+    with pytest.raises(SystemExit) as exit_info:
+        main([cmd, "--conditions", str(tmp_path / "c.yaml"), "--features", str(tmp_path / "f.parquet"), *extra])
+    assert exit_info.value.code == 2
+    err = capsys.readouterr().err.strip().splitlines()
+    assert err[-1] == "error: horizon must be 2026 or 2050, got 2040"
+    assert not any("Traceback" in line for line in err)
+
+
+def test_cli_explain_unknown_fips_exits_2(tmp_path, capsys):
+    make(n=50).to_parquet(tmp_path / "f.parquet", index=False)
+    with pytest.raises(SystemExit) as exit_info:
+        main(["explain", "--conditions", str(PRESETS[0]), "--features", str(tmp_path / "f.parquet"), "--fips", "99999"])
+    assert exit_info.value.code == 2
+    assert capsys.readouterr().err.strip() == "error: fips 99999 not in the feature table"
