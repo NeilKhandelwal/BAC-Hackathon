@@ -50,7 +50,7 @@ weights:
   community: 0.07
   permitting: 0.10
 
-pillar_floor_percentile: 25
+pillar_floor_percentile: 15            # at 25 its four highest composites sat below the floor; 15 keeps it the strictest preset
 pillar_floor_exempt: [permitting]       # three coarse state-level integers; one step moved a county 380 ranks
 
 robustness:

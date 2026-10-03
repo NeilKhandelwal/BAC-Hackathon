@@ -124,14 +124,34 @@ is non-null for the county, so columns absent from the table lower it too.
 `coal_retired_mw` scores in grid and infrastructure: a retired coal plant's
 grid interconnection can be reused, which lets a project skip the queue for
 a new high-voltage connection. It makes no claim about community attitudes.
-`unemployment_rate_pct_2023` (higher is better) and
-`pop_change_pct_2010_2024` (lower is better) score in community. This is a
-stated value choice, not a prediction: the brief lists economic development
-opportunities under community impact, and a campus brings more benefit, and
-finds more available workforce, where jobs are scarce and population is
-falling. The opposition model found no dependable link between these columns
+`unemployment_rate_pct_2023` (higher is better), `pop_change_pct_since_peak`
+(lower is better: a county further below its highest census count scores
+higher), and `mfg_emp_share_1969` (higher is better: industrial legacy)
+score in community. This is a stated value choice, not a prediction: the
+brief lists economic development opportunities under community impact, and
+a campus brings more benefit, and finds more available workforce, where jobs
+are scarce and the county has declined against its own history. The
+long-run measures replaced 2001-based ones, which put the Detroit and
+Youngstown counties near the national median; the 1969 manufacturing share
+puts them in the top fifth. The opposition model found no dependable link between these columns
 and community pushback (`research/economic_development.md`), so the engine
 doesn't use them to predict acceptance.
+
+**State moratoria** are flagged, not excluded, unless
+`exclude_moratorium_state_active` is true (only `speed_to_power` sets it).
+A ranked county with `moratorium_state_active` carries the flag in the
+ranked output, the app's shortlist and headline count, and a warning in
+`explain` and the county detail panel: "State moratorium in effect. A
+facility this size can't get state permits today." The flag comes from the
+data column, so it follows whichever states the table marks. As of the
+current table that's New York, where Executive Order 62, signed July 14,
+2026, pauses state environmental permits for data centers of 50 MW or more
+until a statewide environmental study finishes, about a year. Sources:
+[Jones Day](https://www.jonesday.com/de/insights/2026/07/new-york-enacts-first-statewide-data-center-moratorium),
+[Foley](https://www.foley.com/insights/publications/2026/08/new-york-just-pressed-pause-on-large-data-center-permitting/).
+`explain` and the panel also show two unscored facts: whether the county
+has an IRA energy community coal closure tract, and whether it's in an IRA
+fossil fuel employment area.
 
 **Floor rule.** With `pillar_floor_percentile: 10`, counties are split into
 those with every pillar at or above the 10th percentile and those with at
@@ -144,7 +164,8 @@ pillar never fails the floor, and neither does a pillar weighted zero. A
 lower floor trades protection against lopsided counties for stability: at
 20, small differences on a value-choice column moved counties across the
 floor and hundreds of ranks, so `balanced` uses 10. `speed_to_power` also
-uses 10, and `sustainability_first` keeps 25 as the strict preset.
+uses 10, and `sustainability_first` uses 15 as the strict preset. At 25 its
+four highest composites sat below the floor.
 
 `pillar_floor_exempt` lists pillars that still score in the composite but
 can't fail a county on the floor. Robustness and `rank_delta_2050` use the
@@ -177,7 +198,7 @@ toggle demo.
 | --- | --- | --- |
 | `balanced.yaml` | default demo | the values above |
 | `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.30, permitting 0.30; queue gate 3 years; fiber gate 0.3 instead of 0.2; state moratorium excluded |
-| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25, permitting 0.10; carbon gate 670 lb/MWh, set in the gap between eGRID subregions NWPP (632) and AZNM (704), with no renewable-share gate so nuclear-led grids count as clean; evaporative cooling disallowed above water stress 1; horizon 2050 |
+| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25, permitting 0.10; carbon gate 670 lb/MWh, set in the gap between eGRID subregions NWPP (632) and AZNM (704), with no renewable-share gate so nuclear-led grids count as clean; evaporative cooling disallowed above water stress 1; pillar floor 15; horizon 2050 |
 
 ## CLI
 
@@ -206,9 +227,11 @@ without), then by composite. Columns:
   most to the composite, as a semicolon list. It can be empty.
 - `robustness`, null when too few counties pass the gates and the floor
 - `failed_gates` (always empty here) and `unknown_gates`, semicolon lists
+- `moratorium_state_active`, carried from the table unscored so the flag
+  sits next to the score
 
 The CLI writes these rows to `<out>.csv`, excluded counties with
 `failed_gates` and `unknown_gates` to `<out>_excluded.csv`, and the run
 summary (per-gate counts, `hazard_gate_nonzero_counties`, `weights_used`,
-warnings) to `<out>_report.json`. The engine doesn't emit a permitting
+`moratorium_state_active_ranked`, warnings) to `<out>_report.json`. The engine doesn't emit a permitting
 pathway or a permitting model score.

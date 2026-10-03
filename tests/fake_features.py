@@ -29,6 +29,8 @@ NUMERIC = {
     "coal_retired_mw": lambda r, n: np.where(r.random(n) < 0.1, r.lognormal(6, 1, n), 0.0),  # mostly 0, like the real table
     "unemployment_rate_pct_2023": lambda r, n: r.normal(3.6, 1.2, n).clip(0.3),
     "pop_change_pct_2010_2024": lambda r, n: r.normal(3, 14, n),
+    "pop_change_pct_since_peak": lambda r, n: np.minimum(r.normal(-8, 15, n), 0.0),  # 0 at peak, like the real table
+    "mfg_emp_share_1969": lambda r, n: r.beta(2, 9, n),
     "plant_clean_capacity_mw_100km": lambda r, n: r.lognormal(7, 1.3, n),
     "dc_existing_count": lambda r, n: r.poisson(0.5, n),
     "dc_existing_mw": lambda r, n: r.exponential(20, n),
@@ -51,7 +53,8 @@ NRI = ["nri_risk_score", "nri_drought_score", "nri_inland_flood_score", "nri_coa
        "nri_wildfire_score", "nri_hurricane_score", "nri_heat_wave_score", "nri_tornado_score",
        "nri_winter_score"]
 FLAGS = ["moratorium_active", "moratorium_pending", "moratorium_state_active", "groundwater_managed_area",
-         "state_dc_bill_pending", "state_sales_tax_exemption", "state_large_load_tariff"]
+         "state_dc_bill_pending", "state_sales_tax_exemption", "state_large_load_tariff",
+         "energy_community_coal_closure", "energy_community_ffe"]
 
 
 def make(n=300, seed=0, null_share=0.05):

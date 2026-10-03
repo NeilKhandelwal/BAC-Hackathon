@@ -23,7 +23,7 @@ def fake_env(tmp_path, monkeypatch, request):
     (tmp_path / "counties.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": feats}))
     monkeypatch.setenv("BAC_FEATURES", str(tmp_path / "county_features.parquet"))
     monkeypatch.setenv("BAC_GEOJSON", str(tmp_path / ("counties.geojson" if request.param else "absent.geojson")))
-    df.attrs["path"] = tmp_path / "county_features.parquet"
+    df.attrs["path"] = str(tmp_path / "county_features.parquet")
     return df
 
 
@@ -142,3 +142,36 @@ def test_raw_2050_table_uses_readable_labels_from_the_mapping(fake_env):
     assert not set(table["metric"]) & swapped  # no raw column names leak through
     numeric = table[["today", "2050", "change"]].dropna().to_numpy().ravel()
     assert (abs(numeric * 10 - (numeric * 10).round()) < 1e-6).all()  # one decimal
+
+
+
+@pytest.mark.parametrize("fake_env", [True], indirect=True)
+def test_state_moratorium_flag_shows_in_headline_shortlist_and_detail(fake_env):
+    import pandas as pd
+
+    from engine.explain import MORATORIUM_WARNING
+    from engine.rank import load_yaml, rank
+
+    # Flag three counties that rank under balanced, so the flag is visible on the shortlist.
+    df = fake_env.copy()
+    df.attrs = {}
+    ranked = rank(df, load_yaml("engine/conditions/balanced.yaml"), load_yaml("engine/pillars.yaml"))[0]
+    flagged = set(ranked["fips"].head(3))
+    df["moratorium_state_active"] = pd.array(df["fips"].isin(flagged), dtype="boolean")
+    df.to_parquet(fake_env.attrs["path"], index=False)
+
+    at = started()
+    assert "**3** ranked counties are under a state moratorium" in headline(at)
+    shortlist = next(d.value for d in at.dataframe if "rank" in d.value.columns)
+    assert shortlist["moratorium_state_active"].head(3).astype(bool).all()
+    search = next(s for s in at.selectbox if s.label == "Find a county")
+
+    def open_county(fips):
+        next(s for s in at.selectbox if s.label == "Find a county").set_value(
+            next(o for o in search.options if o.endswith(f"({fips})"))).run()
+        assert not at.exception
+        return [w.value for w in at.warning]
+
+    assert MORATORIUM_WARNING in open_county(sorted(flagged)[0])
+    clear = next(f for f in fake_env["fips"] if f not in flagged)
+    assert MORATORIUM_WARNING not in open_county(clear)

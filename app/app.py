@@ -178,6 +178,10 @@ def show_detail(e, path, mtime, conditions):
         st.error("Excluded by: " + ", ".join(e["failed_gates"]))
     if e["unknown_gates"]:
         st.caption("No data, so not excluded: " + ", ".join(e["unknown_gates"]))
+    for w in e["warnings"]:
+        st.warning(w)
+    if e["facts"]:
+        st.caption(" · ".join(f"{label}: {'n/a' if v is None else 'yes' if v else 'no'}" for label, v in e["facts"].items()))
 
     # Floor crossing between horizons, from a cached rank under each horizon.
     floors = {}
@@ -237,7 +241,9 @@ def main():
     st.title("Where to build a sustainable AI data center")
     st.markdown(f"**{conditions['name']}**{' (edited)' if edited else ''} · horizon {conditions['horizon']} · "
                 f"**{report['passed']:,}** of {report['counties']:,} counties pass the gates · "
-                f"**{report['floor_ok']:,}** pass the pillar floor")
+                f"**{report['floor_ok']:,}** pass the pillar floor"
+                + (f" · **{report['moratorium_state_active_ranked']:,}** ranked counties are under a state moratorium"
+                   if report.get("moratorium_state_active_ranked") else ""))
     dropped = [p for p, w in conditions["weights"].items() if w and p not in report["pillars"]]
     with st.expander(f"Data notes ({len(dropped)} pillars dropped, {len(load_warnings) + len(report['warnings'])} warnings)"):
         if dropped:
@@ -258,12 +264,14 @@ def main():
 
     st.subheader("Shortlist")
     top_n = (conditions.get("output") or {}).get("top_n", 10)
-    cols = ["rank", "county_name", "state", "composite", "robustness", "coverage"] + pillar_cols
+    cols = ["rank", "county_name", "state", "composite", "robustness", "coverage"] + pillar_cols + \
+        [c for c in ("moratorium_state_active",) if c in ranked.columns]
     top = ranked.head(top_n)
     shown = top[cols].round({c: 1 for c in ["composite"] + pillar_cols})
     table = st.dataframe(shown.rename(columns=lambda c: c.removeprefix("pillar_")), hide_index=True,
                          width="stretch", on_select="rerun", selection_mode="single-row",
-                         column_config={"robustness": st.column_config.NumberColumn(format="percent"),
+                         column_config={"moratorium_state_active": st.column_config.CheckboxColumn("state moratorium"),
+                                        "robustness": st.column_config.NumberColumn(format="percent"),
                                         "coverage": st.column_config.NumberColumn(format="percent")})
 
     st.subheader("County detail")
