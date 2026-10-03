@@ -82,7 +82,8 @@ def main() -> None:
     ap.add_argument("--start", required=True, type=dt.date.fromisoformat)
     ap.add_argument("--end", required=True, type=dt.date.fromisoformat)
     ap.add_argument("--days", type=int, default=7, help="window length in days")
-    ap.add_argument("--pause", type=float, default=5.0, help="seconds between calls")
+    ap.add_argument("--pause", type=float, default=6.0,
+                    help="seconds between calls; GDELT enforces one request per 5 s per IP")
     ap.add_argument("--out", type=Path, default=Path("data/raw/gdelt_urls.csv"))
     args = ap.parse_args()
 

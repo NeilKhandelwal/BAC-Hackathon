@@ -21,6 +21,19 @@ County resolution is achievable, but not through the search API alone.
   `language`, `sourcecountry`. No locations. So full-text search and
   geolocation live in two different places and have to be joined.
 
+## Live probe results (2026-10-03, after the network policy was opened)
+
+- The DOC API enforces one request per IP every 5 seconds. The sandbox's
+  egress IP is shared with other sessions, so most calls returned HTTP 429
+  even with 45-second gaps, and the one 200 response was empty. Treat the
+  DOC API as untested until someone runs `etl/gdelt_probe.py` from a laptop.
+- The GEO 2.0 endpoint (`/api/v2/geo/geo`) returned 404 over both https and
+  http. It may have been retired quietly. Don't plan on it.
+- Neither of these affects the BigQuery path, which is the recommended one.
+- Data Center Watch sells its project-level data. The free Q1 2026 page
+  gives totals only, no project list. Labels must come from elsewhere (see
+  bottom of this file).
+
 ## The two access paths
 
 ### Path A: BigQuery public dataset (recommended)
@@ -104,7 +117,8 @@ Quarterly reports from 10a Labs. Headline figures as of the latest coverage:
 
 Opposition groups: 833 across 49 states as of March 2026.
 
-The project-level list (name, location, status, reason) appears in the
-reports but a structured download was not confirmed from the sandbox. Plan
-to hand-code it from the report PDFs and press coverage. Budget two to three
-hours for one person.
+The project-level list (name, location, status, reason) is only in the paid
+"In-Depth Analysis" reports, priced on request. The free pages give totals.
+Plan to hand-code labels from press roundups and advocacy trackers instead.
+Budget two to three hours for one person. A seed list is being compiled
+under `data/processed/` once sources are confirmed.
