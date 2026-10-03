@@ -6,7 +6,7 @@ permitting model so the engine can use the answer.
 
 **Result: the data doesn't support it.** On the permitting model's labels,
 the economic features don't separate counties that saw opposition from those
-that didn't, and they add no predictive skill. See "Second check" below. The
+that didn't, and they add no dependable predictive skill. See "Second check" below. The
 claim rests on case studies and published research, not on our data.
 
 ## The claim
@@ -102,36 +102,61 @@ fights start.
 
 The permitting model (`research/permitting_model.md`) labels 447 counties:
 298 positive (opposition recorded) and 149 negative. A county can be
-negative only if it already has a facility, so comparing all labeled
-counties mixes "had opposition" with "has no data center yet." The fair
-comparison is among the 184 labeled counties with at least one existing
-facility, where either label is possible: 76 positive, 108 negative.
+negative only if it already has a permitted facility, so comparing all
+labeled counties mixes "had opposition" with "has no data center yet." The
+fair comparison uses only counties where either label is possible. There
+are two ways to define them, and the results agree:
 
-| Feature | Positive, median | Negative, median | Mann-Whitney p |
-| --- | --- | --- | --- |
-| Manufacturing share 2001 | 0.128 | 0.123 | 0.78 |
-| Manufacturing loss share (clipped) | 0.019 | 0.023 | 0.22 |
-| Unemployment 2023 (%) | 3.4 | 3.5 | 0.30 |
-| Population change 2010-2024 (%) | 10.8 | 7.5 | 0.06 |
-| Any retired coal | 0% | 0% | 0.26 |
+- **Permitted subset** (the permitting model's definition, column
+  `has_permitted_facility`): 275 counties with an operating, approved, or
+  expanding facility. 126 positive, 149 negative.
+- **Existing-facility subset** (this brief's first definition):
+  `dc_existing_count >= 1`. 184 counties, 76 positive, 108 negative.
 
-Leave-one-state-out AUC in the same 184 counties:
+| Feature | Permitted: positive / negative | p | Existing: positive / negative | p |
+| --- | --- | --- | --- | --- |
+| Manufacturing share 2001, median | 0.136 / 0.127 | 0.88 | 0.128 / 0.123 | 0.78 |
+| Manufacturing loss share (clipped), median | 0.020 / 0.023 | 0.33 | 0.019 / 0.023 | 0.22 |
+| Unemployment 2023 (%), median | 3.3 / 3.5 | 0.12 | 3.4 / 3.5 | 0.30 |
+| Population change 2010-2024 (%), median | 10.8 / 6.0 | 0.01 | 10.8 / 7.5 | 0.06 |
+| Share with retired coal | 21% / 14% | 0.15 | 22% / 16% | 0.26 |
 
-| Features | AUC |
-| --- | --- |
-| The five economic features alone | 0.48 |
-| Density, income, heating degree days | 0.57 |
-| Those three plus the five economic features | 0.50 |
+p is a two-sided Mann-Whitney test.
 
-The manufacturing signal from the first look is gone. Across all 447
-labeled counties it reverses: counties with opposition had a higher 2001
-manufacturing share (0.149 against 0.127, p = 0.11). The economic features
-have no skill alone and make the base features worse. The only hint left is
-that faster-growing counties saw more opposition. That fits the "rich growth
-counties push back" half of the claim, but p = 0.06 among the 15 rank tests in this brief is
-what chance produces.
+Leave-one-state-out AUC on the permitted subset, using the permitting
+model's seven non-count features as the base (`etl/permitting.py`):
 
-Limits: 184 counties is small, and FracTracker records pushback as Yes or
+| Features | Logistic | Boosted |
+| --- | --- | --- |
+| Base | 0.572 | 0.585 |
+| Base plus the five economic features | 0.553 | 0.610 |
+| The five economic features alone | 0.539 | 0.536 |
+
+On the existing-facility subset, with density, income, and heating degree
+days as the base, logistic AUC is 0.57 for the base, 0.49 with the economic
+features added, and 0.48 for the economic features alone.
+
+What this shows:
+
+- The manufacturing features don't separate counties with and without
+  opposition on either subset. Across all 447 labeled counties, the
+  difference reverses: counties with opposition had a higher 2001
+  manufacturing share (0.149 against 0.127, p = 0.11).
+- Retired coal also goes the wrong way. Counties with opposition are more
+  likely to have a retired coal plant, not less.
+- The economic features make the logistic model worse. They lift the
+  boosted model by 0.026, just past the 0.60 bar, but a paired bootstrap of
+  that gain gives a 95% interval of -0.025 to 0.076. That isn't a
+  dependable gain, and the logistic run disagrees.
+- The one consistent difference is population growth. Faster-growing
+  counties saw more opposition (p = 0.01 on the permitted subset). Added
+  alone, it gives the largest boosted lift of the five features (AUC 0.636).
+  That supports the "growth counties push back" half of the claim, not the
+  deindustrialization half. It was picked after looking at five features
+  and 20 rank tests, so treat it as a lead for a future label set, not a
+  result.
+
+Limits: the subsets are small, and FracTracker records pushback as Yes or
 Unknown, never No. A negative county has no recorded opposition. It isn't
 confirmed acceptance.
 
