@@ -1,32 +1,37 @@
 """Per-county breakdown. Returns a plain dict so the CLI and the app share it."""
 import pandas as pd
 
-from engine.rank import apply_gates, rank, score
+from engine.rank import parse_horizon, pillar_percentiles, rank, score
 
 
 def _num(v):
     return None if pd.isna(v) else (v.item() if hasattr(v, "item") else v)
 
 
-def explain(df, conditions, pillars, fips):
-    """Pillar scores, per-column raw value and percentile, gate log, coverage, and raw 2050 deltas."""
+def explain(df, conditions, pillars, fips, result=None):
+    """Pillar scores, per-column raw value and percentile, gate log, coverage, and raw 2050 deltas.
+
+    Pass result, the (ranked, excluded, report) tuple from rank() on the same
+    df and conditions, to skip rerunning the engine.
+    """
     fips = str(fips).zfill(5)
     hits = df.index[df["fips"] == fips]
     if len(hits) == 0:
         raise KeyError(f"fips {fips} not in the feature table")
     i = hits[0]
-    horizon = conditions.get("horizon", 2026)
+    horizon = parse_horizon(conditions.get("horizon", 2026))
     scenario = conditions.get("scenario", "rcp85")
     sc = score(df, pillars, conditions.get("weights") or {}, horizon, scenario)
-    ranked, _, _ = rank(df, conditions, pillars)
-    row = ranked.set_index("fips").loc[fips] if fips in set(ranked["fips"]) else None
-    log = apply_gates(df, conditions).loc[i]
+    ranked, excluded, _ = result if result is not None else rank(df, conditions, pillars)
+    hit = ranked.index[ranked["fips"] == fips]
+    row = ranked.loc[hit[0]] if len(hit) else None
+    log = row if row is not None else excluded.loc[excluded["fips"] == fips].iloc[0]
     directions = {m["column"]: m.get("direction", "higher_better") for ms in pillars.values() for m in ms}
     for ms in pillars.values():
         for m in ms:
             if m.get("horizon_2050"):
                 directions[m["horizon_2050"].format(scenario=scenario)] = m.get("direction", "higher_better")
-    pillar_pct = sc.scores[sc.pillar_cols].rank(pct=True) * 100
+    pillar_pct = pillar_percentiles(sc.scores, sc.pillar_cols)
 
     out = {
         "fips": fips,
@@ -66,19 +71,24 @@ def explain(df, conditions, pillars, fips):
     return out
 
 
+def _fmt(v, spec):
+    return "n/a" if v is None else format(v, spec)
+
+
 def format_text(e):
     lines = [f"{e['county_name']}, {e['state']} ({e['fips']}) under {e['conditions']}, horizon {e['horizon']}"]
     if e["passed_gates"]:
-        lines.append(f"rank {e['rank']} of {e['of']}, composite {e['composite']:.1f}, floor_ok {e['floor_ok']}, "
-                     f"robustness {e['robustness']:.2f}, coverage {e['coverage']:.2f}")
-        lines.append(f"top reasons: {', '.join(e['top_reasons'])}")
+        lines.append(f"rank {e['rank']} of {e['of']}, composite {_fmt(e['composite'], '.1f')}, "
+                     f"floor_ok {e['floor_ok']}, robustness {_fmt(e['robustness'], '.2f')}, "
+                     f"coverage {_fmt(e['coverage'], '.2f')}")
+        lines.append(f"top reasons: {', '.join(e['top_reasons']) or 'no column above the national median'}")
     else:
         lines.append(f"excluded by: {', '.join(e['failed_gates'])}")
     if e["unknown_gates"]:
         lines.append(f"unknown (null, not excluded): {', '.join(e['unknown_gates'])}")
     for p, d in e["pillars"].items():
-        lines.append(f"\n{p}: score {d['score']:.1f}, national pctl {d['national_percentile']:.1f}, weight {d['weight']:.3f}"
-                     if d["score"] is not None else f"\n{p}: no data, weight {d['weight']:.3f}")
+        lines.append(f"\n{p}: score {_fmt(d['score'], '.1f')}, national pctl {_fmt(d['national_percentile'], '.1f')}, "
+                     f"weight {d['weight']:.3f}")
         for c in d["columns"]:
             pct = "null" if c["percentile"] is None else f"{c['percentile']:.1f}"
             raw = "null" if c["raw"] is None else f"{c['raw']:.4g}" if isinstance(c["raw"], (int, float)) else c["raw"]

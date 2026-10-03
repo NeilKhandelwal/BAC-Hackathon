@@ -55,7 +55,7 @@ def run(path, mtime, conditions_json):
 @st.cache_data(show_spinner=False)
 def detail(path, mtime, conditions_json, fips):
     df, _ = features(path, mtime)
-    return explain(df, json.loads(conditions_json), PILLARS, fips)
+    return explain(df, json.loads(conditions_json), PILLARS, fips, result=run(path, mtime, conditions_json))
 
 
 def optional_slider(label, value, lo, hi, step, key, help=None):
@@ -155,12 +155,16 @@ def county_map(df, ranked, excluded, color, geo):
     return fig
 
 
+def fmt(v, spec):
+    return "n/a" if v is None else format(v, spec)
+
+
 def show_detail(e, path, mtime, conditions):
     st.subheader(f"{e['county_name']}, {e['state']} ({e['fips']})")
     if e["passed_gates"]:
         floor = "passes the floor" if e["floor_ok"] else "below the floor on at least one pillar"
-        st.markdown(f"**Rank {e['rank']} of {e['of']}** · composite {e['composite']:.1f} · {floor} · "
-                    f"robustness {e['robustness']:.0%} · coverage {e['coverage']:.0%}")
+        st.markdown(f"**Rank {e['rank']} of {e['of']}** · composite {fmt(e['composite'], '.1f')} · {floor} · "
+                    f"robustness {fmt(e['robustness'], '.0%')} · coverage {fmt(e['coverage'], '.0%')}")
         st.markdown("**Top reasons:** " + (", ".join(r.replace("_", " ") for r in e["top_reasons"])
                                            or "no column above the national median"))
     else:
