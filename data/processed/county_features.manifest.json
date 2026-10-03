@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T21:05:10+00:00",
+  "built_at": "2026-10-03T21:21:02+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -60,7 +60,7 @@
       "name": "Hand-coded state permitting tables",
       "version": "see source_url per row",
       "url": "data/processed/state_policy.csv",
-      "fetched_at": "2026-10-03T21:02:25+00:00"
+      "fetched_at": "2026-10-03T20:58:13+00:00"
     },
     {
       "name": "NREL WIND Toolkit",
@@ -72,25 +72,31 @@
       "name": "Census County Business Patterns",
       "version": "2001 and 2022",
       "url": "https://www2.census.gov/programs-surveys/cbp/datasets/2022/cbp22co.zip",
-      "fetched_at": "2026-10-03T20:45:16+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
     },
     {
       "name": "USDA ERS county unemployment (BLS LAUS)",
       "version": "2000-2023 file, 2023 annual average",
       "url": "https://www.ers.usda.gov/media/5497/unemployment-and-median-household-income-for-the-united-states-states-and-counties-2000-23.csv",
-      "fetched_at": "2026-10-03T20:46:18+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
     },
     {
       "name": "Census county population estimates",
       "version": "Vintage 2020 and Vintage 2024",
       "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv",
-      "fetched_at": "2026-10-03T20:45:17+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
     },
     {
       "name": "EIA-860",
       "version": "2025 final",
       "url": "https://www.eia.gov/electricity/data/eia860/xls/eia8602025.zip",
-      "fetched_at": "2026-10-03T20:46:18+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
+    },
+    {
+      "name": "EIA-861 state historical tables",
+      "version": "2024, total electric industry",
+      "url": "https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx",
+      "fetched_at": "2026-10-03T21:19:48+00:00"
     }
   ],
   "columns_present": [
@@ -162,6 +168,7 @@
     "wind_speed_100m_ms",
     "plant_capacity_mw_100km",
     "plant_clean_capacity_mw_100km",
+    "industrial_price_cents_kwh",
     "mfg_emp_share_2001",
     "mfg_loss_share_emp_2001",
     "unemployment_rate_pct_2023",
@@ -229,7 +236,8 @@
     "ERS reports the 8 old Connecticut counties. Each planning region takes the rate of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
     "Population change chains two vintages: 2010 census to the July 2020 estimate (Vintage 2020), then the 2020 base to July 2024 (Vintage 2024).",
     "Connecticut's 2010-2020 factor comes from the old county each planning region mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
-    "coal_retired_mw sums nameplate MW of coal generators with status RE in the EIA-860 Retired and Canceled sheet. It is 0 for counties with none. Canceled projects are left out. The sheet covers generators retired since EIA-860 began tracking them."
+    "coal_retired_mw sums nameplate MW of coal generators with status RE in the EIA-860 Retired and Canceled sheet. It is 0 for counties with none. Canceled projects are left out. The sheet covers generators retired since EIA-860 began tracking them.",
+    "industrial_price_cents_kwh is the 2024 state average industrial retail price (revenue divided by sales, all providers). It is the same for every county in a state and is not the rate a large new load would negotiate."
   ],
   "joins": {
     "nri": {
@@ -298,6 +306,11 @@
       "counties_without_data": 0
     },
     "eia860_coal": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "eia_price": {
       "rows": 3109,
       "fips_not_in_table": [],
       "counties_without_data": 0

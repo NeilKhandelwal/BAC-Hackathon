@@ -134,3 +134,11 @@ def test_states_without_a_sales_tax_count_as_exempt(table):
     oregon = table[table.state == "OR"]
     assert (oregon.state_policy_risk == oregon.state_dc_bill_pending.astype(int)
             + oregon.state_large_load_tariff.astype(int)).all()
+
+
+def test_industrial_price_is_a_state_value_in_cents(table):
+    # Dollars per kWh or a utility-level value joined by mistake would both break this.
+    assert table.industrial_price_cents_kwh.between(3, 30).all()
+    assert (table.groupby("state").industrial_price_cents_kwh.nunique() == 1).all()
+    price = table.groupby("state").industrial_price_cents_kwh.first()
+    assert price["CA"] > 2 * price["TX"]  # California industrial power costs several times Texas
