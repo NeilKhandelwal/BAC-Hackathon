@@ -73,6 +73,12 @@ BLS LAUS host refuses requests without a contact address, so set
 `BLS_CONTACT_EMAIL=you@example.com` before the first online build. Cached
 files need nothing.
 
+The committed county table and `results/` are frozen hackathon artifacts.
+A rebuild is semantically reproducible but not always byte-identical, and
+it can swap tied counties outside the leading results. Reproduce exact
+rankings from the committed table. See "Frozen artifacts and
+reproducibility" in `docs/schema.md`.
+
 Engine and app commands are added as they're built.
 
 ## Data notes

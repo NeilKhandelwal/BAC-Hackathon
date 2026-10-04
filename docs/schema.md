@@ -282,6 +282,41 @@ Not scored and not gate inputs. Same county placement as `lbnl_queue.py`.
 | `queue_operational_mw_online_5y`, `queue_operational_projects_online_5y` | float, int | `queue_operational_mw_5y` | keyed on completion: operational projects with `on_date` in 2021-2025, falling back to `prop_date` when `on_date` is blank. `queue_operational_mw_5y` keys on `q_year >= 2019`, which is queue entry, not completion. |
 | `queue_operational_online_date_fallback_share` | float 0-1 | | share of those projects dated by `prop_date`. `on_date` is about 99% filled in PJM, CAISO, and MISO but 18% in the West and 0% in ISO-NE. |
 
+## Frozen artifacts and reproducibility
+
+`data/processed/county_features.parquet` and the committed files in
+`results/` are the canonical frozen hackathon artifacts. The committed table
+keeps main's original 83 columns exactly as they were at `1575003` and
+appends 85 context columns that no pillar or gate uses.
+
+A fresh build, online or `--no-fetch`, is semantically reproducible but may
+not be byte-identical to the frozen table. Spatial calculations depend on
+library versions (geopandas, shapely, rasterio). A rebuild can differ from
+the frozen table by less than `1e-12` in `water_stress_bws` and
+`water_stress_2050`, and by 0.0005 m/s in `wind_speed_100m_ms` for one county
+(18083). Main's own build shows the same differences with or without the
+context columns.
+
+Many counties tie exactly on water stress, at 0 or 5. Differences that small
+can break those ties, which changes percentile ranks and swaps adjacent
+counties outside the leading results. In validation on 2026-10-03, a fresh
+build kept every gate, gate count, winner, top-ten list, pillar ordering,
+and core conclusion. It swapped 40 adjacent pairs in `balanced` (best
+affected rank 142) and 2 in `speed_to_power` (ranks 83 and 84), and moved
+some water pillar scores by up to 0.43 points. One displayed top-25 value
+changed by 0.01 (Monroe County, PA's 2050 shift in `sustainability_first`).
+
+To reproduce the exact committed rankings, run the engine on the committed
+table, not on a rebuilt one:
+
+```bash
+python -m engine rank --conditions engine/conditions/balanced.yaml \
+  --features data/processed/county_features.parquet --out results/balanced.csv
+```
+
+`brownfield_sites.parquet` is a generated artifact and isn't committed.
+Running the ETL produces it.
+
 ## Coverage
 
 | Column | Type | Notes |
