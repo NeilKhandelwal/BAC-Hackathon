@@ -291,3 +291,64 @@ test.describe("rank stability outcome bars", () => {
     await expect(page.locator(".row .stab-share").first()).toHaveText("Not computed");
   });
 });
+
+test.describe("map zoom and pan", () => {
+  const scale = (page: Page) =>
+    page.locator(".map .zoom").evaluate((g) => new DOMMatrixReadOnly(getComputedStyle(g).transform).a);
+
+  test("wheel and pinch zoom around the pointer, drag pans, buttons step", async ({ page }) => {
+    await open(page);
+    const map = page.locator(".map");
+    const box = (await map.boundingBox())!;
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+    expect(await scale(page)).toBeCloseTo(1, 3);
+    await expect(page.getByRole("button", { name: "Zoom out" })).toBeDisabled();
+
+    // scroll wheel zooms in and the page does not scroll
+    await page.mouse.move(cx, cy);
+    await page.mouse.wheel(0, -400);
+    await expect.poll(() => scale(page)).toBeGreaterThan(1.5);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(page.getByRole("button", { name: "Show all counties" })).toBeVisible();
+
+    // trackpad pinch arrives as ctrl+wheel
+    const before = await scale(page);
+    await page.keyboard.down("Control");
+    await page.mouse.wheel(0, -60);
+    await page.keyboard.up("Control");
+    await expect.poll(() => scale(page)).toBeGreaterThan(before);
+
+    // drag pans, and the release does not select a county
+    const t0 = await page.locator(".map .zoom").evaluate((g) => new DOMMatrixReadOnly(getComputedStyle(g).transform).e);
+    await page.mouse.move(cx, cy);
+    await page.mouse.down();
+    await page.mouse.move(cx + 120, cy + 40, { steps: 6 });
+    await page.mouse.up();
+    const t1 = await page.locator(".map .zoom").evaluate((g) => new DOMMatrixReadOnly(getComputedStyle(g).transform).e);
+    expect(t1).not.toBeCloseTo(t0, 0);
+    await expect(page.locator(".finding-head")).toHaveCount(0);
+
+    // a plain click still selects
+    await page.mouse.click(cx, cy);
+    await expect.poll(() => new URL(page.url()).searchParams.get("c")).not.toBeNull();
+
+    // buttons step the zoom and stop at the limits
+    await page.getByRole("button", { name: "Show all counties" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1, 2);
+    await page.getByRole("button", { name: "Zoom in" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1.6, 1);
+    await page.getByRole("button", { name: "Zoom out" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1, 2);
+    await expect(page.getByRole("button", { name: "Zoom out" })).toBeDisabled();
+  });
+
+  test("Reset demo returns the map to the full view", async ({ page }) => {
+    await open(page);
+    await page.getByRole("button", { name: "Zoom in" }).click();
+    await page.getByRole("button", { name: "Zoom in" }).click();
+    await expect.poll(() => scale(page)).toBeGreaterThan(2);
+    await page.getByRole("button", { name: "Reset demo" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1, 2);
+  });
+});

@@ -1863,3 +1863,65 @@ table {
   outline: 1px solid var(--rule-strong);
   background: var(--stab-out);
 }
+
+/* ------------------------------------------------------------- map zoom and pan */
+
+.map-frame.is-interacting .zoom,
+.map-frame.is-interacting .ring {
+  transition: none;
+}
+
+.map-frame.is-zoomed .map {
+  cursor: grab;
+  touch-action: none;
+}
+
+.map-frame.is-zoomed .map:active {
+  cursor: grabbing;
+}
+
+.zoom-controls {
+  position: absolute;
+  right: var(--s3);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--rule-strong);
+  background: var(--panel);
+  box-shadow: 0 2px 8px rgb(17 21 24 / 0.08);
+}
+
+.zoom-btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.zoom-btn + .zoom-btn {
+  border-top: 1px solid var(--rule);
+}
+
+.zoom-btn svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: square;
+}
+
+.zoom-btn:hover:not(:disabled) {
+  background: var(--ground);
+}
+
+.zoom-btn:disabled {
+  color: var(--rule-strong);
+  cursor: default;
+}
+
+.zoom-btn:focus-visible {
+  outline-offset: -2px;
+}

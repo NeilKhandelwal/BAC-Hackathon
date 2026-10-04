@@ -242,6 +242,13 @@ sampled weight scenario, 2,000 in the presets.
 - Selecting a county zooms to its region, about eight times the county's
   bounds. A national inset, 160px wide, appears in the corner with the view
   box drawn on it. Reset view returns to the nation.
+- Zoom and pan: the scroll wheel or a trackpad pinch zooms around the
+  pointer, from 1x to 12x. Dragging pans once zoomed in, and a press that
+  doesn't move is still a click. Two 32px buttons, + and −, sit in the
+  bottom-right corner of the frame, above the drawer when it's open. Input
+  follows the pointer directly, with no easing; selection zooms keep the
+  480ms transition. "Show all counties" and Reset demo return to the full
+  view.
 - The legend sits inside the map frame: graphite ramp with breaks, the hatch
   swatch, the floor-fail swatch, and the ring sample.
 

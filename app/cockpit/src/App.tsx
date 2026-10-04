@@ -97,7 +97,9 @@ function Cockpit({ data, topo }: { data: CockpitData; topo: Topology }) {
   };
   const onCompare = (i: number | null) => setView((v) => ({ ...v, compare: i === null ? null : data.counties.fips[i]! }));
 
+  const [resetCount, setResetCount] = useState(0);
   const onReset = () => {
+    setResetCount((n) => n + 1);
     const start = decode(data, `?preset=${DEMO_START.preset}`).view;
     prev.current = null;
     setChanges(NO_CHANGES);
@@ -139,6 +141,7 @@ function Cockpit({ data, topo }: { data: CockpitData; topo: Topology }) {
           compare={compare}
           onSelect={onSelect}
           coveredBelow={drawer && selected !== null ? (drawerOpen ? 0.5 : 0.08) : 0}
+          resetKey={resetCount}
         />
         <FindingPanel
           data={data}
