@@ -21,10 +21,20 @@ PUE = {"dry": (1.12, 1.38), "evaporative": (1.12, 1.25)}
 WUE_L_PER_KWH = {"dry": (0.05, 0.05), "evaporative": (0.1, 1.8)}  # litres per kWh of IT energy
 CDD_COLUMN = {"today": "cdd_hist", "2050": "cdd_2050_rcp85"}
 
+# eGRID2023 balancing authority CO2 output rates (BA23 sheet, BACO2RTA), lb/MWh. Used only for
+# the featured county's CO2 range in research/impact.md, not for scoring.
+BPA_CO2_LB_MWH = 212.458        # Bonneville Power Administration (BPAT)
+GRANT_PUD_CO2_LB_MWH = 0.0      # Public Utility District No. 2 of Grant County (GCPD), all hydro
+
 
 def _linear(params, cdd):
     cold, hot = params
     return cold + (hot - cold) * cdd / HOT_CDD
+
+
+def co2_tonnes(facility_mwh, rate_lb_mwh):
+    """Metric tons of CO2 for a year of facility energy at a grid rate in lb/MWh."""
+    return facility_mwh * rate_lb_mwh / LB_PER_TONNE
 
 
 def impact(fips, mw=300, cooling="dry", horizon="today", table=None):
@@ -43,7 +53,7 @@ def impact(fips, mw=300, cooling="dry", horizon="today", table=None):
         "fips": fips, "county": f"{county.county_name}, {county.state}", "cooling": cooling,
         "horizon": horizon, "cdd": cdd, "grid_co2_lb_mwh": county.grid_co2_lb_mwh,
         "it_mwh": it_mwh, "pue": pue, "facility_mwh": facility_mwh,
-        "co2_tonnes": facility_mwh * county.grid_co2_lb_mwh / LB_PER_TONNE,
+        "co2_tonnes": co2_tonnes(facility_mwh, county.grid_co2_lb_mwh),
         "water_million_gal": water_litres / LITRES_PER_GALLON / 1e6,
     }
 
