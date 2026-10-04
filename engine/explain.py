@@ -1,7 +1,7 @@
 """Per-county breakdown. Returns a plain dict so the CLI and the app share it."""
 import pandas as pd
 
-from engine.rank import floor_exempt, parse_horizon, pillar_percentiles, rank, score
+from engine.rank import DEFAULT_UNIT, floor_exempt, parse_horizon, pillar_percentiles, rank, score, unit
 
 
 MORATORIUM_WARNING = "State moratorium in effect. A facility this size can't get state permits today."
@@ -30,19 +30,21 @@ def explain(df, conditions, pillars, fips, result=None):
     Pass result, the (ranked, excluded, report) tuple from rank() on the same
     df and conditions, to skip rerunning the engine.
     """
-    fips = str(fips).zfill(5)
-    hits = df.index[df["fips"] == fips]
+    u = unit(conditions)
+    key = u["key"]
+    fips = str(fips).zfill(5) if key == "fips" else str(fips)
+    hits = df.index[df[key] == fips]
     if len(hits) == 0:
-        raise KeyError(f"fips {fips} not in the feature table")
+        raise KeyError(f"{key} {fips} not in the feature table")
     i = hits[0]
     horizon = parse_horizon(conditions.get("horizon", 2026))
     exempt = floor_exempt(conditions, pillars)
     scenario = conditions.get("scenario", "rcp85")
     sc = score(df, pillars, conditions.get("weights") or {}, horizon, scenario)
     ranked, excluded, _ = result if result is not None else rank(df, conditions, pillars)
-    hit = ranked.index[ranked["fips"] == fips]
+    hit = ranked.index[ranked[key] == fips]
     row = ranked.loc[hit[0]] if len(hit) else None
-    log = row if row is not None else excluded.loc[excluded["fips"] == fips].iloc[0]
+    log = row if row is not None else excluded.loc[excluded[key] == fips].iloc[0]
     directions = {m["column"]: m.get("direction", "higher_better") for ms in pillars.values() for m in ms}
     for ms in pillars.values():
         for m in ms:
@@ -51,9 +53,9 @@ def explain(df, conditions, pillars, fips, result=None):
     pillar_pct = pillar_percentiles(sc.scores, sc.pillar_cols)
 
     out = {
-        "fips": fips,
-        "county_name": _num(df.at[i, "county_name"]) if "county_name" in df else None,
-        "state": _num(df.at[i, "state"]) if "state" in df else None,
+        key: fips,
+        u["name"]: _num(df.at[i, u["name"]]) if u["name"] in df else None,
+        u["group"]: _num(df.at[i, u["group"]]) if u["group"] in df else None,
         "conditions": conditions.get("name"),
         "horizon": horizon,
         "passed_gates": log["failed_gates"] == "",
@@ -96,8 +98,8 @@ def _fmt(v, spec):
     return "n/a" if v is None else format(v, spec)
 
 
-def format_text(e):
-    lines = [f"{e['county_name']}, {e['state']} ({e['fips']}) under {e['conditions']}, horizon {e['horizon']}"]
+def format_text(e, u=DEFAULT_UNIT):
+    lines = [f"{e[u['name']]}, {e[u['group']]} ({e[u['key']]}) under {e['conditions']}, horizon {e['horizon']}"]
     if e["passed_gates"]:
         lines.append(f"rank {e['rank']} of {e['of']}, composite {_fmt(e['composite'], '.1f')}, "
                      f"floor_ok {e['floor_ok']}, robustness {_fmt(e['robustness'], '.2f')}, "
