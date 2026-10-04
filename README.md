@@ -79,7 +79,15 @@ it can swap tied counties outside the leading results. Reproduce exact
 rankings from the committed table. See "Frozen artifacts and
 reproducibility" in `docs/schema.md`.
 
-Engine and app commands are added as they're built.
+Run the app with `streamlit run app/app.py`. After a county's ranking detail,
+the app shows **Industrial reuse and community transition**. This unscored,
+post-ranking screening covers economic transition, industrial reuse,
+infrastructure context, and EPA brownfield properties, and offers a
+downloadable screening brief. The property table needs
+`data/processed/brownfield_sites.parquet`, which the ETL generates and git
+ignores. Without it, the app explains that and still shows county totals
+from the committed table. See `docs/industrial_reuse.md` and the Boone
+County walkthrough in `docs/demo_script.md`.
 
 ## Data notes
 

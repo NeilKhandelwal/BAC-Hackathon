@@ -15,10 +15,17 @@ reports community sentiment.
 
 ## What the section shows
 
+The section opens for any county, including ones that rank low or fail a
+gate. Its caption says it is unscored, post-ranking screening, meant for
+counties the national model has already shortlisted.
+
 Each numeric measure appears with the national median and the county's
 national percentile. The percentile is mid-rank: the share of counties below
 the value, with ties counted as half. That matters because many of these
-columns are 0 in most counties.
+columns are 0 in most counties. A percentile ranks the raw value, so it
+isn't a score. On a decline measure, the 1st percentile is one of the
+steepest losses in the country, not a favorable result. A "How to read"
+column says so for the decline and unemployment rows.
 
 - **Economic transition:**
   - Unemployment: 2024 and pooled 2022-2024 (BLS LAUS).
