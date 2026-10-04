@@ -1,175 +1,182 @@
+C:\Users\Vals\OneDrive\Documents\BAC-Hackathon\scratch\weighting\montecarlo.py:156: RuntimeWarning: Mean of empty slice
+  within = {"WA / NWPP won by Clark": float((fips[first][win_cluster == "WA / NWPP"] == CLARK).mean()),
+C:\Users\Vals\OneDrive\Documents\BAC-Hackathon\.venv\Lib\site-packages\numpy\_core\_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
 self-check max diff $0.0000
-P(#1): [('Clark, WA', 0.266), ('Franklin, NY', 0.247), ('Chesterfield, SC', 0.112), ('Kootenai, ID', 0.049), ('Bossier, LA', 0.047), ('Curry, NM', 0.047), ('El Paso, TX', 0.044), ('Emery, UT', 0.04), ('Grayson, TX', 0.038), ('Houston, TX', 0.026)]
-P(top 3): [('Clark, WA', 0.352), ('Franklin, NY', 0.343), ('Schuyler, NY', 0.301), ('Clinton, NY', 0.232), ('Chesterfield, SC', 0.183), ('Walla Walla, WA', 0.146), ('Kootenai, ID', 0.123), ('Emery, UT', 0.094), ('El Paso, TX', 0.084), ('Bossier, LA', 0.082)]
-cluster P(#1): {'WA / NWPP': 0.266, 'NY / NYUP': 0.247, 'SC / SRVC': 0.112, 'LA / SRMV': 0.051, 'ID / NWPP': 0.049, 'NM / SPSO': 0.047, 'TX / AZNM': 0.044, 'UT / NWPP': 0.04, 'TX / ERCT': 0.038, 'TX / SRMV': 0.027, 'NC / SRVC': 0.022, 'PA / RFCE': 0.02, 'AR / SRMV': 0.016, 'OK / SPSO': 0.007, 'OH / RFCW': 0.002, 'VA / SRVC': 0.002, 'KY / SRTV': 0.002, 'OR / NWPP': 0.002, 'TX / SPSO': 0.001, 'TN / SRTV': 0.001, 'IA / MROW': 0.001, 'WY / NWPP': 0.001, 'LA / SPSO': 0.001, 'MT / NWPP': 0.001}
-P(Clark beats Franklin) = 0.593 ± 0.030 (95%); P(Clark beats Grant) = 1.000; imputed-queue share of #1 draws = 0.011
-delay_usd_month [('low', [10.1, 22.9], 0.491, 0.368, 0.243), ('mid', [22.9, 37.3], 0.556, 0.243, 0.255), ('high', [37.3, 49.9], 0.733, 0.129, 0.3)]
-moratorium_months_active [('low', [8.0, 11.6], 0.479, 0.332, 0.216), ('mid', [11.6, 15.6], 0.622, 0.219, 0.273), ('high', [15.6, 20.0], 0.679, 0.189, 0.309)]
-carbon_usd_t [('low', [100.1, 162.6], 0.859, 0.033, 0.35), ('mid', [163.1, 231.2], 0.568, 0.246, 0.246), ('high', [231.5, 300.0], 0.351, 0.462, 0.201)]
-Grant with BPA supply: {'median_rank': 246.0, 'p_first': 0.032, 'p_top3': 0.04, 'p10_rank': 12.0, 'p90_rank': 1093.3000000000002, 'p_beats_clark': 0.136, 'p_beats_franklin': 0.16}
+P(#1): [('Chesterfield, SC', 0.218), ('Kootenai, ID', 0.138), ('Emery, UT', 0.112), ('El Paso, TX', 0.094), ('Bossier, LA', 0.076), ('Grayson, TX', 0.068), ('Houston, TX', 0.051), ('Franklin, AR', 0.041), ('Payne, OK', 0.031), ('Rockingham, NC', 0.028)]
+P(top 3): [('Chesterfield, SC', 0.321), ('Kootenai, ID', 0.228), ('Emery, UT', 0.183), ('Florence, SC', 0.165), ('El Paso, TX', 0.141), ('Grayson, TX', 0.128), ('Marlboro, SC', 0.127), ('Bossier, LA', 0.123), ('Houston, TX', 0.113), ('Robertson, TX', 0.09)]
+cluster P(#1): {'SC / SRVC': 0.218, 'ID / NWPP': 0.138, 'UT / NWPP': 0.112, 'TX / AZNM': 0.094, 'LA / SRMV': 0.089, 'TX / ERCT': 0.068, 'NC / SRVC': 0.053, 'TX / SRMV': 0.052, 'PA / RFCE': 0.043, 'AR / SRMV': 0.041, 'OK / SPSO': 0.031, 'OR / NWPP': 0.015, 'WY / NWPP': 0.007, 'LA / SPSO': 0.007, 'KY / SRTV': 0.006, 'IA / MROW': 0.005, 'TN / SRTV': 0.004, 'VA / SRVC': 0.004, 'MT / NWPP': 0.004, 'OH / RFCW': 0.003, 'NY / NYUP': 0.003, 'TX / SPSO': 0.001, 'MS / SRMV': 0.001, 'GA / SRSO': 0.001}
+P(Clark beats Franklin) = 0.593 ± 0.030 (95%); P(Clark beats Grant) = 0.928; imputed-queue share of #1 draws = 0.036
+delay_usd_month [('low', [10.1, 22.9], 0.491, 0.009, 0.0), ('mid', [22.9, 37.3], 0.556, 0.0, 0.0), ('high', [37.3, 49.9], 0.733, 0.0, 0.0)]
+moratorium_months_active [('low', [8.0, 11.6], 0.479, 0.006, 0.0), ('mid', [11.6, 15.6], 0.622, 0.0, 0.0), ('high', [15.6, 20.0], 0.679, 0.003, 0.0)]
+carbon_usd_t [('low', [100.1, 162.6], 0.859, 0.0, 0.0), ('mid', [163.1, 231.2], 0.568, 0.0, 0.0), ('high', [231.5, 300.0], 0.351, 0.009, 0.0)]
+Grant with BPA supply: {'median_rank': 788.5, 'p_first': 0.006, 'p_top3': 0.01, 'p10_rank': 131.0, 'p90_rank': 1351.1, 'p_beats_clark': 0.273, 'p_beats_franklin': 0.322}
 crossover carbon price, $/t: {'base_25M_12mo': np.float64(200.0), '10M_12mo': np.float64(166.2), '50M_12mo': np.float64(256.3), '25M_8mo': np.float64(179.5), '25M_20mo': np.float64(241.1)}
 gap regression R2 0.983; variance share by driver: {'price_mult_WA': 0.154, 'price_mult_NY': 0.309, 'carbon_mult_NWPP': 0.119, 'carbon_mult_NYUP': 0.016, 'delay_usd_month': 0.078, 'moratorium_months': 0.037, 'carbon_usd_t': 0.281}
 winner state price multiplier by cluster:
              mean  size
-WA / NWPP  0.895   266
-NY / NYUP  0.913   247
-SC / SRVC  0.877   112
-LA / SRMV  0.866    51
-ID / NWPP  0.851    49
-NM / SPSO  0.871    47
-TX / AZNM  0.857    44
-UT / NWPP  0.845    40
-TX / ERCT  0.871    38
-TX / SRMV  0.850    27
-NC / SRVC  0.847    22
-PA / RFCE  0.835    20
-within cluster: {'WA / NWPP won by Clark': 1.0, 'NY / NYUP won by Franklin': 1.0}
+SC / SRVC  0.892   218
+ID / NWPP  0.873   138
+UT / NWPP  0.862   112
+TX / AZNM  0.900    94
+LA / SRMV  0.871    89
+TX / ERCT  0.890    68
+NC / SRVC  0.855    53
+TX / SRMV  0.857    52
+PA / RFCE  0.843    43
+AR / SRMV  0.863    41
+OK / SPSO  0.861    31
+OR / NWPP  0.855    15
+within cluster: {'WA / NWPP won by Clark': nan, 'NY / NYUP won by Franklin': 1.0}
 BPA scenario: {
  "p_first_top": [
   {
-   "fips": "53011",
-   "county": "Clark, WA",
-   "share": 0.272
-  },
-  {
-   "fips": "36033",
-   "county": "Franklin, NY",
-   "share": 0.201
-  },
-  {
    "fips": "45025",
    "county": "Chesterfield, SC",
-   "share": 0.091
-  },
-  {
-   "fips": "53071",
-   "county": "Walla Walla, WA",
-   "share": 0.064
+   "share": 0.213
   },
   {
    "fips": "16055",
    "county": "Kootenai, ID",
-   "share": 0.054
-  },
-  {
-   "fips": "35009",
-   "county": "Curry, NM",
-   "share": 0.052
-  },
-  {
-   "fips": "22015",
-   "county": "Bossier, LA",
-   "share": 0.047
-  },
-  {
-   "fips": "48141",
-   "county": "El Paso, TX",
-   "share": 0.044
+   "share": 0.136
   },
   {
    "fips": "49015",
    "county": "Emery, UT",
-   "share": 0.043
+   "share": 0.112
+  },
+  {
+   "fips": "48141",
+   "county": "El Paso, TX",
+   "share": 0.092
+  },
+  {
+   "fips": "22015",
+   "county": "Bossier, LA",
+   "share": 0.076
   },
   {
    "fips": "48181",
    "county": "Grayson, TX",
-   "share": 0.03
+   "share": 0.068
+  },
+  {
+   "fips": "48225",
+   "county": "Houston, TX",
+   "share": 0.051
+  },
+  {
+   "fips": "05047",
+   "county": "Franklin, AR",
+   "share": 0.039
+  },
+  {
+   "fips": "40119",
+   "county": "Payne, OK",
+   "share": 0.031
+  },
+  {
+   "fips": "37157",
+   "county": "Rockingham, NC",
+   "share": 0.028
   }
  ],
  "p_top3_top": [
   {
-   "fips": "36033",
-   "county": "Franklin, NY",
-   "share": 0.343
-  },
-  {
-   "fips": "53011",
-   "county": "Clark, WA",
-   "share": 0.318
-  },
-  {
-   "fips": "36097",
-   "county": "Schuyler, NY",
-   "share": 0.282
-  },
-  {
-   "fips": "36019",
-   "county": "Clinton, NY",
-   "share": 0.187
-  },
-  {
    "fips": "45025",
    "county": "Chesterfield, SC",
-   "share": 0.184
-  },
-  {
-   "fips": "53071",
-   "county": "Walla Walla, WA",
-   "share": 0.16
+   "share": 0.315
   },
   {
    "fips": "16055",
    "county": "Kootenai, ID",
-   "share": 0.126
+   "share": 0.225
   },
   {
    "fips": "49015",
    "county": "Emery, UT",
-   "share": 0.099
+   "share": 0.18
+  },
+  {
+   "fips": "45041",
+   "county": "Florence, SC",
+   "share": 0.164
   },
   {
    "fips": "48141",
    "county": "El Paso, TX",
-   "share": 0.088
+   "share": 0.141
+  },
+  {
+   "fips": "48181",
+   "county": "Grayson, TX",
+   "share": 0.128
+  },
+  {
+   "fips": "45069",
+   "county": "Marlboro, SC",
+   "share": 0.125
   },
   {
    "fips": "22015",
    "county": "Bossier, LA",
-   "share": 0.083
+   "share": 0.123
+  },
+  {
+   "fips": "48225",
+   "county": "Houston, TX",
+   "share": 0.112
+  },
+  {
+   "fips": "48395",
+   "county": "Robertson, TX",
+   "share": 0.09
   }
  ],
  "focus": {
   "Clark, WA": {
-   "p_first": 0.272,
-   "p_top3": 0.318
+   "p_first": 0.013,
+   "p_top3": 0.026
   },
   "Franklin, NY": {
-   "p_first": 0.201,
-   "p_top3": 0.343
+   "p_first": 0.003,
+   "p_top3": 0.006
   },
   "Grant, WA": {
-   "p_first": 0.0,
-   "p_top3": 0.038
+   "p_first": 0.001,
+   "p_top3": 0.008
   }
  },
  "cluster_p_first": {
-  "WA / NWPP": 0.346,
-  "NY / NYUP": 0.201,
-  "SC / SRVC": 0.091,
-  "ID / NWPP": 0.054,
-  "NM / SPSO": 0.052,
-  "LA / SRMV": 0.05,
-  "TX / AZNM": 0.044,
-  "UT / NWPP": 0.043,
-  "TX / ERCT": 0.03,
-  "TX / SRMV": 0.027,
-  "NC / SRVC": 0.019,
-  "AR / SRMV": 0.013,
-  "PA / RFCE": 0.012,
-  "OK / SPSO": 0.007,
-  "OR / NWPP": 0.003,
-  "WY / NWPP": 0.002,
+  "SC / SRVC": 0.213,
+  "ID / NWPP": 0.136,
+  "UT / NWPP": 0.112,
+  "TX / AZNM": 0.092,
+  "LA / SRMV": 0.088,
+  "TX / ERCT": 0.068,
+  "TX / SRMV": 0.052,
+  "NC / SRVC": 0.052,
+  "PA / RFCE": 0.043,
+  "AR / SRMV": 0.039,
+  "OK / SPSO": 0.031,
+  "OR / NWPP": 0.014,
+  "WA / NWPP": 0.014,
+  "WY / NWPP": 0.007,
+  "LA / SPSO": 0.007,
+  "KY / SRTV": 0.006,
+  "IA / MROW": 0.005,
+  "TN / SRTV": 0.004,
+  "VA / SRVC": 0.004,
+  "MT / NWPP": 0.004,
+  "OH / RFCW": 0.003,
+  "NY / NYUP": 0.003,
   "TX / SPSO": 0.001,
-  "OH / RFCW": 0.001,
-  "VA / SRVC": 0.001,
-  "KY / SRTV": 0.001,
-  "IA / MROW": 0.001,
-  "MT / NWPP": 0.001
+  "MS / SRMV": 0.001,
+  "GA / SRSO": 0.001
  },
  "p_clark_beats_franklin": 0.53,
- "p_clark_beats_grant": 1.0,
- "draws_changing_winner": 0.392,
+ "p_clark_beats_grant": 0.932,
+ "draws_changing_winner": 0.014,
  "p_clark_beats_franklin_by_bpa_rate_tercile": {
   "low": {
    "range": [

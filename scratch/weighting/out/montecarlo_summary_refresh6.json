@@ -28,12 +28,12 @@
     {
       "fips": "45025",
       "county": "Chesterfield, SC",
-      "share": 0.218
+      "share": 0.217
     },
     {
       "fips": "16055",
       "county": "Kootenai, ID",
-      "share": 0.138
+      "share": 0.137
     },
     {
       "fips": "49015",
@@ -43,7 +43,7 @@
     {
       "fips": "48141",
       "county": "El Paso, TX",
-      "share": 0.094
+      "share": 0.092
     },
     {
       "fips": "22015",
@@ -53,7 +53,7 @@
     {
       "fips": "48181",
       "county": "Grayson, TX",
-      "share": 0.068
+      "share": 0.067
     },
     {
       "fips": "48225",
@@ -80,17 +80,17 @@
     {
       "fips": "45025",
       "county": "Chesterfield, SC",
-      "share": 0.321
+      "share": 0.318
     },
     {
       "fips": "16055",
       "county": "Kootenai, ID",
-      "share": 0.228
+      "share": 0.226
     },
     {
       "fips": "49015",
       "county": "Emery, UT",
-      "share": 0.183
+      "share": 0.181
     },
     {
       "fips": "45041",
@@ -100,7 +100,7 @@
     {
       "fips": "48141",
       "county": "El Paso, TX",
-      "share": 0.141
+      "share": 0.14
     },
     {
       "fips": "48181",
@@ -110,7 +110,7 @@
     {
       "fips": "45069",
       "county": "Marlboro, SC",
-      "share": 0.127
+      "share": 0.124
     },
     {
       "fips": "22015",
@@ -120,27 +120,28 @@
     {
       "fips": "48225",
       "county": "Houston, TX",
-      "share": 0.113
+      "share": 0.112
     },
     {
       "fips": "48395",
       "county": "Robertson, TX",
-      "share": 0.09
+      "share": 0.089
     }
   ],
   "cluster_p_first": {
-    "SC / SRVC": 0.218,
-    "ID / NWPP": 0.138,
+    "SC / SRVC": 0.217,
+    "ID / NWPP": 0.137,
     "UT / NWPP": 0.112,
-    "TX / AZNM": 0.094,
+    "TX / AZNM": 0.092,
     "LA / SRMV": 0.089,
-    "TX / ERCT": 0.068,
-    "NC / SRVC": 0.053,
+    "TX / ERCT": 0.067,
     "TX / SRMV": 0.052,
+    "NC / SRVC": 0.052,
     "PA / RFCE": 0.043,
     "AR / SRMV": 0.041,
     "OK / SPSO": 0.031,
     "OR / NWPP": 0.015,
+    "NY / NYUP": 0.008,
     "WY / NWPP": 0.007,
     "LA / SPSO": 0.007,
     "KY / SRTV": 0.006,
@@ -149,19 +150,19 @@
     "VA / SRVC": 0.004,
     "MT / NWPP": 0.004,
     "OH / RFCW": 0.003,
-    "NY / NYUP": 0.003,
     "TX / SPSO": 0.001,
+    "WA / NWPP": 0.001,
     "MS / SRMV": 0.001,
     "GA / SRSO": 0.001
   },
   "focus": {
     "Clark, WA": {
       "p_first": 0.0,
-      "p_top3": 0.0
+      "p_top3": 0.001
     },
     "Franklin, NY": {
-      "p_first": 0.003,
-      "p_top3": 0.006
+      "p_first": 0.008,
+      "p_top3": 0.015
     },
     "Grant, WA": {
       "p_first": 0.0,
@@ -170,7 +171,7 @@
   },
   "p_clark_beats_franklin": 0.593,
   "p_clark_beats_franklin_se": 0.015535475531827148,
-  "p_clark_beats_grant": 0.928,
+  "p_clark_beats_grant": 0.923,
   "imputed_queue_share_of_first": 0.036,
   "terciles": {
     "delay_usd_month": [
@@ -181,7 +182,7 @@
           22926049.946367946
         ],
         "p_clark_beats_franklin": 0.491,
-        "p_ny_first": 0.009,
+        "p_ny_first": 0.018,
         "p_wa_first": 0.0
       },
       {
@@ -191,7 +192,7 @@
           37255791.94976213
         ],
         "p_clark_beats_franklin": 0.556,
-        "p_ny_first": 0.0,
+        "p_ny_first": 0.006,
         "p_wa_first": 0.0
       },
       {
@@ -202,7 +203,7 @@
         ],
         "p_clark_beats_franklin": 0.733,
         "p_ny_first": 0.0,
-        "p_wa_first": 0.0
+        "p_wa_first": 0.003
       }
     ],
     "moratorium_months_active": [
@@ -213,7 +214,7 @@
           11.57777248026013
         ],
         "p_clark_beats_franklin": 0.479,
-        "p_ny_first": 0.006,
+        "p_ny_first": 0.015,
         "p_wa_first": 0.0
       },
       {
@@ -223,8 +224,8 @@
           15.554582503068893
         ],
         "p_clark_beats_franklin": 0.622,
-        "p_ny_first": 0.0,
-        "p_wa_first": 0.0
+        "p_ny_first": 0.006,
+        "p_wa_first": 0.003
       },
       {
         "tercile": "high",
@@ -256,7 +257,7 @@
         ],
         "p_clark_beats_franklin": 0.568,
         "p_ny_first": 0.0,
-        "p_wa_first": 0.0
+        "p_wa_first": 0.003
       },
       {
         "tercile": "high",
@@ -265,19 +266,19 @@
           299.99040356553724
         ],
         "p_clark_beats_franklin": 0.351,
-        "p_ny_first": 0.009,
+        "p_ny_first": 0.024,
         "p_wa_first": 0.0
       }
     ]
   },
   "grant_bpa": {
-    "median_rank": 788.5,
-    "p_first": 0.006,
-    "p_top3": 0.01,
-    "p10_rank": 131.0,
-    "p90_rank": 1351.1,
-    "p_beats_clark": 0.273,
-    "p_beats_franklin": 0.322
+    "median_rank": 710.0,
+    "p_first": 0.01,
+    "p_top3": 0.011,
+    "p10_rank": 101.0,
+    "p90_rank": 1328.0,
+    "p_beats_clark": 0.276,
+    "p_beats_franklin": 0.323
   },
   "crossover_carbon_usd_t": {
     "base_25M_12mo": 199.99132494622293,
@@ -288,40 +289,40 @@
   },
   "gap_regression_r2": 0.9828058716662462,
   "gap_regression_beta": {
-    "intercept": -517419859.66297734,
-    "price_mult_WA": 1796114082.3835332,
+    "intercept": -517419859.66297853,
+    "price_mult_WA": 1796114082.3835335,
     "price_mult_NY": -2559890545.9143047,
-    "carbon_mult_NWPP": 1572916830.1829,
-    "carbon_mult_NYUP": -599694019.0115615,
+    "carbon_mult_NWPP": 1572916830.1828988,
+    "carbon_mult_NYUP": -599694019.0115607,
     "delay_usd_month": -12.526928186416626,
-    "moratorium_months": -28720723.09391048,
+    "moratorium_months": -28720723.093911197,
     "carbon_usd_t": 4830752.747995278
   },
   "gap_variance_share_by_driver": {
-    "price_mult_WA": 0.153551725965644,
-    "price_mult_NY": 0.30901047323583397,
-    "carbon_mult_NWPP": 0.11867457158791203,
-    "carbon_mult_NYUP": 0.016351141690237873,
-    "delay_usd_month": 0.07826883802860053,
-    "moratorium_months": 0.036604771252583525,
-    "carbon_usd_t": 0.2807673630134034
+    "price_mult_WA": 0.15355172596564398,
+    "price_mult_NY": 0.3090104732358339,
+    "carbon_mult_NWPP": 0.11867457158791184,
+    "carbon_mult_NYUP": 0.01635114169023782,
+    "delay_usd_month": 0.07826883802860052,
+    "moratorium_months": 0.03660477125258534,
+    "carbon_usd_t": 0.2807673630134033
   },
   "winner_state_price_mult": {
     "SC / SRVC": {
       "mean": 0.892,
-      "wins": 218
+      "wins": 217
     },
     "ID / NWPP": {
       "mean": 0.873,
-      "wins": 138
+      "wins": 137
     },
     "UT / NWPP": {
       "mean": 0.862,
       "wins": 112
     },
     "TX / AZNM": {
-      "mean": 0.9,
-      "wins": 94
+      "mean": 0.896,
+      "wins": 92
     },
     "LA / SRMV": {
       "mean": 0.871,
@@ -329,14 +330,14 @@
     },
     "TX / ERCT": {
       "mean": 0.89,
-      "wins": 68
-    },
-    "NC / SRVC": {
-      "mean": 0.855,
-      "wins": 53
+      "wins": 67
     },
     "TX / SRMV": {
       "mean": 0.857,
+      "wins": 52
+    },
+    "NC / SRVC": {
+      "mean": 0.855,
       "wins": 52
     },
     "PA / RFCE": {
@@ -355,12 +356,16 @@
       "mean": 0.855,
       "wins": 15
     },
-    "LA / SPSO": {
-      "mean": 0.867,
-      "wins": 7
+    "NY / NYUP": {
+      "mean": 0.85,
+      "wins": 8
     },
     "WY / NWPP": {
       "mean": 0.827,
+      "wins": 7
+    },
+    "LA / SPSO": {
+      "mean": 0.867,
       "wins": 7
     },
     "KY / SRTV": {
@@ -387,25 +392,25 @@
       "mean": 0.818,
       "wins": 3
     },
-    "NY / NYUP": {
-      "mean": 0.827,
-      "wins": 3
+    "MS / SRMV": {
+      "mean": 0.806,
+      "wins": 1
     },
     "GA / SRSO": {
       "mean": 0.854,
       "wins": 1
     },
-    "MS / SRMV": {
-      "mean": 0.806,
-      "wins": 1
-    },
     "TX / SPSO": {
       "mean": 0.819,
+      "wins": 1
+    },
+    "WA / NWPP": {
+      "mean": 0.861,
       "wins": 1
     }
   },
   "within_cluster": {
-    "WA / NWPP won by Clark": NaN,
+    "WA / NWPP won by Clark": 0.0,
     "NY / NYUP won by Franklin": 1.0
   },
   "bpa_scenario": {
@@ -418,27 +423,27 @@
       {
         "fips": "16055",
         "county": "Kootenai, ID",
-        "share": 0.136
+        "share": 0.135
       },
       {
         "fips": "49015",
         "county": "Emery, UT",
-        "share": 0.112
+        "share": 0.11
       },
       {
         "fips": "48141",
         "county": "El Paso, TX",
-        "share": 0.092
+        "share": 0.089
       },
       {
         "fips": "22015",
         "county": "Bossier, LA",
-        "share": 0.076
+        "share": 0.075
       },
       {
         "fips": "48181",
         "county": "Grayson, TX",
-        "share": 0.068
+        "share": 0.067
       },
       {
         "fips": "48225",
@@ -465,27 +470,27 @@
       {
         "fips": "45025",
         "county": "Chesterfield, SC",
-        "share": 0.315
+        "share": 0.312
       },
       {
         "fips": "16055",
         "county": "Kootenai, ID",
-        "share": 0.225
+        "share": 0.223
       },
       {
         "fips": "49015",
         "county": "Emery, UT",
-        "share": 0.18
+        "share": 0.178
       },
       {
         "fips": "45041",
         "county": "Florence, SC",
-        "share": 0.164
+        "share": 0.163
       },
       {
         "fips": "48141",
         "county": "El Paso, TX",
-        "share": 0.141
+        "share": 0.14
       },
       {
         "fips": "48181",
@@ -493,70 +498,70 @@
         "share": 0.128
       },
       {
-        "fips": "45069",
-        "county": "Marlboro, SC",
-        "share": 0.125
-      },
-      {
         "fips": "22015",
         "county": "Bossier, LA",
         "share": 0.123
       },
       {
+        "fips": "45069",
+        "county": "Marlboro, SC",
+        "share": 0.122
+      },
+      {
         "fips": "48225",
         "county": "Houston, TX",
-        "share": 0.112
+        "share": 0.11
       },
       {
         "fips": "48395",
         "county": "Robertson, TX",
-        "share": 0.09
+        "share": 0.089
       }
     ],
     "focus": {
       "Clark, WA": {
-        "p_first": 0.013,
-        "p_top3": 0.026
+        "p_first": 0.021,
+        "p_top3": 0.036
       },
       "Franklin, NY": {
-        "p_first": 0.003,
-        "p_top3": 0.006
+        "p_first": 0.007,
+        "p_top3": 0.015
       },
       "Grant, WA": {
-        "p_first": 0.001,
-        "p_top3": 0.008
+        "p_first": 0.002,
+        "p_top3": 0.01
       }
     },
     "cluster_p_first": {
       "SC / SRVC": 0.213,
-      "ID / NWPP": 0.136,
-      "UT / NWPP": 0.112,
-      "TX / AZNM": 0.092,
-      "LA / SRMV": 0.088,
-      "TX / ERCT": 0.068,
+      "ID / NWPP": 0.135,
+      "UT / NWPP": 0.11,
+      "TX / AZNM": 0.089,
+      "LA / SRMV": 0.087,
+      "TX / ERCT": 0.067,
       "TX / SRMV": 0.052,
-      "NC / SRVC": 0.052,
-      "PA / RFCE": 0.043,
+      "NC / SRVC": 0.05,
+      "PA / RFCE": 0.041,
       "AR / SRMV": 0.039,
       "OK / SPSO": 0.031,
+      "WA / NWPP": 0.024,
       "OR / NWPP": 0.014,
-      "WA / NWPP": 0.014,
-      "WY / NWPP": 0.007,
+      "NY / NYUP": 0.007,
       "LA / SPSO": 0.007,
       "KY / SRTV": 0.006,
+      "WY / NWPP": 0.006,
       "IA / MROW": 0.005,
       "TN / SRTV": 0.004,
-      "VA / SRVC": 0.004,
       "MT / NWPP": 0.004,
       "OH / RFCW": 0.003,
-      "NY / NYUP": 0.003,
+      "VA / SRVC": 0.003,
       "TX / SPSO": 0.001,
       "MS / SRMV": 0.001,
       "GA / SRSO": 0.001
     },
     "p_clark_beats_franklin": 0.53,
-    "p_clark_beats_grant": 0.932,
-    "draws_changing_winner": 0.014,
+    "p_clark_beats_grant": 0.931,
+    "draws_changing_winner": 0.023,
     "p_clark_beats_franklin_by_bpa_rate_tercile": {
       "low": {
         "range": [
@@ -589,5 +594,7 @@
     "clark_breakeven_bpa_rate_usd_mwh_50M_delay": 113.9
   },
   "chart": "docs/img/mc_winners.png",
-  "overrides": {}
+  "overrides": {
+    "tax_refresh_years": 6
+  }
 }

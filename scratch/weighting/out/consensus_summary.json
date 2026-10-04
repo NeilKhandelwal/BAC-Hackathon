@@ -13,7 +13,7 @@
       "fips": "41067",
       "county": "Washington, OR",
       "balanced": 120,
-      "monetized": 652,
+      "monetized": 623,
       "smaa": 14,
       "critic": 1,
       "entropy": 6,
@@ -22,34 +22,10 @@
       "borda_no_entropy": 39
     },
     {
-      "fips": "53011",
-      "county": "Clark, WA",
-      "balanced": 7,
-      "monetized": 1,
-      "smaa": 5,
-      "critic": 27,
-      "entropy": 338,
-      "revealed": 103,
-      "borda_all": 50,
-      "borda_no_entropy": 50
-    },
-    {
-      "fips": "53075",
-      "county": "Whitman, WA",
-      "balanced": 3,
-      "monetized": 10,
-      "smaa": 1,
-      "critic": 78,
-      "entropy": 318,
-      "revealed": 660,
-      "borda_all": 49,
-      "borda_no_entropy": 49
-    },
-    {
       "fips": "53025",
       "county": "Grant, WA",
       "balanced": 1,
-      "monetized": 92,
+      "monetized": 647,
       "smaa": 2,
       "critic": 12,
       "entropy": 50,
@@ -61,7 +37,7 @@
       "fips": "19163",
       "county": "Scott, IA",
       "balanced": 6,
-      "monetized": 611,
+      "monetized": 582,
       "smaa": 7,
       "critic": 6,
       "entropy": 257,
@@ -70,10 +46,22 @@
       "borda_no_entropy": 44
     },
     {
+      "fips": "53075",
+      "county": "Whitman, WA",
+      "balanced": 3,
+      "monetized": 296,
+      "smaa": 1,
+      "critic": 78,
+      "entropy": 318,
+      "revealed": 660,
+      "borda_all": 38,
+      "borda_no_entropy": 38
+    },
+    {
       "fips": "47181",
       "county": "Wayne, TN",
       "balanced": 2,
-      "monetized": 560,
+      "monetized": 530,
       "smaa": 3,
       "critic": 208,
       "entropy": 895,
@@ -85,7 +73,7 @@
       "fips": "26163",
       "county": "Wayne, MI",
       "balanced": 304,
-      "monetized": 1386,
+      "monetized": 1303,
       "smaa": 16,
       "critic": 20,
       "entropy": 9,
@@ -97,7 +85,7 @@
       "fips": "48029",
       "county": "Bexar, TX",
       "balanced": 1122,
-      "monetized": 222,
+      "monetized": 187,
       "smaa": 271,
       "critic": 524,
       "entropy": 1,
@@ -109,7 +97,7 @@
       "fips": "49035",
       "county": "Salt Lake, UT",
       "balanced": 489,
-      "monetized": 93,
+      "monetized": 60,
       "smaa": 227,
       "critic": 31,
       "entropy": 3,
@@ -121,45 +109,33 @@
       "fips": "48113",
       "county": "Dallas, TX",
       "balanced": 179,
-      "monetized": 142,
+      "monetized": 108,
       "smaa": 19,
       "critic": 264,
       "entropy": 12,
       "revealed": 1,
       "borda_all": 31,
       "borda_no_entropy": 22
+    },
+    {
+      "fips": "17161",
+      "county": "Rock Island, IL",
+      "balanced": 200,
+      "monetized": 1064,
+      "smaa": 9,
+      "critic": 2,
+      "entropy": 278,
+      "revealed": 106,
+      "borda_all": 31,
+      "borda_no_entropy": 31
     }
   ],
   "consensus_top10_no_entropy": [
     {
-      "fips": "53011",
-      "county": "Clark, WA",
-      "balanced": 7,
-      "monetized": 1,
-      "smaa": 5,
-      "critic": 27,
-      "entropy": 338,
-      "revealed": 103,
-      "borda_all": 50,
-      "borda_no_entropy": 50
-    },
-    {
-      "fips": "53075",
-      "county": "Whitman, WA",
-      "balanced": 3,
-      "monetized": 10,
-      "smaa": 1,
-      "critic": 78,
-      "entropy": 318,
-      "revealed": 660,
-      "borda_all": 49,
-      "borda_no_entropy": 49
-    },
-    {
       "fips": "53025",
       "county": "Grant, WA",
       "balanced": 1,
-      "monetized": 92,
+      "monetized": 647,
       "smaa": 2,
       "critic": 12,
       "entropy": 50,
@@ -171,7 +147,7 @@
       "fips": "19163",
       "county": "Scott, IA",
       "balanced": 6,
-      "monetized": 611,
+      "monetized": 582,
       "smaa": 7,
       "critic": 6,
       "entropy": 257,
@@ -183,7 +159,7 @@
       "fips": "41067",
       "county": "Washington, OR",
       "balanced": 120,
-      "monetized": 652,
+      "monetized": 623,
       "smaa": 14,
       "critic": 1,
       "entropy": 6,
@@ -192,10 +168,22 @@
       "borda_no_entropy": 39
     },
     {
+      "fips": "53075",
+      "county": "Whitman, WA",
+      "balanced": 3,
+      "monetized": 296,
+      "smaa": 1,
+      "critic": 78,
+      "entropy": 318,
+      "revealed": 660,
+      "borda_all": 38,
+      "borda_no_entropy": 38
+    },
+    {
       "fips": "47181",
       "county": "Wayne, TN",
       "balanced": 2,
-      "monetized": 560,
+      "monetized": 530,
       "smaa": 3,
       "critic": 208,
       "entropy": 895,
@@ -207,7 +195,7 @@
       "fips": "17161",
       "county": "Rock Island, IL",
       "balanced": 200,
-      "monetized": 1099,
+      "monetized": 1064,
       "smaa": 9,
       "critic": 2,
       "entropy": 278,
@@ -216,10 +204,22 @@
       "borda_no_entropy": 31
     },
     {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "balanced": 7,
+      "monetized": 365,
+      "smaa": 5,
+      "critic": 27,
+      "entropy": 338,
+      "revealed": 103,
+      "borda_all": 30,
+      "borda_no_entropy": 30
+    },
+    {
       "fips": "40051",
       "county": "Grady, OK",
       "balanced": 9,
-      "monetized": 624,
+      "monetized": 595,
       "smaa": 6,
       "critic": 266,
       "entropy": 189,
@@ -231,7 +231,7 @@
       "fips": "40097",
       "county": "Mayes, OK",
       "balanced": 4,
-      "monetized": 271,
+      "monetized": 236,
       "smaa": 12,
       "critic": 118,
       "entropy": 29,
@@ -243,7 +243,7 @@
       "fips": "41051",
       "county": "Multnomah, OR",
       "balanced": 1005,
-      "monetized": 412,
+      "monetized": 380,
       "smaa": 271,
       "critic": 4,
       "entropy": 59,
@@ -255,27 +255,27 @@
   "focus": {
     "Clark, WA": {
       "balanced": 7,
-      "monetized": 1,
+      "monetized": 365,
       "smaa": 5,
       "critic": 27,
       "entropy": 338,
       "revealed": 103,
-      "borda_all": 50,
-      "borda_no_entropy": 50
+      "borda_all": 30,
+      "borda_no_entropy": 30
     },
     "Franklin, NY": {
       "balanced": 986,
-      "monetized": 2,
+      "monetized": 409,
       "smaa": 271,
       "critic": 64,
       "entropy": 392,
       "revealed": 548,
-      "borda_all": 19,
-      "borda_no_entropy": 19
+      "borda_all": 0,
+      "borda_no_entropy": 0
     },
     "Grant, WA": {
       "balanced": 1,
-      "monetized": 92,
+      "monetized": 647,
       "smaa": 2,
       "critic": 12,
       "entropy": 50,
@@ -298,16 +298,16 @@
       "Adair, OK"
     ],
     "monetized": [
-      "Clark, WA",
-      "Franklin, NY",
-      "Schuyler, NY",
-      "Clinton, NY",
-      "Chautauqua, NY",
-      "Tompkins, NY",
-      "Niagara, NY",
-      "Walla Walla, WA",
       "Chesterfield, SC",
-      "Whitman, WA"
+      "Kootenai, ID",
+      "Marlboro, SC",
+      "Florence, SC",
+      "Aiken, SC",
+      "Emery, UT",
+      "El Paso, TX",
+      "Grayson, TX",
+      "Bossier, LA",
+      "Houston, TX"
     ],
     "smaa": [
       "Whitman, WA",
@@ -360,38 +360,38 @@
   },
   "engine_with_implied_weights": {
     "weights": {
-      "energy_carbon": 0.3715686274509804,
+      "energy_carbon": 0.2281746031746032,
       "water": 0.0,
-      "climate_resilience": 0.011764705882352941,
-      "grid_infrastructure": 0.07745098039215687,
+      "climate_resilience": 0.00992063492063492,
+      "grid_infrastructure": 0.06646825396825397,
       "land": 0.0,
       "community": 0.0,
-      "permitting": 0.0,
-      "cost": 0.5392156862745099
+      "permitting": 0.15476190476190477,
+      "cost": 0.5406746031746033
     },
     "top10": [
       "Grady, OK",
-      "Scurry, TX",
       "Caddo, OK",
       "Garfield, OK",
-      "Young, TX",
-      "Nolan, TX",
-      "Ector, TX",
-      "Howard, TX",
-      "Ellis, TX",
-      "Haskell, TX"
+      "Oklahoma, OK",
+      "Canadian, OK",
+      "Payne, OK",
+      "Lincoln, OK",
+      "McClain, OK",
+      "Cleveland, OK",
+      "Beaver, OK"
     ],
     "npv_top10": [
-      "Clark, WA",
-      "Franklin, NY",
-      "Schuyler, NY",
-      "Clinton, NY",
-      "Chautauqua, NY",
-      "Tompkins, NY",
-      "Niagara, NY",
-      "Walla Walla, WA",
       "Chesterfield, SC",
-      "Whitman, WA"
+      "Kootenai, ID",
+      "Marlboro, SC",
+      "Florence, SC",
+      "Aiken, SC",
+      "Emery, UT",
+      "El Paso, TX",
+      "Grayson, TX",
+      "Bossier, LA",
+      "Houston, TX"
     ],
     "overlap_with_npv_top10": 0
   },
@@ -400,60 +400,6 @@
     "size": 161,
     "stage2_top10_by_190": [
       {
-        "fips": "53011",
-        "county": "Clark, WA",
-        "npv_190_busd": 3.496,
-        "co2_kt": 678.0,
-        "smaa_top10_floor_off": 0.2062,
-        "floor_ok": true,
-        "balanced_rank": 7
-      },
-      {
-        "fips": "36033",
-        "county": "Franklin, NY",
-        "npv_190_busd": 3.545,
-        "co2_kt": 260.0,
-        "smaa_top10_floor_off": 0.2434,
-        "floor_ok": false,
-        "balanced_rank": 986
-      },
-      {
-        "fips": "36019",
-        "county": "Clinton, NY",
-        "npv_190_busd": 3.577,
-        "co2_kt": 261.0,
-        "smaa_top10_floor_off": 0.0942,
-        "floor_ok": false,
-        "balanced_rank": 1031
-      },
-      {
-        "fips": "36013",
-        "county": "Chautauqua, NY",
-        "npv_190_busd": 3.592,
-        "co2_kt": 262.0,
-        "smaa_top10_floor_off": 0.0564,
-        "floor_ok": false,
-        "balanced_rank": 1123
-      },
-      {
-        "fips": "36063",
-        "county": "Niagara, NY",
-        "npv_190_busd": 3.674,
-        "co2_kt": 268.0,
-        "smaa_top10_floor_off": 0.0298,
-        "floor_ok": false,
-        "balanced_rank": 1097
-      },
-      {
-        "fips": "53071",
-        "county": "Walla Walla, WA",
-        "npv_190_busd": 3.678,
-        "co2_kt": 701.0,
-        "smaa_top10_floor_off": 0.0134,
-        "floor_ok": true,
-        "balanced_rank": 18
-      },
-      {
         "fips": "45025",
         "county": "Chesterfield, SC",
         "npv_190_busd": 3.682,
@@ -461,15 +407,6 @@
         "smaa_top10_floor_off": 0.032,
         "floor_ok": true,
         "balanced_rank": 17
-      },
-      {
-        "fips": "53075",
-        "county": "Whitman, WA",
-        "npv_190_busd": 3.741,
-        "co2_kt": 682.0,
-        "smaa_top10_floor_off": 0.3128,
-        "floor_ok": true,
-        "balanced_rank": 3
       },
       {
         "fips": "45069",
@@ -481,13 +418,76 @@
         "balanced_rank": 28
       },
       {
-        "fips": "36065",
-        "county": "Oneida, NY",
-        "npv_190_busd": 3.808,
-        "co2_kt": 262.0,
-        "smaa_top10_floor_off": 0.0768,
+        "fips": "49015",
+        "county": "Emery, UT",
+        "npv_190_busd": 3.822,
+        "co2_kt": 688.0,
+        "smaa_top10_floor_off": 0.068,
         "floor_ok": false,
-        "balanced_rank": 1065
+        "balanced_rank": 1078
+      },
+      {
+        "fips": "48139",
+        "county": "Ellis, TX",
+        "npv_190_busd": 3.907,
+        "co2_kt": 843.0,
+        "smaa_top10_floor_off": 0.0412,
+        "floor_ok": true,
+        "balanced_rank": 157
+      },
+      {
+        "fips": "48503",
+        "county": "Young, TX",
+        "npv_190_busd": 3.934,
+        "co2_kt": 840.0,
+        "smaa_top10_floor_off": 0.076,
+        "floor_ok": false,
+        "balanced_rank": 926
+      },
+      {
+        "fips": "37045",
+        "county": "Cleveland, NC",
+        "npv_190_busd": 3.95,
+        "co2_kt": 686.0,
+        "smaa_top10_floor_off": 0.012,
+        "floor_ok": true,
+        "balanced_rank": 267
+      },
+      {
+        "fips": "48179",
+        "county": "Gray, TX",
+        "npv_190_busd": 3.952,
+        "co2_kt": 854.0,
+        "smaa_top10_floor_off": 0.0148,
+        "floor_ok": false,
+        "balanced_rank": 962
+      },
+      {
+        "fips": "22077",
+        "county": "Pointe Coupee, LA",
+        "npv_190_busd": 3.965,
+        "co2_kt": 849.0,
+        "smaa_top10_floor_off": 0.0112,
+        "floor_ok": true,
+        "balanced_rank": 71
+      },
+      {
+        "fips": "48227",
+        "county": "Howard, TX",
+        "npv_190_busd": 3.984,
+        "co2_kt": 891.0,
+        "smaa_top10_floor_off": 0.075,
+        "floor_ok": false,
+        "balanced_rank": 933
+      },
+      {
+        "fips": "42115",
+        "county": "Susquehanna, PA",
+        "npv_190_busd": 4.001,
+        "co2_kt": 644.0,
+        "smaa_top10_floor_off": 0.0182,
+        "floor_ok": true,
+        "balanced_rank": 189
       }
     ],
     "stage2_top5_private": [
@@ -495,7 +495,7 @@
       "Noble, OK",
       "Tulsa, OK",
       "Pittsburg, OK",
-      "Clark, WA"
+      "Oklahoma, OK"
     ],
     "focus_in_shortlist": {
       "Clark, WA": true,
@@ -503,9 +503,9 @@
       "Grant, WA": true
     },
     "focus_stage2_rank": {
-      "Clark, WA": 1,
-      "Franklin, NY": 2,
-      "Grant, WA": 28
+      "Clark, WA": 72,
+      "Franklin, NY": 79,
+      "Grant, WA": 101
     }
   },
   "weights_table": {
@@ -520,14 +520,14 @@
       "cost": 0.15
     },
     "Monetized, $190/t (variance shares)": {
-      "energy_carbon": 0.372,
+      "energy_carbon": 0.228,
       "water": 0.0,
-      "climate_resilience": 0.012,
-      "grid_infrastructure": 0.077,
+      "climate_resilience": 0.01,
+      "grid_infrastructure": 0.066,
       "land": 0.0,
       "community": 0.0,
-      "permitting": 0.0,
-      "cost": 0.539
+      "permitting": 0.155,
+      "cost": 0.541
     },
     "CRITIC (pillar sums)": {
       "energy_carbon": 0.18,

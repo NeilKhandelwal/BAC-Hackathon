@@ -50,23 +50,23 @@ water                   0.125                      0.236     0.119   0.121
 
 industry picks (gate passers without a data center):
                 county  p_industry  rank_monetized_190  rank_balanced
-41051    Multnomah, OR       0.846                 412           1005
-48141      El Paso, TX       0.829                  31           1360
-37183         Wake, NC       0.702                 190            430
-36055       Monroe, NY       0.693                  23           1106
-27123       Ramsey, MN       0.689                1289           1185
-48135        Ector, TX       0.639                  86            998
-42043      Dauphin, PA       0.626                 226            386
-42133         York, PA       0.606                 141            370
-21111    Jefferson, KY       0.587                 857            952
-45083  Spartanburg, SC       0.584                  42            972
+41051    Multnomah, OR       0.846                 380           1005
+48141      El Paso, TX       0.829                   7           1360
+37183         Wake, NC       0.702                 155            430
+36055       Monroe, NY       0.693                 917           1106
+27123       Ramsey, MN       0.689                1217           1185
+48135        Ector, TX       0.639                  54            998
+42043      Dauphin, PA       0.626                 191            386
+42133         York, PA       0.606                 107            370
+21111    Jefferson, KY       0.587                 827            952
+45083  Spartanburg, SC       0.584                  12            972
 
 five biggest disagreements (revealed vs monetized $190, combined top 20):
               county  rank_revealed  rank_monetized_190  rank_balanced  has_dc
-17031       Cook, IL             19                1409            641    True
-32003      Clark, NV             18                1408            719    True
-26163      Wayne, MI              3                1386            304    True
-27053   Hennepin, MN             16                1320           1139    True
-42003  Allegheny, PA             10                1271            401    True
+17031       Cook, IL             19                1327            641    True
+32003      Clark, NV             18                1326            719    True
+26163      Wayne, MI              3                1303            304    True
+27053   Hennepin, MN             16                1244           1139    True
+42003  Allegheny, PA             10                1203            401    True
 
 focus: {'Clark, WA': {'p_industry': 0.327, 'rank_revealed': 103, 'has_dc': False}, 'Franklin, NY': {'p_industry': 0.038, 'rank_revealed': 548, 'has_dc': False}, 'Grant, WA': {'p_industry': 0.284, 'rank_revealed': 120, 'has_dc': True}}

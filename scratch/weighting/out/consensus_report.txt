@@ -1,59 +1,59 @@
 consensus top 10, all six methods:
-               county  balanced  monetized  smaa  critic  entropy  revealed  borda_all
-fips                                                                                  
-41067  Washington, OR       120        652    14       1        6         9         54
-53011       Clark, WA         7          1     5      27      338       103         50
-53075     Whitman, WA         3         10     1      78      318       660         49
-53025       Grant, WA         1         92     2      12       50       120         48
-19163       Scott, IA         6        611     7       6      257       122         44
-47181       Wayne, TN         2        560     3     208      895      1475         37
-26163       Wayne, MI       304       1386    16      20        9         3         36
-48029       Bexar, TX      1122        222   271     524        1         7         34
-49035   Salt Lake, UT       489         93   227      31        3         8         31
-48113      Dallas, TX       179        142    19     264       12         1         31
+                county  balanced  monetized  smaa  critic  entropy  revealed  borda_all
+fips                                                                                   
+41067   Washington, OR       120        623    14       1        6         9         54
+53025        Grant, WA         1        647     2      12       50       120         48
+19163        Scott, IA         6        582     7       6      257       122         44
+53075      Whitman, WA         3        296     1      78      318       660         38
+47181        Wayne, TN         2        530     3     208      895      1475         37
+26163        Wayne, MI       304       1303    16      20        9         3         36
+48029        Bexar, TX      1122        187   271     524        1         7         34
+49035    Salt Lake, UT       489         60   227      31        3         8         31
+48113       Dallas, TX       179        108    19     264       12         1         31
+17161  Rock Island, IL       200       1064     9       2      278       106         31
 
 consensus top 10, without entropy:
                 county  balanced  monetized  smaa  critic  entropy  revealed  borda_no_entropy
 fips                                                                                          
-53011        Clark, WA         7          1     5      27      338       103                50
-53075      Whitman, WA         3         10     1      78      318       660                49
-53025        Grant, WA         1         92     2      12       50       120                48
-19163        Scott, IA         6        611     7       6      257       122                44
-41067   Washington, OR       120        652    14       1        6         9                39
-47181        Wayne, TN         2        560     3     208      895      1475                37
-17161  Rock Island, IL       200       1099     9       2      278       106                31
-40051        Grady, OK         9        624     6     266      189       504                27
-40097        Mayes, OK         4        271    12     118       29      1003                26
-41051    Multnomah, OR      1005        412   271       4       59        12                26
+53025        Grant, WA         1        647     2      12       50       120                48
+19163        Scott, IA         6        582     7       6      257       122                44
+41067   Washington, OR       120        623    14       1        6         9                39
+53075      Whitman, WA         3        296     1      78      318       660                38
+47181        Wayne, TN         2        530     3     208      895      1475                37
+17161  Rock Island, IL       200       1064     9       2      278       106                31
+53011        Clark, WA         7        365     5      27      338       103                30
+40051        Grady, OK         9        595     6     266      189       504                27
+40097        Mayes, OK         4        236    12     118       29      1003                26
+41051    Multnomah, OR      1005        380   271       4       59        12                26
 
-focus: {"Clark, WA": {"balanced": 7, "monetized": 1, "smaa": 5, "critic": 27, "entropy": 338, "revealed": 103, "borda_all": 50, "borda_no_entropy": 50}, "Franklin, NY": {"balanced": 986, "monetized": 2, "smaa": 271, "critic": 64, "entropy": 392, "revealed": 548, "borda_all": 19, "borda_no_entropy": 19}, "Grant, WA": {"balanced": 1, "monetized": 92, "smaa": 2, "critic": 12, "entropy": 50, "revealed": 120, "borda_all": 48, "borda_no_entropy": 48}}
+focus: {"Clark, WA": {"balanced": 7, "monetized": 365, "smaa": 5, "critic": 27, "entropy": 338, "revealed": 103, "borda_all": 30, "borda_no_entropy": 30}, "Franklin, NY": {"balanced": 986, "monetized": 409, "smaa": 271, "critic": 64, "entropy": 392, "revealed": 548, "borda_all": 0, "borda_no_entropy": 0}, "Grant, WA": {"balanced": 1, "monetized": 647, "smaa": 2, "critic": 12, "entropy": 50, "revealed": 120, "borda_all": 48, "borda_no_entropy": 48}}
 
-engine with implied weights {'energy_carbon': 0.372, 'water': 0.0, 'climate_resilience': 0.012, 'grid_infrastructure': 0.077, 'land': 0.0, 'community': 0.0, 'permitting': 0.0, 'cost': 0.539}
-  top 10: ['Grady, OK', 'Scurry, TX', 'Caddo, OK', 'Garfield, OK', 'Young, TX', 'Nolan, TX', 'Ector, TX', 'Howard, TX', 'Ellis, TX', 'Haskell, TX']
-  NPV top 10: ['Clark, WA', 'Franklin, NY', 'Schuyler, NY', 'Clinton, NY', 'Chautauqua, NY', 'Tompkins, NY', 'Niagara, NY', 'Walla Walla, WA', 'Chesterfield, SC', 'Whitman, WA'] overlap 0
+engine with implied weights {'energy_carbon': 0.228, 'water': 0.0, 'climate_resilience': 0.01, 'grid_infrastructure': 0.066, 'land': 0.0, 'community': 0.0, 'permitting': 0.155, 'cost': 0.541}
+  top 10: ['Grady, OK', 'Caddo, OK', 'Garfield, OK', 'Oklahoma, OK', 'Canadian, OK', 'Payne, OK', 'Lincoln, OK', 'McClain, OK', 'Cleveland, OK', 'Beaver, OK']
+  NPV top 10: ['Chesterfield, SC', 'Kootenai, ID', 'Marlboro, SC', 'Florence, SC', 'Aiken, SC', 'Emery, UT', 'El Paso, TX', 'Grayson, TX', 'Bossier, LA', 'Houston, TX'] overlap 0
 
-shortlist (SMAA top-10 acceptability, floor off, >= 1%): 161 counties; focus in it: {'Clark, WA': True, 'Franklin, NY': True, 'Grant, WA': True} stage-2 ranks: {'Clark, WA': 1, 'Franklin, NY': 2, 'Grant, WA': 28}
-                 county  npv_190_busd  co2_kt  smaa_top10_floor_off  floor_ok  balanced_rank
-fips                                                                                        
-53011         Clark, WA         3.496   678.0                0.2062      True              7
-36033      Franklin, NY         3.545   260.0                0.2434     False            986
-36019       Clinton, NY         3.577   261.0                0.0942     False           1031
-36013    Chautauqua, NY         3.592   262.0                0.0564     False           1123
-36063       Niagara, NY         3.674   268.0                0.0298     False           1097
-53071   Walla Walla, WA         3.678   701.0                0.0134      True             18
-45025  Chesterfield, SC         3.682   667.0                0.0320      True             17
-53075       Whitman, WA         3.741   682.0                0.3128      True              3
-45069      Marlboro, SC         3.753   669.0                0.0194      True             28
-36065        Oneida, NY         3.808   262.0                0.0768     False           1065
-stage 2, private cost only, top 5: ['Payne, OK', 'Noble, OK', 'Tulsa, OK', 'Pittsburg, OK', 'Clark, WA']
+shortlist (SMAA top-10 acceptability, floor off, >= 1%): 161 counties; focus in it: {'Clark, WA': True, 'Franklin, NY': True, 'Grant, WA': True} stage-2 ranks: {'Clark, WA': 72, 'Franklin, NY': 79, 'Grant, WA': 101}
+                  county  npv_190_busd  co2_kt  smaa_top10_floor_off  floor_ok  balanced_rank
+fips                                                                                         
+45025   Chesterfield, SC         3.682   667.0                0.0320      True             17
+45069       Marlboro, SC         3.753   669.0                0.0194      True             28
+49015          Emery, UT         3.822   688.0                0.0680     False           1078
+48139          Ellis, TX         3.907   843.0                0.0412      True            157
+48503          Young, TX         3.934   840.0                0.0760     False            926
+37045      Cleveland, NC         3.950   686.0                0.0120      True            267
+48179           Gray, TX         3.952   854.0                0.0148     False            962
+22077  Pointe Coupee, LA         3.965   849.0                0.0112      True             71
+48227         Howard, TX         3.984   891.0                0.0750     False            933
+42115    Susquehanna, PA         4.001   644.0                0.0182      True            189
+stage 2, private cost only, top 5: ['Payne, OK', 'Noble, OK', 'Tulsa, OK', 'Pittsburg, OK', 'Oklahoma, OK']
 
 weights:
                       Balanced (judgment)  Monetized, $190/t (variance shares)  CRITIC (pillar sums)  Entropy (pillar sums)  Revealed preference
-energy_carbon                      0.153                                0.372                 0.180                  0.268                0.173
+energy_carbon                      0.153                                0.228                 0.180                  0.268                0.173
 water                              0.119                                0.000                 0.121                  0.037                0.125
-climate_resilience                 0.119                                0.012                 0.254                  0.091                0.228
-grid_infrastructure                0.153                                0.077                 0.150                  0.430                0.083
+climate_resilience                 0.119                                0.010                 0.254                  0.091                0.228
+grid_infrastructure                0.153                                0.066                 0.150                  0.430                0.083
 land                               0.068                                0.000                 0.044                  0.008                0.129
 community                          0.085                                0.000                 0.136                  0.141                0.146
-permitting                         0.153                                0.000                 0.096                  0.024                0.056
-cost                               0.150                                0.539                 0.018                  0.002                0.060
+permitting                         0.153                                0.155                 0.096                  0.024                0.056
+cost                               0.150                                0.541                 0.018                  0.002                0.060

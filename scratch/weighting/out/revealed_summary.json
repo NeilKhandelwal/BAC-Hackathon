@@ -341,70 +341,70 @@
       "fips": "41051",
       "county": "Multnomah, OR",
       "p_industry": 0.8456174679158555,
-      "rank_monetized_190": 412,
+      "rank_monetized_190": 380,
       "rank_balanced": 1005
     },
     {
       "fips": "48141",
       "county": "El Paso, TX",
       "p_industry": 0.8286598701208934,
-      "rank_monetized_190": 31,
+      "rank_monetized_190": 7,
       "rank_balanced": 1360
     },
     {
       "fips": "37183",
       "county": "Wake, NC",
       "p_industry": 0.7022508655534964,
-      "rank_monetized_190": 190,
+      "rank_monetized_190": 155,
       "rank_balanced": 430
     },
     {
       "fips": "36055",
       "county": "Monroe, NY",
       "p_industry": 0.6929257665446183,
-      "rank_monetized_190": 23,
+      "rank_monetized_190": 917,
       "rank_balanced": 1106
     },
     {
       "fips": "27123",
       "county": "Ramsey, MN",
       "p_industry": 0.6891427977842073,
-      "rank_monetized_190": 1289,
+      "rank_monetized_190": 1217,
       "rank_balanced": 1185
     },
     {
       "fips": "48135",
       "county": "Ector, TX",
       "p_industry": 0.6385749145058941,
-      "rank_monetized_190": 86,
+      "rank_monetized_190": 54,
       "rank_balanced": 998
     },
     {
       "fips": "42043",
       "county": "Dauphin, PA",
       "p_industry": 0.6258085241601077,
-      "rank_monetized_190": 226,
+      "rank_monetized_190": 191,
       "rank_balanced": 386
     },
     {
       "fips": "42133",
       "county": "York, PA",
       "p_industry": 0.6059334889433687,
-      "rank_monetized_190": 141,
+      "rank_monetized_190": 107,
       "rank_balanced": 370
     },
     {
       "fips": "21111",
       "county": "Jefferson, KY",
       "p_industry": 0.5869408783381765,
-      "rank_monetized_190": 857,
+      "rank_monetized_190": 827,
       "rank_balanced": 952
     },
     {
       "fips": "45083",
       "county": "Spartanburg, SC",
       "p_industry": 0.5837397615729991,
-      "rank_monetized_190": 42,
+      "rank_monetized_190": 12,
       "rank_balanced": 972
     }
   ],
@@ -475,41 +475,41 @@
       "index": "17031",
       "county": "Cook, IL",
       "rank_revealed": 19,
-      "rank_monetized_190": 1409,
+      "rank_monetized_190": 1327,
       "rank_balanced": 641,
-      "diff": 1390
+      "diff": 1308
     },
     {
       "index": "32003",
       "county": "Clark, NV",
       "rank_revealed": 18,
-      "rank_monetized_190": 1408,
+      "rank_monetized_190": 1326,
       "rank_balanced": 719,
-      "diff": 1390
+      "diff": 1308
     },
     {
       "index": "26163",
       "county": "Wayne, MI",
       "rank_revealed": 3,
-      "rank_monetized_190": 1386,
+      "rank_monetized_190": 1303,
       "rank_balanced": 304,
-      "diff": 1383
+      "diff": 1300
     },
     {
       "index": "27053",
       "county": "Hennepin, MN",
       "rank_revealed": 16,
-      "rank_monetized_190": 1320,
+      "rank_monetized_190": 1244,
       "rank_balanced": 1139,
-      "diff": 1304
+      "diff": 1228
     },
     {
       "index": "42003",
       "county": "Allegheny, PA",
       "rank_revealed": 10,
-      "rank_monetized_190": 1271,
+      "rank_monetized_190": 1203,
       "rank_balanced": 401,
-      "diff": 1261
+      "diff": 1193
     }
   ],
   "focus": {

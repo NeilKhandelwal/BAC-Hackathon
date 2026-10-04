@@ -81,7 +81,9 @@ def main():
     # Tax comparisons at $190/t.
     out["tax"] = {"with_tax_5y": ranked(base), "no_tax": ranked(run({"tax": False})[2]),
                   "with_tax_4y": ranked(run({"tax_refresh_years": 4})[2]),
-                  "with_tax_6y": ranked(run({"tax_refresh_years": 6})[2])}
+                  "with_tax_6y": ranked(run({"tax_refresh_years": 6})[2]),
+                  "ny_exempt": ranked(run({"ny_exempt": True})[2]),
+                  "refresh_taxed_everywhere": ranked(run({"other_refresh_exempt": False})[2])}
 
     # Variance shares that can't go negative, at each carbon price, with tax in the model.
     out["shares"] = {c: variance_shares(base, c) for c in p["carbon_prices"]}
