@@ -164,6 +164,84 @@ def main():
                  "p_beats_clark": float((g_bpa < T[:, i[CLARK]]).mean()),
                  "p_beats_franklin": float((g_bpa < T[:, i[FRANKLIN]]).mean())}
 
+    # BPA fairness scenario: Clark and Grant both pay the drawn BPA new-load rate (one tariff, one draw)
+    # and emit at BPA's rate with no multiplier. Franklin and every other county keep the state average.
+    T_bpa = T.copy()
+    for f in (CLARK, GRANT):
+        k = i[f]
+        r = c.iloc[k]
+        energy = r.facility_mwh * r.price_usd_mwh * price_m[:, s_idx[k]] * af
+        carbon = r.co2_t * carbon_m[:, r_idx[k]] * cprice * af
+        rest = (r.delay_months_ttp * delay + (extra["active"][k] * months + extra["fixed_months"][k]) * delay
+                + r.water + r.hazard)
+        assert np.allclose(energy + carbon + rest, T[:, k]), "BPA self-check failed"
+        T_bpa[:, k] = (rest + r.facility_mwh * bpa_usd * af
+                       + impact.co2_tonnes(r.facility_mwh, impact.BPA_CO2_LB_MWH) * cprice * af)
+    first_b = T_bpa.argmin(axis=1)
+    top3_b = np.argpartition(T_bpa, 3, axis=1)[:, :3]
+    p1_b = pd.Series(np.bincount(first_b, minlength=n) / N, index=fips)
+    p3_b = pd.Series(np.bincount(top3_b.ravel(), minlength=n) / N, index=fips)
+    cf_b = T_bpa[:, i[CLARK]] < T_bpa[:, i[FRANKLIN]]
+    bpa = {
+        "p_first_top": [{"fips": f, "county": c.county[f], "share": round(float(v), 3)}
+                        for f, v in p1_b.sort_values(ascending=False).head(10).items() if v > 0],
+        "p_top3_top": [{"fips": f, "county": c.county[f], "share": round(float(v), 3)}
+                       for f, v in p3_b.sort_values(ascending=False).head(10).items() if v > 0],
+        "focus": {c.county[f]: {"p_first": float(p1_b[f]), "p_top3": float(p3_b[f])} for f in (CLARK, FRANKLIN, GRANT)},
+        "cluster_p_first": pd.Series(cluster.to_numpy()[first_b]).value_counts(normalize=True).round(3).to_dict(),
+        "p_clark_beats_franklin": float(cf_b.mean()),
+        "p_clark_beats_grant": float((T_bpa[:, i[CLARK]] < T_bpa[:, i[GRANT]]).mean()),
+        "draws_changing_winner": float((first != first_b).mean()),
+        "p_clark_beats_franklin_by_bpa_rate_tercile": {},
+    }
+    cuts = np.quantile(bpa_usd, [1 / 3, 2 / 3])
+    for k, (lo, hi) in enumerate([(-np.inf, cuts[0]), (cuts[0], cuts[1]), (cuts[1], np.inf)]):
+        sel = (bpa_usd > lo) & (bpa_usd <= hi)
+        bpa["p_clark_beats_franklin_by_bpa_rate_tercile"][["low", "mid", "high"][k]] = {
+            "range": [round(float(bpa_usd[sel].min()), 1), round(float(bpa_usd[sel].max()), 1)],
+            "p": round(float(cf_b[sel].mean()), 3)}
+
+    # BPA rate below which Clark beats Franklin at base prices, by carbon price, for the chart.
+    i_c = i[CLARK]
+    clark_bpa_co2 = impact.co2_tonnes(cl.facility_mwh, impact.BPA_CO2_LB_MWH)
+
+    def clark_breakeven_rate(cp, D=25e6, M=12):
+        franklin = (fixed(fr) + fr.delay_months_ttp * D + (extra["active"][i_f] * M + extra["fixed_months"][i_f]) * D
+                    + fr.co2_t * cp * af)
+        clark_rest = (cl.water + cl.hazard + cl.delay_months_ttp * D
+                      + (extra["active"][i_c] * M + extra["fixed_months"][i_c]) * D + clark_bpa_co2 * cp * af)
+        return (franklin - clark_rest) / (cl.facility_mwh * af)
+
+    bpa["clark_breakeven_bpa_rate_usd_mwh"] = {f"{cp}_usd_t": round(float(clark_breakeven_rate(cp)), 1)
+                                               for cp in (100, 190, 300)}
+    bpa["clark_breakeven_bpa_rate_usd_mwh_10M_delay"] = round(float(clark_breakeven_rate(190, D=10e6)), 1)
+    bpa["clark_breakeven_bpa_rate_usd_mwh_50M_delay"] = round(float(clark_breakeven_rate(190, D=50e6)), 1)
+
+    fig, ax = plt.subplots(figsize=(10, 6.5), dpi=200)
+    ws = np.where(np.isin(extra["state"][first_b], ["WA", "NY"]), extra["state"][first_b], "other")
+    style_b = {"WA": ("#1f618d", "Washington county is #1"), "NY": ("#c0392b", "New York county is #1"),
+               "other": ("#b8b8b8", "Another state's county is #1")}
+    for s in ("other", "WA", "NY"):
+        sel = ws == s
+        ax.scatter(cprice[sel], bpa_usd[sel], s=14, alpha=0.8, color=style_b[s][0],
+                   label=f"{style_b[s][1]} ({sel.mean():.0%} of draws)")
+    cps = np.linspace(100, 300, 50)
+    for D, ls in ((25e6, "-"), (10e6, ":"), (50e6, "--")):
+        ax.plot(cps, [clark_breakeven_rate(x, D=D) for x in cps], ls, color="black", lw=1.2,
+                label=f"Clark = Franklin at base prices, delay \\${D / 1e6:.0f}M per month")
+    ax.set_xlabel(r"Carbon price, \$ per tonne CO2")
+    ax.set_ylabel(r"BPA new-load rate paid by Clark and Grant, \$ per MWh")
+    ax.set_title("With BPA supply for Clark and Grant, the rate decides #1", fontsize=13, loc="left")
+    ax.legend(fontsize=8, frameon=True, framealpha=0.95, edgecolor="none", loc="upper left")
+    ax.grid(alpha=0.3)
+    fig.text(0.01, 0.005, "Each dot is one of the same 1,000 draws. Clark and Grant: BPA rate U(\\$80, \\$132)/MWh "
+             "and 212 lb CO2/MWh. Franklin and all other counties: state average price ±20%.\n"
+             "No new-load rate is sourced for New York. Other Washington counties keep the state average. "
+             "Below a line, Clark costs less than Franklin.", fontsize=7, color="#555")
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.savefig(IMG / "mc_winners_bpa.png")
+    plt.close(fig)
+
     # Chart: which state wins, by carbon price and delay cost.
     fig, ax = plt.subplots(figsize=(10, 6.5), dpi=200)
     win_state = np.where(np.isin(extra["state"][first], ["WA", "NY"]), extra["state"][first], "other")
@@ -207,7 +285,7 @@ def main():
         "gap_variance_share_by_driver": drv_share,
         "winner_state_price_mult": {k: {"mean": round(float(v["mean"]), 3), "wins": int(v["size"])}
                                     for k, v in lucky.iterrows()},
-        "within_cluster": within,
+        "within_cluster": within, "bpa_scenario": bpa,
         "chart": "docs/img/mc_winners.png",
     }
     (OUT / "montecarlo_summary.json").write_text(json.dumps(summary, indent=2))
@@ -226,6 +304,7 @@ def main():
     print(f"gap regression R2 {r2:.3f}; variance share by driver:", {k: round(v, 3) for k, v in drv_share.items()})
     print("winner state price multiplier by cluster:\n", lucky.head(12).round(3).to_string())
     print("within cluster:", within)
+    print("BPA scenario:", json.dumps(bpa, indent=1))
 
 
 if __name__ == "__main__":

@@ -46,7 +46,7 @@ PRIVATE = ["energy", "water", "hazard", "time_to_power", "moratorium"]
 COMPONENTS = ["energy", "carbon", "water", "hazard", "time_to_power", "moratorium"]
 PILLAR_OF = {"energy": "cost", "carbon": "energy_carbon", "water": "water", "hazard": "climate_resilience",
              "time_to_power": "grid_infrastructure", "moratorium": "permitting"}
-GRANT = "53025"
+GRANT, CLARK, FRANKLIN = "53025", "53011", "36033"
 BPA_USD_MWH = (80, 132)  # BPA rate range for a new large load, research/impact.md
 
 
@@ -153,6 +153,52 @@ def grant_variants(costs, p):
     return out
 
 
+def bpa_variants(costs, fips, p):
+    """A county at its regional rate and state price, and with BPA-like supply at $80 and $132/MWh."""
+    af = annuity(p["rate"], p["years"])
+    r = costs.loc[fips]
+    co2 = impact.co2_tonnes(r.facility_mwh, impact.BPA_CO2_LB_MWH)
+    out = {"regional": {"co2_t": float(r.co2_t), "private": float(r.private)}}
+    for usd in BPA_USD_MWH:
+        out[f"bpa_{usd}"] = {"co2_t": float(co2), "private": float(r.private - r.energy + r.facility_mwh * usd * af)}
+    return out
+
+
+def winning_conditions(costs, p, carbon_prices=(0, 51, 100, 190, 300)):
+    """What each contender needs to win, at base delay cost and NY moratorium months.
+
+    Clark and Grant can take BPA-like supply; Franklin stays at the NY average because there is no
+    sourced new-load rate for it.
+    """
+    af = annuity(p["rate"], p["years"])
+    cl, fr, gr = costs.loc[CLARK], costs.loc[FRANKLIN], costs.loc[GRANT]
+    bpa_co2 = {k: impact.co2_tonnes(costs.loc[k].facility_mwh, impact.BPA_CO2_LB_MWH) for k in (CLARK, GRANT)}
+
+    def rest(r):  # everything except energy and carbon
+        return r.private - r.energy
+
+    # BPA rate below which Clark (BPA supply) costs less than Franklin (NY average), by carbon price.
+    clark_vs_franklin = {c: float((fr.private + fr.co2_t * c * af - rest(cl) - bpa_co2[CLARK] * c * af)
+                                  / (cl.facility_mwh * af)) for c in carbon_prices}
+    # Grant against Clark at $190/t: on the same supply, what Grant would have to save.
+    gap_avg = float(gr.total_190 - cl.total_190)
+    gap_bpa = {usd: float((rest(gr) + gr.facility_mwh * usd * af + bpa_co2[GRANT] * 190 * af)
+                          - (rest(cl) + cl.facility_mwh * usd * af + bpa_co2[CLARK] * 190 * af))
+               for usd in BPA_USD_MWH}
+    return {
+        "clark_bpa_co2_t": float(bpa_co2[CLARK]), "grant_bpa_co2_t": float(bpa_co2[GRANT]),
+        "franklin_co2_t": float(fr.co2_t),
+        "clark_bpa_beats_franklin_below_usd_mwh": clark_vs_franklin,
+        "grant_minus_clark_190_state_avg_usd": gap_avg,
+        "grant_needs_months_less_delay_state_avg": gap_avg / p["delay_usd_month"],
+        "grant_needs_usd_mwh_discount_state_avg": gap_avg / (gr.facility_mwh * af),
+        "grant_minus_clark_190_bpa_usd": gap_bpa,
+        "grant_needs_months_less_delay_bpa": {k: v / p["delay_usd_month"] for k, v in gap_bpa.items()},
+        "grant_time_to_power_months": float(gr.delay_months_ttp), "clark_time_to_power_months": float(cl.delay_months_ttp),
+        "franklin_new_load_rate": "none sourced; NY state average used",
+    }
+
+
 def breakevens(costs, frontier, variants, p):
     """Carbon price at which each cleaner frontier county's private + carbon cost drops below Grant's."""
     af = annuity(p["rate"], p["years"])
@@ -172,7 +218,7 @@ def breakevens(costs, frontier, variants, p):
     return pd.DataFrame(rows)
 
 
-def plot(costs, frontier, variants, loudoun, p):
+def plot(costs, frontier, variants, loudoun, p, clark_variants=None):
     af = annuity(p["rate"], p["years"])
     y = costs.private / af / 1e6
     x = costs.co2_t / 1e3
@@ -213,6 +259,12 @@ def plot(costs, frontier, variants, loudoun, p):
     ax.plot([bx, bx], [lo, hi], color="#1f618d", lw=3, zorder=5)
     ax.scatter([bx, bx], [lo, hi], marker="_", s=200, color="#1f618d", zorder=5,
                label=r"Grant with BPA-like supply: 212 lb/MWh, \$80 to \$132/MWh")
+    if clark_variants is not None:
+        cx = clark_variants["bpa_80"]["co2_t"] / 1e3
+        clo, chi = clark_variants["bpa_80"]["private"] / af / 1e6, clark_variants["bpa_132"]["private"] / af / 1e6
+        ax.plot([cx, cx], [clo, chi], color="#7d3c98", lw=3, zorder=5)
+        ax.scatter([cx, cx], [clo, chi], marker="_", s=200, color="#7d3c98", zorder=5,
+                   label=r"Clark with BPA-like supply: 212 lb/MWh, \$80 to \$132/MWh")
     if loudoun is not None:
         ax.scatter(loudoun.co2_t / 1e3, loudoun.private / af / 1e6, marker="D", s=50, facecolors="none",
                    edgecolors="black", zorder=5, label="Loudoun, VA (fails the queue-age gate; reference)")
@@ -223,7 +275,8 @@ def plot(costs, frontier, variants, loudoun, p):
     ax.legend(fontsize=8, loc="upper left", frameon=False)
     fig.text(0.01, 0.005, r"Load factor 0.8, 7% over 25 years, \$25M per month of delay, \$10B asset value, "
              r"\$7 per 1,000 gal water. Cooling: evaporative where Aqueduct water stress <= 2, else dry." "\n"
-             "New York counties carry a 12-month state moratorium cost. Energy uses state average industrial prices.",
+             "New York counties carry a 12-month state moratorium cost. Energy uses state average industrial prices. "
+             "No new-load rate is sourced for New York, so Franklin has no BPA-style range.",
              fontsize=7, color="#555")
     fig.tight_layout(rect=(0, 0.035, 1, 1))
     path = IMG / "cost_vs_co2.png"
@@ -278,7 +331,9 @@ def main():
     sens = pd.DataFrame(sens)
 
     loudoun = allc.loc["51107"] if "51107" in allc.index else None
-    img = plot(costs, frontier, variants, loudoun, p)
+    clark_variants = bpa_variants(costs, CLARK, p)
+    conditions = winning_conditions(costs, p)
+    img = plot(costs, frontier, variants, loudoun, p, clark_variants)
 
     keep = ["county", "cooling", "pue", "co2_t", "water_mgal", "price_usd_mwh", "hazard_alr", "queue_age_used",
             "queue_imputed", "delay_months_moratorium"] + COMPONENTS[:1] + PRIVATE[1:] + ["private"] + \
@@ -307,6 +362,7 @@ def main():
                           "carbon_190_musd": round(costs.loc[f, "carbon_190"] / 1e6, 1),
                           "co2_kt": round(costs.loc[f, "co2_t"] / 1e3)}
                   for f in FOCUS if f in costs.index},
+        "clark_bpa_variants": clark_variants, "winning_conditions": conditions,
         "chart": str(img.relative_to(ROOT)),
     }
     (OUT / "monetize_summary.json").write_text(json.dumps(summary, indent=2, default=str))
@@ -337,6 +393,9 @@ def main():
     print(be.to_string(index=False))
     print("\nsensitivities:")
     print(sens.to_string(index=False))
+    print("clark bpa variants ($M/yr, kt):", {k: (round(v["private"] / af / 1e6), round(v["co2_t"] / 1e3))
+                                            for k, v in clark_variants.items()})
+    print("winning conditions:", json.dumps(conditions, indent=1))
     print("chart:", img)
 
 

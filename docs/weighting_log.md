@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:52 UTC
+- **Updated:** 2026-10-04 01:55 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,13 +17,13 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** Phase 4 done. Next: the BPA fairness fix (item 3 below), then Phase 5. The user
+- **Phase and step:** BPA fairness fix done. Next: Phase 5 (item 4 below). The user
   approved running Phases 3 and 4 back to back without a check-in unless
   something blocks.
 - **Done:** Phase 0. Phase 1 (`monetize.py`). Monte Carlo
   (`montecarlo.py`). Phase 2 (`smaa.py`). `docs/weighting.md` stub with
   the hazard-downtime and floor notes. Results are in the history.
-- **In progress:** BPA fairness fix in `monetize.py` and `montecarlo.py`.
+- **In progress:** Phase 5: `scratch/weighting/consensus.py`, then the advisor check, then `docs/weighting.md`.
 - **Exact next action:** in order, per approved decisions 13 to 16:
   1. `scratch/weighting/critic.py`: raw-value CRITIC and entropy only
      (winsorize 1st/99th, min-max, direction applied, column-level
@@ -737,3 +737,61 @@ Franklin NY: 0.04, rank 548.
 **Caveat.** FracTracker's existing facilities reflect past siting, much
 of it near metros for latency, not where a 300 MW AI campus would go.
 The weights describe the existing fleet, not a target.
+
+### 2026-10-04 01:55 UTC, BPA fairness fix and Monte Carlo rerun
+
+Changes: `monetize.py` now gives Clark WA the same BPA new-load scenario
+as Grant WA ($80 to $132/MWh, 212 lb CO2/MWh) and computes each
+contender's winning condition. `montecarlo.py` reruns the same 1,000
+draws (seed 42) with Clark and Grant both paying the drawn BPA rate (one
+tariff, one draw) at BPA's carbon rate with no multiplier. Franklin NY
+stays at the NY state average: there is no sourced new-load rate for New
+York, and none was invented. A self-check confirmed the original WA totals
+before the swap. Chart: `docs/img/mc_winners_bpa.png`. The cost chart
+`docs/img/cost_vs_co2.png` now shows Clark's BPA range too.
+
+**Clark with BPA supply emits less than Franklin**: 228 kt/yr against
+260 kt. Grant with BPA supply: 236 kt. So in this scenario the carbon
+price no longer decides Clark against Franklin; the BPA rate does. At base
+delay cost and NY moratorium months, Clark (BPA) costs less than Franklin
+when the BPA rate is below:
+
+| Carbon price | Breakeven BPA rate |
+| --- | --- |
+| $0/t | $101.4/MWh |
+| $100/t | $102.8/MWh |
+| $190/t | $104.0/MWh |
+| $300/t | $105.5/MWh |
+
+At $190/t the breakeven moves to $98.0/MWh at $10M per month of delay
+and $113.9/MWh at $50M.
+
+**BPA Monte Carlo shares** (same draws as the state-average run):
+
+| County | #1, BPA run | Top 3, BPA run | #1, state-average run | Top 3, state-average run |
+| --- | --- | --- | --- | --- |
+| Clark, WA | 27.2% | 31.8% | 26.6% | 35.2% |
+| Franklin, NY | 20.1% | 34.3% | 24.7% | 34.3% |
+| Grant, WA | 0% | 3.8% | 0% | 0% |
+
+Clark beats Franklin in 53% of BPA draws: 91% when the BPA rate is in the
+low tercile ($80 to $99), 51% in the middle ($99 to $114), and 18% in
+the high tercile ($114 to $132). Clark beats Grant in every draw again;
+that's structural. 39% of draws change winner against the state-average
+run. Walla Walla WA takes #1 in 6.4% of BPA draws because it keeps the WA
+state average while Clark pays BPA's rate. That's a partial application of
+the scenario, not a finding.
+
+**The two runs are bounds.** BPA's whole range sits above WA's $66/MWh
+state average while Franklin keeps NY's average, so the BPA run tilts
+against WA. The state-average run tilts toward WA. Clark leads Franklin in
+both.
+
+**What Grant needs to beat Clark.** At $190/t on the same supply, Grant
+costs $514M more (state average) or $494M to $541M more (BPA). That's
+20.6 months of delay at $25M per month, more than Grant's whole 18.5-month
+time-to-power charge, so shorter delay alone can't close it. Grant needs
+both its queue cleared to Clark's level and a rate about $2/MWh below
+Clark's; with its current queue, it needs a rate $18/MWh below Clark's.
+The rest of the gap after delay comes from dry cooling (water stress 3.6)
+raising its PUE.

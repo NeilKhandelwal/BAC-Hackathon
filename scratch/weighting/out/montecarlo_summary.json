@@ -408,5 +408,182 @@
     "WA / NWPP won by Clark": 1.0,
     "NY / NYUP won by Franklin": 1.0
   },
+  "bpa_scenario": {
+    "p_first_top": [
+      {
+        "fips": "53011",
+        "county": "Clark, WA",
+        "share": 0.272
+      },
+      {
+        "fips": "36033",
+        "county": "Franklin, NY",
+        "share": 0.201
+      },
+      {
+        "fips": "45025",
+        "county": "Chesterfield, SC",
+        "share": 0.091
+      },
+      {
+        "fips": "53071",
+        "county": "Walla Walla, WA",
+        "share": 0.064
+      },
+      {
+        "fips": "16055",
+        "county": "Kootenai, ID",
+        "share": 0.054
+      },
+      {
+        "fips": "35009",
+        "county": "Curry, NM",
+        "share": 0.052
+      },
+      {
+        "fips": "22015",
+        "county": "Bossier, LA",
+        "share": 0.047
+      },
+      {
+        "fips": "48141",
+        "county": "El Paso, TX",
+        "share": 0.044
+      },
+      {
+        "fips": "49015",
+        "county": "Emery, UT",
+        "share": 0.043
+      },
+      {
+        "fips": "48181",
+        "county": "Grayson, TX",
+        "share": 0.03
+      }
+    ],
+    "p_top3_top": [
+      {
+        "fips": "36033",
+        "county": "Franklin, NY",
+        "share": 0.343
+      },
+      {
+        "fips": "53011",
+        "county": "Clark, WA",
+        "share": 0.318
+      },
+      {
+        "fips": "36097",
+        "county": "Schuyler, NY",
+        "share": 0.282
+      },
+      {
+        "fips": "36019",
+        "county": "Clinton, NY",
+        "share": 0.187
+      },
+      {
+        "fips": "45025",
+        "county": "Chesterfield, SC",
+        "share": 0.184
+      },
+      {
+        "fips": "53071",
+        "county": "Walla Walla, WA",
+        "share": 0.16
+      },
+      {
+        "fips": "16055",
+        "county": "Kootenai, ID",
+        "share": 0.126
+      },
+      {
+        "fips": "49015",
+        "county": "Emery, UT",
+        "share": 0.099
+      },
+      {
+        "fips": "48141",
+        "county": "El Paso, TX",
+        "share": 0.088
+      },
+      {
+        "fips": "22015",
+        "county": "Bossier, LA",
+        "share": 0.083
+      }
+    ],
+    "focus": {
+      "Clark, WA": {
+        "p_first": 0.272,
+        "p_top3": 0.318
+      },
+      "Franklin, NY": {
+        "p_first": 0.201,
+        "p_top3": 0.343
+      },
+      "Grant, WA": {
+        "p_first": 0.0,
+        "p_top3": 0.038
+      }
+    },
+    "cluster_p_first": {
+      "WA / NWPP": 0.346,
+      "NY / NYUP": 0.201,
+      "SC / SRVC": 0.091,
+      "ID / NWPP": 0.054,
+      "NM / SPSO": 0.052,
+      "LA / SRMV": 0.05,
+      "TX / AZNM": 0.044,
+      "UT / NWPP": 0.043,
+      "TX / ERCT": 0.03,
+      "TX / SRMV": 0.027,
+      "NC / SRVC": 0.019,
+      "AR / SRMV": 0.013,
+      "PA / RFCE": 0.012,
+      "OK / SPSO": 0.007,
+      "OR / NWPP": 0.003,
+      "WY / NWPP": 0.002,
+      "TX / SPSO": 0.001,
+      "OH / RFCW": 0.001,
+      "VA / SRVC": 0.001,
+      "KY / SRTV": 0.001,
+      "IA / MROW": 0.001,
+      "MT / NWPP": 0.001
+    },
+    "p_clark_beats_franklin": 0.53,
+    "p_clark_beats_grant": 1.0,
+    "draws_changing_winner": 0.392,
+    "p_clark_beats_franklin_by_bpa_rate_tercile": {
+      "low": {
+        "range": [
+          80.1,
+          99.3
+        ],
+        "p": 0.907
+      },
+      "mid": {
+        "range": [
+          99.4,
+          114.3
+        ],
+        "p": 0.505
+      },
+      "high": {
+        "range": [
+          114.4,
+          132.0
+        ],
+        "p": 0.177
+      }
+    },
+    "clark_breakeven_bpa_rate_usd_mwh": {
+      "100_usd_t": 102.8,
+      "190_usd_t": 104.0,
+      "300_usd_t": 105.5
+    },
+    "clark_breakeven_bpa_rate_usd_mwh_10M_delay": 98.0,
+    "clark_breakeven_bpa_rate_usd_mwh_50M_delay": 113.9
+  },
   "chart": "docs/img/mc_winners.png"
 }

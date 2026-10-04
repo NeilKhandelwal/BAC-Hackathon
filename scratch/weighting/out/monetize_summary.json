@@ -793,6 +793,17 @@
       "carbon_190_musd": 1550.8,
       "co2_kt": 700
     },
+    "Clark, WA": {
+      "rank_private": 17,
+      "rank_190": 1,
+      "energy": 1823.1,
+      "water": 7.9,
+      "hazard": 137.4,
+      "time_to_power": 25.9,
+      "moratorium": 0.0,
+      "carbon_190_musd": 1501.7,
+      "co2_kt": 678
+    },
     "Franklin, NY": {
       "rank_private": 1309,
       "rank_190": 2,
@@ -837,6 +848,46 @@
       "carbon_190_musd": 1995.3,
       "co2_kt": 901
     }
+  },
+  "clark_bpa_variants": {
+    "regional": {
+      "co2_t": 678201.6664296761,
+      "private": 1994315205.9305081
+    },
+    "bpa_80": {
+      "co2_t": 228085.14590186728,
+      "private": 2377697398.96682
+    },
+    "bpa_132": {
+      "co2_t": 228085.14590186728,
+      "private": 3811932941.260937
+    }
+  },
+  "winning_conditions": {
+    "clark_bpa_co2_t": 228085.14590186728,
+    "grant_bpa_co2_t": 235547.34837163534,
+    "franklin_co2_t": 260367.72302311525,
+    "clark_bpa_beats_franklin_below_usd_mwh": {
+      "0": 101.40670741052492,
+      "51": 102.10234127599186,
+      "100": 102.77069538202872,
+      "190": 103.99828455638217,
+      "300": 105.49867132503638
+    },
+    "grant_minus_clark_190_state_avg_usd": 514295734.76755905,
+    "grant_needs_months_less_delay_state_avg": 20.571829390702362,
+    "grant_needs_usd_mwh_discount_state_avg": 18.05570990927814,
+    "grant_minus_clark_190_bpa_usd": {
+      "80": 494231959.3635211,
+      "132": 541155471.0355234
+    },
+    "grant_needs_months_less_delay_bpa": {
+      "80": 19.769278374540843,
+      "132": 21.646218841420936
+    },
+    "grant_time_to_power_months": 18.51334702258727,
+    "clark_time_to_power_months": 1.0349075975359323,
+    "franklin_new_load_rate": "none sourced; NY state average used"
   },
   "chart": "docs\\img\\cost_vs_co2.png"
 }

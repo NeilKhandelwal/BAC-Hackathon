@@ -35,6 +35,17 @@ focus: {
 "carbon_190_musd": 1550.8,
 "co2_kt": 700
 },
+"Clark, WA": {
+"rank_private": 17,
+"rank_190": 1,
+"energy": 1823.1,
+"water": 7.9,
+"hazard": 137.4,
+"time_to_power": 25.9,
+"moratorium": 0.0,
+"carbon_190_musd": 1501.7,
+"co2_kt": 678
+},
 "Franklin, NY": {
 "rank_private": 1309,
 "rank_190": 2,
@@ -110,4 +121,31 @@ sensitivities:
   moratorium 8 mo       35009   36033      Franklin, NY; Schuyler, NY; Clinton, NY; Chautauqua, NY; Clark, WA            0.53             93                 1               1546            0.543            0.383          -0.007            0.012                   0.079               -0.010                          0.151
  moratorium 20 mo       35009   53011 Clark, WA; Walla Walla, WA; Chesterfield, SC; Whitman, WA; Franklin, NY            5.20             74                 5               1546            0.563            0.371          -0.008            0.012                   0.081               -0.018                          0.153
 time to power off       35009   53011           Clark, WA; Whitman, WA; Asotin, WA; Saratoga, NY; Ontario, NY            0.14              8                 7               1553            0.582            0.427          -0.008            0.014                   0.000               -0.015                          0.000
+clark bpa variants ($M/yr, kt): {'regional': (171, 678), 'bpa_80': (204, 228), 'bpa_132': (327, 228)}
+winning conditions: {
+ "clark_bpa_co2_t": 228085.14590186728,
+ "grant_bpa_co2_t": 235547.34837163534,
+ "franklin_co2_t": 260367.72302311525,
+ "clark_bpa_beats_franklin_below_usd_mwh": {
+  "0": 101.40670741052492,
+  "51": 102.10234127599186,
+  "100": 102.77069538202872,
+  "190": 103.99828455638217,
+  "300": 105.49867132503638
+ },
+ "grant_minus_clark_190_state_avg_usd": 514295734.76755905,
+ "grant_needs_months_less_delay_state_avg": 20.571829390702362,
+ "grant_needs_usd_mwh_discount_state_avg": 18.05570990927814,
+ "grant_minus_clark_190_bpa_usd": {
+  "80": 494231959.3635211,
+  "132": 541155471.0355234
+ },
+ "grant_needs_months_less_delay_bpa": {
+  "80": 19.769278374540843,
+  "132": 21.646218841420936
+ },
+ "grant_time_to_power_months": 18.51334702258727,
+ "clark_time_to_power_months": 1.0349075975359323,
+ "franklin_new_load_rate": "none sourced; NY state average used"
+}
 chart: C:\Users\Vals\OneDrive\Documents\BAC-Hackathon\docs\img\cost_vs_co2.png
