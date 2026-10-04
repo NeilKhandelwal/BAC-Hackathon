@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 
 const SHOTS = "../../.impeccable/review";
@@ -440,4 +441,118 @@ test("pillar table headers and floor flags are not clipped", async ({ page }) =>
     expect(clipped).toBe(0);
     await expect(flags.first()).toHaveText("Below floor");
   }
+});
+
+test.describe("custom tabs", () => {
+  const saveAs = async (page: Page, name: string) => {
+    await page.getByRole("button", { name: "Save as tab" }).click();
+    await page.getByLabel("Tab name").fill(name);
+    await page.keyboard.press("Enter");
+  };
+
+  test("an edited scenario saves as a tab that survives a reload and a reset", async ({ page }, info) => {
+    await open(page);
+    await expect(page.getByRole("button", { name: "Save as tab" })).toHaveCount(0);
+    await page.locator("#w-water").fill("40");
+    await page.getByRole("radio", { name: "2050" }).click();
+    const saved = await topTen(page);
+    await saveAs(page, "Wet first");
+
+    const tab = page.getByRole("tab", { name: "Wet first" });
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+    await expect(tab).not.toContainText("Edited");
+    await expect(page).toHaveURL(/preset=balanced&h=2050&w=water:40&tab=Wet\+first$/);
+    expect(await topTen(page)).toEqual(saved);
+    await page.screenshot({ path: `${SHOTS}/tabs/saved-${info.project.name}.png` });
+
+    await page.reload();
+    await expect(page.locator(".rows .row").first()).toBeVisible();
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+    expect(await topTen(page)).toEqual(saved);
+
+    // Reset demo goes back to Balanced and keeps the tab
+    await page.getByRole("button", { name: "Reset demo" }).click();
+    await expect(page).toHaveURL(/\?preset=balanced$/);
+    expect(await topTen(page)).not.toEqual(saved);
+    await tab.click();
+    await expect(page.locator(".change-cause")).toHaveText("Preset: Wet first");
+    expect(await topTen(page)).toEqual(saved);
+    await expect(page.locator("#w-water")).toHaveValue("40");
+  });
+
+  test("removing a tab leaves its scenario on screen and forgets it after a reload", async ({ page }) => {
+    await open(page);
+    await page.locator("#w-water").fill("40");
+    await saveAs(page, "Wet first");
+    const saved = await topTen(page);
+    await page.getByRole("button", { name: "Remove tab" }).click();
+    await expect(page.getByRole("tab", { name: "Wet first" })).toHaveCount(0);
+    await expect(page.getByRole("tab", { name: /Balanced/ })).toContainText("Edited");
+    expect(await topTen(page)).toEqual(saved);
+    await page.reload();
+    await expect(page.locator(".rows .row").first()).toBeVisible();
+    await expect(page.getByRole("tab")).toHaveCount(3);
+  });
+
+  test("a tab's link offers to save the tab in a browser that doesn't have it", async ({ page }) => {
+    await open(page, "?preset=balanced&w=water:40&tab=Wet+first");
+    await expect(page.getByRole("tab", { name: /Balanced/ })).toContainText("Edited");
+    await expect(page.locator(".notice")).toContainText('This link carries a custom tab, "Wet first".');
+    await page.getByRole("button", { name: "Save tab" }).click();
+    await expect(page.locator(".notice")).toHaveCount(0);
+    await expect(page.getByRole("tab", { name: "Wet first" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("a link can't save a tab under a name that is already taken", async ({ page }) => {
+    await open(page, "?preset=balanced&w=water:40&tab=Balanced");
+    await page.getByRole("button", { name: "Save tab" }).click();
+    await expect(page.locator(".notice")).toContainText(`The tab from the link wasn't saved. A tab named "Balanced" already exists.`);
+    await expect(page.getByRole("tab")).toHaveCount(3);
+  });
+
+  test("a name that is already a tab is refused with a reason", async ({ page }) => {
+    await open(page);
+    await page.locator("#w-water").fill("40");
+    await saveAs(page, "balanced");
+    await expect(page.getByRole("alert")).toHaveText('A tab named "balanced" already exists.');
+    await expect(page.getByRole("tab")).toHaveCount(3);
+    await page.getByRole("button", { name: "Cancel" }).click();
+    await expect(page.getByRole("button", { name: "Save as tab" })).toBeVisible();
+  });
+
+  test("the scenario downloads as a conditions file for the engine", async ({ page }) => {
+    await open(page);
+    await page.locator("#w-water").fill("40");
+    await saveAs(page, "Wet first");
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.getByRole("button", { name: "Download YAML" }).click(),
+    ]);
+    expect(download.suggestedFilename()).toBe("wet_first.yaml");
+    const text = readFileSync(await download.path(), "utf8");
+    expect(text).toContain('name: "Wet first"');
+    expect(text).toContain("  water: 0.4");
+  });
+
+  test("a full set of long-named tabs keeps the top bar inside the viewport", async ({ page }, info) => {
+    await page.addInitScript(() => {
+      const tabs = ["one", "two", "six", "ten"].map((n) => ({ label: `Long custom tab name ${n}`, query: "?preset=balanced&w=water:40" }));
+      window.localStorage.setItem("cockpit.tabs.v1", JSON.stringify(tabs));
+    });
+    await open(page, "?preset=balanced&w=water:40&tab=Long+custom+tab+name+ten");
+    await expect(page.getByRole("tab")).toHaveCount(7);
+    const iw = page.viewportSize()!.width;
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(iw);
+    const box = await page.getByRole("button", { name: "Reset demo" }).boundingBox();
+    expect(box!.x + box!.width).toBeLessThanOrEqual(iw);
+    // the tabs scroll inside the bar, and the active one is scrolled into view
+    const last = page.getByRole("tab", { name: "Long custom tab name ten" });
+    await expect(last).toHaveAttribute("aria-selected", "true");
+    await expect(last).toBeInViewport({ ratio: 0.99 });
+    // the fifth save is refused with a reason, not a silent no-op
+    await page.locator("#w-water").fill("30");
+    await expect(page.getByRole("button", { name: "Save as tab" })).toHaveCount(0);
+    await expect(page.getByText("Remove a custom tab to save another.")).toBeVisible();
+    await page.screenshot({ path: `${SHOTS}/tabs/full-${info.project.name}.png` });
+  });
 });

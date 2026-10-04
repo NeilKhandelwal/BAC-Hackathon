@@ -4,9 +4,20 @@
 //   ?preset=balanced&h=2050&s=rcp45&cool=evaporative
 //    &w=energy_carbon:30,water:20        weights in percent
 //    &g=max_queue_median_age_years:3,exclude_moratorium_state_active:1,max_grid_co2_lb_mwh:off
+//    &tab=Cheap+and+clean                 name of the custom tab the scenario was saved as
 //    &c=53025&cmp=51107                  selected and comparison county
 
 import type { CockpitData, Conditions, GateValue, Preset } from "../data/types";
+
+// A custom tab is a preset the user saved from a built-in one. A link always
+// names the built-in base, so it opens in a browser that never saved the tab.
+export interface CustomPreset extends Preset {
+  base: string;
+}
+
+export const customId = (label: string) => `custom:${label}`;
+
+const baseOf = (data: CockpitData, p: Preset): Preset => ("base" in p ? presetOf(data, (p as CustomPreset).base) : p);
 
 export interface ViewState {
   conditions: Conditions;
@@ -43,11 +54,11 @@ export function isEdited(data: CockpitData, c: Conditions): boolean {
   return false;
 }
 
-export function encode(data: CockpitData, v: ViewState): string {
-  const c = v.conditions;
-  const p = presetOf(data, c.presetId);
+/** The scenario part of a link: a built-in preset plus what differs from it. */
+export function scenarioParams(data: CockpitData, c: Conditions): URLSearchParams {
+  const p = baseOf(data, presetOf(data, c.presetId));
   const q = new URLSearchParams();
-  q.set("preset", c.presetId);
+  q.set("preset", p.presetId);
   if (c.horizon !== p.horizon) q.set("h", String(c.horizon));
   if (c.scenario !== p.scenario) q.set("s", c.scenario);
   if (c.facility.cooling !== p.facility.cooling) q.set("cool", c.facility.cooling);
@@ -62,13 +73,25 @@ export function encode(data: CockpitData, v: ViewState): string {
       return `${k}:${x === null ? "off" : x === true ? 1 : x === false ? 0 : x}`;
     });
   if (g.length) q.set("g", g.join(","));
+  return q;
+}
+
+export const queryString = (q: URLSearchParams) => `?${q.toString().replace(/%3A/g, ":").replace(/%2C/g, ",")}`;
+
+export function encode(data: CockpitData, v: ViewState): string {
+  const q = scenarioParams(data, v.conditions);
+  const active = presetOf(data, v.conditions.presetId);
+  if ("base" in active) q.set("tab", active.label);
   if (v.selected) q.set("c", v.selected);
   if (v.compare) q.set("cmp", v.compare);
-  return `?${q.toString().replace(/%3A/g, ":").replace(/%2C/g, ",")}`;
+  return queryString(q);
 }
 
 /** Parse a query string. Anything unknown or malformed is dropped and reported, never thrown. */
-export function decode(data: CockpitData, search: string): { view: ViewState; ignored: string[] } {
+export function decode(
+  data: CockpitData,
+  search: string,
+): { view: ViewState; ignored: string[]; unsavedTab: string | null } {
   const q = new URLSearchParams(search);
   const ignored: string[] = [];
   const pid = q.get("preset");
@@ -121,5 +144,16 @@ export function decode(data: CockpitData, search: string): { view: ViewState; ig
     ignored.push(`county "${f}"`);
     return null;
   };
-  return { view: { conditions: c, selected: pick("c"), compare: pick("cmp") }, ignored };
+
+  // A named tab this browser has saved becomes the active tab. One it hasn't is
+  // reported, and the scenario shows as an edit of its base preset.
+  const tab = q.get("tab")?.trim() || null;
+  const saved = tab ? data.presets.find((p) => p.presetId === customId(tab)) : undefined;
+  if (saved) c.presetId = saved.presetId;
+
+  return {
+    view: { conditions: c, selected: pick("c"), compare: pick("cmp") },
+    ignored,
+    unsavedTab: tab && !saved ? tab : null,
+  };
 }

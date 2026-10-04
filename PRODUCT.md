@@ -114,6 +114,9 @@ sustainability factors.
 Planned demo capabilities:
 
 - Pick a preset, then adjust pillar weights, gates, and horizon live.
+- Save an adjusted scenario as a named tab beside the presets. The tab stays
+  in that browser, travels in its link, and downloads as a conditions file
+  for the Python engine.
 - Choropleth map of county scores.
 - Top-10 table with pillar breakdown and rank stability.
 - County detail: per-pillar contributions, evidence, coverage, gate log,
