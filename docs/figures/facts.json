@@ -1,0 +1,361 @@
+{
+ "balanced": {
+  "counties": 3109,
+  "passed": 1565,
+  "floor_ok": 915,
+  "moratorium_state_active_ranked": 30
+ },
+ "top10": [
+  {
+   "rank": 1,
+   "fips": "53025",
+   "county": "Grant, WA",
+   "composite": 63.7,
+   "robustness": 0.999,
+   "state_moratorium": false
+  },
+  {
+   "rank": 2,
+   "fips": "47181",
+   "county": "Wayne, TN",
+   "composite": 63.2,
+   "robustness": 0.995,
+   "state_moratorium": false
+  },
+  {
+   "rank": 3,
+   "fips": "53075",
+   "county": "Whitman, WA",
+   "composite": 63.0,
+   "robustness": 0.955,
+   "state_moratorium": false
+  },
+  {
+   "rank": 4,
+   "fips": "40097",
+   "county": "Mayes, OK",
+   "composite": 62.3,
+   "robustness": 0.947,
+   "state_moratorium": false
+  },
+  {
+   "rank": 5,
+   "fips": "53005",
+   "county": "Benton, WA",
+   "composite": 62.1,
+   "robustness": 0.842,
+   "state_moratorium": false
+  },
+  {
+   "rank": 6,
+   "fips": "19163",
+   "county": "Scott, IA",
+   "composite": 62.1,
+   "robustness": 0.809,
+   "state_moratorium": false
+  },
+  {
+   "rank": 7,
+   "fips": "53011",
+   "county": "Clark, WA",
+   "composite": 61.9,
+   "robustness": 0.688,
+   "state_moratorium": false
+  },
+  {
+   "rank": 8,
+   "fips": "47151",
+   "county": "Scott, TN",
+   "composite": 61.7,
+   "robustness": 0.759,
+   "state_moratorium": false
+  },
+  {
+   "rank": 9,
+   "fips": "40051",
+   "county": "Grady, OK",
+   "composite": 61.1,
+   "robustness": 0.501,
+   "state_moratorium": false
+  },
+  {
+   "rank": 10,
+   "fips": "40001",
+   "county": "Adair, OK",
+   "composite": 61.1,
+   "robustness": 0.433,
+   "state_moratorium": false
+  }
+ ],
+ "gap_first_to_second": 0.6,
+ "featured": {
+  "fips": "53025",
+  "county": "Grant, WA",
+  "rank": 1,
+  "composite": 63.7,
+  "robustness": 0.999,
+  "coverage": 0.778,
+  "warnings": [],
+  "facts": {
+   "IRA energy community: coal closure tract": false,
+   "IRA energy community: fossil employment area": false,
+   "State moratorium in effect": false
+  },
+  "top_reasons": [
+   "industrial_price_cents_kwh",
+   "state_policy_risk",
+   "land_area_sqkm"
+  ],
+  "pillars": {
+   "energy_carbon": 70.8,
+   "water": 49.4,
+   "climate_resilience": 51.2,
+   "grid_infrastructure": 72.2,
+   "land": 75.0,
+   "community": 59.2,
+   "cost": 77.5,
+   "permitting": 53.2
+  },
+  "horizon_2050_raw": {
+   "water_stress_bws": {
+    "today": 3.6207239306023298,
+    "water_stress_2050": 3.6209709505453964,
+    "delta": 0.00024701994306663977
+   },
+   "cdd_hist": {
+    "today": 655.10486,
+    "cdd_2050_rcp85": 1176.8304,
+    "delta": 521.72554
+   },
+   "days_above_95f_hist": {
+    "today": 14.47371,
+    "days_above_95f_2050_rcp85": 35.89837,
+    "delta": 21.42466
+   }
+  }
+ },
+ "corrections": {
+  "old_inputs": {
+   "passed": 1573,
+   "floor_ok": 925,
+   "top10": [
+    "Douglas, WA",
+    "Wayne, TN",
+    "Whitman, WA",
+    "Scott, TN",
+    "Van Buren, TN",
+    "Winnebago, IA",
+    "Bledsoe, TN",
+    "Fentress, TN",
+    "Marshall, IA",
+    "Sequatchie, TN"
+   ]
+  },
+  "counties": {
+   "Grant, WA": {
+    "old": "excluded: hazard_percentile_max.nri_wildfire_score",
+    "corrected": 1
+   },
+   "Berkshire, MA": {
+    "old": "excluded: hazard_percentile_max.nri_inland_flood_score",
+    "corrected": 1013
+   },
+   "Bennington, VT": {
+    "old": 960,
+    "corrected": 1058
+   },
+   "Polk, IA": {
+    "old": "excluded: hazard_percentile_max.nri_inland_flood_score",
+    "corrected": 23
+   },
+   "Dallas, TX": {
+    "old": "excluded: hazard_percentile_max.nri_inland_flood_score",
+    "corrected": 179
+   },
+   "Maricopa, AZ": {
+    "old": "excluded: hazard_percentile_max.nri_inland_flood_score;hazard_percentile_max.nri_wildfire_score",
+    "corrected": 1421
+   }
+  },
+  "vermont_grid": {
+   "state_co2_lb_mwh": 43.0,
+   "state_renewable_share": 0.997,
+   "subregion": "NEWE",
+   "subregion_co2_lb_mwh": 539.3,
+   "subregion_renewable_share": 0.192
+  }
+ },
+ "validation_hubs": {
+  "Grant, WA": {
+   "rank": 1,
+   "rank_without_dc_existing_count": 4,
+   "dc_existing_count": 3
+  },
+  "Luzerne, PA": {
+   "rank": 54,
+   "rank_without_dc_existing_count": 108,
+   "dc_existing_count": 1
+  }
+ },
+ "limitations": {
+  "homer_city_indiana_pa_fiber_share": 0.1996,
+  "fiber_gate": 0.2,
+  "indiana_pa_coal_retired_mw": 2230.2,
+  "counties_with_zero_retired_coal": 2884,
+  "counties_at_population_peak": 1274,
+  "knox_il_rank": 253,
+  "knox_il_pop_change_pct_since_peak": -20.9,
+  "knox_il_unemployment_rate_pct_2023": 5.5,
+  "knox_il_pillar_community": 78.4,
+  "nwpp_co2_lb_mwh": 631.7,
+  "coverage_top10": [
+   0.778,
+   0.733,
+   0.756,
+   0.778,
+   0.778,
+   0.733,
+   0.778,
+   0.733,
+   0.778,
+   0.733
+  ],
+  "scored_columns_present": 35,
+  "scored_columns_mapped": 45,
+  "loudoun_va": "excluded: max_queue_median_age_years",
+  "featured_plant_capacity_mw_100km": 16193
+ },
+ "presets": {
+  "balanced": {
+   "passed": 1565,
+   "floor_ok": 915,
+   "floor": 10,
+   "top3": [
+    "Grant, WA",
+    "Wayne, TN",
+    "Whitman, WA"
+   ]
+  },
+  "speed_to_power": {
+   "passed": 779,
+   "floor_ok": 489,
+   "floor": 10,
+   "top3": [
+    "Wayne, TN",
+    "Mayes, OK",
+    "Scott, TN"
+   ]
+  },
+  "sustainability_first": {
+   "passed": 179,
+   "floor_ok": 73,
+   "floor": 15,
+   "top3": [
+    "Whitman, WA",
+    "Benton, WA",
+    "Washington, OR"
+   ]
+  }
+ },
+ "impact": {
+  "Grant, WA": {
+   "co2_tonnes_dry": 700390,
+   "water_million_gal_evap": 210.2,
+   "water_million_gal_dry": 27.8
+  },
+  "Whitman, WA": {
+   "co2_tonnes_dry": 688917,
+   "water_million_gal_evap": 141.0,
+   "water_million_gal_dry": 27.8
+  },
+  "Wayne, TN": {
+   "co2_tonnes_dry": 1034876,
+   "water_million_gal_evap": 376.4,
+   "water_million_gal_dry": 27.8
+  },
+  "Berkshire, MA": {
+   "co2_tonnes_dry": 584653,
+   "water_million_gal_evap": 116.8,
+   "water_million_gal_dry": 27.8
+  },
+  "Loudoun, VA": {
+   "co2_tonnes_dry": 675455,
+   "water_million_gal_evap": 322.8,
+   "water_million_gal_dry": 27.8
+  }
+ },
+ "pick_story": {
+  "stages": [
+   "seven pillars at the freeze tag",
+   "seven pillars, Massachusetts policy corrected",
+   "eight pillars with cost"
+  ],
+  "ranks": {
+   "Grant, WA": [
+    7,
+    6,
+    1
+   ],
+   "Berkshire, MA": [
+    1,
+    2,
+    1013
+   ],
+   "Whitman, WA": [
+    8,
+    7,
+    3
+   ]
+  }
+ },
+ "weights": {
+  "balanced": {
+   "energy_carbon": 0.153,
+   "water": 0.119,
+   "climate_resilience": 0.119,
+   "grid_infrastructure": 0.153,
+   "land": 0.068,
+   "community": 0.085,
+   "permitting": 0.153,
+   "cost": 0.15
+  },
+  "equal_weights_featured_rank": 1,
+  "equal_weights_top10_overlap": 8,
+  "uniform_weightings_top10_share": {
+   "Grant, WA": 0.505,
+   "Whitman, WA": 0.447,
+   "Wayne, TN": 0.421,
+   "Trumbull, OH": 0.324,
+   "Clark, WA": 0.296
+  },
+  "default_weight_sd": {
+   "energy_carbon": 0.028,
+   "water": 0.026,
+   "climate_resilience": 0.026,
+   "grid_infrastructure": 0.028,
+   "land": 0.02,
+   "community": 0.022,
+   "permitting": 0.028,
+   "cost": 0.028
+  }
+ },
+ "grant_ranges": {
+  "facility_mwh": 2444212,
+  "co2_tonnes": {
+   "bpa": 235550,
+   "nwpp_table": 700390
+  },
+  "energy_cost_musd": {
+   "state_average": 162,
+   "new_load_low": 196,
+   "new_load_high": 323
+  }
+ },
+ "energy_cost_musd_state_average": {
+  "Grant, WA": 162,
+  "Whitman, WA": 159,
+  "Wayne, TN": 158,
+  "Berkshire, MA": 435,
+  "Loudoun, VA": 226
+ }
+}
