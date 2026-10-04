@@ -9,9 +9,10 @@ interface Props {
   result: RunResult;
   onWeight: (pillar: string, w: number) => void;
   onGate: (key: string, v: GateValue) => void;
+  children?: React.ReactNode; // rendered above the weights
 }
 
-export function Controls({ data, conditions: c, result, onWeight, onGate }: Props) {
+export function Controls({ data, conditions: c, result, onWeight, onGate, children }: Props) {
   const stated = data.pillars.reduce((a, p) => a + (c.weights[p.id] ?? 0), 0);
   const hazards = data.gates.filter((g) => g.kind === "hazard_pct");
   const others = data.gates.filter((g) => g.kind !== "hazard_pct");
@@ -21,6 +22,7 @@ export function Controls({ data, conditions: c, result, onWeight, onGate }: Prop
 
   return (
     <aside className="rail" aria-label="Weights and gates">
+      {children}
       <section className="weights" aria-labelledby="weights-h">
         <div className="rail-head">
           <h2 id="weights-h">Pillar weights</h2>

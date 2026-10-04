@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { CockpitData, Conditions, Horizon, Scenario } from "../data/types";
 import { fmtInt } from "../lib/format";
 
@@ -22,6 +23,20 @@ export function TopBar({ data, conditions: c, edited, onPreset, onHorizon, onSce
     (e.currentTarget.parentElement?.children[next] as HTMLElement | undefined)?.focus();
   };
 
+  // Custom tabs can outgrow the bar and scroll; the active one stays in view.
+  // scrollLeft, not scrollIntoView: Chrome starts keyboard Tab order from an
+  // element scrolled into view, which would skip the tab list on first Tab.
+  const tabs = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const list = tabs.current;
+    const active = list?.querySelector('[aria-selected="true"]');
+    if (!list || !active) return;
+    const a = active.getBoundingClientRect();
+    const b = list.getBoundingClientRect();
+    if (a.left < b.left) list.scrollLeft -= Math.ceil(b.left - a.left);
+    else if (a.right > b.right) list.scrollLeft += Math.ceil(a.right - b.right);
+  }, [c.presetId, data.presets.length]);
+
   return (
     <header className="topbar">
       <div className="brand">
@@ -29,7 +44,7 @@ export function TopBar({ data, conditions: c, edited, onPreset, onHorizon, onSce
         <span className="brand-sub">{fmtInt(data.counties.fips.length)} US counties</span>
       </div>
 
-      <div className="presets" role="tablist" aria-label="Scenario preset">
+      <div className="presets" role="tablist" aria-label="Scenario preset" ref={tabs}>
         {data.presets.map((p, i) => {
           const active = p.presetId === c.presetId;
           return (

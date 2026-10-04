@@ -223,6 +223,10 @@ select {
   display: flex;
   align-self: stretch;
   gap: var(--s1);
+  /* custom tabs can outgrow a narrow bar; they scroll instead of pushing Reset demo off screen */
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .preset-tab {
@@ -379,6 +383,48 @@ select {
 .rail-meta {
   font-size: var(--fs-fine);
   color: var(--ink-3);
+}
+
+.scenario-tab {
+  margin-bottom: var(--s5);
+  padding-bottom: var(--s4);
+  border-bottom: 1px solid var(--rule);
+}
+
+.scenario-tab .fine {
+  margin: 0 0 var(--s3);
+}
+
+.tab-actions,
+.tab-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.tab-actions .fine {
+  flex: 1 0 100%;
+  margin: 0;
+}
+
+.tab-form input {
+  flex: 1 0 100%;
+  min-height: 34px;
+  padding: 0 var(--s3);
+  border: 1px solid var(--rule-strong);
+  background: var(--panel);
+}
+
+.tab-form input[aria-invalid="true"] {
+  border-color: var(--fail);
+}
+
+.tab-error {
+  flex: 1 0 100%;
+  margin: 0;
+  font-size: var(--fs-fine);
+  color: var(--fail);
 }
 
 .weight-list,
