@@ -18,8 +18,8 @@ the bottom is append-only.
    - (b) **Gate it.** `docs/schema.md` already calls it a "sensitive-area gate". The model would check, and Grant passes. It needs a new engine gate and a threshold. The balanced pass count moves from 1,565 to 1,561 at a 50% cap or 1,535 at 25%, and the top 10 is unchanged.
    - (c) **Context only.** Nothing changes.
 8. **Recommendation:** (c) for 9am, the only option that keeps every artifact valid. After the deadline, (b) fixes the bug as you stated it: Grant passes because the model checked.
-10. **Follow-up, NLCD land cover:** built and measured, not shipped. Cropland alone moves Grant to 2nd behind Wayne TN. All the NLCD columns the pillar map lists keep Grant 1st. Adding protected land too leaves Grant 1st by 0.01 points (see history).
-9. **Open:** check the Yakama ceded-area reading against an official map; the 11-item unverified list is in `research/sensitive_land.md`. `main`'s weighting log was stale, so this branch carries the close-out commit. PR #40 (https://github.com/NeilKhandelwal/BAC-Hackathon/pull/40) is ready for review, not merged.
+9. **Follow-up, NLCD land cover:** built and measured, not shipped. Cropland alone moves Grant to 2nd behind Wayne TN. All the NLCD columns the pillar map lists keep Grant 1st. Adding protected land too leaves Grant 1st by 0.01 points (see history).
+10. **Open:** check the Yakama ceded-area reading against an official map; the 11-item unverified list is in `research/sensitive_land.md`. `main`'s weighting log was stale, so this branch carries the close-out commit. PR #40 (https://github.com/NeilKhandelwal/BAC-Hackathon/pull/40) is ready for review, not merged.
 
 ## CURRENT STATE
 
