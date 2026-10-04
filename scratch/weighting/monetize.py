@@ -32,6 +32,7 @@ DEFAULTS = {
     "water_usd_per_kgal": 7.0,          # assumption, not sourced
     "asset_usd": 10e9,                  # campus capex exposed to hazard loss
     "delay_usd_month": 25e6,
+    "ttp_delay_usd_month": None,        # time-to-power delay cost; None uses delay_usd_month. 0 turns the proxy off
     "queue_baseline_years": 2.0,        # queue age that costs nothing
     "moratorium_months_active": 12,     # state or county moratorium in force, probability 1
     "moratorium_months_pending": 12,
@@ -64,7 +65,9 @@ def hazard_rates():
     cols = [c for c in nri.columns if c.endswith("_ALRB")]
     alr = nri[cols].fillna(0).sum(axis=1)
     check = (nri.EAL_VALB / nri.BUILDVALUE).reindex(alr.index)
-    return alr, cols, float((alr - check).abs().max())
+    rel = ((alr - check).abs() / check)
+    return alr, cols, {"median_rel_diff": float(rel.median()), "p95_rel_diff": float(rel.quantile(0.95)),
+                       "max_rel_diff": float(rel.max()), "max_rel_diff_fips": rel.idxmax()}
 
 
 def compute(df, p, alr, queue_median):
@@ -104,7 +107,8 @@ def compute(df, p, alr, queue_median):
         "energy": facility_mwh * price * af,
         "water": water_gal / 1000 * p["water_usd_per_kgal"] * (1 + bws) * af,
         "hazard": rate * p["asset_usd"] * af,
-        "time_to_power": ttp_months * p["delay_usd_month"],
+        "time_to_power": ttp_months * (p["delay_usd_month"] if p["ttp_delay_usd_month"] is None
+                                       else p["ttp_delay_usd_month"]),
         "moratorium": mor_months * p["delay_usd_month"],
     })
     out["private"] = out[PRIVATE].sum(axis=1)
@@ -239,6 +243,8 @@ def summarize_variant(costs, label):
     rank190 = t.total_190.rank(method="min")
     known = costs[~costs.queue_imputed]
     return {"variant": label, "top_private": costs.private.idxmin(), "top_190": t.index[0],
+            "top5_190": "; ".join(t.county.head(5)),
+            "gap_1_to_2_pct": round(100 * (t.total_190.iloc[1] / t.total_190.iloc[0] - 1), 2),
             **{f"rank190_{FOCUS[f].split(',')[0]}": (int(rank190[f]) if f in rank190 else None)
                for f in ["53025", "36033", "25003"]},
             **{f"share190_{k}": round(v, 3) for k, v in shares(costs, 190).items()},
@@ -266,7 +272,8 @@ def main():
                       ("water $15/kgal", {"water_usd_per_kgal": 15}), ("delay $10M/mo", {"delay_usd_month": 10e6}),
                       ("delay $50M/mo", {"delay_usd_month": 50e6}),
                       ("moratorium 8 mo", {"moratorium_months_active": 8}),
-                      ("moratorium 20 mo", {"moratorium_months_active": 20})]:
+                      ("moratorium 20 mo", {"moratorium_months_active": 20}),
+                      ("time to power off", {"ttp_delay_usd_month": 0})]:
         sens.append(summarize_variant(run(df, passed, alr, queue_median, ov)[2], label))
     sens = pd.DataFrame(sens)
 
@@ -288,7 +295,7 @@ def main():
     summary = {
         "params": p, "annuity_factor": af, "counties": int(len(costs)),
         "queue_imputed": int(costs.queue_imputed.sum()), "queue_national_median_years": queue_median,
-        "hazard_columns": alr_cols, "hazard_sum_vs_eal_ratio_max_abs_diff": alr_err,
+        "hazard_columns": alr_cols, "hazard_sum_vs_eal_ratio": alr_err,
         "cooling_counts": costs.cooling.value_counts().to_dict(),
         "top10_private": top("private"), **{f"top10_total_{c}": top(f"total_{c}") for c in p["carbon_prices"]},
         "variance_shares": share, "variance_shares_known_queue_only": share_known,
@@ -306,7 +313,14 @@ def main():
 
     # Report
     print(f"counties {len(costs)}, annuity factor {af:.3f}, queue imputed {summary['queue_imputed']} "
-          f"(median {queue_median:.2f} y), cooling {summary['cooling_counts']}, hazard check max diff {alr_err:.2e}")
+          f"(median {queue_median:.2f} y), cooling {summary['cooling_counts']}, hazard sum vs EAL/BUILDVALUE {alr_err}")
+    t190 = costs.sort_values("total_190")
+    g = costs.loc[GRANT]
+    print(f"$190 head-to-head, $B: {t190.county.iloc[0]} {t190.total_190.iloc[0] / 1e9:.3f}, "
+          f"{t190.county.iloc[1]} {t190.total_190.iloc[1] / 1e9:.3f}, Grant {g.total_190 / 1e9:.3f}, "
+          f"Grant without time to power {(g.total_190 - g.time_to_power) / 1e9:.3f}")
+    print("imputed queue share: top 50 at $190", round(t190.head(50).queue_imputed.mean(), 2),
+          "overall", round(costs.queue_imputed.mean(), 2))
     for c in p["carbon_prices"]:
         print(f"top10 private+carbon ${c}:", [f"{r['county']} {r['npv_busd']}" for r in top(f'total_{c}')])
     print("top10 private:", [f"{r['county']} {r['npv_busd']}" for r in top("private")])

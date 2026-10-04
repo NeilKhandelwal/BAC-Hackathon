@@ -236,12 +236,21 @@ Script: `scratch/weighting/monetize.py`. Full printout:
 `scratch/weighting/out/monetized_costs.csv`. Key numbers as JSON:
 `scratch/weighting/out/monetize_summary.json`.
 
+**Headline.** At $190/t, Pacific Northwest and North Country New York
+counties sit within about 1.5% of each other: Clark WA $3.496B, Franklin NY
+$3.545B, and Grant WA $3.547B without its time-to-power charge. Which one
+comes first depends on the monthly delay cost and the queue-age proxy.
+Clark WA is #1 in 8 of 9 sensitivity runs, including with time to power
+switched off. Franklin is #1 only at a $10M monthly delay cost or an
+8-month New York moratorium.
+
 **Setup.** 1,565 gate-passing counties, annuity factor 11.654 (7%, 25
 years). Cooling: 826 evaporative, 739 dry. The NRI building loss rates
-summed over 17 hazards match NRI's own EAL_VALB / BUILDVALUE to within
-0.00045. Queue age is null for 1,072 of 1,565 counties (68%). They take the
-national median of 2.89 years, which is a $265M one-time time-to-power cost
-each at $25M per month.
+summed over 17 hazards equal NRI's composite EAL_VALB / BUILDVALUE to
+machine precision for 95% of counties. The largest gap is 8% (Kittitas,
+WA, FIPS 53037). Queue age is null for 1,072 of 1,565 counties (68%). They
+take the national median of 2.89 years, which is a $265M one-time
+time-to-power cost each at $25M per month.
 
 **Rankings by 25-year NPV.**
 
@@ -257,7 +266,12 @@ a $463M time-to-power charge from its LBNL queue median age of 3.54 years,
 and dry cooling forced by Aqueduct water stress of 3.6. Clark, WA has the
 same state price and eGRID subregion, a queue age of 2.09 years, and
 evaporative cooling, so Clark dominates Grant on both cost and CO2. Grant
-is not on the Pareto frontier.
+is not on the Pareto frontier. Of the $465M private gap between Grant and
+Clark, $437M is the time-to-power charge. The repo's own research supports
+a real delay at Grant even though the proxy is a generation queue:
+`research/risk.md` and `research/implementation.md` report about 800 MW of
+large-load requests in Grant PUD's queue, no spare hydro, and Quincy
+transmission upgrades due in 2027 and 2029.
 
 **Variance shares, the data-implied weights.** Share of the cross-county
 variance in total NPV, cov(component, total) / var(total):
@@ -299,6 +313,16 @@ $132/MWh, Grant costs $372M/yr.
 | Delay $50M per month | Clark WA | 255 | 10 | 0.494 | 0.298 | 0.221 |
 | NY moratorium 8 months | Franklin NY | 93 | 1 | 0.543 | 0.383 | 0.079 |
 | NY moratorium 20 months | Clark WA | 74 | 5 | 0.563 | 0.371 | 0.081 |
+| Time to power off | Clark WA | 8 | 7 | n/a | n/a | 0 |
+
+With time to power off, the top 5 at $190 is Clark WA, Whitman WA, Asotin
+WA, Saratoga NY, Ontario NY, and #1 leads #2 by 0.14%.
+
+**Variance shares are not percentile weights.** A share of dollar variance
+says which costs separate counties. It doesn't carry over one-to-one to the
+engine's percentile composite, where every pillar is spread evenly from 0
+to 100. Phase 5 runs the engine once with the $190 shares and reports how
+much its top 10 overlaps the NPV top 10.
 
 **Implausible or fragile.**
 
@@ -311,6 +335,10 @@ $132/MWh, Grant costs $372M/yr.
 - Only Grant gets a new-load rate scenario (BPA). Other counties are priced
   at their state average, which may also understate what a new large load
   pays.
-- Water's share is slightly negative. Water is cheap at $7 per 1,000
-  gallons, and evaporative cooling, which uses more water, is allowed only
-  where electricity is also cheaper to save.
+- Imputation favors counties without queue data over slow known ones and
+  penalizes them against fast known ones: an imputed county pays $265M, a
+  county with a known queue age under 2 years pays $0. Imputed counties are
+  46% of the top 50 at $190 against 68% of all gate passers.
+- Water's share is slightly negative. Evaporative cooling raises water
+  cost but lowers PUE, so the counties that get it pay more for water and
+  less for energy and carbon. Water cost therefore moves against the total.
