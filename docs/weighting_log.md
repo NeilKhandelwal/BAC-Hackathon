@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:58 UTC
+- **Updated:** 2026-10-04 01:52 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -679,7 +679,7 @@ beat Clark (shorter delay or a lower rate).
 **Phase 5 heads-up.** Land isn't monetized, and Clark's land pillar is at
 the 22nd percentile. The recommendation must address it.
 
-### 2026-10-04 01:58 UTC, Phase 4: revealed preference
+### 2026-10-04 01:52 UTC, Phase 4: revealed preference
 
 Script: `scratch/weighting/revealed.py`. Printout:
 `scratch/weighting/out/revealed_report.txt`. Ranks:
