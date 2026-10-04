@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 02:01 UTC
+- **Updated:** 2026-10-04 02:59 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,18 +17,29 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** all phases done. PR #35 is marked ready for review.
-  Nothing is in progress.
-- **Done:** Phases 0 to 5, the Monte Carlo, and the BPA fairness fix.
-  `docs/weighting.md` holds the final write-up and recommendation (feature
-  Clark WA; alternatives Franklin NY and Grant WA, each with its winning
-  condition).
-- **In progress:** nothing.
-- **Exact next action:** waiting on the user and team. Open decision:
-  whether to switch the deck's featured county from Grant to Clark, or to
-  present Grant as the engine's pick and Clark as the dollar pick. Don't
-  edit `docs/deck.md`, `docs/demo_script.md`, `research/implementation.md`,
-  or `research/risk.md` without that decision. Never merge PR #35.
+- **Phase and step:** revision round 1 on PR #35 (user request at
+  02:58 UTC, 60-minute timebox, ends about 03:58 UTC). PR is open, not
+  merged.
+- **Done in this round:** AI footer removed from the PR body; PR comments
+  posted asking Neil about a squash merge and surfacing the 90% against
+  30% energy-and-carbon finding.
+- **In progress:** an Opus research subagent is verifying the WA data
+  center sales tax exemption (RCW 82.08.986, 82.12.986) for Clark and
+  Grant, any NY exemption for Franklin, and sourced sales tax rates. If a
+  new session starts and the result is lost, rerun that research.
+- **Exact next action:** in order, per approved decisions 17 to 21:
+  1. Add the sales tax component to `monetize.py` once the rates and
+     eligibility are sourced (or flagged unverified).
+  2. Neil's review items in `scratch/weighting/revisions.py`:
+     non-negative variance shares, time to power with imputed counties at
+     $0 and excluded, Grant's evidence-based delay, dry cooling everywhere
+     for Clark against Grant, hazard asset value $3B, and one table of the
+     top 10 and the four focus counties' ranks under every method.
+  3. Rerun `montecarlo.py` (BPA run) and `consensus.py` with the tax
+     component; report Clark, Franklin, and Grant with and without tax and
+     at refresh cycles of 4 and 6 years.
+  4. Consult the advisor before writing the final recommendation.
+  5. Update `docs/weighting.md`, this log, and the PR body.
 - **Reproduce:** from the repo root, after fetching raw NRI (below):
   `.venv/Scripts/python.exe scratch/weighting/monetize.py`, then
   `.venv/Scripts/python.exe scratch/weighting/montecarlo.py`, then
@@ -52,6 +63,9 @@ Overwritten at every update.
 - **Tooling notes:**
   - On the Windows machine, `gh` is at `C:\Program Files\GitHub CLI\gh.exe`
     and isn't on the Git Bash PATH. It's authenticated as `ValsTRM`.
+  - **No AI attribution (Neil's rule, 2026-10-04 02:58 UTC):** no
+    Co-Authored-By trailers on new commits and no "Generated with" footer
+    in the PR body. Don't rewrite existing history.
   - Git has no global identity on the Windows machine. Commits pass
     `-c user.name="Valaya Choudhary" -c user.email=35052710+ValsTRM@users.noreply.github.com`.
 - **Approved decisions** (2026-10-04 01:05 UTC):
@@ -116,6 +130,36 @@ Overwritten at every update.
       said. Name one featured county and two alternatives, each with the
       condition under which it would win (for example, carbon price above
       X or new-load rate below Y).
+  17. Revision round 1 (2026-10-04 02:58 UTC), process: remove the AI
+      footer from the PR body; no Co-Authored-By trailers from now on; don't
+      rewrite history; ask Neil in a PR comment whether he wants a squash
+      merge with a clean message.
+  18. Sales and use tax: verify the WA exemption (RCW 82.08.986 and
+      82.12.986) for Clark and Grant, and whether NY has one for Franklin;
+      cite sources, flag anything unverified, invent nothing. Add a tax
+      component: taxable equipment capex (default $4B) times the county's
+      combined state and local rate (sourced, or a documented default),
+      refreshed every 5 years (parameter), discounted at 7%; exempt
+      counties pay 0. Rerun $190/t and the BPA Monte Carlo; report Clark,
+      Franklin, and Grant with and without tax and at 4- and 6-year
+      refresh.
+  19. Neil's review items: non-negative variance shares (standalone or
+      Shapley) and whether the order changes; time to power with imputed
+      counties at $0 and with them excluded; Grant's row from its own
+      evidence in research/risk.md and research/implementation.md, stating
+      no other county has equivalent evidence; cooling stated as a modeling
+      choice, with Clark against Grant under dry cooling everywhere; hazard
+      asset value at $3B as well as $10B; one table of the top 10 and the
+      ranks of Grant, Clark, Franklin, and Berkshire under balanced,
+      monetized $190, SMAA, CRITIC, entropy, revealed preference, and
+      consensus.
+  20. Surface to Neil in a PR comment: energy and carbon carry about 90%
+      of dollar variance at every carbon price; balanced gives them about
+      30%.
+  21. Update docs/weighting.md, this log, and the PR body. Revise the
+      recommendation if the tax component changes the order; give each of
+      the three counties its win condition. Consult the advisor before the
+      final recommendation.
   12. Phase 2 additions: run SMAA with the floor on and off. Report which
       pillar fails Franklin's floor and by how much. Report rank-1 and
       top-10 acceptability for Clark WA, Franklin NY, and Grant WA under
