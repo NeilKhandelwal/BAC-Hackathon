@@ -14,7 +14,7 @@ import pandas as pd
 import pytest
 
 from etl.adapters import bls_qcew, fractracker_context, lbnl_queue_alt
-from etl.schema import CORE, STRETCH, V2_CONTEXT
+from etl.schema import CORE, SCORED_V2, STRETCH, V2_CONTEXT
 
 OUT = Path("data/processed")
 BASE_COMMIT = "1575003"  # origin/main before the port
@@ -44,11 +44,13 @@ def manifest():
 
 # --- registration -------------------------------------------------------------
 
-def test_v2_columns_are_stretch_not_core_and_not_scored():
+def test_v2_columns_are_stretch_and_only_the_queue_measures_are_scored():
+    import yaml
     assert set(V2_CONTEXT) <= set(STRETCH)
     assert not set(V2_CONTEXT) & set(CORE)
-    pillars = Path("engine/pillars.yaml").read_text()
-    assert not [c for c in V2_CONTEXT if f"column: {c}\n" in pillars]
+    pillars = yaml.safe_load(Path("engine/pillars.yaml").read_text())
+    scored = {m["column"] for metrics in pillars.values() for m in metrics}
+    assert set(V2_CONTEXT) & scored == set(SCORED_V2)
 
 
 # --- unit rules -----------------------------------------------------------------

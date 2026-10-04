@@ -61,7 +61,7 @@ STRETCH = {
     "pop_change_pct_since_peak": "float64", "mfg_emp_share_1969": "float64",
     "mfg_emp_share_change_1969_2022": "float64",
     "energy_community_coal_closure": "boolean", "energy_community_ffe": "boolean",
-    # Context columns from the ETL v2 port. None is scored in engine/pillars.yaml.
+    # Context columns from the ETL v2 port. Only the two queue measures noted below are scored.
     # BLS LAUS
     "unemployment_rate_pct_2024": "float64", "unemployment_rate_pct_3yr_2022_2024": "float64",
     "unemployed_persons_2024": "Int64", "labor_force_2024": "Int64",
@@ -104,11 +104,15 @@ STRETCH = {
     "dc_existing_mw_reported": "float64", "dc_existing_mw_reporting_share": "float64",
     "dc_proposed_mw_reported": "float64", "dc_proposed_mw_reporting_share": "float64",
     "dc_stopped_count": "Int64",
-    # LBNL alternative queue measures (not scored, not gate inputs)
+    # LBNL queue measures. queue_active_mw_clean_excl_storage and queue_operational_mw_online_5y are
+    # scored in energy_carbon; the legacy queue_active_mw_clean and queue_operational_mw_5y stay in CORE,
+    # unscored, for traceability. None is a gate input.
     "queue_active_mw_clean_excl_storage": "float64", "queue_active_mw_storage_standalone": "float64",
     "queue_operational_mw_online_5y": "float64", "queue_operational_projects_online_5y": "Int64",
     "queue_operational_online_date_fallback_share": "float64",
 }
 
 # STRETCH columns added by the ETL v2 port; the quality report and tests check them.
+# Of these, only SCORED_V2 appear in engine/pillars.yaml.
 V2_CONTEXT = list(STRETCH)[list(STRETCH).index("unemployment_rate_pct_2024"):]
+SCORED_V2 = ["queue_active_mw_clean_excl_storage", "queue_operational_mw_online_5y"]

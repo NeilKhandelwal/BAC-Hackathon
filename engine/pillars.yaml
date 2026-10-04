@@ -9,10 +9,10 @@ energy_carbon:
     direction: lower_better
   - column: grid_renewable_share
     direction: higher_better
-  - column: queue_active_mw_clean
+  - column: queue_active_mw_clean_excl_storage   # clean generation in the queue; storage isn't generation
     direction: higher_better
     transform: log1p
-  - column: queue_operational_mw_5y
+  - column: queue_operational_mw_online_5y       # delivered 2021-2025 by actual online date, else proposed date
     direction: higher_better
     transform: log1p
   - column: solar_ghi_kwh_m2_day
