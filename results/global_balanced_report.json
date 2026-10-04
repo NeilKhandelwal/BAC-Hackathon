@@ -1,0 +1,30 @@
+{
+  "warnings": [],
+  "counties": 196,
+  "passed": 83,
+  "excluded": 113,
+  "gate_failures": {
+    "min_electricity_generation_twh": 105,
+    "min_population": 37
+  },
+  "hazard_gate_nonzero_counties": {},
+  "floor_ok": 55,
+  "moratorium_state_active_ranked": null,
+  "pillars": [
+    "energy_carbon",
+    "water",
+    "climate_resilience",
+    "grid_infrastructure",
+    "community",
+    "governance"
+  ],
+  "pillar_floor_exempt": [],
+  "weights_used": {
+    "energy_carbon": 0.2,
+    "water": 0.15,
+    "climate_resilience": 0.15,
+    "grid_infrastructure": 0.2,
+    "community": 0.1,
+    "governance": 0.2
+  }
+}

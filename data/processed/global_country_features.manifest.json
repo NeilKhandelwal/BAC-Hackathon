@@ -1,0 +1,161 @@
+{
+  "built_at": "2026-10-04T00:16:13+00:00",
+  "rows": 196,
+  "sources": [
+    {
+      "name": "World Bank country list",
+      "version": "API v2, regions as published",
+      "url": "https://api.worldbank.org/v2/country?format=json&per_page=400",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "Our World in Data energy dataset (republishes Ember and Energy Institute)",
+      "version": "latest year with carbon intensity per country, 2022-2025, mode 2024",
+      "url": "https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "WRI Aqueduct 4.0 country rankings",
+      "version": "2023-07-05 release; baseline and 2050 business as usual, industrial weight",
+      "url": "https://files.wri.org/aqueduct/aqueduct-4-0-country-rankings.zip",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "EU JRC INFORM Risk Index",
+      "version": "INFORM Risk 2026 v0.7.2, released 2026-03-31",
+      "url": "https://drmkc.jrc.ec.europa.eu/inform-index/Portals/0/InfoRM/2026/INFORM_Risk_2026_v072.xlsx",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank Climate Change Knowledge Portal",
+      "version": "CMIP6 0.25 degree ensemble median, 1995-2014 and 2040-2059",
+      "url": "https://cckpapi.worldbank.org/cckp/v1/cmip6-x0.25_climatology_",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "PeeringDB",
+      "version": "live API, fetched 2026-10-04",
+      "url": "https://www.peeringdb.com/api/",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank API SP.POP.TOTL",
+      "version": "most recent non-empty value, 2025",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank API NY.GDP.PCAP.CD",
+      "version": "most recent non-empty value, 2011-2025",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank API SL.UEM.TOTL.ZS",
+      "version": "most recent non-empty value, 2021-2025",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SL.UEM.TOTL.ZS",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank API IT.NET.BBND.P2",
+      "version": "most recent non-empty value, 2021-2025",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/IT.NET.BBND.P2",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank API GOV_WGI_PV.EST",
+      "version": "most recent non-empty value, 2025",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/GOV_WGI_PV.EST",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank API GOV_WGI_RQ.EST",
+      "version": "most recent non-empty value, 2025",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/GOV_WGI_RQ.EST",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    },
+    {
+      "name": "World Bank API GOV_WGI_RL.EST",
+      "version": "most recent non-empty value, 2025",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/GOV_WGI_RL.EST",
+      "fetched_at": "2026-10-04T00:16:13+00:00"
+    }
+  ],
+  "columns_present": [
+    "iso3",
+    "country",
+    "region",
+    "energy_data_year",
+    "grid_co2_g_kwh",
+    "renewable_share_elec_pct",
+    "low_carbon_share_elec_pct",
+    "electricity_generation_twh",
+    "water_stress_bws",
+    "water_stress_2050",
+    "inform_earthquake",
+    "inform_river_flood",
+    "inform_tsunami",
+    "inform_tropical_cyclone",
+    "inform_coastal_flood",
+    "inform_drought",
+    "cdd65_hist",
+    "cdd65_2050_ssp245",
+    "cdd65_2050_ssp585",
+    "hd35_hist",
+    "hd35_2050_ssp245",
+    "hd35_2050_ssp585",
+    "peeringdb_facility_count",
+    "peeringdb_ixp_count",
+    "population",
+    "gdp_per_capita_usd",
+    "unemployment_rate_pct",
+    "broadband_per_100",
+    "wgi_political_stability",
+    "wgi_regulatory_quality",
+    "wgi_rule_of_law"
+  ],
+  "columns_missing": [],
+  "null_counts": {
+    "iso3": 0,
+    "country": 0,
+    "region": 0,
+    "energy_data_year": 9,
+    "grid_co2_g_kwh": 9,
+    "renewable_share_elec_pct": 9,
+    "low_carbon_share_elec_pct": 9,
+    "electricity_generation_twh": 9,
+    "water_stress_bws": 32,
+    "water_stress_2050": 32,
+    "inform_earthquake": 5,
+    "inform_river_flood": 5,
+    "inform_tsunami": 5,
+    "inform_tropical_cyclone": 5,
+    "inform_coastal_flood": 5,
+    "inform_drought": 5,
+    "cdd65_hist": 1,
+    "cdd65_2050_ssp245": 1,
+    "cdd65_2050_ssp585": 1,
+    "hd35_hist": 1,
+    "hd35_2050_ssp245": 1,
+    "hd35_2050_ssp585": 1,
+    "peeringdb_facility_count": 0,
+    "peeringdb_ixp_count": 0,
+    "population": 1,
+    "gdp_per_capita_usd": 2,
+    "unemployment_rate_pct": 17,
+    "broadband_per_100": 3,
+    "wgi_political_stability": 0,
+    "wgi_regulatory_quality": 0,
+    "wgi_rule_of_law": 0
+  },
+  "notes": [
+    "Rows are World Bank economies minus aggregates and 22 territories or special administrative regions (including Hong Kong, Macao, Puerto Rico, Greenland), plus Taiwan, which the World Bank omits. Taiwan has null World Bank columns.",
+    "region is the World Bank region. Taiwan is assigned East Asia & Pacific.",
+    "grid_co2_g_kwh is lifecycle gCO2e per kWh of generation as published by OWID. It is not comparable to the US table's grid_co2_lb_mwh, which is eGRID combustion output emission rate.",
+    "water_stress_bws and water_stress_2050 are Aqueduct 0-5 scores, the same scale as the US column.",
+    "PeeringDB counts are self-reported registry entries with status ok. Zero means none listed, not unknown.",
+    "No open, current, global industrial electricity price exists. The cost pillar is omitted.",
+    "No power reliability indicator: the World Bank Enterprise Survey outage series IC.ELC.OUTG returns 'indicator not found' from the API, and Doing Business ended in 2020.",
+    "gdp_per_capita_usd is carried in the table but not scored. See docs/global.md."
+  ]
+}

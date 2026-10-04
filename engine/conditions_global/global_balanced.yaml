@@ -1,0 +1,45 @@
+name: global_balanced
+description: >
+  Country-level screen with even weights. Proof that the engine runs on another region's
+  table. Use with engine/pillars_global.yaml and data/processed/global_country_features.parquet.
+
+unit:
+  key: iso3
+  name: country
+  group: region          # states_include and states_exclude act on this column
+
+facility:
+  mw: 300
+  online_year: 2029
+  cooling: dry
+
+horizon: 2026
+scenario: ssp585         # mid-century CMIP6 high-emissions, the analogue of the US presets' rcp85
+
+gates:
+  states_include: []     # World Bank region names, for example "Europe & Central Asia"
+  states_exclude: []
+  # 300 MW at 0.8 load factor draws about 2.1 TWh a year. Below 20 TWh of national generation
+  # that is more than a tenth of the whole system, which no grid absorbs from one new customer.
+  min_electricity_generation_twh: 20
+  # The generation gate marks a null as unknown, not failed. Eight microstates have no generation
+  # data. This gate removes them and nothing else: every country above 20 TWh has over 1.5 million people.
+  min_population: 1000000
+
+weights:
+  energy_carbon: 0.20
+  water: 0.15
+  climate_resilience: 0.15
+  grid_infrastructure: 0.20
+  community: 0.10
+  governance: 0.20
+
+pillar_floor_percentile: 10
+
+robustness:
+  samples: 2000
+  concentration: 20
+  top_n: 10
+
+output:
+  top_n: 15

@@ -1,0 +1,65 @@
+# Maps country feature columns (data/processed/global_country_features.parquet) to scoring pillars.
+# Same format as pillars.yaml. Pillar names mirror the US ones where the idea carries over.
+# No cost pillar: no open, current, global industrial electricity price exists. No land pillar: a
+# country always has land somewhere. governance stands in for permitting.
+
+energy_carbon:
+  - column: grid_co2_g_kwh                  # lifecycle gCO2e per kWh generated (OWID, from Ember)
+    direction: lower_better
+  - column: low_carbon_share_elec_pct       # renewables plus nuclear
+    direction: higher_better
+  - column: renewable_share_elec_pct
+    direction: higher_better
+
+water:
+  - column: water_stress_bws                # Aqueduct 4.0, industrial weighting, 0-5
+    direction: lower_better
+    horizon_2050: water_stress_2050
+  - column: inform_drought
+    direction: lower_better
+  - column: cdd65_hist                      # cooling degree days, base 65F, country mean
+    direction: lower_better
+    horizon_2050: cdd65_2050_{scenario}
+
+climate_resilience:
+  - column: inform_earthquake
+    direction: lower_better
+  - column: inform_river_flood
+    direction: lower_better
+  - column: inform_coastal_flood
+    direction: lower_better
+  - column: inform_tropical_cyclone
+    direction: lower_better
+  - column: inform_tsunami
+    direction: lower_better
+  - column: hd35_hist                       # days above 35C
+    direction: lower_better
+    horizon_2050: hd35_2050_{scenario}
+
+grid_infrastructure:
+  - column: electricity_generation_twh      # system size; a large grid absorbs a new load more easily
+    direction: higher_better
+    transform: log1p
+  - column: peeringdb_facility_count        # existing colocation cluster
+    direction: higher_better
+    transform: log1p
+  - column: peeringdb_ixp_count
+    direction: higher_better
+    transform: log1p
+  - column: broadband_per_100
+    direction: higher_better
+
+community:
+  - column: population                      # workforce and local market
+    direction: higher_better
+    transform: log1p
+  - column: unemployment_rate_pct           # same value choice as the US table: more benefit where jobs are scarce
+    direction: higher_better
+
+governance:
+  - column: wgi_political_stability
+    direction: higher_better
+  - column: wgi_regulatory_quality
+    direction: higher_better
+  - column: wgi_rule_of_law
+    direction: higher_better

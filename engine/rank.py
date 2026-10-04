@@ -21,6 +21,7 @@ SIMPLE_GATES = {
     "min_fiber_share_locations": ("fiber_share_locations", lambda v, t: v < t),
     "max_permitting_risk": ("permitting_discretionary_risk", lambda v, t: v > t),
     "min_population": ("population", lambda v, t: v < t),
+    "min_electricity_generation_twh": ("electricity_generation_twh", lambda v, t: v < t),
 }
 FLAG_GATES = {
     "exclude_moratorium_active": "moratorium_active",
@@ -36,6 +37,8 @@ SPECIAL_GATES = {
     "hazard_percentile_max": None,
 }
 HORIZONS = (2026, 2050)
+# Row identity: key, display name, and the group column the states_* gates act on.
+DEFAULT_UNIT = {"key": "fips", "name": "county_name", "group": "state"}
 # Unscored columns carried into ranked output so a user sees them next to the score.
 FLAG_COLUMNS = ("moratorium_state_active",)
 
@@ -91,11 +94,18 @@ def load_yaml(path):
         return yaml.safe_load(fh)
 
 
-def load_features(path):
-    """Read the county table and drop columns the manifest lists as missing."""
+def unit(conditions):
+    """The conditions file's unit block over the county defaults."""
+    return {**DEFAULT_UNIT, **((conditions or {}).get("unit") or {})}
+
+
+def load_features(path, key="fips"):
+    """Read the feature table and drop columns the manifest lists as missing. Zero-pads only a fips key."""
     path = Path(path)
     df = pd.read_parquet(path)
-    df["fips"] = df["fips"].astype(str).str.zfill(5)
+    df[key] = df[key].astype(str)
+    if key == "fips":
+        df[key] = df[key].str.zfill(5)
     manifest = path.with_name(path.stem + ".manifest.json")
     warnings = []
     if manifest.exists():
@@ -126,6 +136,7 @@ def percentile(values, direction="higher_better", transform=None):
 def apply_gates(df, conditions):
     """Return a per-county gate log: failed_gates and unknown_gates, semicolon lists."""
     gates = conditions.get("gates") or {}
+    group = unit(conditions)["group"]
     failed = pd.Series([[] for _ in range(len(df))], index=df.index)
     unknown = pd.Series([[] for _ in range(len(df))], index=df.index)
 
@@ -149,9 +160,9 @@ def apply_gates(df, conditions):
         if not isinstance(v, (list, tuple)):
             raise ValueError(f"gates.{name} must be a list of state abbreviations, got {v!r}")
     if include:
-        record("states_include", "state", ~values("state").isin(include))
+        record("states_include", group, ~values(group).isin(include))
     if exclude:
-        record("states_exclude", "state", values("state").isin(exclude))
+        record("states_exclude", group, values(group).isin(exclude))
 
     for name, (column, test) in SIMPLE_GATES.items():
         t = gates.get(name)
@@ -394,7 +405,7 @@ def rank(df, conditions, pillars):
     scores["robustness"] = robust.reindex(scores.index)
     report["warnings"] += warns
 
-    ids = [c for c in ("fips", "county_name", "state") if c in df.columns]
+    ids = [c for c in unit(conditions).values() if c in df.columns]
     flags = [c for c in FLAG_COLUMNS if c in df.columns]
     full = pd.concat([df[ids + flags], scores, log], axis=1)
     full["rank"] = order(scores, scores["floor_ok"], passed)
