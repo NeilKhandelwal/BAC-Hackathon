@@ -7,16 +7,19 @@ It is a screen for where to look next. It doesn't pick sites.
 Run it:
 
 ```
-python -m engine rank --conditions engine/conditions/global_balanced.yaml \
+python -m engine rank --conditions engine/conditions_global/global_balanced.yaml \
   --pillars engine/pillars_global.yaml \
   --features data/processed/global_country_features.parquet \
   --out results/global_balanced.csv
-python -m engine explain --conditions engine/conditions/global_balanced.yaml \
+python -m engine explain --conditions engine/conditions_global/global_balanced.yaml \
   --pillars engine/pillars_global.yaml \
   --features data/processed/global_country_features.parquet --id USA
 ```
 
 Rebuild the table with `python -m etl.global_countries.build`. Raw files go to `data/raw/global/`.
+
+The preset lives in `engine/conditions_global/`, not `engine/conditions/`. The demo app and the preset
+tests treat every file in `engine/conditions/` as a US preset and run it on the county table.
 
 ## What changed in the engine
 

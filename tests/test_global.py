@@ -9,7 +9,7 @@ from engine.explain import explain, format_text
 from engine.rank import load_features, load_yaml, rank
 
 GLOBAL = "data/processed/global_country_features.parquet"
-COND = "engine/conditions/global_balanced.yaml"
+COND = "engine/conditions_global/global_balanced.yaml"
 PILLARS = "engine/pillars_global.yaml"
 UNIT = {"key": "iso3", "name": "country", "group": "region"}
 
