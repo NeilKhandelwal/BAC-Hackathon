@@ -145,6 +145,7 @@ function Cockpit({ data, topo }: { data: CockpitData; topo: Topology }) {
           data={data}
           result={result}
           stability={stability}
+          stabilityStale={stale}
           idx={selected}
           compare={compare}
           onCompare={onCompare}

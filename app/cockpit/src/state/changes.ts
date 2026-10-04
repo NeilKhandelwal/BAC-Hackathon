@@ -70,8 +70,14 @@ export function computeChanges(data: CockpitData, prev: RunResult, next: RunResu
   const moved = delta.size;
   const cause = describeCause(data, prev.conditions, next.conditions);
   const summary =
-    entered.size === 0 && moved === 0
+    entered.size === 0 && moved === 0 && dropped.length === 0
       ? "Top 10 unchanged"
-      : [entered.size ? `${entered.size} new` : null, moved ? `${moved} moved` : null].filter(Boolean).join(", ");
+      : [
+          entered.size ? `${entered.size} new` : null,
+          moved ? `${moved} moved` : null,
+          dropped.length ? `${dropped.length} left` : null,
+        ]
+          .filter(Boolean)
+          .join(", ");
   return { cause, delta, entered, dropped, summary };
 }

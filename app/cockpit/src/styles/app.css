@@ -1701,3 +1701,8 @@ table {
 .contrib td:nth-child(3) {
   width: auto;
 }
+
+.stab-block.is-stale > :not(h3) {
+  opacity: 0.45;
+  transition: opacity var(--t-fade) linear;
+}

@@ -10,6 +10,8 @@ interface Props {
   data: CockpitData;
   result: RunResult;
   stability: Stability | null;
+  /** true while rank stability still reflects the previous conditions */
+  stabilityStale: boolean;
   idx: number | null;
   compare: number | null;
   onCompare: (i: number | null) => void;
@@ -21,7 +23,7 @@ interface Props {
 
 const LOUDOUN = "51107";
 
-export function FindingPanel({ data, result, stability, idx, compare, onCompare, onClose, drawer, open, onToggle }: Props) {
+export function FindingPanel({ data, result, stability, stabilityStale, idx, compare, onCompare, onClose, drawer, open, onToggle }: Props) {
   if (idx === null) {
     return (
       <section className={`finding is-empty${drawer ? " is-drawer" : ""}`} aria-label="County finding">
@@ -78,7 +80,7 @@ export function FindingPanel({ data, result, stability, idx, compare, onCompare,
       {(!drawer || open) && (
         <div className="finding-body">
           <div className="fcol">
-            <StabilityBlock data={data} result={result} stability={stability} idx={idx} />
+            <StabilityBlock data={data} result={result} stability={stability} stale={stabilityStale} idx={idx} />
             <GateBlock data={data} result={result} idx={idx} />
             <CoverageBlock data={data} result={result} idx={idx} />
           </div>
@@ -95,13 +97,31 @@ export function FindingPanel({ data, result, stability, idx, compare, onCompare,
   );
 }
 
-function StabilityBlock({ data, result, stability, idx }: { data: CockpitData; result: RunResult; stability: Stability | null; idx: number }) {
+function StabilityBlock({
+  data,
+  result,
+  stability,
+  stale,
+  idx,
+}: {
+  data: CockpitData;
+  result: RunResult;
+  stability: Stability | null;
+  stale: boolean;
+  idx: number;
+}) {
+  // Check the current result first: a share from the previous conditions must
+  // not outlive the county's exclusion or floor failure.
+  const eligible = !!result.gates.passed[idx] && !!result.floor[idx];
   const share = stability?.share[idx];
   const tiers = stability?.tiers.get(idx);
-  const has = share !== undefined && !Number.isNaN(share);
+  const has = eligible && share !== undefined && !Number.isNaN(share);
   return (
-    <div className="block">
-      <h3>Rank stability</h3>
+    <div className={`block stab-block${stale && has ? " is-stale" : ""}`} aria-busy={stale}>
+      <h3>
+        Rank stability
+        {stale && has && <span className="h-note">Updating</span>}
+      </h3>
       {has ? (
         <>
           <p className="stab-big">
@@ -122,7 +142,9 @@ function StabilityBlock({ data, result, stability, idx }: { data: CockpitData; r
         <p className="fine">
           {!result.gates.passed[idx]
             ? "Not computed: the county is excluded by a gate."
-            : (stability?.warning ?? "Not computed for counties below a pillar floor.")}
+            : !result.floor[idx]
+              ? "Not computed for counties below a pillar floor."
+              : (stability?.warning ?? "Updating for the current conditions.")}
         </p>
       )}
       {data.meta.synthetic && <p className="fine">Computed on synthetic values.</p>}

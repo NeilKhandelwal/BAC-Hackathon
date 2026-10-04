@@ -97,3 +97,17 @@ describe("url state", () => {
     expect(bad.view.conditions.presetId).toBe("balanced");
   });
 });
+
+describe("rank change summary", () => {
+  it("reports counties that left even when the rest keep their order", async () => {
+    const { computeChanges } = await import("../src/state/changes");
+    const c = fromPreset(data.presets[0]!);
+    const a = run(data, c, { ...opts, withStability: false });
+    // Keep only the current top 3: the survivors hold their order, seven drop out.
+    const keep = new Set(a.ranked.slice(0, 3));
+    const b = { ...a, ranked: a.ranked.slice(0, 3), gates: { ...a.gates, passed: a.gates.passed.map((_, i) => (keep.has(i) ? 1 : 0)) as Uint8Array, failed: a.gates.failed.map((f, i) => (keep.has(i) ? f : ["min_population"])) } };
+    const ch = computeChanges(data, a, b, 10);
+    expect(ch.dropped.length).toBe(7);
+    expect(ch.summary).toBe("7 left");
+  });
+});
