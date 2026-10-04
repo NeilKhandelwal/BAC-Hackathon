@@ -12,6 +12,25 @@ FACTS = {
     "State moratorium in effect": "moratorium_state_active",
 }
 
+# Readable names for columns whose raw names are easy to confuse. Scored queue measures first, then
+# the unscored queue context shown beside them. Columns without an entry show their raw name.
+COLUMN_LABELS = {
+    "queue_active_mw_clean_excl_storage": "Clean generation in the queue, excluding storage (MW)",
+    "queue_operational_mw_online_5y": "Delivered or estimated online 2021-2025 (MW)",
+    "queue_active_mw_storage_standalone": "Standalone storage in the queue (MW, not scored)",
+    "queue_active_mw_clean": "Legacy: clean including storage in the queue (MW, not scored)",
+    "queue_operational_mw_5y": "Legacy: operational, entered the queue 2019 or later (MW, not scored)",
+    "queue_operational_online_date_fallback_share":
+        "Delivered projects dated by proposed online date (share, not scored)",
+}
+# Unscored queue context shown beside the scores, so storage and legacy measures stay visible.
+QUEUE_CONTEXT = ["queue_active_mw_storage_standalone", "queue_operational_online_date_fallback_share",
+                 "queue_active_mw_clean", "queue_operational_mw_5y"]
+
+
+def label(column):
+    return COLUMN_LABELS.get(column, column)
+
 
 def _flag(df, i, column):
     """True, False, or None when the column is absent or null."""
@@ -71,6 +90,7 @@ def explain(df, conditions, pillars, fips, result=None):
         "facts": {label: _flag(df, i, col) for label, col in FACTS.items() if col in df.columns},
         "warnings": [MORATORIUM_WARNING] if _flag(df, i, "moratorium_state_active") else [],
         "top_reasons": None if row is None else [r for r in row["top_reasons"].split(";") if r],
+        "context": {label(c): _num(df.at[i, c]) for c in QUEUE_CONTEXT if c in df.columns},
         "pillars": {},
         "horizon_2050_raw": {},
     }
@@ -81,8 +101,8 @@ def explain(df, conditions, pillars, fips, result=None):
             "national_percentile": _num(pillar_pct.at[i, pc]),
             "weight": float(sc.weights[pc]),
             "floor_exempt": pillar in exempt,
-            "columns": [{"column": c, "raw": _num(df.at[i, c]), "percentile": _num(sc.pcts.at[i, c]),
-                         "direction": directions.get(c)} for c in cols],
+            "columns": [{"column": c, "label": label(c), "raw": _num(df.at[i, c]),
+                         "percentile": _num(sc.pcts.at[i, c]), "direction": directions.get(c)} for c in cols],
         }
     for ms in pillars.values():
         for m in ms:
@@ -104,7 +124,7 @@ def format_text(e, u=DEFAULT_UNIT):
         lines.append(f"rank {e['rank']} of {e['of']}, composite {_fmt(e['composite'], '.1f')}, "
                      f"floor_ok {e['floor_ok']}, robustness {_fmt(e['robustness'], '.2f')}, "
                      f"coverage {_fmt(e['coverage'], '.2f')}")
-        lines.append(f"top reasons: {', '.join(e['top_reasons']) or 'no column above the national median'}")
+        lines.append(f"top reasons: {', '.join(label(r) for r in e['top_reasons']) or 'no column above the national median'}")
     else:
         lines.append(f"excluded by: {', '.join(e['failed_gates'])}")
     if e["unknown_gates"]:
@@ -121,7 +141,13 @@ def format_text(e, u=DEFAULT_UNIT):
         for c in d["columns"]:
             pct = "null" if c["percentile"] is None else f"{c['percentile']:.1f}"
             raw = "null" if c["raw"] is None else f"{c['raw']:.4g}" if isinstance(c["raw"], (int, float)) else c["raw"]
-            lines.append(f"  {c['column']:<32} raw {raw:>10}  pctl {pct:>5}  ({c['direction']})")
+            name = c.get("label", c["column"])
+            suffix = f"  {c['column']}" if name != c["column"] else ""
+            lines.append(f"  {name:<32} raw {raw:>10}  pctl {pct:>5}  ({c['direction']}){suffix}")
+    if e.get("context"):
+        lines.append("\nunscored queue context:")
+        for name, v in e["context"].items():
+            lines.append(f"  {name}: {'n/a' if v is None else format(v, '.4g')}")
     if e["horizon_2050_raw"]:
         lines.append("\n2050 raw change:")
         for col, d in e["horizon_2050_raw"].items():
