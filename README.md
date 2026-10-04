@@ -67,6 +67,12 @@ python -m etl.build_features   # downloads to data/raw/, writes the county table
 `build_features` caches every download. Pass `--no-fetch` to rebuild from
 `data/raw/` without network calls. Delete a file under `data/raw/` to refetch it.
 
+The build also writes `county_features_quality_report.json` (validation
+checks and column profiles) and `brownfield_sites.parquet` (gitignored). The
+BLS LAUS host refuses requests without a contact address, so set
+`BLS_CONTACT_EMAIL=you@example.com` before the first online build. Cached
+files need nothing.
+
 Engine and app commands are added as they're built.
 
 ## Data notes

@@ -312,3 +312,35 @@ could not be tested from the sandbox because of a shared-IP rate limit.
   including the zonal stats run.
 - Person C: EIA 861 and 923 via PUDL or the ZIPs, FCC via the Esri layer,
   GDELT via BigQuery, hand-verification of the opposition labels. One day.
+
+## ETL v2 context sources (2026-10-03)
+
+The context columns in `docs/schema.md` come from these sources. Each was
+checked from a laptop on 2026-10-03.
+
+- **BLS LAUS:** `https://www.bls.gov/lau/laucntyYY.xlsx`. The host returns
+  403 unless the User-Agent carries a contact address, which the adapter
+  reads from `BLS_CONTACT_EMAIL`. Read with `skiprows=1`. All years key
+  Connecticut by planning region. The 2025 file is an 11-month average.
+- **BLS QCEW:** `https://data.bls.gov/cew/data/api/{year}/a/industry/31_33.csv`
+  (underscore, not hyphen) and `.../10.csv`. County manufacturing is
+  `agglvl_code` 74. Suppressed cells have `disclosure_code` N and employment 0.
+  2015 and 2019 use Connecticut's old counties.
+- **USDA ERS:** RUCC 2023 at
+  `https://www.ers.usda.gov/media/5767/2023-rural-urban-continuum-codes.xlsx`
+  and Typology 2025 at
+  `https://www.ers.usda.gov/media/6173/ers-county-typology-codes-2025-edition.xlsx`.
+  Both are wide in the xlsx and long in the CSV. In Typology, 99 means not
+  available.
+- **EPA brownfields:** Envirofacts exposes no ACRES tables. Three public
+  layers under `services.arcgis.com/cJ9YHowT8TU7DUyn`:
+  `Cleanups_in_my_Community_Sites` (47,106 brownfield rows, 47,101
+  properties), `RE_Powering_Mapper_Sites_2022` (`Program='Brownfields'`,
+  acreage), and `Brownfield_Properties_Over_100_Acres_view` (335 sites).
+  RE-Powering acreage includes community-wide records up to 168,000 acres.
+- **FracTracker moratoria:** municipal rows use 10-digit county-subdivision
+  GEOIDs or 7-digit place GEOIDs. Places need the 2024 place Gazetteer
+  to reach a county.
+- **LBNL:** `on_date` is the actual online date. It's filled for about 69%
+  of operational rows, about 99% in PJM, CAISO, and MISO but 18% in the West
+  and 0% in ISO-NE.
