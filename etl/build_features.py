@@ -18,6 +18,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from etl import quality
 from etl.schema import CORE, STRETCH
 
 RAW_DIR = Path("data/raw")
@@ -25,7 +26,10 @@ OUT_DIR = Path("data/processed")
 ADAPTERS = ["tiger_acs", "nri", "cmra", "lbnl_queue", "fcc_fiber", "egrid", "drought_monitor",
             "fractracker", "air_nonattainment", "state_tables", "nrel_wind", "cbp_manufacturing",
             "ers_unemployment", "popest", "eia860_coal", "eia_price", "aqueduct",
-            "pop_history", "bea_manufacturing", "netl_energy_communities"]  # tiger_acs must be first: it defines the rows
+            "pop_history", "bea_manufacturing", "netl_energy_communities",
+            # ETL v2 context adapters. They only add STRETCH columns and leave the ones above alone.
+            "bls_laus", "bls_qcew", "usda_ers", "epa_brownfields", "nri_context", "aqueduct_context",
+            "cmra_context", "fcc_context", "fractracker_context", "lbnl_queue_alt"]  # tiger_acs must be first: it defines the rows
 
 
 def _mtime(path):
@@ -34,6 +38,7 @@ def _mtime(path):
 
 def build(fetch=True):
     table, sources, joins, errors, notes, unmatched, failed = None, [], {}, {}, [], [], []
+    artifact_writers = []  # adapters with write_artifacts(out_dir), called after the table is saved
     for name in ADAPTERS:
         try:
             mod = importlib.import_module(f"etl.adapters.{name}")
@@ -69,10 +74,13 @@ def build(fetch=True):
                 "counties_without_data": int((~table.fips.isin(df.fips)).sum()),
             }
             table = table.merge(df, on="fips", how="left", validate="one_to_one")
-        sources.append({**mod.SOURCE, "fetched_at": _mtime(RAW_DIR / mod.RAW)})
+        sources.append({**mod.SOURCE, "adapter": name, "fetched_at": _mtime(RAW_DIR / mod.RAW)})
+        if hasattr(mod, "write_artifacts"):
+            artifact_writers.append(mod)
         notes += getattr(mod, "NOTES", [])
         unmatched += [(name, *row) for row in getattr(mod, "UNMATCHED", [])]
 
+    table = table.copy()  # one defragmenting copy after many merges; values are unchanged
     if {"hdd_hist", "pop_density_per_sqkm"} <= set(table.columns):
         table["heat_sink_score"] = table.hdd_hist * np.log1p(table.pop_density_per_sqkm)
 
@@ -101,7 +109,10 @@ def build(fetch=True):
     unmatched.to_csv(OUT_DIR / "unmatched_names.csv", index=False)
     manifest["unmatched_name_rows"] = {k: int(v) for k, v in unmatched.groupby("source").rows.sum().items()}
     table.to_parquet(OUT_DIR / "county_features.parquet", index=False)
+    manifest["artifacts"] = [p for mod in artifact_writers for p in mod.write_artifacts(OUT_DIR)]
+    manifest["quality_report"] = str(OUT_DIR / "county_features_quality_report.json")
     (OUT_DIR / "county_features.manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    quality.write_report(table, manifest, OUT_DIR / "county_features_quality_report.json")
     return table, manifest, failed
 
 

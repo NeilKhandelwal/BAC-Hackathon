@@ -50,7 +50,11 @@ def test_shares_are_fractions_not_percents(table, column):
 
 
 def test_nri_scores_are_0_to_100(table):
-    for column in [c for c in table.columns if c.startswith("nri_")]:
+    # Percentile columns only. NRI context columns also hold a rating string, not-applicable
+    # flags, and annualized frequencies (drought days per year exceed 100).
+    columns = [c for c in table.columns if c.startswith("nri_") and c.endswith(("_score", "_risks"))]
+    assert "nri_risk_score" in columns and "nri_wildfire_risks" in columns
+    for column in columns:
         assert table[column].dropna().between(0, 100).all(), column
 
 
