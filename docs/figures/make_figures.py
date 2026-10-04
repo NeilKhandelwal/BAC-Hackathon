@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from engine.explain import explain  # noqa: E402
 from engine.rank import load_features, load_yaml, rank  # noqa: E402
-from etl.impact import impact  # noqa: E402
+from etl.impact import BPA_CO2_LB_MWH, co2_tonnes, impact  # noqa: E402
 
 OUT = Path(__file__).resolve().parent
 TABLE = ROOT / "data/processed/county_features.parquet"
@@ -53,10 +53,8 @@ PILLAR_LABELS = {
 }
 SHORT = {"energy_carbon": "Energy", "water": "Water", "climate_resilience": "Climate", "grid_infrastructure": "Grid",
          "land": "Land", "community": "Community", "permitting": "Permitting", "cost": "Cost"}
-# Grant County supply and price cases, stated in research/impact.md and research/implementation.md.
-# The script multiplies them by etl/impact.py's facility energy, so the products are reproduced here.
-BPA_CO2_LB_MWH = 212.46        # eGRID2023 balancing authority BPAT. research/impact.md shows it rounded to 212;
-                               # 212.46 reproduces that file's 235,547 t. The exact rate isn't in a committed file.
+# Grant County price cases, stated in research/impact.md and research/implementation.md. The BPA CO2
+# rate comes from etl/impact.py (eGRID2023 BA23, BPAT). Both are multiplied by etl/impact.py's facility energy.
 NEW_LOAD_USD_MWH = (80, 132)   # BPA rate for a new large single load, low and high
 FREEZE_TAG = "data-freeze-2026-10-03"
 HAZARDS = ["drought", "inland_flood", "coastal_flood", "wildfire", "hurricane", "heat_wave", "tornado", "winter"]
@@ -206,7 +204,8 @@ def grant_ranges(table, fips="53025"):
     dry = impact(fips, cooling="dry", table=table)
     price = float(table.set_index("fips").loc[fips, "industrial_price_cents_kwh"])
     return {"facility_mwh": round(dry["facility_mwh"]),
-            "co2_tonnes": {"bpa": round(dry["facility_mwh"] * BPA_CO2_LB_MWH / 2204.62),
+            "co2_tonnes": {"bpa": round(co2_tonnes(dry["facility_mwh"], BPA_CO2_LB_MWH)),
+                           "bpa_rate_lb_mwh": BPA_CO2_LB_MWH,
                            "nwpp_table": round(dry["co2_tonnes"])},
             "energy_cost_musd": {"state_average": round(dry["facility_mwh"] * price * 10 / 1e6),
                                  "new_load_low": round(dry["facility_mwh"] * NEW_LOAD_USD_MWH[0] / 1e6),

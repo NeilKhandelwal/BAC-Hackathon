@@ -342,7 +342,8 @@
  "grant_ranges": {
   "facility_mwh": 2444212,
   "co2_tonnes": {
-   "bpa": 235550,
+   "bpa": 235547,
+   "bpa_rate_lb_mwh": 212.458,
    "nwpp_table": 700390
   },
   "energy_cost_musd": {

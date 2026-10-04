@@ -172,7 +172,8 @@ of Loudoun's, and dry cooling cuts its water to 28 million gallons.
 **Speaker note:**
 - Formulas, ranges, and limits: `research/impact.md`.
 - New-load rates: `research/implementation.md`.
-- Figure values are recomputed from `etl/impact.py` into `docs/figures/facts.json` (`grant_ranges`, `impact`).
+- The BPA rate is `BPA_CO2_LB_MWH` (212.458 lb/MWh, eGRID2023 BPAT) in `etl/impact.py`.
+- Figure values are recomputed with `etl/impact.py` into `docs/figures/facts.json` (`grant_ranges`, `impact`).
 
 ## 7. Risk assessment
 
