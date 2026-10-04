@@ -57,20 +57,24 @@ site. Differences are against Loudoun.
 
 ### Dry cooling
 
-On-site water is 27.8 million gallons a year at every site.
+On-site water is 27.8 million gallons a year at every site. Energy cost is
+facility energy times the state's `industrial_price_cents_kwh`
+(`etl.risk.energy_cost`).
 
-| County | CDD | Grid lb/MWh | PUE | CO2, tons/yr | vs Loudoun |
-| --- | --- | --- | --- | --- | --- |
-| Berkshire, MA | 259 | 539 | 1.137 | 584,653 | -90,801 |
-| Franklin, NY | 240 | 242 | 1.136 | 262,168 | -413,287 |
-| Clinton, NY | 354 | 242 | 1.143 | 263,888 | -411,567 |
-| Erie, NY | 457 | 242 | 1.150 | 265,420 | -410,034 |
-| Onondaga, NY | 495 | 242 | 1.152 | 265,995 | -409,459 |
-| Grant, WA | 655 | 632 | 1.163 | 700,390 | +24,936 |
-| Washington, OR | 214 | 632 | 1.134 | 683,128 | +7,674 |
-| Trumbull, OH | 640 | 911 | 1.162 | 1,009,646 | +334,192 |
-| Maricopa, AZ | 3,377 | 704 | 1.340 | 898,913 | +223,458 |
-| Loudoun, VA | 1,132 | 593 | 1.194 | 675,455 | 0 |
+| County | CDD | Grid lb/MWh | PUE | CO2, tons/yr | vs Loudoun | Energy cost, $M/yr | vs Loudoun |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Grant, WA | 655 | 632 | 1.163 | 700,390 | +24,936 | 162 | -64 |
+| Berkshire, MA | 259 | 539 | 1.137 | 584,653 | -90,801 | 435 | +209 |
+| Franklin, NY | 240 | 242 | 1.136 | 262,168 | -413,287 | 219 | -7 |
+| Clinton, NY | 354 | 242 | 1.143 | 263,888 | -411,567 | 220 | -5 |
+| Erie, NY | 457 | 242 | 1.150 | 265,420 | -410,034 | 222 | -4 |
+| Onondaga, NY | 495 | 242 | 1.152 | 265,995 | -409,459 | 222 | -3 |
+| Washington, OR | 214 | 632 | 1.134 | 683,128 | +7,674 | 192 | -34 |
+| Trumbull, OH | 640 | 911 | 1.162 | 1,009,646 | +334,192 | 173 | -52 |
+| Maricopa, AZ | 3,377 | 704 | 1.340 | 898,913 | +223,458 | 222 | -3 |
+| Loudoun, VA | 1,132 | 593 | 1.194 | 675,455 | 0 | 226 | 0 |
+
+Grant's CO2 in this table uses the regional average. See the range below.
 
 ### Evaporative cooling
 
@@ -86,6 +90,26 @@ On-site water is 27.8 million gallons a year at every site.
 | Trumbull, OH | 1.141 | 991,555 | +336,922 | 206.7 | -116.0 |
 | Maricopa, AZ | 1.230 | 825,258 | +170,624 | 852.7 | +529.9 |
 | Loudoun, VA | 1.157 | 654,634 | 0 | 322.8 | 0 |
+
+## Grant County, WA: CO2 as a range
+
+Grant County is the featured site. Its emissions depend on which power
+serves the new load, so the honest figure is a range. Facility energy is
+2,444,212 MWh a year with dry cooling.
+
+| Supply assumption | Rate, lb/MWh | CO2, tons/yr | vs Loudoun |
+| --- | --- | --- | --- |
+| Grant PUD's own generation (eGRID balancing authority GCPD) | 0 | 0 | -675,455 |
+| Bonneville Power Administration (eGRID balancing authority BPAT) | 212 | 235,547 | -439,908 |
+| Northwest subregion average (the county table's value) | 632 | 700,390 | +24,936 |
+
+For assigning the county to its balancing authority: Grant PUD is the
+county's utility, its plants are all inside the county, and all of them
+are hydro. Against: a balancing authority rate describes what the utility
+generates, not what a new customer receives. The campus would draw 59
+percent of the PUD's 4.13 TWh, and the PUD says new large loads pay for
+new generation. Use the middle row as the working estimate and show the
+range. The county table and the engine keep the subregion value.
 
 ## Results in 2050
 
@@ -118,6 +142,8 @@ percent.
 - Climate decides water. An evaporative site in upstate New York uses about
   a third to half of Loudoun's water today. Maricopa uses 2.6 times
   Loudoun's.
+- Grant County costs $64M a year less than Loudoun to power. Its CO2 runs
+  from zero to slightly above Loudoun's, depending on supply.
 - Dry cooling removes almost all on-site water for a small energy cost in
   cool climates: about 1 percent more CO2 in upstate New York, 9 percent in
   Maricopa.
@@ -130,8 +156,8 @@ percent.
 - The subregion average hides local supply. Grant County, WA and
   Washington County, OR show slightly more CO2 than Loudoun because the
   Northwest subregion (NWPP, 632 lb/MWh) spans coal and gas plants in the
-  interior West. Their local utilities are mostly hydro. Treat those two
-  rows as overstated.
+  interior West. Their local utilities are mostly hydro. The range above
+  handles Grant. Washington County's row is overstated in the same way.
 - Emissions are location-based annual averages. A new 300 MW load is served
   at the margin, which is usually dirtier than the average.
 - Water used to generate the grid power is omitted. The county table has no

@@ -50,3 +50,13 @@ def test_power_price_is_the_featured_countys_worst_risk():
     assert risk.worst("25003", 1).column.iloc[0] == "industrial_price_cents_kwh"
     assert risk.energy_cost("25003")["difference_usd_per_year"] > 150e6
     assert impact.impact("25003")["co2_tonnes"] < impact.impact("51107")["co2_tonnes"]
+
+
+def test_grant_risks_match_the_write_up():
+    # research/risk.md leads with heat, wildfire, and water stress for the featured county and
+    # says evaporative cooling is ruled out. If the table changes, the write-up must follow.
+    assert list(risk.worst("53025", 3).column) == ["nri_heat_wave_score", "nri_wildfire_score", "water_stress_bws"]
+    profile = risk.profile("53025").set_index("column")
+    assert profile.value["water_stress_bws"] > 2          # above the evaporative-cooling gate
+    assert profile.worse_than_pct["nri_wildfire_score"] < 95  # under the wildfire gate
+    assert risk.energy_cost("53025")["difference_usd_per_year"] < 0  # cheaper than Loudoun
