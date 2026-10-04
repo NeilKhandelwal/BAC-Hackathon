@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:40 UTC
+- **Updated:** 2026-10-04 01:53 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,13 +17,13 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** Phase 3 (CRITIC and entropy), starting. The user
+- **Phase and step:** Phase 3 done. Phase 4 (revealed preference) starting. The user
   approved running Phases 3 and 4 back to back without a check-in unless
   something blocks.
 - **Done:** Phase 0. Phase 1 (`monetize.py`). Monte Carlo
   (`montecarlo.py`). Phase 2 (`smaa.py`). `docs/weighting.md` stub with
   the hazard-downtime and floor notes. Results are in the history.
-- **In progress:** Phase 3.
+- **In progress:** Phase 4.
 - **Exact next action:** in order, per approved decisions 13 to 16:
   1. `scratch/weighting/critic.py`: raw-value CRITIC and entropy only
      (winsorize 1st/99th, min-max, direction applied, column-level
@@ -144,7 +144,7 @@ exemption. Don't attribute the whole flip to weights.
 | 0 | Get current, summarize, plan | done | this file |
 | 1 | Monetized total cost of siting | done | `scratch/weighting/monetize.py`, `docs/img/cost_vs_co2.png` |
 | 2 | Weight-space mapping (SMAA) | done | `scratch/weighting/smaa.py`, `docs/img/smaa_acceptability.png` |
-| 3 | CRITIC and entropy weights | not started | `scratch/weighting/critic.py` |
+| 3 | CRITIC and entropy weights | done | `scratch/weighting/critic.py` |
 | 4 | Revealed preference | not started | `scratch/weighting/revealed.py` |
 | 5 | Consensus and write-up | not started | `scratch/weighting/consensus.py`, `docs/weighting.md`, `docs/img/` |
 
@@ -576,7 +576,7 @@ physical gap into a few points. That's why the engine needs an
 energy_carbon weight of 0.79 before Franklin passes Grant, while the
 monetized model has Franklin passing Grant at $99/t.
 
-### 2026-10-04 01:50 UTC, Phase 3: CRITIC and entropy on raw values
+### 2026-10-04 01:48 UTC, Phase 3: CRITIC and entropy on raw values
 
 Script: `scratch/weighting/critic.py`. Printout:
 `scratch/weighting/out/critic_report.txt`. Weights:
@@ -626,14 +626,25 @@ weights):
   gate passers have no data center and entropy rewards sparse,
   concentrated columns. Entropy's top 10 is the big metros with existing
   clusters. That's a property of the method, not evidence those counties
-  are good sustainable sites.
+  are good sustainable sites. Entropy also depends on how a column is
+  coded: after the lower_better flip, a mostly-zero column becomes mostly
+  ones, reads as near-uniform, and gets almost no weight. Coastal flood
+  shows this (0.0019), while sparse higher_better columns such as
+  `dc_existing_count` get large weights. Entropy's ranking reflects coding
+  choices, so Phase 5 reports the consensus with and without it.
 - Both methods nearly ignore cost (0.018 and 0.002). The industrial price
   has one value per state, so its spread after winsorizing is small.
-- Only two pairs exceed |r| 0.8: `cdd_hist` with `days_above_95f_hist`
-  (0.80), and `pop_density_per_sqkm` with `population` (-0.87). CRITIC
-  down-weights them by about 3 to 7% against the mean column weight
-  (0.0286), because one high correlation among 34 barely moves the
-  conflict sum.
+- Only two pairs exceed |r| 0.8. `cdd_hist` with `days_above_95f_hist`
+  (r 0.80) is the only pair CRITIC down-weights, by about 6 to 9% against
+  the mean column weight (0.0286). `pop_density_per_sqkm` with
+  `population` has r -0.87 after direction coding, so each gets 1 - r of
+  about 1.87, the largest conflict term: CRITIC up-weights that pair.
+  Their slightly below-mean weights come from their spread. The pair also
+  shows a tension in the pillars: land rewards low density while community
+  rewards high population, two opposite readings of one fact.
+- Queue age's very low weights (CRITIC 0.0177, entropy 0.0038) are partly
+  an artifact: 68% of its values take the median for the weight
+  calculation, which shrinks its spread.
 
 ### 2026-10-04 01:52 UTC, advisor consulted on Phase 3 and the next two designs
 
