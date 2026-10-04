@@ -7,37 +7,30 @@ the bottom is append-only.
 
 ## MORNING SUMMARY
 
-1. **Grant (Quincy): no conflict.** The nearest protected land is a WDFW wildlife area 5.8 km away, and none is within 5 km. No refuge, national park, wilderness, or national forest is within 30 km, and the nearest tribal land is 75 km away. Most of the county's 12.8% protected share lies 20 to 54 km from Quincy (Hanford Reach, the Desert Unit, Columbia NWR).
-2. **Grant process risk:** Quincy appears to sit inside the Yakama 1855 ceded area. That's unverified against an official map. A federal permit would trigger Section 106 tribal consultation, and state funding would trigger Executive Order 21-02 review.
-3. **Clark:** the Columbia River Gorge National Scenic Area is a real constraint at the county's east end. A site also needs to avoid the Ridgefield and Shillapoo lowlands and the Cowlitz Reservation, 23 km north of Vancouver.
-4. **Franklin NY:** 68% of the county is inside the Adirondack Park, where a site needs an APA permit. Malone is 6.1 km outside the Blue Line.
-5. **`pct_protected` was built but not shipped.** It comes from USGS PAD-US 4.1's county table (GAP 1-2), and `tribal_land_share` from Census TIGER. The frozen table, `results/`, figures, demo, and deck numbers are unchanged.
-6. **Grant is still #1.** The deck gained one limitation bullet and one speaker note. No number in the deck changed.
-7. **Decision for you:** is "proximity to sensitive areas" a feasibility screen, or a sustainability score?
-   - (a) **Score it.** `pillars.yaml` already scores the column once it's in the table. Whitman WA becomes #1 and Grant 4th, 0.87 points behind. Grant's top-10 share across random weightings falls from 50.5% to 14.0%.
-   - (b) **Gate it.** `docs/schema.md` already calls it a "sensitive-area gate". The model would check, and Grant passes. It needs a new engine gate and a threshold. The balanced pass count moves from 1,565 to 1,561 at a 50% cap or 1,535 at 25%, and the top 10 is unchanged.
-   - (c) **Context only.** Nothing changes.
-8. **Recommendation:** (c) for 9am, the only option that keeps every artifact valid. After the deadline, (b) fixes the bug as you stated it: Grant passes because the model checked.
-9. **Follow-up, NLCD land cover:** built and measured, not shipped. Cropland alone moves Grant to 2nd behind Wayne TN. All the NLCD columns the pillar map lists keep Grant 1st. Adding protected land too leaves Grant 1st by 0.01 points (see history).
-10. **Open:** check the Yakama ceded-area reading against an official map; the 11-item unverified list is in `research/sensitive_land.md`. `main`'s weighting log was stale, so this branch carries the close-out commit. PR #40 (https://github.com/NeilKhandelwal/BAC-Hackathon/pull/40) is ready for review, not merged.
+Updated after the user's direction to ship (the product is the tool, so missing land context is a gap).
+
+1. **Grant (Quincy): no conflict found by hand.** The nearest protected land is a WDFW wildlife area 5.8 km away, none is within 5 km, and the nearest tribal land is 75 km away. Clark: the Columbia River Gorge National Scenic Area constrains the county's east end. Franklin NY: 68% of the county is inside the Adirondack Park, but Malone is outside it. Details are in `research/sensitive_land.md`.
+2. **Shipped on PR #40, against `main`'s current code.** Seven columns were appended at the end of the frozen table: PAD-US protected land, tribal land share, and NLCD cropland, developed land, and forest/wetland. Every earlier column is unchanged.
+3. **Scoring.** The land pillar now scores protected land, cropland, and developed land; permitting scores forest and wetland. New optional gates (`max_pct_protected`, `max_tribal_land_share`) are off in every preset and have sidebar sliders.
+4. **Grant is still #1 under balanced:** 63.70, level with Whitman WA at 63.69. Floor passes fall from 912 to 883. Grant is 2nd under equal weights. Its random-weight top-10 share falls from 50.5% to 35.8%, and Whitman leads at 43.9%. speed_to_power's #1 is now Mayes OK.
+5. **Updated:** deck numbers, the demo script (including Whitman ranking 1st under evaporative cooling), risk, implementation, figures, `facts.json`, and `results/`. Tests: 187 passed.
+6. **Not done:** `app/cockpit`'s `engine-export.json` and its parity tests need Node (`npm run data:engine`), which isn't installed here. The cockpit shows the old data until someone runs that. The Streamlit click path was recomputed with the engine but not clicked through in a browser.
+7. **Fallback:** `main` still has the old version if you'd rather submit that.
 
 ## CURRENT STATE
 
 Overwritten after every step.
 
-- **Updated:** 2026-10-04 05:59 UTC
+- **Updated:** 2026-10-04 06:54 UTC
 - **Branch:** `fix/sensitive-land`, from `main` at `714d231` (PR #35,
   the weighting work, is merged).
-- **Phase and step:** finished. Phase 1 done, Phase 2 done, Phase 3
-  measured and not shipped (decision rule and advisor). PR #40,
-  https://github.com/NeilKhandelwal/BAC-Hackathon/pull/40, from
-  `fix/sensitive-land` to `main`, is ready for review and not merged.
-- **Done:** see the morning summary and the history.
+- **Phase and step:** shipped on PR #40 at the user's direction. Waiting on
+  review; not merged.
+- **Done:** see the morning summary.
 - **In progress:** nothing.
-- **Exact next action:** waiting on the user's a/b/c decision. Ship steps
-  for each option are in the PR description. Warning: appending
-  `pct_protected` to the frozen table ships option (a), because
-  `engine/pillars.yaml` already scores it.
+- **Exact next action:** a teammate with Node runs `npm run data:engine` and
+  the parity tests in `app/cockpit`. Optionally, click through the
+  Streamlit demo path in a browser.
 - **Raw files to recreate** (gitignored): `data/raw/tiger/` (county and
   AIANNH zips) via the adapters' `fetch`; `data/raw/padus/` via
   `python -c "from etl.adapters import pad_us; from pathlib import Path; pad_us.fetch(Path('data/raw'))"`.
@@ -358,3 +351,43 @@ choice.
 the "all NLCD" row automatically, because `pillars.yaml` already maps all
 three scored columns. Nothing was appended. `docs/schema.md` rows are
 updated to say "built and measured; not in the frozen table".
+
+### 2026-10-04 06:54 UTC, shipped at the user's direction
+
+The user reframed the goal. The product is a tool for picking a county
+with your own weights, so missing land context is a gap in the tool, not
+only a risk to the featured pick. Their direction was to ship with speed;
+the fallback is the old version on \`main\`.
+
+**What shipped:**
+1. Merged current \`main\` (\`23bb71c\`, React cockpit) into this branch.
+2. Appended seven columns at the end of the frozen table with
+   \`etl/append_columns.py\`:
+   - \`pct_developed\`, \`pct_cropland\`, \`pct_forest_wetland\`,
+     \`pct_cultivated_crops\` (NLCD 2021 via NHGIS)
+   - \`pct_protected\`, \`pct_protected_gap1to3\` (PAD-US 4.1)
+   - \`tribal_land_share\` (TIGER)
+3. Moved those entries to the end of \`etl/schema.py\` STRETCH, and bounded
+   \`V2_CONTEXT\` so they aren't counted as v2 columns.
+4. \`append_columns\` now restores every frozen column's dtype after the
+   merge. A merge on \`fips\` had changed it from \`string\` to \`str\`, and
+   \`tests/test_etl_v2.py\` caught that.
+5. Registered the three adapters in \`build_features\`.
+   \`nlcd_landcover\` is OPTIONAL because its raw file needs an NHGIS
+   account.
+6. Added gates \`max_pct_protected\` and \`max_tribal_land_share\` in
+   \`engine/rank.py\` (null in every preset), with app sidebar sliders and
+   readable labels in \`engine/explain.py\`.
+7. Regenerated \`results/\` for the three presets and reran
+   \`make_figures.py\`.
+8. Updated \`docs/deck.md\`, \`docs/demo_script.md\` (values recomputed with
+   the engine), \`research/risk.md\`, \`research/implementation.md\`,
+   \`research/sensitive_land.md\`, \`docs/schema.md\`, and
+   \`docs/conditions.md\`.
+9. \`tests/test_reuse.py\`'s pinned floor count moves from 912 to 883. New
+   tests cover the frozen columns and the gates.
+
+Tests: 187 passed, 15 skipped, 1 xfailed. Quality report: 21 of 21 checks
+pass.
+
+**Not done:** the \`app/cockpit\` export and parity tests (no Node here).
