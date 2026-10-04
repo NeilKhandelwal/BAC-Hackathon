@@ -1,0 +1,437 @@
+{
+  "counties": 1565,
+  "columns": [
+    "grid_co2_lb_mwh",
+    "grid_renewable_share",
+    "queue_active_mw_clean",
+    "queue_operational_mw_5y",
+    "wind_speed_100m_ms",
+    "plant_clean_capacity_mw_100km",
+    "drought_share_weeks_d2plus",
+    "nri_drought_score",
+    "water_stress_bws",
+    "cdd_hist",
+    "nri_inland_flood_score",
+    "nri_coastal_flood_score",
+    "nri_wildfire_score",
+    "nri_hurricane_score",
+    "nri_heat_wave_score",
+    "nri_tornado_score",
+    "nri_winter_score",
+    "days_above_95f_hist",
+    "queue_median_age_years",
+    "queue_withdrawal_rate",
+    "fiber_share_locations",
+    "dc_existing_count",
+    "plant_capacity_mw_100km",
+    "coal_retired_mw",
+    "pop_density_per_sqkm",
+    "land_area_sqkm",
+    "heat_sink_score",
+    "population",
+    "unemployment_rate_pct_2023",
+    "pop_change_pct_since_peak",
+    "mfg_emp_share_1969",
+    "industrial_price_cents_kwh",
+    "air_nonattainment_count",
+    "water_permit_risk",
+    "state_policy_risk"
+  ],
+  "null_counts": {
+    "queue_median_age_years": 1072,
+    "queue_withdrawal_rate": 710,
+    "heat_sink_score": 8,
+    "mfg_emp_share_1969": 14,
+    "state_policy_risk": 349
+  },
+  "column_weights": {
+    "grid_co2_lb_mwh": {
+      "pillar": "energy_carbon",
+      "critic": 0.0226,
+      "entropy": 0.0104
+    },
+    "grid_renewable_share": {
+      "pillar": "energy_carbon",
+      "critic": 0.0357,
+      "entropy": 0.0313
+    },
+    "queue_active_mw_clean": {
+      "pillar": "energy_carbon",
+      "critic": 0.0423,
+      "entropy": 0.0412
+    },
+    "queue_operational_mw_5y": {
+      "pillar": "energy_carbon",
+      "critic": 0.0284,
+      "entropy": 0.1728
+    },
+    "wind_speed_100m_ms": {
+      "pillar": "energy_carbon",
+      "critic": 0.0274,
+      "entropy": 0.0076
+    },
+    "plant_clean_capacity_mw_100km": {
+      "pillar": "energy_carbon",
+      "critic": 0.0236,
+      "entropy": 0.0043
+    },
+    "drought_share_weeks_d2plus": {
+      "pillar": "water",
+      "critic": 0.028,
+      "entropy": 0.0057
+    },
+    "nri_drought_score": {
+      "pillar": "water",
+      "critic": 0.034,
+      "entropy": 0.016
+    },
+    "water_stress_bws": {
+      "pillar": "water",
+      "critic": 0.0328,
+      "entropy": 0.0091
+    },
+    "cdd_hist": {
+      "pillar": "water",
+      "critic": 0.0261,
+      "entropy": 0.0062
+    },
+    "nri_inland_flood_score": {
+      "pillar": "climate_resilience",
+      "critic": 0.0347,
+      "entropy": 0.0152
+    },
+    "nri_coastal_flood_score": {
+      "pillar": "climate_resilience",
+      "critic": 0.0208,
+      "entropy": 0.0019
+    },
+    "nri_wildfire_score": {
+      "pillar": "climate_resilience",
+      "critic": 0.0322,
+      "entropy": 0.0111
+    },
+    "nri_hurricane_score": {
+      "pillar": "climate_resilience",
+      "critic": 0.0374,
+      "entropy": 0.0143
+    },
+    "nri_heat_wave_score": {
+      "pillar": "climate_resilience",
+      "critic": 0.0352,
+      "entropy": 0.0123
+    },
+    "nri_tornado_score": {
+      "pillar": "climate_resilience",
+      "critic": 0.0322,
+      "entropy": 0.016
+    },
+    "nri_winter_score": {
+      "pillar": "climate_resilience",
+      "critic": 0.0341,
+      "entropy": 0.0162
+    },
+    "days_above_95f_hist": {
+      "pillar": "climate_resilience",
+      "critic": 0.0269,
+      "entropy": 0.0043
+    },
+    "queue_median_age_years": {
+      "pillar": "grid_infrastructure",
+      "critic": 0.0177,
+      "entropy": 0.0038
+    },
+    "queue_withdrawal_rate": {
+      "pillar": "grid_infrastructure",
+      "critic": 0.0263,
+      "entropy": 0.0104
+    },
+    "fiber_share_locations": {
+      "pillar": "grid_infrastructure",
+      "critic": 0.0343,
+      "entropy": 0.0116
+    },
+    "dc_existing_count": {
+      "pillar": "grid_infrastructure",
+      "critic": 0.0209,
+      "entropy": 0.1981
+    },
+    "plant_capacity_mw_100km": {
+      "pillar": "grid_infrastructure",
+      "critic": 0.0267,
+      "entropy": 0.0092
+    },
+    "coal_retired_mw": {
+      "pillar": "grid_infrastructure",
+      "critic": 0.0247,
+      "entropy": 0.1969
+    },
+    "pop_density_per_sqkm": {
+      "pillar": "land",
+      "critic": 0.0282,
+      "entropy": 0.0057
+    },
+    "land_area_sqkm": {
+      "pillar": "land",
+      "critic": 0.0163,
+      "entropy": 0.002
+    },
+    "heat_sink_score": {
+      "pillar": "community",
+      "critic": 0.0266,
+      "entropy": 0.0193
+    },
+    "population": {
+      "pillar": "community",
+      "critic": 0.0266,
+      "entropy": 0.015
+    },
+    "unemployment_rate_pct_2023": {
+      "pillar": "community",
+      "critic": 0.0234,
+      "entropy": 0.0108
+    },
+    "pop_change_pct_since_peak": {
+      "pillar": "community",
+      "critic": 0.0315,
+      "entropy": 0.0772
+    },
+    "mfg_emp_share_1969": {
+      "pillar": "community",
+      "critic": 0.0283,
+      "entropy": 0.0186
+    },
+    "industrial_price_cents_kwh": {
+      "pillar": "cost",
+      "critic": 0.0178,
+      "entropy": 0.0016
+    },
+    "air_nonattainment_count": {
+      "pillar": "permitting",
+      "critic": 0.0306,
+      "entropy": 0.005
+    },
+    "water_permit_risk": {
+      "pillar": "permitting",
+      "critic": 0.0297,
+      "entropy": 0.0043
+    },
+    "state_policy_risk": {
+      "pillar": "permitting",
+      "critic": 0.0362,
+      "entropy": 0.0145
+    }
+  },
+  "pillar_weights": {
+    "climate_resilience": {
+      "columns": 8,
+      "critic": 0.2535,
+      "entropy": 0.0913,
+      "balanced": 0.119,
+      "equal_per_column": 0.2286
+    },
+    "community": {
+      "columns": 5,
+      "critic": 0.1364,
+      "entropy": 0.141,
+      "balanced": 0.085,
+      "equal_per_column": 0.1429
+    },
+    "cost": {
+      "columns": 1,
+      "critic": 0.0178,
+      "entropy": 0.0016,
+      "balanced": 0.15,
+      "equal_per_column": 0.0286
+    },
+    "energy_carbon": {
+      "columns": 6,
+      "critic": 0.1799,
+      "entropy": 0.2675,
+      "balanced": 0.153,
+      "equal_per_column": 0.1714
+    },
+    "grid_infrastructure": {
+      "columns": 6,
+      "critic": 0.1505,
+      "entropy": 0.43,
+      "balanced": 0.153,
+      "equal_per_column": 0.1714
+    },
+    "land": {
+      "columns": 2,
+      "critic": 0.0445,
+      "entropy": 0.0078,
+      "balanced": 0.068,
+      "equal_per_column": 0.0571
+    },
+    "permitting": {
+      "columns": 3,
+      "critic": 0.0965,
+      "entropy": 0.0238,
+      "balanced": 0.153,
+      "equal_per_column": 0.0857
+    },
+    "water": {
+      "columns": 4,
+      "critic": 0.1209,
+      "entropy": 0.037,
+      "balanced": 0.119,
+      "equal_per_column": 0.1143
+    }
+  },
+  "correlated_pairs_abs_r_gt_0_8": [
+    {
+      "a": "cdd_hist",
+      "b": "days_above_95f_hist",
+      "r": 0.801,
+      "critic_a": 0.0261,
+      "critic_b": 0.0269,
+      "entropy_a": 0.0062,
+      "entropy_b": 0.0043
+    },
+    {
+      "a": "pop_density_per_sqkm",
+      "b": "population",
+      "r": -0.865,
+      "critic_a": 0.0282,
+      "critic_b": 0.0266,
+      "entropy_a": 0.0057,
+      "entropy_b": 0.015
+    }
+  ],
+  "mean_critic_column_weight": 0.02857142857142857,
+  "critic_top10": [
+    {
+      "fips": "41067",
+      "county": "Washington, OR",
+      "score": 0.6714,
+      "floor_ok": true
+    },
+    {
+      "fips": "17161",
+      "county": "Rock Island, IL",
+      "score": 0.6629,
+      "floor_ok": true
+    },
+    {
+      "fips": "27037",
+      "county": "Dakota, MN",
+      "score": 0.651,
+      "floor_ok": false
+    },
+    {
+      "fips": "41051",
+      "county": "Multnomah, OR",
+      "score": 0.6482,
+      "floor_ok": false
+    },
+    {
+      "fips": "18141",
+      "county": "St. Joseph, IN",
+      "score": 0.642,
+      "floor_ok": true
+    },
+    {
+      "fips": "19163",
+      "county": "Scott, IA",
+      "score": 0.6384,
+      "floor_ok": true
+    },
+    {
+      "fips": "36055",
+      "county": "Monroe, NY",
+      "score": 0.6361,
+      "floor_ok": false
+    },
+    {
+      "fips": "27123",
+      "county": "Ramsey, MN",
+      "score": 0.6334,
+      "floor_ok": false
+    },
+    {
+      "fips": "36067",
+      "county": "Onondaga, NY",
+      "score": 0.6327,
+      "floor_ok": false
+    },
+    {
+      "fips": "36029",
+      "county": "Erie, NY",
+      "score": 0.6284,
+      "floor_ok": false
+    }
+  ],
+  "entropy_top10": [
+    {
+      "fips": "48029",
+      "county": "Bexar, TX",
+      "score": 0.7353,
+      "floor_ok": false
+    },
+    {
+      "fips": "48331",
+      "county": "Milam, TX",
+      "score": 0.662,
+      "floor_ok": true
+    },
+    {
+      "fips": "49035",
+      "county": "Salt Lake, UT",
+      "score": 0.6342,
+      "floor_ok": true
+    },
+    {
+      "fips": "32003",
+      "county": "Clark, NV",
+      "score": 0.6131,
+      "floor_ok": true
+    },
+    {
+      "fips": "17031",
+      "county": "Cook, IL",
+      "score": 0.61,
+      "floor_ok": true
+    },
+    {
+      "fips": "41067",
+      "county": "Washington, OR",
+      "score": 0.5988,
+      "floor_ok": true
+    },
+    {
+      "fips": "08041",
+      "county": "El Paso, CO",
+      "score": 0.5896,
+      "floor_ok": true
+    },
+    {
+      "fips": "42011",
+      "county": "Berks, PA",
+      "score": 0.5651,
+      "floor_ok": true
+    },
+    {
+      "fips": "26163",
+      "county": "Wayne, MI",
+      "score": 0.5641,
+      "floor_ok": true
+    },
+    {
+      "fips": "29189",
+      "county": "St. Louis, MO",
+      "score": 0.5632,
+      "floor_ok": false
+    }
+  ],
+  "critic_focus": {
+    "Clark, WA": 27,
+    "Franklin, NY": 64,
+    "Grant, WA": 12
+  },
+  "entropy_focus": {
+    "Clark, WA": 338,
+    "Franklin, NY": 392,
+    "Grant, WA": 50
+  }
+}

@@ -575,3 +575,62 @@ Grant scores near the top, and percentile scoring compresses a large
 physical gap into a few points. That's why the engine needs an
 energy_carbon weight of 0.79 before Franklin passes Grant, while the
 monetized model has Franklin passing Grant at $99/t.
+
+### 2026-10-04 01:50 UTC, Phase 3: CRITIC and entropy on raw values
+
+Script: `scratch/weighting/critic.py`. Printout:
+`scratch/weighting/out/critic_report.txt`. Weights:
+`scratch/weighting/out/critic_weights.csv`. Ranks:
+`scratch/weighting/out/critic_ranks.csv`. JSON:
+`scratch/weighting/out/critic_summary.json`. 35 scored columns with data,
+1,565 gate-passing counties. Raw values get their pillars.yaml transform,
+are winsorized at the 1st and 99th percentiles, min-max scaled, and
+flipped where lower is better. Nulls take the column median for the
+weight calculation only (queue age 1,072, queue withdrawal 710, state
+policy 349). The composite is the weighted mean of each county's non-null
+scaled columns, with no pillar floor. Took about 5 minutes of the
+30-minute timebox. The percentile sensitivity was skipped as instructed.
+
+**Top 10.**
+
+| Method | Top 10 | Clark | Franklin | Grant |
+| --- | --- | --- | --- | --- |
+| CRITIC | Washington OR, Rock Island IL, Dakota MN, Multnomah OR, St. Joseph IN, Scott IA, Monroe NY, Ramsey MN, Onondaga NY, Erie NY | 27 | 64 | 12 |
+| Entropy | Bexar TX, Milam TX, Salt Lake UT, Clark NV, Cook IL, Washington OR, El Paso CO, Berks PA, Wayne MI, St. Louis MO | 338 | 392 | 50 |
+
+Six of CRITIC's top 10 and two of entropy's fail the balanced pillar
+floor.
+
+**Pillar-summed weights** (comparison only; the composite uses column
+weights):
+
+| Pillar | Columns | CRITIC | Entropy | Equal per column | Balanced |
+| --- | --- | --- | --- | --- | --- |
+| climate_resilience | 8 | 0.254 | 0.091 | 0.229 | 0.119 |
+| energy_carbon | 6 | 0.180 | 0.268 | 0.171 | 0.153 |
+| grid_infrastructure | 6 | 0.151 | 0.430 | 0.171 | 0.153 |
+| community | 5 | 0.136 | 0.141 | 0.143 | 0.085 |
+| water | 4 | 0.121 | 0.037 | 0.114 | 0.119 |
+| permitting | 3 | 0.097 | 0.024 | 0.086 | 0.153 |
+| land | 2 | 0.044 | 0.008 | 0.057 | 0.068 |
+| cost | 1 | 0.018 | 0.002 | 0.029 | 0.150 |
+
+**What the weights show.**
+
+- CRITIC is close to equal weight per column: column weights range from
+  0.016 to 0.042. Correlations are mostly low, so the conflict term
+  (sum of 1 - r) is between 33 and 36 for every column, and CRITIC
+  reduces to spread times a near constant. Pillar sums therefore track
+  column count: climate resilience gets 0.254 from 8 columns.
+- Entropy gives `dc_existing_count` 0.198 of all weight, because 88% of
+  gate passers have no data center and entropy rewards sparse,
+  concentrated columns. Entropy's top 10 is the big metros with existing
+  clusters. That's a property of the method, not evidence those counties
+  are good sustainable sites.
+- Both methods nearly ignore cost (0.018 and 0.002). The industrial price
+  has one value per state, so its spread after winsorizing is small.
+- Only two pairs exceed |r| 0.8: `cdd_hist` with `days_above_95f_hist`
+  (0.80), and `pop_density_per_sqkm` with `population` (-0.87). CRITIC
+  down-weights them by about 3 to 7% against the mean column weight
+  (0.0286), because one high correlation among 34 barely moves the
+  conflict sum.
