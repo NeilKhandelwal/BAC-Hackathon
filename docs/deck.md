@@ -9,7 +9,8 @@ research write-ups from PRs #29 and #30. Figures and
 `docs/figures/facts.json` come from `python docs/figures/make_figures.py`,
 which reads only committed files and makes no network calls.
 
-**Featured county.** Grant County, WA (53025). To swap it, run
+**Featured county.** Grant County, WA (53025). Slide 12 covers the global
+country run. To swap the featured county, run
 `python docs/figures/make_figures.py --featured <fips>` and update slides 1,
 6, 7, 8, and 9 from the new `facts.json` and research files.
 
@@ -171,7 +172,8 @@ of Loudoun's, and dry cooling cuts its water to 28 million gallons.
 **Speaker note:**
 - Formulas, ranges, and limits: `research/impact.md`.
 - New-load rates: `research/implementation.md`.
-- Figure values are recomputed from `etl/impact.py` into `docs/figures/facts.json` (`grant_ranges`, `impact`).
+- The BPA rate is `BPA_CO2_LB_MWH` (212.458 lb/MWh, eGRID2023 BPAT) in `etl/impact.py`.
+- Figure values are recomputed with `etl/impact.py` into `docs/figures/facts.json` (`grant_ranges`, `impact`).
 
 ## 7. Risk assessment
 
@@ -220,22 +222,23 @@ sources marked [C], [P], or [U] are in `research/implementation.md`.
 ## 9. The 2050 view
 
 **Headline:** The shortlist holds through 2050. What changes is heat: by
-mid-century Grant's cooling load matches Loudoun's today.
+mid-century Grant's cooling load matches Loudoun's today, and Grant already
+has more days above 95°F.
 
 - Grant's cooling degree days rise from 655 to 1,177 under RCP 8.5 at
-  mid-century, about Loudoun's 1,132 today. Days above 95°F go from 14.5 to
-  35.9 a year.
+  mid-century, about Loudoun's 1,132 today; Loudoun rises to 1,888. But
+  Grant has more peak heat: 14.5 days above 95°F today against Loudoun's
+  5.0, and 35.9 against 30.3 by 2050.
 - Under the 2050 horizon, no top-10 county moves more than one place.
 - Water stress barely moves: 727 of 1,254 US basins have the same Aqueduct
   score in 2050, all at 0 or the cap of 5, and Grant stays at 3.6. Cooling
   degree days and days above 95°F carry the horizon story. Design cooling
   for 2050 design days.
 
-**Figure:** none yet. A two-bar figure of Grant 2050 against Loudoun today,
-in cooling degree days, would land the point.
+**Figure:** `docs/figures/horizon_2050.png`
 
 **Speaker note:** County values are in `docs/figures/facts.json`
-(`featured.horizon_2050_raw`). Rank movement is in `results/balanced.csv`
+(`horizon_2050_figure`). Rank movement is in `results/balanced.csv`
 (`rank_delta_2050`), Loudoun's cooling degree days in `research/impact.md`,
 and the basin saturation in the manifest notes.
 
@@ -288,3 +291,27 @@ Take it from the live demo; the click path is in `docs/demo_script.md`.
 **Speaker note:** Preset counts are in `results/*_report.json` and
 `docs/figures/facts.json` (`presets`). The conditions format is in
 `docs/conditions.md`.
+
+## 12. The engine carries to another region
+
+**Headline:** The same engine ranked 196 countries after about 40 lines of
+change. That shows it carries to another region; it isn't a country
+recommendation.
+
+- **What changed:** only the row identity. An optional `unit` block names the
+  key, name, and group columns. Gates, percentiles, pillar means, weights,
+  the floor, and robustness are the same code. The US presets still
+  reproduce their results byte for byte.
+- **Result:** 83 of 196 countries pass the gates and 55 pass the floor.
+  Sweden, Switzerland, and Norway lead, with robustness 100%.
+- **Why it isn't a recommendation:**
+  - There's no cost pillar, because no open global industrial power price exists.
+  - The United States ranks 58th of 83 because a national hazard average (climate pillar 16.2) fails the floor. That says nothing about a site in Ohio.
+  - A country isn't a site. Use it to choose which country's sub-national data to build next.
+
+**Figure:** `docs/figures/global_table.png`
+
+**Speaker note:** The method, sources, and the United States explanation are
+in `docs/global.md`. The ranks are in `results/global_balanced.csv` and
+`results/global_balanced_report.json`, and `docs/figures/facts.json`
+(`global`) has the counts.

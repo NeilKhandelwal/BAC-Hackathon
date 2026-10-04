@@ -342,7 +342,8 @@
  "grant_ranges": {
   "facility_mwh": 2444212,
   "co2_tonnes": {
-   "bpa": 235550,
+   "bpa": 235547,
+   "bpa_rate_lb_mwh": 212.458,
    "nwpp_table": 700390
   },
   "energy_cost_musd": {
@@ -357,5 +358,52 @@
   "Wayne, TN": 158,
   "Berkshire, MA": 435,
   "Loudoun, VA": 226
+ },
+ "horizon_2050_figure": {
+  "Cooling degree days": {
+   "Grant, WA": {
+    "today": 655.1,
+    "2050": 1176.8
+   },
+   "Loudoun, VA": {
+    "today": 1132.1,
+    "2050": 1887.5
+   }
+  },
+  "Days above 95\u00b0F": {
+   "Grant, WA": {
+    "today": 14.5,
+    "2050": 35.9
+   },
+   "Loudoun, VA": {
+    "today": 5.0,
+    "2050": 30.3
+   }
+  }
+ },
+ "global": {
+  "countries": 196,
+  "passed": 83,
+  "floor_ok": 55,
+  "pillars": [
+   "energy_carbon",
+   "water",
+   "climate_resilience",
+   "grid_infrastructure",
+   "community",
+   "governance"
+  ],
+  "top3": [
+   "Sweden",
+   "Switzerland",
+   "Norway"
+  ],
+  "us": {
+   "rank": 58,
+   "of": 83,
+   "composite": 59.5,
+   "floor_ok": false,
+   "pillar_climate_resilience": 16.2
+  }
  }
 }
