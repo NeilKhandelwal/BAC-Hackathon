@@ -112,8 +112,8 @@ All 73 are in `docs/deck/numbers_to_check.md`. The ones most likely to move:
 - **Updated:** 2026-10-04, step 5 (round 2 final).
 - **Branch:** `deck/template`, with `origin/main` at `f98054f` merged in
   (`da29599`, no history rewritten).
-- **Pull request:** opened from `deck/template` to `main`, not merged. Link
-  in the session summary.
+- **Pull request:** #43, https://github.com/NeilKhandelwal/BAC-Hackathon/pull/43,
+  from `deck/template` to `main`. Not merged.
 - **Deck:** 14 slides. `check_deck.py` reports no problems. PowerPoint for
   Mac opened and exported the file, with a fade on every slide, 4 effects on
   slide 2, and 12 on slide 7.
@@ -432,6 +432,7 @@ Merged as `da29599`. A rebuild gave the same deck numbers.
 
 ## Pull request text
 
-The PR was opened with `gh pr create` from `deck/template` to `main`. Its body
+PR #43 (https://github.com/NeilKhandelwal/BAC-Hackathon/pull/43) was opened with
+`gh pr create` from `deck/template` to `main`. Its body
 summarizes the files, story, placeholders, numbers to check, and decisions
 above.
