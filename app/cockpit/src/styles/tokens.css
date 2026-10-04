@@ -1,0 +1,79 @@
+/* Provisional tokens. See DESIGN.md. */
+:root {
+  --ground: #f3f5f4;
+  --panel: #ffffff;
+  --ink: #111518;
+  --ink-2: #46505a;
+  --ink-3: #5f6a74;
+  --rule: #d3d8d6;
+  --rule-strong: #a9b0ad;
+
+  --p-energy_carbon: #b86200;
+  --p-water: #14758f;
+  --p-climate_resilience: #b0303f;
+  --p-grid_infrastructure: #5b4ba0;
+  --p-land: #5e6e12;
+  --p-community: #23804f;
+  --p-permitting: #86523a;
+  --p-cost: #9a3a8c;
+
+  --ramp-1: #ecebe6;
+  --ramp-2: #d3d2cb;
+  --ramp-3: #b3b3ac;
+  --ramp-4: #8e8f8a;
+  --ramp-5: #696c6a;
+  --ramp-6: #454a4b;
+  --ramp-7: #22272a;
+
+  --hatch: #b4bab5;
+
+  --stab-top3: #0b3c6f;
+  --stab-top10: #4f82bd;
+  --stab-out: #dce3ea;
+
+  --ember-1: #fbe7a1;
+  --ember-2: #f2b33d;
+  --ember-3: #d9532b;
+  --ember-4: #8e1b3e;
+  --ember-5: #4a1748;
+
+  --warn: #b86200;
+  --fail: #b0303f;
+  --pass: #23804f;
+
+  --fs-xs: max(12px, 0.75rem);
+  --fs-fine: max(13px, 0.8125rem);
+  --font: "Public Sans Variable", "Public Sans", system-ui, sans-serif;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --t-move: 420ms;
+  --t-fade: 240ms;
+  --t-zoom: 480ms;
+
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+
+  --top: 64px;
+  --left: 304px;
+  --right: 480px;
+  --finding: 400px;
+}
+
+@media (max-width: 1599px), (max-height: 899px) {
+  :root {
+    --left: 264px;
+    --right: 400px;
+    --top: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-move: 0ms;
+    --t-fade: 0ms;
+    --t-zoom: 0ms;
+  }
+}
