@@ -4,6 +4,17 @@ A tool that ranks US counties as sites for a sustainable AI data center,
 given a user's conditions. It returns a ranked, explained shortlist and can
 be rerun with new conditions, new data, or a new region.
 
+## Current result
+
+The balanced preset scores all 3,109 counties in the contiguous US for a
+300 MW campus. 1,565 counties pass the hard gates and 912 pass the pillar
+floor. The top five are Grant, WA (63.7), Wayne, TN (63.2), Whitman, WA
+(63.1), Mayes, OK (62.2), and Scott, IA (62.1).
+
+The deck features Grant County, WA. The case for it, and its limits, are in
+`research/impact.md`, `research/risk.md`, and `research/implementation.md`.
+Full results for every preset are in `results/`.
+
 ## User
 
 A site-selection lead at a data center developer or hyperscaler. Input is a
@@ -26,9 +37,95 @@ each rank and each exclusion.
 5. **Robustness.** Weights are resampled 2,000 times. Each county gets the
    share of samples where it ranked top 10.
 6. **Output.** Ranked list with pillar breakdown, robustness, permitting
-   pathway, and gate log. CLI, CSV, and a Streamlit app.
+   pathway, and gate log. CLI, CSV, a React cockpit, and a Streamlit app.
 
 Conditions format and presets: `docs/conditions.md`, `engine/conditions/`.
+Why the weights are what they are, and how the ranking holds up under other
+weighting methods: `docs/weighting.md`.
+
+## Run the demo
+
+Neither app needs a network connection once its dependencies are installed.
+Both read committed data.
+
+### Cockpit
+
+The cockpit in `app/cockpit/` is the recorded and judged demo. It's a static
+React app that recomputes gates, scores, and ranks in the browser when you
+change a weight, gate, preset, cooling type, or horizon. It needs Node
+20.19 or later, or 22.12 or later. It doesn't need Python.
+
+```bash
+cd app/cockpit
+npm install
+npm run dev        # http://localhost:5173
+```
+
+The page shows a **Real engine data** badge when it loads the committed
+export. The URL carries the scenario, so a link such as
+`http://localhost:5173/?preset=balanced&h=2050` opens the same view every
+time. **Reset demo** returns to the starting state.
+
+To serve the built files instead, as you would on demo day:
+
+```bash
+npm run build
+npm run preview    # http://localhost:4173
+```
+
+Port 5173 and port 4173 are fixed. If one is in use, the command exits
+instead of picking another port.
+
+After the county table or a preset changes, refresh the cockpit's data and
+check it against the Python engine:
+
+```bash
+npm run data       # needs the Python environment at .venv in the repo root
+npm test           # includes the parity test against results/*.csv
+```
+
+`npm run e2e` runs the browser tests. Run `npx playwright install chromium`
+and `npm run data:fixture` once first.
+
+### Streamlit app
+
+The Streamlit app is the team's working tool and the fallback demo. Run
+these from the repo root:
+
+```bash
+pip install -r requirements.txt
+streamlit run app/app.py    # http://localhost:8501
+```
+
+After a county's ranking detail, the app shows **Industrial reuse and
+community transition**. This unscored, post-ranking screening covers
+economic transition, industrial reuse, infrastructure context, and EPA
+brownfield properties, and offers a downloadable screening brief. The
+property table needs `data/processed/brownfield_sites.parquet`, which the
+ETL generates and git ignores. Without it, the app explains that and still
+shows county totals from the committed table. See `docs/industrial_reuse.md`
+and the click path in `docs/demo_script.md`.
+
+## Run the engine
+
+```bash
+python -m engine rank --conditions engine/conditions/balanced.yaml \
+  --features data/processed/county_features.parquet \
+  --out results/balanced.csv
+python -m engine explain --conditions engine/conditions/balanced.yaml --fips 53025
+```
+
+`rank` writes the ranked list, the excluded list with the gate each county
+failed, and a report. `explain` prints one county's gates, pillar scores,
+and the metrics behind them. Add `--json` for machine-readable output.
+
+Run the tests with `python -m pytest -q`. Skipped tests print their reason.
+
+## Beyond the US
+
+The same engine ranks 196 countries from a country table and its own
+pillar and conditions files. It's a proof that the method ports to a new
+region, not a recommendation. See `docs/global.md`.
 
 ## Where ML is used
 
@@ -39,23 +136,28 @@ how the labels are built. The permitting pillar uses three sourced columns
 instead, and every score is transparent. Findings:
 `research/permitting_model.md`. Method: `docs/permitting.md`.
 
-## Plan
-
-Build procedure, roles, phases, and cut list: `docs/plan.md`.
-
 ## Repo
 
 ```
-docs/             plan.md, schema.md, conditions.md, permitting.md
-engine/           pillars.yaml, conditions/ presets, engine code
-etl/              data adapters and scripts
-research/         data inventory, source verification, label notes
+PRODUCT.md        what the product is, who it's for, and what it claims
+DESIGN.md         visual system for the cockpit
+docs/             schema, conditions, weighting, permitting, industrial reuse,
+                  global version, deck outline and figures, demo script, plan
+engine/           rank.py, explain.py, reuse.py, pillars.yaml, conditions/ presets
+etl/              data adapters, table build, impact and risk calculations
+research/         data inventory, findings, impact, risk, implementation plan
 data/raw/         downloads (gitignored)
-data/processed/   county table, labels, lookup tables
-app/              Streamlit UI
+data/processed/   county table, country table, labels, lookup tables
+results/          ranked and excluded lists and a report for each preset
+app/app.py        Streamlit app
+app/cockpit/      React cockpit
+scratch/weighting/  code and outputs behind docs/weighting.md
+tests/            engine, ETL, and Streamlit app tests
 ```
 
-## Run
+## Rebuild the data
+
+You don't need this to run the demo. The county table is committed.
 
 ```bash
 pip install -r requirements.txt
@@ -79,15 +181,9 @@ it can swap tied counties outside the leading results. Reproduce exact
 rankings from the committed table. See "Frozen artifacts and
 reproducibility" in `docs/schema.md`.
 
-Run the app with `streamlit run app/app.py`. After a county's ranking detail,
-the app shows **Industrial reuse and community transition**. This unscored,
-post-ranking screening covers economic transition, industrial reuse,
-infrastructure context, and EPA brownfield properties, and offers a
-downloadable screening brief. The property table needs
-`data/processed/brownfield_sites.parquet`, which the ETL generates and git
-ignores. Without it, the app explains that and still shows county totals
-from the committed table. See `docs/industrial_reuse.md` and the Boone
-County walkthrough in `docs/demo_script.md`.
+## Plan
+
+Build procedure, roles, phases, and cut list: `docs/plan.md`.
 
 ## Data notes
 
