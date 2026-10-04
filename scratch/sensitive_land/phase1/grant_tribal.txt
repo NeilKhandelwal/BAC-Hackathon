@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "C:\Users\Vals\AppData\Local\Temp\claude\c--Users-Vals-OneDrive-Documents-BAC-Hackathon\5b9c88ca-4311-4c3f-9712-bb9c7d9ad705\scratchpad\prot\near.py", line 126, in <module>
+    main(sys.argv[1], float(sys.argv[2]), sys.argv[3])
+  File "C:\Users\Vals\AppData\Local\Temp\claude\c--Users-Vals-OneDrive-Documents-BAC-Hackathon\5b9c88ca-4311-4c3f-9712-bb9c7d9ad705\scratchpad\prot\near.py", line 100, in main
+    for f in query_all(TIGER.format(lyr), b):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Vals\AppData\Local\Temp\claude\c--Users-Vals-OneDrive-Documents-BAC-Hackathon\5b9c88ca-4311-4c3f-9712-bb9c7d9ad705\scratchpad\prot\near.py", line 65, in query_all
+    raise RuntimeError(d["error"])
+RuntimeError: {'code': 400, 'message': 'Failed to execute query.', 'details': []}

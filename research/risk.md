@@ -36,11 +36,15 @@ $64M less than in Loudoun County, VA.
 | Power price | `industrial_price_cents_kwh` 6.61, a state average, worse than 21%. | The $162M annual cost assumes that price, so it is a floor. At BPA's rate for a new large load, about $80 to $132 per MWh, the same energy costs $196M to $323M. Above about $92 per MWh, Grant costs more than Loudoun's $226M. PUD staff have proposed data center rate classes for 2027. | Negotiate the rate with the service agreement. Fund dedicated generation if it beats the BPA rate. | Medium |
 | Cluster record | `dc_existing_count` 3 and `dc_existing_mw` 82 in FracTracker, which undercounts the Quincy cluster. `dc_pushback_count` 0. `fiber_share_locations` 0.99. | An existing cluster means fiber, contractors, and a utility that knows the load. No recorded opposition. | None needed. | Low |
 | Flood, hurricane, tornado | `nri_inland_flood_score` 23.3. `nri_hurricane_score` 0. `nri_tornado_score` 8.7. | Low exposure. | Site above the mapped floodplain. | Low |
+| Protected and sensitive land | Not in the table: the engine doesn't score it. Checked by hand (`research/sensitive_land.md`). PAD-US 4.1 puts 12.8% of the county in GAP 1-2 protected status, the 89th percentile nationally, but none of it within 5 km of Quincy. Nearest: WDFW Columbia Basin Wildlife Area parcels 5.8 km W and the Quincy Lakes Unit 8.6 km S. No national wildlife refuge, NPS unit, wilderness, or national forest within 30 km. Columbia NWR is 41 km S and Hanford Reach 54 km SE. No tribal land in the county; the nearest is 74.7 km N. | The brief asks about proximity to sensitive areas. Grant passes this check by hand, not because the model checked. | Site on farmland or already disturbed land near the existing cluster. Keep lighting and stormwater away from the wildlife area parcels. | Low |
+| Tribal consultation and cultural resources | Quincy appears to sit inside the Yakama Nation's 1855 ceded area (a reading of the treaty text, not checked against an official map). Grant PUD has a long relationship with the Wanapum, whose heritage center is near Priest Rapids Dam, south of Quincy. The Confederated Tribes of the Colville Reservation are an expected consulting party for the mid-Columbia. | A federal connection triggers Section 106 consultation with affected tribes: an Army Corps permit, a BPA interconnection, federal funding, or work on FERC-licensed hydro project lands. State funding triggers Executive Order 21-02 review. Ceded land gives no land-use authority over a private parcel. | Engage the tribes and Washington's Department of Archaeology and Historic Preservation early. Run a cultural resource survey before site selection. Prefer irrigated upland farmland, which carries less archaeological risk than land near the river and coulees. Unverified: consultation may matter more for the utility's transmission work near the Priest Rapids Project than for the campus parcel; see the power availability row. | Low |
 
 ## Comparison
 
-The two counties that follow Grant once electricity cost is its own
-pillar. PR #28 gives the order: Grant 63.7, Wayne 63.2, Whitman 63.0.
+The counties that followed Grant once electricity cost became its own
+pillar. PR #28 gave the order Grant 63.7, Wayne 63.2, Whitman 63.0. With
+protected land and land cover scored, the order is Grant 63.70, Whitman
+63.69, Benton 62.7, and Wayne falls out of the top 10.
 
 - **Wayne County, TN (47181).** Worst three: inland flooding (83.1, worse
   than 83%), hurricane (57.7, worse than 69%), workforce (population
@@ -59,6 +63,21 @@ exclusion. And its rank leaned on a state tax exemption that has been
 closed to new applications since June 2026. The state policy table now
 codes that exemption as unavailable.
 
+**Sensitive land and tribal consultation in the alternatives.** Neither
+reference site has a conflict (`research/sensitive_land.md`):
+- **Clark County, WA:** the Columbia River Gorge National Scenic Area
+  covers about 31 km² at the county's east end, and its rules would
+  constrain an industrial campus there. A site also needs to avoid the
+  Ridgefield and Shillapoo lowlands and the Cowlitz Reservation near La
+  Center, 23 km north of Vancouver. The Cowlitz Indian Tribe is the main
+  consulting party, and the county requires an archaeological
+  predetermination for many parcels.
+- **Franklin County, NY:** about 68% of the county is inside the Adirondack
+  Park, where a site needs an Adirondack Park Agency permit. Malone is
+  6.1 km outside the Blue Line. The Saint Regis Mohawk Reservation is
+  24.8 km northwest. A land claim settlement that could add reservation
+  land 20 to 30 km northwest is pending in Congress.
+
 **New York.** Executive Order 62 (2026-07-14) holds incomplete state
 permit applications for data centers of 50 MW or more until a statewide
 environmental review is done. It has no end date. The upstate grid is the
@@ -69,6 +88,11 @@ play if the order lifts.
 
 - County scores are not parcel scores. Wildfire, flood, and fiber need a
   site-level check.
+- The engine scores protected land and cropland as county shares, and has
+  optional protected and tribal land gates. Proximity was also checked by hand for Grant, Clark, and Franklin
+  (`research/sensitive_land.md`). A county protected-land share was built
+  and is now scored in the land pillar; a county share is a screen, not a
+  siting check.
 - eGRID understates the PUD's generation. It credits the PUD's balancing
   authority with 4.13 TWh and assigns Priest Rapids dam to BPA's. The PUD
   lists both Priest Rapids and Wanapum as its own, averaging about 1,000
