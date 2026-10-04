@@ -100,8 +100,12 @@ serves the new load, so the honest figure is a range. Facility energy is
 | Supply assumption | Rate, lb/MWh | CO2, tons/yr | vs Loudoun |
 | --- | --- | --- | --- |
 | Grant PUD's own generation (eGRID balancing authority GCPD) | 0 | 0 | -675,455 |
-| Bonneville Power Administration (eGRID balancing authority BPAT) | 212 | 235,547 | -439,908 |
+| Bonneville Power Administration (eGRID balancing authority BPAT) | 212.458 | 235,547 | -439,908 |
 | Northwest subregion average (the county table's value) | 632 | 700,390 | +24,936 |
+
+The two balancing authority rates are constants in `etl/impact.py`
+(`GRANT_PUD_CO2_LB_MWH`, `BPA_CO2_LB_MWH`), from the `BACO2RTA` field of
+eGRID2023's BA23 sheet.
 
 For assigning the county to its balancing authority: Grant PUD is the
 county's utility, its plants are all inside the county, and all of them

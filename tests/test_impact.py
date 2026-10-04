@@ -47,3 +47,21 @@ def test_runs_on_the_committed_table_against_loudoun():
     assert row.co2_tonnes_vs_baseline < 0  # upstate New York's grid is cleaner than Virginia's
     loudoun = result[result.fips == "51107"]
     assert (loudoun.co2_tonnes_vs_baseline == 0).all()
+
+
+def test_grant_co2_range_matches_the_write_up():
+    # research/impact.md and the deck figures quote these three numbers for the featured county.
+    mwh = impact.impact("53025")["facility_mwh"]
+    assert round(mwh) == 2_444_212
+    assert round(impact.co2_tonnes(mwh, impact.GRANT_PUD_CO2_LB_MWH)) == 0
+    assert round(impact.co2_tonnes(mwh, impact.BPA_CO2_LB_MWH)) == 235_547
+    assert round(impact.impact("53025")["co2_tonnes"]) == 700_390
+
+
+def test_balancing_authority_rates_match_egrid():
+    from etl.adapters import egrid
+    from tests.conftest import RAW, require_raw
+    require_raw(egrid.RAW)
+    ba = pd.read_excel(f"{RAW}/{egrid.RAW}", sheet_name="BA23", header=1).set_index("BACODE").BACO2RTA
+    assert ba["BPAT"] == pytest.approx(impact.BPA_CO2_LB_MWH, abs=5e-4)
+    assert ba["GCPD"] == impact.GRANT_PUD_CO2_LB_MWH
