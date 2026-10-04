@@ -34,14 +34,15 @@ gates:
   exclude_air_nonattainment: false
   min_population: 10000
 
-weights:
-  energy_carbon: 0.08
-  water: 0.07
-  climate_resilience: 0.08
-  grid_infrastructure: 0.30
-  land: 0.07
-  community: 0.10
-  permitting: 0.30
+weights:                               # cost 0.18, a little above balanced, others scaled by 0.82: a developer with a signed tenant prices power into the lease, so cheap power is part of speed to revenue
+  energy_carbon: 0.066
+  water: 0.057
+  climate_resilience: 0.066
+  grid_infrastructure: 0.246
+  land: 0.057
+  community: 0.082
+  permitting: 0.246
+  cost: 0.18
 
 pillar_floor_percentile: 10
 pillar_floor_exempt: [permitting]       # three coarse state-level integers; one step moved a county 380 ranks

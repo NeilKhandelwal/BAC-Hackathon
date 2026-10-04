@@ -607,3 +607,28 @@ def test_explain_warns_only_for_a_flagged_county_and_lists_energy_community_fact
     assert flagged["facts"]["IRA energy community: coal closure tract"] is True
     assert set(flagged["facts"]) >= {"IRA energy community: coal closure tract",
                                      "IRA energy community: fossil employment area"}
+
+
+# Cost pillar
+
+def test_cheaper_power_outranks_dearer_power_all_else_equal():
+    # Energy is the largest operating cost; at the same site, cheaper power must win.
+    a, b = twin_counties(industrial_price_cents_kwh=(18.0, 6.5))
+    assert b["pillar_cost"] > a["pillar_cost"]
+    assert b["composite"] > a["composite"]
+    assert b["pillar_grid_infrastructure"] == a["pillar_grid_infrastructure"]  # price left the grid pillar
+
+
+def test_the_dearest_power_fails_the_balanced_floor():
+    # The floor applies to cost like any scored pillar: a county in the bottom tenth on price
+    # can't outrank a county that isn't, however strong it is elsewhere.
+    df = make(n=200, null_share=0.0)
+    cond = {**load_yaml(ROOT / "engine/conditions/balanced.yaml"), "gates": {}}
+    pillars = load_yaml(ROOT / "engine/pillars.yaml")
+    ranked = rank(df, cond, pillars)[0]
+    fips = ranked.loc[ranked["floor_ok"], "fips"].iloc[0]  # the top floor-passing county
+    df.loc[df.fips == fips, "industrial_price_cents_kwh"] = df["industrial_price_cents_kwh"].max() * 1.5
+    after = rank(df, cond, pillars)[0].set_index("fips").loc[fips]
+    assert not after["floor_ok"]
+    exempt = rank(df, {**cond, "pillar_floor_exempt": ["permitting", "cost"]}, pillars)[0].set_index("fips").loc[fips]
+    assert exempt["floor_ok"]  # cost alone is what failed it

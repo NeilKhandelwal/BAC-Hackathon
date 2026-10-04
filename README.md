@@ -18,10 +18,11 @@ each rank and each exclusion.
 2. **Gates.** Counties that fail a hard condition, such as a flood
    percentile or an active moratorium, are excluded and logged.
 3. **Scores.** Each metric becomes a national percentile. Metrics average
-   into seven pillars: energy and carbon, water, climate resilience, grid
-   and infrastructure, land, community, permitting. See `engine/pillars.yaml`.
-4. **Composite.** Weighted sum of pillars. A county below the 20th
-   percentile on any pillar ranks below every county that isn't.
+   into eight pillars: energy and carbon, water, climate resilience, grid
+   and infrastructure, land, community, permitting, cost. See `engine/pillars.yaml`.
+4. **Composite.** Weighted sum of pillars. A county below the 10th
+   percentile on any pillar (in the balanced preset) ranks below every
+   county that isn't.
 5. **Robustness.** Weights are resampled 2,000 times. Each county gets the
    share of samples where it ranked top 10.
 6. **Output.** Ranked list with pillar breakdown, robustness, permitting

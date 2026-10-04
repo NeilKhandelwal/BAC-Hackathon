@@ -45,13 +45,14 @@ gates:                            # hard exclusions, applied before scoring
   min_population: 5000            # proxy for workforce until a labor layer exists
 
 weights:                          # must sum to 1; the engine renormalizes and warns
-  energy_carbon: 0.18
-  water: 0.14
-  climate_resilience: 0.14
-  grid_infrastructure: 0.18
-  land: 0.08
-  community: 0.10
-  permitting: 0.18
+  energy_carbon: 0.153
+  water: 0.119
+  climate_resilience: 0.119
+  grid_infrastructure: 0.153
+  land: 0.068
+  community: 0.085
+  permitting: 0.153
+  cost: 0.15                      # industrial electricity price; the largest operating cost
 
 pillar_floor_percentile: 10       # a county below this percentile on any pillar can't rank above a county that isn't. Set 0 to disable.
 pillar_floor_exempt: [permitting] # pillars that score in the composite but never fail the floor
@@ -119,6 +120,15 @@ presets. A county with every column in a pillar null has a null pillar; its
 composite renormalizes over its other pillars, and `coverage` shows the gap.
 `coverage` is the share of every column mapped in `engine/pillars.yaml` that
 is non-null for the county, so columns absent from the table lower it too.
+
+**Cost** is its own pillar: `industrial_price_cents_kwh`, the state average
+industrial electricity price, lower is better. Energy is the largest
+operating cost of a campus, and the brief asks for long-term economic
+viability. As one of seven grid columns, price carried about 2.6% of the
+composite; as a pillar it carries 15% in `balanced`, 18% in
+`speed_to_power`, and 10% in `sustainability_first`. The floor applies to it
+like any other pillar. It's a state average, so a new large-load tariff
+could be higher.
 
 **Industrial reuse and economic opportunity** are two separate additions.
 `coal_retired_mw` scores in grid and infrastructure: a retired coal plant's
@@ -197,8 +207,8 @@ toggle demo.
 | File | Intended user | What's different |
 | --- | --- | --- |
 | `balanced.yaml` | default demo | the values above |
-| `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.30, permitting 0.30; queue gate 3 years; fiber gate 0.3 instead of 0.2; state moratorium excluded |
-| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.30, water 0.25, permitting 0.10; carbon gate 670 lb/MWh, set in the gap between eGRID subregions NWPP (632) and AZNM (704), with no renewable-share gate so nuclear-led grids count as clean; evaporative cooling disallowed above water stress 1; pillar floor 15; horizon 2050 |
+| `speed_to_power.yaml` | developer with a 2028 deadline | grid_infrastructure 0.246, permitting 0.246, cost 0.18; queue gate 3 years; fiber gate 0.3 instead of 0.2; state moratorium excluded |
+| `sustainability_first.yaml` | hyperscaler with a 24/7 carbon-free commitment | energy_carbon 0.27, water 0.225, permitting 0.09, cost 0.10; carbon gate 670 lb/MWh, set in the gap between eGRID subregions NWPP (632) and AZNM (704), with no renewable-share gate so nuclear-led grids count as clean; evaporative cooling disallowed above water stress 1; pillar floor 15; horizon 2050 |
 
 ## CLI
 

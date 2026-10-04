@@ -32,14 +32,15 @@ gates:
   exclude_air_nonattainment: false
   min_population: 5000
 
-weights:
-  energy_carbon: 0.18
-  water: 0.14
-  climate_resilience: 0.14
-  grid_infrastructure: 0.18
-  land: 0.08
-  community: 0.10
-  permitting: 0.18
+weights:                               # cost 0.15 and the other seven scaled by 0.85: energy is the largest operating cost, and the brief asks for long-term economic viability
+  energy_carbon: 0.153
+  water: 0.119
+  climate_resilience: 0.119
+  grid_infrastructure: 0.153
+  land: 0.068
+  community: 0.085
+  permitting: 0.153
+  cost: 0.15
 
 pillar_floor_percentile: 10            # guards against a county that fails badly on one pillar; at 20 it turned small
                                        # value-choice differences into drops of hundreds of ranks
