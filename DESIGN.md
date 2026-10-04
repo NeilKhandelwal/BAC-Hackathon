@@ -195,8 +195,8 @@ map, finding, controls.
   the live count of counties this gate excludes. The funnel total
   ("1,565 of 3,109 counties pass") heads the list.
 - **Shortlist row:** rank numeral, rank change, county and state, score,
-  stacked pillar bar, stability barcode, and the stability share. The whole
-  row is a button.
+  and the rank stability outcome bar with its share. The row is a button;
+  the outcome bar is a separate button laid over its lower line.
 - **Evidence row:** pillar marker, metric label, observed value with unit,
   national percentile, source. A missing value prints "No data."
 - **Badge:** "Synthetic data" in `--p-energy` text on a white panel with a
@@ -206,21 +206,30 @@ No cards inside cards. Areas are separated by rules and whitespace, not
 shadows. The only shadow is the drawer at narrow widths: `0 -6px 20px
 rgb(17 21 24 / 0.12)`.
 
-## Signature: the rank stability barcode
+## Signature: the rank stability outcome bar
 
-Each shortlist row carries a strip of 64 columns. Each column is one sampled
-weight scenario: a deterministic sample of the scenarios the engine ran, in
-the same order on every row, so columns line up down the list. A column of
-pale cells shows a scenario that knocked several leaders out at once.
+Each shortlist row carries one full-width stacked bar built from every
+sampled weight scenario, 2,000 in the presets.
 
-- Cells are drawn 3px wide with a 1px gap and the strip stretches to the
-  row's width, up to 260px; it's 16px tall in the shortlist and 34px in the
-  finding panel. A 1px `--rule` frame keeps pale cells readable.
-- Color: `--stab-top3`, `--stab-top10`, or `--stab-out` for that scenario.
-- The barcode is illustrative. The printed share ("Top 10 in 91% of 2,000
-  sampled weight scenarios") is authoritative and always visible.
-- The finding panel repeats the barcode at twice the height, with a one-line
-  definition of what was sampled.
+- Three segments: `--stab-top3` for ranks 1 to 3, `--stab-top10` for ranks
+  4 to 10, `--stab-out` for outside the top 10. Segment widths are the draw
+  counts, so they always fill 100% of the bar.
+- The bar is 14px tall in the shortlist and 20px in the finding panel, with a
+  1px `--rule-strong` outline so the pale segment still reads.
+- A visible label beside it, "Top 10 in 98%", is authoritative. It never
+  rounds a partial share to 100% or 0%; it prints ">99%" or "<1%".
+- One persistent legend under the shortlist header names the three
+  categories and the scenario count.
+- The whole bar is one button. Hover, keyboard focus, or a tap opens a
+  tooltip with counts and percentages for each category. Percentages use
+  largest-remainder rounding so they total exactly 100.0%. A tap also selects
+  the county, as a row click does. Escape or a tap elsewhere closes it.
+- No width animation. While stability recomputes, the bar and label fade to
+  45% opacity. Before the first result they show a neutral empty track and
+  "Computing"; when stability can't be computed, a dashed track, "Not
+  computed", and the reason in the legend slot.
+- Shortlist rows no longer carry the pillar strip; pillar detail lives in the
+  finding panel.
 
 ## Map
 

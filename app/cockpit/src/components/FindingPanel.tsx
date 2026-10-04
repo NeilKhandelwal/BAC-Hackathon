@@ -4,7 +4,7 @@ import type { RunResult } from "../engine/run";
 import { topReasons } from "../engine/run";
 import type { Stability } from "../engine/rank";
 import { fmtInt, fmtPct, fmtScore, fmtThreshold, fmtValue, ordinal } from "../lib/format";
-import { Barcode } from "./Shortlist";
+import { OutcomeBarStatic, OutcomeTable, outcomesOf, topNLabel } from "./OutcomeBar";
 
 interface Props {
   data: CockpitData;
@@ -114,8 +114,8 @@ function StabilityBlock({
   // not outlive the county's exclusion or floor failure.
   const eligible = !!result.gates.passed[idx] && !!result.floor[idx];
   const share = stability?.share[idx];
-  const tiers = stability?.tiers.get(idx);
-  const has = eligible && share !== undefined && !Number.isNaN(share);
+  const o = outcomesOf(stability, idx);
+  const has = eligible && o !== null && share !== undefined && !Number.isNaN(share);
   return (
     <div className={`block stab-block${stale && has ? " is-stale" : ""}`} aria-busy={stale}>
       <h3>
@@ -125,9 +125,10 @@ function StabilityBlock({
       {has ? (
         <>
           <p className="stab-big">
-            Top {result.topN} in <strong>{fmtPct(share!)}</strong> of {fmtInt(stability!.samples)} sampled weight scenarios
+            <strong>{topNLabel(o!.top3 + o!.ranks4to10, o!.samples, result.topN)}</strong> of {fmtInt(stability!.samples)} sampled weight scenarios
           </p>
-          {tiers && <Barcode tiers={tiers} tall />}
+          <OutcomeBarStatic o={o!} />
+          <OutcomeTable o={o!} />
           <p className="fine">
             {share! >= 0.9
               ? "Robust: the rank holds across most shifts in priorities."

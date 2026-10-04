@@ -190,3 +190,104 @@ test("nothing overflows or clips at this viewport", async ({ page }) => {
   });
   expect(minFont).toBeGreaterThanOrEqual(12);
 });
+
+test.describe("rank stability outcome bars", () => {
+  test("replace the barcode and pillar strip, with a persistent legend", async ({ page }) => {
+    await open(page);
+    await expect(page.locator(".outcome-wrap .outcome")).toHaveCount(10);
+    await expect(page.locator(".barcode, svg.barcode, .barcode-empty")).toHaveCount(0);
+    await expect(page.locator(".stack, .stack-seg")).toHaveCount(0);
+    await expect(page.getByText(/Barcodes show/)).toHaveCount(0);
+    const legend = page.locator(".stab-legend");
+    await expect(legend).toBeVisible();
+    await expect(legend).toContainText("Top 3");
+    await expect(legend).toContainText("Ranks 4–10");
+    await expect(legend).toContainText("Outside top 10");
+    await expect(legend).toContainText("2,000 weight scenarios");
+    await expect(page.locator(".row .stab-share").first()).toHaveText(/^Top 10 in (\d+%|>99%|<1%)$/);
+  });
+
+  test("segments cover the whole bar and match the tooltip counts", async ({ page }) => {
+    await open(page);
+    await page.waitForTimeout(400);
+    const bars = page.locator(".row .outcome-wrap .outcome");
+    for (let k = 0; k < 10; k++) {
+      const bar = bars.nth(k);
+      const seg = await bar.evaluate((el) => {
+        const segs = [...el.querySelectorAll<HTMLElement>(".outcome-seg")];
+        const total = el.getBoundingClientRect().width;
+        const sum = segs.reduce((a, s) => a + s.getBoundingClientRect().width, 0);
+        return { total, sum, grow: segs.reduce((a, s) => a + Number(s.style.flexGrow), 0) };
+      });
+      expect(Math.abs(seg.sum - seg.total)).toBeLessThan(1); // segments fill 100% of the bar
+      expect(seg.grow).toBe(2000); // flex weights are the draw counts
+      const tipId = await bar.getAttribute("aria-describedby");
+      const rows = page.locator(`[id="${tipId}"] tbody tr`);
+      await expect(rows).toHaveCount(3);
+      const cells = await rows.evaluateAll((trs) =>
+        trs.map((tr) => [tr.querySelector("th")!.textContent!.trim(), ...[...tr.querySelectorAll("td")].map((td) => td.textContent!.trim())]),
+      );
+      expect(cells.map((c) => c[0])).toEqual(["Top 3", "Ranks 4–10", "Outside top 10"]);
+      const counts = cells.map((c) => Number(c[1]!.replace(/,/g, "")));
+      const pcts = cells.map((c) => parseFloat(c[2]!));
+      expect(counts.reduce((a, b) => a + b, 0)).toBe(2000);
+      expect(Math.round(pcts.reduce((a, b) => a + b, 0) * 10)).toBe(1000);
+      expect(counts[0]!).toBeLessThanOrEqual(counts[0]! + counts[1]!); // top 3 within top 10
+      expect(seg.grow).toBe(counts.reduce((a, b) => a + b, 0));
+    }
+  });
+
+  test("tooltip opens on hover, keyboard focus, and tap", async ({ page }, info) => {
+    await open(page);
+    const bar = page.locator(".row .outcome-wrap .outcome").first();
+    await expect(bar).toBeVisible();
+    const tip = page.locator(`[id="${await bar.getAttribute("aria-describedby")}"]`);
+    await expect(tip).toHaveAttribute("role", "tooltip");
+    await expect(tip).toBeHidden();
+    // hover
+    await bar.hover();
+    await expect(tip).toBeVisible();
+    await expect(tip).toContainText("Rank across 2,000 weight scenarios");
+    await page.mouse.move(5, 5);
+    await expect(tip).toBeHidden();
+    // keyboard: Tab from the row button reaches the bar
+    await page.locator(".row-btn").first().focus();
+    await page.keyboard.press("Tab");
+    await expect(bar).toBeFocused();
+    await expect(tip).toBeVisible();
+    await expect(bar).toHaveAttribute("aria-label", /Rank stability for .+: top 10 in/);
+    await page.keyboard.press("Escape");
+    await expect(tip).toBeHidden();
+    await page.locator("#county-search").focus();
+    // tap: the tooltip stays open and the county is selected, as a row click always did
+    await bar.click();
+    await page.mouse.move(5, 5);
+    await expect(tip).toBeVisible();
+    await expect(page.locator(".finding-head h2")).toBeVisible();
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: `${SHOTS}/stability/tooltip-${info.project.name}.png` });
+    await page.locator(".topbar .brand").click();
+    await expect(tip).toBeHidden();
+  });
+
+  test("clicking the label still selects the county", async ({ page }) => {
+    await open(page);
+    const name = (await topTen(page))[1]!;
+    // the label lets clicks through to the row button underneath
+    await page.locator(".row .stab-share").nth(1).click({ force: true });
+    await expect(page.locator(".finding-head h2")).toContainText(name);
+  });
+
+  test("unavailable stability renders cleanly", async ({ page }) => {
+    // On the committed engine export these gates leave 8 counties, fewer than
+    // the top 10, so rank stability cannot be computed.
+    await open(page, "?preset=balanced&g=min_population:50000,min_fiber_share_locations:0.6,max_grid_co2_lb_mwh:400");
+    const rows = await page.locator(".rows .row").count();
+    expect(rows).toBeGreaterThan(0);
+    expect(rows).toBeLessThanOrEqual(10);
+    await expect(page.locator(".stab-legend")).toContainText("not computed");
+    await expect(page.locator(".row .outcome-empty")).toHaveCount(rows);
+    await expect(page.locator(".row .outcome-wrap")).toHaveCount(0); // no tooltip trigger without data
+    await expect(page.locator(".row .stab-share").first()).toHaveText("Not computed");
+  });
+});
