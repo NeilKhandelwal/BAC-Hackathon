@@ -779,6 +779,40 @@
       "share190_time_to_power": 0.0,
       "share190_moratorium": -0.015,
       "share190_ttp_known_queue_only": 0.0
+    },
+    {
+      "variant": "queue baseline 1.5 y",
+      "top_private": "35009",
+      "top_190": "36033",
+      "top5_190": "Franklin, NY; Schuyler, NY; Clinton, NY; Chautauqua, NY; Tompkins, NY",
+      "gap_1_to_2_pct": 0.52,
+      "rank190_Grant": 116,
+      "rank190_Franklin": 1,
+      "rank190_Berkshire": 1544,
+      "share190_energy": 0.535,
+      "share190_carbon": 0.371,
+      "share190_water": -0.007,
+      "share190_hazard": 0.012,
+      "share190_time_to_power": 0.103,
+      "share190_moratorium": -0.014,
+      "share190_ttp_known_queue_only": 0.189
+    },
+    {
+      "variant": "queue baseline 2.5 y",
+      "top_private": "35009",
+      "top_190": "53011",
+      "top5_190": "Clark, WA; Franklin, NY; Schuyler, NY; Clinton, NY; Walla Walla, WA",
+      "gap_1_to_2_pct": 2.15,
+      "rank190_Grant": 59,
+      "rank190_Franklin": 2,
+      "rank190_Berkshire": 1549,
+      "share190_energy": 0.564,
+      "share190_carbon": 0.388,
+      "share190_water": -0.008,
+      "share190_hazard": 0.013,
+      "share190_time_to_power": 0.057,
+      "share190_moratorium": -0.014,
+      "share190_ttp_known_queue_only": 0.108
     }
   ],
   "focus": {

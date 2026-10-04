@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:55 UTC
+- **Updated:** 2026-10-04 02:01 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,26 +17,23 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** BPA fairness fix done. Next: Phase 5 (item 4 below). The user
-  approved running Phases 3 and 4 back to back without a check-in unless
-  something blocks.
-- **Done:** Phase 0. Phase 1 (`monetize.py`). Monte Carlo
-  (`montecarlo.py`). Phase 2 (`smaa.py`). `docs/weighting.md` stub with
-  the hazard-downtime and floor notes. Results are in the history.
-- **In progress:** Phase 5: `scratch/weighting/consensus.py`, then the advisor check, then `docs/weighting.md`.
-- **Exact next action:** in order, per approved decisions 13 to 16:
-  1. `scratch/weighting/critic.py`: raw-value CRITIC and entropy only
-     (winsorize 1st/99th, min-max, direction applied, column-level
-     weights). No percentile sensitivity. 30-minute timebox. Report the
-     top 10 under each and where Clark, Franklin, and Grant land.
-  2. `scratch/weighting/revealed.py`: Phase 4 as specified.
-  3. Fairness fix: BPA new-load scenario for Clark as well as Grant in
-     `monetize.py`, then a BPA Monte Carlo run.
-  4. Phase 5: consult the advisor before writing the recommendation.
+- **Phase and step:** all phases done. PR #35 is marked ready for review.
+  Nothing is in progress.
+- **Done:** Phases 0 to 5, the Monte Carlo, and the BPA fairness fix.
+  `docs/weighting.md` holds the final write-up and recommendation (feature
+  Clark WA; alternatives Franklin NY and Grant WA, each with its winning
+  condition).
+- **In progress:** nothing.
+- **Exact next action:** waiting on the user and team. Open decision:
+  whether to switch the deck's featured county from Grant to Clark, or to
+  present Grant as the engine's pick and Clark as the dollar pick. Don't
+  edit `docs/deck.md`, `docs/demo_script.md`, `research/implementation.md`,
+  or `research/risk.md` without that decision. Never merge PR #35.
 - **Reproduce:** from the repo root, after fetching raw NRI (below):
   `.venv/Scripts/python.exe scratch/weighting/monetize.py`, then
   `.venv/Scripts/python.exe scratch/weighting/montecarlo.py`, then
-  `.venv/Scripts/python.exe scratch/weighting/smaa.py`. Each rewrites its
+  `.venv/Scripts/python.exe scratch/weighting/smaa.py`, `critic.py`,
+  `revealed.py`, and `consensus.py` in that order. Each rewrites its
   files in `scratch/weighting/out/` and its chart in `docs/img/`.
 - **Advisor rule (from the user):** consult the advisor before finalizing a
   Monte Carlo design, when judging whether the top 3 is a real tie, before
@@ -123,7 +120,8 @@ Overwritten at every update.
       pillar fails Franklin's floor and by how much. Report rank-1 and
       top-10 acceptability for Clark WA, Franklin NY, and Grant WA under
       both settings.
-- **Open questions waiting on the user:** none.
+- **Open questions waiting on the user:** which county the deck features
+  (see Exact next action).
 
 ## Background
 
@@ -146,7 +144,7 @@ exemption. Don't attribute the whole flip to weights.
 | 2 | Weight-space mapping (SMAA) | done | `scratch/weighting/smaa.py`, `docs/img/smaa_acceptability.png` |
 | 3 | CRITIC and entropy weights | done | `scratch/weighting/critic.py` |
 | 4 | Revealed preference | done | `scratch/weighting/revealed.py` |
-| 5 | Consensus and write-up | not started | `scratch/weighting/consensus.py`, `docs/weighting.md`, `docs/img/` |
+| 5 | Consensus and write-up | done | `scratch/weighting/consensus.py`, `docs/weighting.md`, `docs/img/` |
 
 ## Rules
 
@@ -795,3 +793,59 @@ both its queue cleared to Clark's level and a rate about $2/MWh below
 Clark's; with its current queue, it needs a rate $18/MWh below Clark's.
 The rest of the gap after delay comes from dry cooling (water stress 3.6)
 raising its PUE.
+
+### 2026-10-04 02:01 UTC, Phase 5: consensus, two-stage shortlist, recommendation
+
+Script: `scratch/weighting/consensus.py`. Printout:
+`scratch/weighting/out/consensus_report.txt`. Ranks:
+`scratch/weighting/out/consensus_ranks.csv`. JSON:
+`scratch/weighting/out/consensus_summary.json`. Chart:
+`docs/img/weights_by_method.png`. Write-up: `docs/weighting.md`.
+
+**Consensus.** Borda over each method's top 20. Without entropy: Clark WA
+50, Whitman WA 49, Grant WA 48, Scott IA 44, Washington OR 39, Wayne TN 37,
+Rock Island IL 31, Grady OK 27, Mayes OK 26, Multnomah OR 26. With entropy,
+Washington OR leads (54) and Clark is second (50). Franklin NY scores 19
+either way.
+
+**Two-stage framework.** Shortlist: counties that at least 1% of SMAA
+weightings put in the top 10, floor off (161 counties). Ranked by 25-year
+cost at $190/t: Clark, Franklin, Clinton NY, Chautauqua NY, Niagara NY,
+Walla Walla WA, Chesterfield SC, Whitman WA, Marlboro SC, Oneida NY. Grant
+is 28th. Clark is #1 under all four shortlist rules (1% or 5%, floor on or
+off); Franklin drops out with the floor on.
+
+**Engine run with the monetized implied weights** (cost 0.54,
+energy_carbon 0.37, grid 0.08, climate 0.01): its top 10 is Oklahoma and
+Texas counties and shares 0 counties with the dollar top 10. This and the
+2.7x carbon example are the two reasons dollars do the ranking.
+
+**Advisor consulted before the recommendation.** It agreed with featuring
+Clark and set the wording: Clark leads in every scenario tested but not
+decisively. Checks it asked for, and their results:
+
+- **Queue baseline sensitivities added to `monetize.py`.** At 2.0 and 2.5
+  years Clark is #1. At 1.5 years Franklin is #1 and Clark 6th. Clark leads
+  Franklin by $48.7M at $190/t, 1.95 months of delay, so Clark leads only
+  if it can energize within about 2.25 years.
+- **Repo search for Clark's utility** (Clark County, Clark Public
+  Utilities, Vancouver, Camas, Ridgefield in `research/` and `docs/`):
+  nothing beyond a demo-script mention. Power availability is the top
+  diligence item, stated as a threshold, not inferred.
+- **Shortlist rule check:** done, as above.
+- **Clark's weak spots named in the write-up:** land pillar 22nd
+  percentile (314 people per km²), fiber 29%, 4.7 GW of plants within
+  100 km against Grant's 16.2 GW, no existing FracTracker facility.
+- **Deck conflict stated:** featuring Clark means reworking
+  `docs/deck.md`, `docs/demo_script.md`, `research/implementation.md`,
+  and `research/risk.md`, which this branch doesn't touch.
+- **Structure:** stage 2 is the primary ranking, Borda is a cross-check,
+  and the variance shares are labeled as weights on dollars, not engine
+  weights.
+
+**Recommendation in `docs/weighting.md`.** Featured: Clark WA.
+Alternative 1: Franklin NY, if the carbon price is above about $200/t at
+state-average power, Clark's new-load rate is above about $104/MWh, or
+Clark's power arrives about 2 months later than the proxy. Alternative 2:
+Grant WA, if its queue clears to Clark's level and its power costs about
+$2/MWh less than Clark's ($18/MWh less with its current queue).

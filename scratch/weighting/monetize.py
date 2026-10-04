@@ -326,7 +326,9 @@ def main():
                       ("delay $50M/mo", {"delay_usd_month": 50e6}),
                       ("moratorium 8 mo", {"moratorium_months_active": 8}),
                       ("moratorium 20 mo", {"moratorium_months_active": 20}),
-                      ("time to power off", {"ttp_delay_usd_month": 0})]:
+                      ("time to power off", {"ttp_delay_usd_month": 0}),
+                      ("queue baseline 1.5 y", {"queue_baseline_years": 1.5}),
+                      ("queue baseline 2.5 y", {"queue_baseline_years": 2.5})]:
         sens.append(summarize_variant(run(df, passed, alr, queue_median, ov)[2], label))
     sens = pd.DataFrame(sens)
 
