@@ -9,23 +9,28 @@ the bottom is append-only.
 
 Overwritten after every step.
 
-- **Updated:** 2026-10-04 05:30 UTC
+- **Updated:** 2026-10-04 05:43 UTC
 - **Branch:** `fix/sensitive-land`, from `main` at `714d231` (PR #35,
   the weighting work, is merged).
-- **Phase and step:** Phase 2 in progress (Phase 1 research running in
-  parallel).
-- **Done:** Phase 0. Census county and AIANNH boundaries downloaded to
-  `data/raw/tiger/`. `etl/adapters/tribal_lands.py` written and tested
-  (Grant 0%, Clark 0.04%, Franklin NY 1.2%). `etl/append_columns.py`
-  written: it appends adapter columns to the frozen table and rebuilds the
-  manifest and quality report.
-- **In progress:** two Opus research subagents. One is checking protected,
-  tribal, and cultural-resource land near Grant WA, Clark WA, and Franklin
-  NY. The other is checking PAD-US and Census AIANNH download access. If a
-  new session starts and their results are lost, rerun that research.
-- **Exact next action:** get the PAD-US download (waiting on the
-  dataset-access subagent), write `etl/adapters/pad_us.py`, and compute
-  `pct_protected` (GAP 1-2) and `pct_protected_gap1to3` (context).
+- **Phase and step:** Phase 2 done. Phase 3 measured, ship decision
+  pending. Phase 1 research is still running.
+- **Done:** Phase 0. Adapters `etl/adapters/tribal_lands.py` and
+  `etl/adapters/pad_us.py`. `etl/append_columns.py`. Schema rows in
+  `docs/schema.md`. Measurement in `scratch/sensitive_land/measure.py`
+  (scored: Grant 1 to 4, Whitman 1st; gate: no change).
+- **In progress:** an Opus research subagent on Phase 1 (protected,
+  tribal, and cultural-resource land near Quincy, Vancouver, and Malone).
+  If lost, rerun it with the same scope (see the Phase 1 brief in the
+  user's task).
+- **Exact next action:** when Phase 1 lands, apply the decision rule
+  (history, PAD-US entry): a real conflict near Quincy means stop; holdings
+  that don't constrain Quincy mean Phase 3 is measured but not shipped.
+  Then write the Phase 1 docs (`research/risk.md` row, deck limitation),
+  consult the advisor on plausibility and shipping, and finish with the PR
+  and morning summary.
+- **Raw files to recreate** (gitignored): `data/raw/tiger/` (county and
+  AIANNH zips) via the adapters' `fetch`; `data/raw/padus/` via
+  `python -c "from etl.adapters import pad_us; from pathlib import Path; pad_us.fetch(Path('data/raw'))"`.
 - **Decisions so far:**
   1. The frozen county table is updated by appending the new columns and
      leaving every existing column untouched. That follows the documented
