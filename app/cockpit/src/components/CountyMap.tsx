@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { geoConicEqualArea, geoPath } from "d3-geo";
 import { quantile } from "d3-array";
 import { feature, mesh } from "topojson-client";
@@ -7,10 +7,39 @@ import type { Feature, FeatureCollection, Geometry } from "geojson";
 import type { CockpitData } from "../data/types";
 import type { RunResult } from "../engine/run";
 import { fmtInt, fmtScore } from "../lib/format";
+import { useCountyLookup } from "../lib/countyLookup";
 
 const W = 1000;
 const H = 620;
 const RAMP = 7;
+const MIN_K = 1;
+const MAX_K = 12;
+const BUTTON_STEP = 1.6;
+
+interface View {
+  k: number;
+  tx: number;
+  ty: number;
+}
+
+/** Zoom by `f` around point (px, py) in map units, keeping that point still. */
+function zoomAt(v: View, f: number, px: number, py: number): View {
+  const k = Math.min(MAX_K, Math.max(MIN_K, v.k * f));
+  const r = k / v.k;
+  return clampView({ k, tx: px - (px - v.tx) * r, ty: py - (py - v.ty) * r });
+}
+
+/** Keep the map in the frame: at least three quarters of the frame stays on the map. */
+function clampView(v: View): View {
+  if (v.k <= 1) return { k: 1, tx: 0, ty: 0 };
+  const mx = W * 0.25;
+  const my = H * 0.25;
+  return {
+    k: v.k,
+    tx: Math.min(mx, Math.max(W - W * v.k - mx, v.tx)),
+    ty: Math.min(my, Math.max(H - H * v.k - my, v.ty)),
+  };
+}
 
 type Props = { fips: string; county_name: string; state: string };
 
@@ -73,9 +102,11 @@ interface MapProps {
   onSelect: (idx: number | null) => void;
   /** share of the map height covered from below, so a selection centers in the visible part */
   coveredBelow?: number;
+  /** changes when the app resets, so a hand-set zoom resets with it */
+  resetKey?: number;
 }
 
-export function CountyMap({ data, geo, result, selected, compare, onSelect, coveredBelow = 0 }: MapProps) {
+export function CountyMap({ data, geo, result, selected, compare, onSelect, coveredBelow = 0, resetKey = 0 }: MapProps) {
   const [hover, setHover] = useState<number | null>(null);
 
   // Quantile breaks of the composite among gate-passing counties.
@@ -102,7 +133,7 @@ export function CountyMap({ data, geo, result, selected, compare, onSelect, cove
     return f;
   }, [result, breaks, data]);
 
-  const view = useMemo(() => {
+  const selectionView = useMemo<View>(() => {
     if (selected === null) return { k: 1, tx: 0, ty: 0 };
     const [[x0, y0], [x1, y1]] = geo.bounds[selected]!;
     const cx = (x0 + x1) / 2;
@@ -113,15 +144,102 @@ export function CountyMap({ data, geo, result, selected, compare, onSelect, cove
     return { k, tx: W / 2 - k * cx, ty: visibleMid - k * cy };
   }, [selected, geo, coveredBelow]);
 
+  // A hand-set view (wheel, pinch, drag, buttons) wins until the selection changes or the app resets.
+  const [userView, setUserView] = useState<View | null>(null);
+  useEffect(() => setUserView(null), [selected, resetKey]);
+  const view = userView ?? selectionView;
+  const viewRef = useRef(view);
+  viewRef.current = view;
+
+  // While the user drives the view, follow the input directly instead of easing toward it.
+  const [interacting, setInteracting] = useState(false);
+  const idle = useRef<number | undefined>(undefined);
+  const touch = () => {
+    setInteracting(true);
+    window.clearTimeout(idle.current);
+    idle.current = window.setTimeout(() => setInteracting(false), 160);
+  };
+
+  const svgRef = useRef<SVGSVGElement>(null);
+  /** client pixels to map units, through the svg's viewBox scaling */
+  const toMap = (clientX: number, clientY: number): [number, number] => {
+    const svg = svgRef.current!;
+    const pt = svg.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const m = svg.getScreenCTM();
+    if (!m) return [W / 2, H / 2];
+    const p = pt.matrixTransform(m.inverse());
+    return [p.x, p.y];
+  };
+
+  // Wheel and trackpad: scroll or pinch to zoom around the pointer. React's
+  // wheel handler is passive, so this listener is attached by hand to stop
+  // the page from scrolling.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      // a pinch arrives as ctrl+wheel with small deltas
+      const f = Math.exp(-dy * (e.ctrlKey ? 0.01 : 0.0015));
+      const [px, py] = toMap(e.clientX, e.clientY);
+      touch();
+      setUserView(zoomAt(viewRef.current, f, px, py));
+    };
+    svg.addEventListener("wheel", onWheel, { passive: false });
+    return () => svg.removeEventListener("wheel", onWheel);
+  }, []);
+
+  // Drag to pan once zoomed in. A press that doesn't move stays a click.
+  const drag = useRef<{ x: number; y: number; v: View; moved: boolean; id: number } | null>(null);
+  const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (e.button !== 0 || viewRef.current.k <= 1) return;
+    drag.current = { x: e.clientX, y: e.clientY, v: viewRef.current, moved: false, id: e.pointerId };
+  };
+  const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    const d = drag.current;
+    if (!d || d.id !== e.pointerId) return;
+    const [ax, ay] = toMap(d.x, d.y);
+    const [bx, by] = toMap(e.clientX, e.clientY);
+    if (!d.moved && Math.hypot(e.clientX - d.x, e.clientY - d.y) < 4) return;
+    if (!d.moved) {
+      d.moved = true;
+      svgRef.current?.setPointerCapture(e.pointerId);
+    }
+    touch();
+    setUserView(clampView({ k: d.v.k, tx: d.v.tx + (bx - ax), ty: d.v.ty + (by - ay) }));
+  };
+  const endDrag = (e: React.PointerEvent<SVGSVGElement>) => {
+    const d = drag.current;
+    if (!d || d.id !== e.pointerId) return;
+    if (d.moved) {
+      // swallow the click that follows a drag
+      const stop = (ev: MouseEvent) => ev.stopPropagation();
+      window.addEventListener("click", stop, { capture: true, once: true });
+      window.setTimeout(() => window.removeEventListener("click", stop, { capture: true }), 0);
+    }
+    drag.current = null;
+  };
+
+  const visibleMid = (H * (1 - coveredBelow)) / 2;
+  const zoomBy = (f: number) => setUserView(zoomAt(view, f, W / 2, visibleMid));
+
   const top = result.ranked.slice(0, result.topN);
   const zoomed = view.k > 1;
   const hovered = hover ?? null;
 
   return (
-    <div className="map-frame">
+    <div className={`map-frame${interacting ? " is-interacting" : ""}${zoomed ? " is-zoomed" : ""}`}>
       <svg
+        ref={svgRef}
         className="map"
         viewBox={`0 0 ${W} ${H}`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
         role="img"
         aria-label={`Map of ${fmtInt(data.counties.fips.length)} counties. ${fmtInt(result.passedCount)} pass the gates. Use the shortlist or Find a county to select one.`}
         onClick={(e) => {
@@ -174,7 +292,13 @@ export function CountyMap({ data, geo, result, selected, compare, onSelect, cove
       <div className="map-toolbar">
         <CountySearch data={data} onSelect={onSelect} />
         {zoomed && (
-          <button className="btn btn-quiet" onClick={() => onSelect(null)}>
+          <button
+            className="btn btn-quiet"
+            onClick={() => {
+              setUserView(null);
+              onSelect(null);
+            }}
+          >
             Show all counties
           </button>
         )}
@@ -193,6 +317,19 @@ export function CountyMap({ data, geo, result, selected, compare, onSelect, cove
           <rect x={-view.tx / view.k} y={-view.ty / view.k} width={W / view.k} height={H / view.k} className="inset-view" />
         </svg>
       )}
+
+      <div className="zoom-controls" role="group" aria-label="Map zoom" style={{ bottom: `calc(${coveredBelow * 100}% + 12px)` }}>
+        <button type="button" className="zoom-btn" aria-label="Zoom in" disabled={view.k >= MAX_K - 1e-6} onClick={() => zoomBy(BUTTON_STEP)}>
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden>
+            <path d="M8 3v10M3 8h10" />
+          </svg>
+        </button>
+        <button type="button" className="zoom-btn" aria-label="Zoom out" disabled={view.k <= MIN_K + 1e-6} onClick={() => zoomBy(1 / BUTTON_STEP)}>
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden>
+            <path d="M3 8h10" />
+          </svg>
+        </button>
+      </div>
 
       <Legend breaks={breaks} />
     </div>
@@ -251,26 +388,16 @@ function Legend({ breaks }: { breaks: number[] }) {
 }
 
 function CountySearch({ data, onSelect }: { data: CockpitData; onSelect: (i: number | null) => void }) {
-  const options = useMemo(
-    () => data.counties.fips.map((f, i) => ({ label: `${data.counties.name[i]}, ${data.counties.state[i]} (${f})`, i })),
-    [data],
-  );
-  const lookup = useMemo(() => new Map(options.map((o) => [o.label.toLowerCase(), o.i])), [options]);
+  const { options, resolve, isExact } = useCountyLookup(data);
   const [q, setQ] = useState("");
   const [miss, setMiss] = useState(false);
   const submit = (value: string) => {
-    const v = value.trim().toLowerCase();
-    let i = lookup.get(v);
-    if (i === undefined && /^\d{5}$/.test(v)) i = data.counties.fips.indexOf(v);
-    if (i === undefined || i < 0) {
-      const hit = options.find((o) => o.label.toLowerCase().startsWith(v));
-      i = hit?.i;
-    }
-    if (i !== undefined && i >= 0 && v) {
+    const i = resolve(value);
+    if (i !== null) {
       onSelect(i);
       setQ("");
       setMiss(false);
-    } else setMiss(v.length > 0);
+    } else setMiss(value.trim().length > 0);
   };
   return (
     <form
@@ -292,7 +419,7 @@ function CountySearch({ data, onSelect }: { data: CockpitData; onSelect: (i: num
         onChange={(e) => {
           setQ(e.target.value);
           setMiss(false);
-          if (lookup.has(e.target.value.toLowerCase())) submit(e.target.value);
+          if (isExact(e.target.value)) submit(e.target.value);
         }}
         aria-invalid={miss}
         aria-describedby={miss ? "search-miss" : undefined}

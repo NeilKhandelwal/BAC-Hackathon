@@ -261,11 +261,12 @@ export function applyGates(data: CockpitData, c: Conditions, hazardPct: (column:
 export interface Stability {
   samples: number;
   topN: number;
-  /** share of draws in the top N, per county; NaN when not computed */
+  /** per county, draws that rank it in the top 3; NaN when not computed */
+  top3: Vec;
+  /** per county, draws that rank it in the top N; NaN when not computed */
+  topNCount: Vec;
+  /** topNCount / samples; NaN when not computed */
   share: Vec;
-  /** per county, for the barcode: rank tier in the first `barcodeSamples` draws: 0 out, 1 top N, 2 top 3 */
-  tiers: Map<number, Uint8Array>;
-  barcodeSamples: number;
   warning: string | null;
 }
 
@@ -302,12 +303,11 @@ export function stability(
   floor: Uint8Array,
   passed: Uint8Array,
   cfg: { samples: number; concentration: number; topN: number; seed: number },
-  keep: Set<number>,
-  barcodeSamples = 64,
 ): Stability {
   const n = hs.coverage.length;
   const share = new Float64Array(n).fill(NaN);
-  const tiers = new Map<number, Uint8Array>();
+  const top3 = new Float64Array(n).fill(NaN);
+  const topNCount = new Float64Array(n).fill(NaN);
   const { samples, concentration, topN } = cfg;
   const pos = hs.pillars.filter((p) => w[p]! > 0);
   const eligible: number[] = [];
@@ -319,9 +319,9 @@ export function stability(
     return {
       samples,
       topN,
+      top3,
+      topNCount,
       share,
-      tiers,
-      barcodeSamples: 0,
       warning: `Rank stability not computed: ${eligible.length} counties pass the gates and the floor, not more than ${topN}.`,
     };
   }
@@ -336,13 +336,10 @@ export function stability(
   const S = new Float64Array(m * k);
   for (let r = 0; r < m; r++) for (let j = 0; j < k; j++) S[r * k + j] = hs.pillarScore[pos[j]!]![eligible[r]!]!;
   const hits = new Uint32Array(m);
+  const hits3 = new Uint32Array(m);
   const comp = new Float64Array(m);
   const top = new Int32Array(topN);
   const topV = new Float64Array(topN);
-  const bc = Math.min(barcodeSamples, samples);
-  const tierRows = new Map<number, Uint8Array>();
-  for (const i of keep) tierRows.set(i, new Uint8Array(bc));
-  const rowOf = new Map(eligible.map((i, r) => [i, r]));
   const draw = new Float64Array(k);
 
   for (let s = 0; s < samples; s++) {
@@ -394,15 +391,17 @@ export function stability(
       if (topV[p] === -Infinity) continue;
       const r = top[p]!;
       hits[r]!++;
-      if (s < bc) {
-        const row = tierRows.get(eligible[r]!);
-        if (row) row[s] = p < 3 ? 2 : 1;
-      }
+      if (p < 3) hits3[r]!++; // the buffer is sorted, so slots 0-2 are ranks 1-3
     }
   }
-  for (let r = 0; r < m; r++) share[eligible[r]!] = hits[r]! / samples;
-  for (const [i, row] of tierRows) if (rowOf.has(i)) tiers.set(i, row);
-  return { samples, topN, share, tiers, barcodeSamples: bc, warning: null };
+  // Every eligible county gets counts, including zeros; ineligible ones stay NaN.
+  for (let r = 0; r < m; r++) {
+    const i = eligible[r]!;
+    topNCount[i] = hits[r]!;
+    top3[i] = hits3[r]!;
+    share[i] = hits[r]! / samples;
+  }
+  return { samples, topN, top3, topNCount, share, warning: null };
 }
 
 // ---------------------------------------------------------------- top reasons

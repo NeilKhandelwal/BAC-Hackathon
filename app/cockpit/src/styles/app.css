@@ -360,10 +360,6 @@ select {
   color: var(--warn);
 }
 
-.badge-data.is-engine {
-  color: var(--pass);
-}
-
 /* ------------------------------------------------------------- left rail */
 
 .rail h2,
@@ -921,9 +917,6 @@ input[type="range"]::-moz-range-thumb {
   color: var(--ink-3);
 }
 
-.cols span:last-child {
-  display: none;
-}
 
 .rows {
   list-style: none;
@@ -941,8 +934,8 @@ input[type="range"]::-moz-range-thumb {
   grid-template-columns: 2.25rem 1fr 3.5rem;
   grid-template-areas:
     "rank who score"
-    "move stack stack"
-    "move stab stab";
+    "move . .";
+  grid-template-rows: auto 22px;
   column-gap: var(--s2);
   row-gap: 4px;
   width: 100%;
@@ -1033,21 +1026,8 @@ input[type="range"]::-moz-range-thumb {
   font-weight: 700;
 }
 
-.stack {
-  grid-area: stack;
-  display: flex;
-  height: 8px;
-  background: var(--ground);
-  align-self: center;
-}
 
-.stack-seg {
-  height: 100%;
-}
 
-.stack-seg + .stack-seg {
-  border-left: 1px solid var(--panel);
-}
 
 .stab {
   grid-area: stab;
@@ -1068,29 +1048,10 @@ input[type="range"]::-moz-range-thumb {
   white-space: nowrap;
 }
 
-.barcode {
-  display: block;
-  flex: none;
-}
 
-.barcode-frame {
-  fill: none;
-  stroke: var(--rule);
-}
 
-.bar.t0 { fill: var(--stab-out); }
-.bar.t1 { fill: var(--stab-top10); }
-.bar.t2 { fill: var(--stab-top3); }
 
-.barcode-empty {
-  width: 255px;
-  height: 20px;
-  border: 1px dashed var(--rule);
-}
 
-.stab-def {
-  margin-top: var(--s3);
-}
 
 .dropped {
   margin-top: var(--s4);
@@ -1543,18 +1504,7 @@ table {
   padding: 3px 0;
 }
 
-.barcode {
-  flex: 1 1 auto;
-  min-width: 0;
-  width: 100%;
-  max-width: 260px;
-  height: 20px;
-}
 
-.barcode.is-tall {
-  max-width: none;
-  height: 34px;
-}
 
 .pbar-wrap {
   display: flex;
@@ -1656,13 +1606,7 @@ table {
   row-gap: 3px;
 }
 
-.stack {
-  height: 6px;
-}
 
-.barcode {
-  height: 16px;
-}
 
 .shortlist-head + .change-line {
   min-height: 0;
@@ -1688,10 +1632,11 @@ table {
   table-layout: fixed;
 }
 
-.contrib .c-pillar { width: 38%; }
-.contrib .c-weight { width: 11%; }
-.contrib .c-bar { width: 37%; }
-.contrib .c-adds { width: 14%; }
+/* Weight and Adds get fixed widths that fit their headers and values;
+   the pillar name takes what's left. */
+.contrib .c-weight { width: 4rem; }
+.contrib .c-bar { width: 34%; }
+.contrib .c-adds { width: 3.5rem; }
 
 .contrib tbody th {
   overflow: hidden;
@@ -1705,4 +1650,433 @@ table {
 .stab-block.is-stale > :not(h3) {
   opacity: 0.45;
   transition: opacity var(--t-fade) linear;
+}
+
+/* ------------------------------------------------------------- rank stability outcome bar */
+
+.row {
+  position: relative;
+}
+
+/* The row button covers the whole row; the stability line sits over its
+   second grid row. Only the bar takes pointer events, so a click on the
+   label still selects the county. */
+.row .stab {
+  position: absolute;
+  left: calc(var(--s2) * 2 + 2.25rem);
+  right: var(--s2);
+  bottom: 8px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  pointer-events: none;
+}
+
+.stab .outcome,
+.stab .stab-share {
+  transition: opacity var(--t-fade) linear;
+}
+
+.stab.is-stale .outcome,
+.stab.is-stale .stab-share {
+  opacity: 0.45;
+}
+
+.stab-share {
+  flex: none;
+  min-width: 7.6em;
+  text-align: right;
+  font-size: var(--fs-fine);
+  font-weight: 650;
+  color: var(--stab-top3);
+  white-space: nowrap;
+}
+
+.outcome-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  pointer-events: auto;
+}
+
+.outcome {
+  display: flex;
+  width: 100%;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  outline: 1px solid var(--rule-strong);
+  outline-offset: 0;
+  background: var(--stab-out);
+  cursor: help;
+}
+
+.outcome:hover {
+  outline-color: var(--ink);
+}
+
+.outcome:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.outcome-empty {
+  flex: 1 1 auto;
+  height: 14px;
+  outline: 1px dashed var(--rule-strong);
+}
+
+.outcome-empty.is-pending {
+  outline-style: solid;
+  outline-color: var(--rule);
+  background: var(--ground);
+}
+
+.stab-share.is-muted {
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+.outcome-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.outcome-seg {
+  flex-basis: 0;
+  min-width: 0;
+}
+
+.outcome-seg + .outcome-seg {
+  box-shadow: inset 1px 0 0 var(--panel);
+}
+
+.o-top3 { background: var(--stab-top3); }
+.o-top10 { background: var(--stab-top10); }
+.o-out { background: var(--stab-out); }
+
+.outcome-sw {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+
+.outcome-sw.o-out {
+  box-shadow: inset 0 0 0 1px var(--rule-strong);
+}
+
+.stab-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px var(--s3);
+  padding: 6px var(--s2);
+  border-bottom: 1px solid var(--rule);
+  font-size: var(--fs-fine);
+  color: var(--ink-2);
+}
+
+.stab-legend-title {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stab-legend-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--s3);
+}
+
+.stab-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.outcome-tip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 10;
+  width: max-content;
+  padding: var(--s2) var(--s3);
+  background: var(--panel);
+  border: 1px solid var(--ink);
+  box-shadow: 0 6px 20px rgb(17 21 24 / 0.16);
+}
+
+.outcome-tip.is-above {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.outcome-tip[hidden] {
+  display: none;
+}
+
+.outcome-table caption {
+  text-align: left;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+  padding-bottom: 4px;
+}
+
+.outcome-table th,
+.outcome-table td {
+  padding: 3px 0;
+  font-size: var(--fs-fine);
+  font-weight: 400;
+  text-align: left;
+  border-top: 1px solid var(--rule);
+}
+
+.outcome-table caption,
+.outcome-table th {
+  white-space: nowrap;
+}
+
+.outcome-table th {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: var(--s3);
+}
+
+.outcome-table td.num {
+  text-align: right;
+  padding-left: var(--s3);
+  font-weight: 600;
+}
+
+.outcome-lg {
+  height: 20px;
+  margin: 2px 0 var(--s2);
+  outline: 1px solid var(--rule-strong);
+  background: var(--stab-out);
+}
+
+/* ------------------------------------------------------------- map zoom and pan */
+
+.map-frame.is-interacting .zoom,
+.map-frame.is-interacting .ring {
+  transition: none;
+}
+
+.map-frame.is-zoomed .map {
+  cursor: grab;
+  touch-action: none;
+}
+
+.map-frame.is-zoomed .map:active {
+  cursor: grabbing;
+}
+
+.zoom-controls {
+  position: absolute;
+  right: var(--s3);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--rule-strong);
+  background: var(--panel);
+  box-shadow: 0 2px 8px rgb(17 21 24 / 0.08);
+}
+
+.zoom-btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.zoom-btn + .zoom-btn {
+  border-top: 1px solid var(--rule);
+}
+
+.zoom-btn svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: square;
+}
+
+.zoom-btn:hover:not(:disabled) {
+  background: var(--ground);
+}
+
+.zoom-btn:disabled {
+  color: var(--rule-strong);
+  cursor: default;
+}
+
+.zoom-btn:focus-visible {
+  outline-offset: -2px;
+}
+
+/* ------------------------------------------------------------- compare picker */
+
+.compare {
+  position: relative;
+}
+
+.compare-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  max-width: 22rem;
+}
+
+.compare-trigger.is-on {
+  border-color: var(--ink-2);
+  border-style: dashed;
+}
+
+.compare-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* matches the dashed comparison outline on the map */
+.compare-swatch {
+  flex: none;
+}
+
+.compare-swatch rect {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 2;
+}
+
+.compare-caret {
+  flex: none;
+}
+
+.compare-caret path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.compare-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 30;
+  width: 22rem;
+  padding: var(--s3);
+  background: var(--panel);
+  border: 1px solid var(--ink);
+  box-shadow: 0 8px 24px rgb(17 21 24 / 0.16);
+}
+
+.compare-h {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+.pick-list {
+  list-style: none;
+  margin: 0 0 var(--s3);
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.pick-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  width: 100%;
+  padding: 8px var(--s2);
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pick-btn:hover {
+  background: var(--ground);
+}
+
+.pick-btn:focus-visible {
+  outline-offset: -2px;
+}
+
+.pick-title {
+  font-weight: 650;
+}
+
+.pick-note {
+  font-size: var(--fs-fine);
+  color: var(--ink-3);
+}
+
+.pick-current {
+  position: absolute;
+  top: 8px;
+  right: var(--s2);
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+.compare-row {
+  display: flex;
+  gap: var(--s2);
+}
+
+.compare-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 var(--s3);
+  border: 1px solid var(--rule-strong);
+  background: var(--panel);
+}
+
+.compare-row input::placeholder {
+  color: var(--ink-3);
+}
+
+.compare-row input[aria-invalid="true"] {
+  border-color: var(--fail);
+}
+
+.compare-err {
+  margin-top: 6px;
+  font-size: var(--fs-fine);
+  color: var(--fail);
+}
+
+.compare-stop {
+  margin-top: var(--s3);
+}
+
+.contrib tbody th .pillar-name {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.contrib .pillar-flag {
+  display: block;
+  padding-left: 16px;
+  line-height: 1.2;
 }
