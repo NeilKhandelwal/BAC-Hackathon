@@ -1,0 +1,9 @@
+self-check max diff $0.0000
+P(#1): [('Clark, WA', 0.266), ('Franklin, NY', 0.247), ('Chesterfield, SC', 0.112), ('Kootenai, ID', 0.049), ('Bossier, LA', 0.047), ('Curry, NM', 0.047), ('El Paso, TX', 0.044), ('Emery, UT', 0.04), ('Grayson, TX', 0.038), ('Houston, TX', 0.026)]
+P(top 3): [('Clark, WA', 0.352), ('Franklin, NY', 0.343), ('Schuyler, NY', 0.301), ('Clinton, NY', 0.232), ('Chesterfield, SC', 0.183), ('Walla Walla, WA', 0.146), ('Kootenai, ID', 0.123), ('Emery, UT', 0.094), ('El Paso, TX', 0.084), ('Bossier, LA', 0.082)]
+cluster P(#1): {'WA / NWPP': 0.266, 'NY / NYUP': 0.247, 'SC / SRVC': 0.112, 'LA / SRMV': 0.051, 'ID / NWPP': 0.049, 'NM / SPSO': 0.047, 'TX / AZNM': 0.044, 'UT / NWPP': 0.04, 'TX / ERCT': 0.038, 'TX / SRMV': 0.027, 'NC / SRVC': 0.022, 'PA / RFCE': 0.02, 'AR / SRMV': 0.016, 'OK / SPSO': 0.007, 'OH / RFCW': 0.002, 'VA / SRVC': 0.002, 'KY / SRTV': 0.002, 'OR / NWPP': 0.002, 'TX / SPSO': 0.001, 'TN / SRTV': 0.001, 'IA / MROW': 0.001, 'WY / NWPP': 0.001, 'LA / SPSO': 0.001, 'MT / NWPP': 0.001}
+P(Clark beats Franklin) = 0.593 ± 0.030 (95%); P(Clark beats Grant) = 1.000; imputed-queue share of #1 draws = 0.011
+delay_usd_month [('low', [10.1, 22.9], 0.491, 0.368, 0.243), ('mid', [22.9, 37.3], 0.556, 0.243, 0.255), ('high', [37.3, 49.9], 0.733, 0.129, 0.3)]
+moratorium_months_active [('low', [8.0, 11.6], 0.479, 0.332, 0.216), ('mid', [11.6, 15.6], 0.622, 0.219, 0.273), ('high', [15.6, 20.0], 0.679, 0.189, 0.309)]
+carbon_usd_t [('low', [100.1, 162.6], 0.859, 0.033, 0.35), ('mid', [163.1, 231.2], 0.568, 0.246, 0.246), ('high', [231.5, 300.0], 0.351, 0.462, 0.201)]
+Grant with BPA supply: {'median_rank': 246.0, 'p_first': 0.032, 'p_top3': 0.04, 'p10_rank': 12.0, 'p90_rank': 1093.3000000000002, 'p_beats_clark': 0.136, 'p_beats_franklin': 0.16}
