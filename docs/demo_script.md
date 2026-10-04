@@ -46,6 +46,27 @@ generation, not capacity available to a new customer, and a new large load
 in Grant would need new supply. The sourced version is in the risk
 write-up.
 
+## Stage 2: industrial reuse (Boone County, IL)
+
+Use this after the main click path, or in place of the extra minute. Grant
+and Loudoun still demonstrate the national model; Boone demonstrates the
+screening layer that comes after it.
+
+| Click | What the screen shows | What you say |
+| --- | --- | --- |
+| In **Find a county**, type `17007` and pick `Boone, IL (17007)`. Scroll past the pillar bars. | **Industrial reuse and community transition**, captioned as unscored, post-ranking screening, and the yellow statement: "Economic need is not evidence of community support. Local engagement and project-level validation are still required." | "After the ranking, a site lead wants to know what a community has been through and what land might be reused. This section doesn't change any rank." |
+| Point at **Economic transition**. | Manufacturing jobs 7,761 in 2015 and 2,070 in 2024: -5,691 (-73%), national percentile 1, read as "Low percentile = steeper decline". Unemployment 6.2% for 2022-2024 against a 3.6% national median. | "Boone lost almost three quarters of its manufacturing jobs since 2015, after the Belvidere assembly plant went idle. The 1st percentile here means one of the steepest losses in the country, not a good score." |
+| Scroll to **Brownfield properties**. | 8 EPA brownfield properties in Belvidere, 0.8 to 11.9 acres, none listed ready for reuse, substations 1.3 to 2.0 miles away, 138 kV where reported. **Download this county's 8 brownfield properties (CSV)**. | "These are candidates with a cleanup history, not available land. None is large enough for a 300 MW campus on its own." |
+| Point at the two blocks below. | **Why this community could benefit** (job losses, long-run manufacturing decline, unemployment, brownfields) beside **What still requires local verification** (utility capacity, ownership, cleanup, zoning, permits, transmission, local engagement, tax and community-benefit agreements). | "The data shows need and assets. Whether the community wants a data center is something only local engagement can answer." |
+| Click **Download county screening brief (Markdown)**. | A file `screening_brief_17007.md`. | "Everything on screen, with the risks and missing data, in one file for the site team." |
+
+If `data/processed/brownfield_sites.parquet` is missing (a fresh clone that
+hasn't run the ETL), the property table is replaced by a note that the ETL
+generates it. The county totals (8 properties, 43.6 reported acres) still
+show from the committed feature table. Run `python -m etl.build_features
+--no-fetch` with cached downloads, or `python -m etl.build_features`, to
+produce it.
+
 ## Likely questions
 
 - **Why does permitting score if the model was dropped?** It scores three
@@ -91,3 +112,6 @@ write-up.
   was checked. Say the number on screen, not the one here.
 - **The app shows an error box after a slider change:** you set every weight
   to 0. Reload the page.
+- **Boone shows a note instead of a brownfield property table:** the
+  generated site file is absent. Say "the property list comes from the ETL
+  run" and continue; the county totals above it are still real.
