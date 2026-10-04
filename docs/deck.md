@@ -269,7 +269,7 @@ new 300 MW load gets neither, so the feasibility study has the last word.
 **Speaker note:**
 - Numbers: `docs/figures/facts.json` (`limitations`, `weights`, `gap_first_to_second`).
 - The installed-versus-available gap: `research/risk.md` and `research/implementation.md`.
-- Sensitive land: `research/sensitive_land.md`. Grant County is 12.8% PAD-US GAP 1-2 protected land, the 89th percentile, but none within 5 km of Quincy. Scoring that county share in the land pillar would move Grant from 1st to 4th behind Whitman WA, which is why it isn't scored without a team decision. Section 106 tribal consultation applies only if a federal permit or interconnection is involved.
+- Sensitive land: `research/sensitive_land.md`. Grant County is 12.8% PAD-US GAP 1-2 protected land, the 89th percentile, but none within 5 km of Quincy. Scoring that county share in the land pillar would move Grant from 1st to 4th behind Whitman WA, which is why it isn't scored without a team decision. A federal connection, such as a federal permit or a BPA interconnection, triggers Section 106 tribal consultation; state funding triggers Washington Executive Order 21-02 review.
 - Proxy definitions: `docs/conditions.md` and the manifest notes.
 
 ## 11. The engine as the product

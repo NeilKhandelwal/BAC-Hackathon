@@ -150,8 +150,8 @@ constraints:
 - **Wanapum:** Grant PUD describes a long relationship with the
   [Wanapum](https://www.grantpud.org/the-wanapum), dating from the
   licensing of Priest Rapids and Wanapum dams. The Wanapum Heritage Center
-  is next to their ancestral village near Priest Rapids Dam, about 50 km
-  south of Quincy.
+  is next to their ancestral village near Priest Rapids Dam, south of
+  Quincy.
 - **Colville:** the Confederated Tribes of the Colville Reservation are an
   expected consulting party for the mid-Columbia.
 - **Where the risk sits:** irrigated upland farmland carries less

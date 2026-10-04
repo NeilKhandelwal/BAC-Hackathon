@@ -5,29 +5,37 @@ protected and sensitive land. It's written so that a new session with no
 memory can resume from it alone. Read CURRENT STATE first. The history at
 the bottom is append-only.
 
+## MORNING SUMMARY
+
+1. **Grant (Quincy): no conflict.** The nearest protected land is a WDFW wildlife area 5.8 km away, and none is within 5 km. No refuge, national park, wilderness, or national forest is within 30 km, and the nearest tribal land is 75 km away. Most of the county's 12.8% protected share lies 20 to 54 km from Quincy (Hanford Reach, the Desert Unit, Columbia NWR).
+2. **Grant process risk:** Quincy appears to sit inside the Yakama 1855 ceded area. That's unverified against an official map. A federal permit would trigger Section 106 tribal consultation, and state funding would trigger Executive Order 21-02 review.
+3. **Clark:** the Columbia River Gorge National Scenic Area is a real constraint at the county's east end. A site also needs to avoid the Ridgefield and Shillapoo lowlands and the Cowlitz Reservation, 23 km north of Vancouver.
+4. **Franklin NY:** 68% of the county is inside the Adirondack Park, where a site needs an APA permit. Malone is 6.1 km outside the Blue Line.
+5. **`pct_protected` was built but not shipped.** It comes from USGS PAD-US 4.1's county table (GAP 1-2), and `tribal_land_share` from Census TIGER. The frozen table, `results/`, figures, demo, and deck numbers are unchanged.
+6. **Grant is still #1.** The deck gained one limitation bullet and one speaker note. No number in the deck changed.
+7. **Decision for you:** is "proximity to sensitive areas" a feasibility screen, or a sustainability score?
+   - (a) **Score it.** `pillars.yaml` already scores the column once it's in the table. Whitman WA becomes #1 and Grant 4th, 0.87 points behind. Grant's top-10 share across random weightings falls from 50.5% to 14.0%.
+   - (b) **Gate it.** `docs/schema.md` already calls it a "sensitive-area gate". The model would check, and Grant passes. It needs a new engine gate and a threshold. The balanced pass count moves from 1,565 to 1,561 at a 50% cap or 1,535 at 25%, and the top 10 is unchanged.
+   - (c) **Context only.** Nothing changes.
+8. **Recommendation:** (c) for 9am, the only option that keeps every artifact valid. After the deadline, (b) fixes the bug as you stated it: Grant passes because the model checked.
+9. **Open:** check the Yakama ceded-area reading against an official map; the 11-item unverified list is in `research/sensitive_land.md`. `main`'s weighting log was stale, so this branch carries the close-out commit. PR: see CURRENT STATE.
+
 ## CURRENT STATE
 
 Overwritten after every step.
 
-- **Updated:** 2026-10-04 05:43 UTC
+- **Updated:** 2026-10-04 05:59 UTC
 - **Branch:** `fix/sensitive-land`, from `main` at `714d231` (PR #35,
   the weighting work, is merged).
-- **Phase and step:** Phase 2 done. Phase 3 measured, ship decision
-  pending. Phase 1 research is still running.
-- **Done:** Phase 0. Adapters `etl/adapters/tribal_lands.py` and
-  `etl/adapters/pad_us.py`. `etl/append_columns.py`. Schema rows in
-  `docs/schema.md`. Measurement in `scratch/sensitive_land/measure.py`
-  (scored: Grant 1 to 4, Whitman 1st; gate: no change).
-- **In progress:** an Opus research subagent on Phase 1 (protected,
-  tribal, and cultural-resource land near Quincy, Vancouver, and Malone).
-  If lost, rerun it with the same scope (see the Phase 1 brief in the
-  user's task).
-- **Exact next action:** when Phase 1 lands, apply the decision rule
-  (history, PAD-US entry): a real conflict near Quincy means stop; holdings
-  that don't constrain Quincy mean Phase 3 is measured but not shipped.
-  Then write the Phase 1 docs (`research/risk.md` row, deck limitation),
-  consult the advisor on plausibility and shipping, and finish with the PR
-  and morning summary.
+- **Phase and step:** finished. Phase 1 done, Phase 2 done, Phase 3
+  measured and not shipped (decision rule and advisor). PR from
+  `fix/sensitive-land` to `main` opened ready for review, not merged.
+- **Done:** see the morning summary and the history.
+- **In progress:** nothing.
+- **Exact next action:** waiting on the user's a/b/c decision. Ship steps
+  for each option are in the PR description. Warning: appending
+  `pct_protected` to the frozen table ships option (a), because
+  `engine/pillars.yaml` already scores it.
 - **Raw files to recreate** (gitignored): `data/raw/tiger/` (county and
   AIANNH zips) via the adapters' `fetch`; `data/raw/padus/` via
   `python -c "from etl.adapters import pad_us; from pathlib import Path; pad_us.fetch(Path('data/raw'))"`.
@@ -267,3 +275,36 @@ Wayne TN first (Grant fails that preset's gates either way).
 skips when raw files are absent. The tribal check for Grant uses a
 tolerance, because TIGER/Line against cartographic county edges leaves a
 sliver of about 0.0001%. Suite: 185 passed, 15 skipped, 1 xfailed.
+
+### 2026-10-04 05:59 UTC, advisor on PR conclusions; final fixes
+
+**Advisor consulted before the PR conclusions.** Fixes made:
+- **Wanapum distance:** removed the unsourced "about 50 km" from
+  `research/sensitive_land.md` and `research/risk.md`. It now reads
+  "near Priest Rapids Dam, south of Quincy".
+- **Deck speaker note:** reworded so a federal connection triggers Section
+  106 and state funding triggers Executive Order 21-02. The earlier "only
+  if" wording overclaimed.
+- **`main`'s new React UI (`app/cockpit`, merged as PR #39) depends on the
+  frozen artifacts.** `scripts/export_engine.py` snapshots the county table
+  into `public/data/engine-export.json`, `build-fixture.ts` reads
+  `pillars.yaml` and the manifest, and `tests/parity.test.ts` compares
+  against `results/`. These are added to the stale list and to every ship
+  step.
+- **Weighting log close-out:** `dc98fcc` landed on
+  `feat/weighting-methods` after PR #35 merged, so `main`'s weighting log
+  was stale. It's cherry-picked here as a new commit (`fd4ac3f`), so no
+  history was rewritten.
+
+**Frozen-artifact check.** `git diff` against the merge base (`714d231`)
+is empty for `data/processed`, `results`, `docs/figures`, `engine`,
+`app`, `docs/demo_script.md`, `etl/schema.py`, and
+`etl/build_features.py`. `main` moved to `23bb71c` (the React UI)
+without touching any file on this branch.
+
+**PR conclusions follow the advisor's outline:**
+- It doesn't imply the engine checks sensitive land.
+- It lists what changed and what didn't.
+- It flags that `docs/schema.md` documents two columns `etl/schema.py`
+  doesn't list yet (intentional).
+- It gives ship steps for each option, with the auto-ship warning first.
