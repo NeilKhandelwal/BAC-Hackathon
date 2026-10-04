@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-04T01:49:44+00:00",
+  "built_at": "2026-10-04T02:57:44+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -70,7 +70,7 @@
       "version": "see source_url per row",
       "url": "data/processed/state_policy.csv",
       "adapter": "state_tables",
-      "fetched_at": "2026-10-04T01:26:39+00:00"
+      "fetched_at": "2026-10-04T02:56:40+00:00"
     },
     {
       "name": "NREL WIND Toolkit",
@@ -238,7 +238,7 @@
       "fetched_at": "2026-10-04T01:37:21+00:00"
     },
     {
-      "name": "LBNL Queued Up (alternative queue measures)",
+      "name": "LBNL Queued Up (scored clean-generation and delivered-capacity measures)",
       "version": "2026 edition, queues through 2025",
       "url": "https://eta-publications.lbl.gov/sites/default/files/2026-05/lbnl_ix_queue_data_file_thru2025.xlsx",
       "observation_period": "queue snapshot 2025-12-31; online window 2021-01-01 to 2025-12-31",
@@ -550,9 +550,11 @@
     "dc_stopped_count counts facilities with status Cancelled or Suspended.",
     "moratorium_municipal_count and moratorium_municipal_pending_count count active and pending municipal rows of any category (moratorium, ban, zoning restriction, curative amendment). County-subdivision rows carry the county in their GEOID. Incorporated places are assigned to the county holding the place's 2024 Census internal point, so a city spanning counties counts once. Municipal rows never set moratorium_active.",
     "county_dc_restriction_active is a county-level active row whose category is not moratorium or ban, such as a zoning restriction. moratorium_state_pending is a state-level pending moratorium or ban. Rows whose end_date is before 2026-10-03 are skipped, as in main.",
-    "queue_active_mw_clean_excl_storage differs from queue_active_mw_clean in two ways. Standalone storage (Battery, Pumped Storage) is excluded because it isn't generation. For a hybrid, only the MW of its first clean-generation component counts (mw_1 when type_1 is clean generation, else mw_2 or mw_3 when given), so a Battery+Solar row with no mw_2 adds 0. queue_active_mw_clean counts mw_1 of every active project whose components are all in etl/schema.py CLEAN_SOURCES, which includes battery and other storage.",
-    "queue_active_mw_storage_standalone is mw_1 of active projects whose type_clean is Battery, Pumped Storage, or Storage.",
-    "queue_operational_mw_online_5y keys on completion, not queue entry: operational projects whose on_date falls in 2021-2025, falling back to prop_date (proposed online date) when on_date is blank. queue_operational_mw_5y instead counts operational projects with q_year 2019 or later, plus undated-q_year projects online since 2021. on_date is filled for about 99% of operational PJM, CAISO, and MISO rows but 18% in the West and 0% in ISO-NE; queue_operational_online_date_fallback_share reports how many were dated by prop_date."
+    "queue_active_mw_clean_excl_storage (scored) counts only identifiable clean-generation capacity in active projects: solar, wind, offshore wind, hydro, geothermal, and nuclear components. Each component's separately reported MW counts once (mw_1, mw_2, mw_3 for type_1, type_2, type_3). A component with no reported MW adds 0, so the measure is conservative: 233 Solar+Battery rows list only battery capacity and add nothing. A clean component of a gas or other hybrid counts when its MW is reported. Storage is excluded: it can help integrate renewables, but it isn't clean generation, because its emissions depend on what charges it.",
+    "queue_active_mw_clean (legacy, not scored) counts mw_1 of every active project whose components are all in etl/schema.py CLEAN_SOURCES, which includes battery and other storage.",
+    "queue_active_mw_storage_standalone (not scored) is mw_1 of active projects whose every component is storage: Battery, Pumped Storage, Storage, or Other Storage.",
+    "queue_operational_mw_online_5y (scored) counts operational projects dated to 2021-2025 by their actual online date (on_date), or by their proposed online date (prop_date) only when on_date is blank. queue_operational_online_date_fallback_share is the share of each county's counted projects dated by prop_date. The fallback is substantial where LBNL lacks on_date: 100% of operational ISO-NE projects and 82% in the West. The measure is evidence that the queue delivers, not proof of capacity available to a new data center.",
+    "queue_operational_mw_5y (legacy, not scored) counts operational projects that entered the queue in 2019 or later (q_year), which measures queue entry rather than delivery."
   ],
   "joins": {
     "nri": {

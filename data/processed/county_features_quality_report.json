@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-04T01:49:44+00:00",
+  "built_at": "2026-10-04T02:57:44+00:00",
   "rows": 3109,
   "checks": [
     {
@@ -750,7 +750,7 @@
       "dtype": "float64",
       "nulls": 0,
       "min": 0.0,
-      "median": 2.022859662444991,
+      "median": 2.0228596624450077,
       "max": 5.0,
       "zeros": 300
     },
@@ -1463,7 +1463,7 @@
       "min": 0.0,
       "median": 0.0,
       "max": 9477.192673,
-      "zeros": 2318
+      "zeros": 2315
     },
     "queue_operational_mw_online_5y": {
       "dtype": "float64",

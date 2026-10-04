@@ -27,7 +27,7 @@ sustainable AI campus: first of 1,565 qualifying counties, and in the top 10
 under 99.9% of weight resamples.
 
 - Grant ranks first with a composite of 63.7, ahead of Wayne TN (63.2) and
-  Whitman WA (63.0). Its lead is 0.6 points, so the robustness number
+  Whitman WA (63.1). Its lead is 0.5 points, so the robustness number
   carries the claim, not the rank.
 - **Why it wins:** cheap power, favorable state policy, room to build, and an
   existing data center cluster with 99% fiber coverage.
@@ -58,7 +58,7 @@ strength.
   county below the 10th percentile on any pillar ranks after every county
   that isn't.
 - **The weights are stated judgments, not fitted values.** Grant is also first
-  under equal weights, sharing 8 of the top 10. Across uniformly random
+  under equal weights, sharing 7 of the top 10. Across uniformly random
   weightings it lands in the top 10 50.5% of the time, more than any other
   county.
 
@@ -77,7 +77,7 @@ sources, and the proxies are labeled as proxies.
 - 3,109 counties in the contiguous US by 83 columns. 35 of the 45 mapped
   columns are populated, so coverage is 0.73 to 0.78 across the top 10.
 - Sources by pillar:
-  - **Energy and carbon:** eGRID2023 subregions, the LBNL interconnection queue, the NREL WIND Toolkit, and eGRID plants within 100 km.
+  - **Energy and carbon:** eGRID2023 subregions, the LBNL interconnection queue (clean generation excluding storage, and capacity delivered 2021-2025), the NREL WIND Toolkit, and eGRID plants within 100 km.
   - **Water:** the Drought Monitor, FEMA NRI, WRI Aqueduct 4.0, and CMRA.
   - **Climate:** FEMA NRI loss rates and CMRA projections.
   - **Grid:** the LBNL queue, FCC fiber, FracTracker, and EIA-860.
@@ -106,10 +106,10 @@ means.
 
 - **Seven pillars:** with price as one of seven grid columns (2.6% of the
   composite), Berkshire County, MA ranked first at 18.19 cents/kWh, and Grant
-  seventh. Correcting a closed Massachusetts tax exemption moved Berkshire to
-  second and Grant to sixth.
+  seventh. Correcting a closed Massachusetts tax exemption, recomputed with
+  today's queue measures, moves Berkshire to fifth and Grant to ninth.
 - **Cost as its own pillar:** at 15%, cost moved Grant to first and Berkshire
-  to 1,013th. Berkshire would pay $435M a year for power against Loudoun's
+  to 1,047th. Berkshire would pay $435M a year for power against Loudoun's
   $226M and Grant's $162M.
 - **Then feasibility:** research found that $162M uses a state average price
   a new load won't get. At BPA's new-load rate the same energy costs $196M to
@@ -258,9 +258,10 @@ new 300 MW load gets neither, so the feasibility study has the last word.
   - Retired coal is 0 in 2,884 counties and acts like a yes/no flag. Counties can rise on population decline, a stated value choice.
 - **Judgment and cutoffs:**
   - The weights are judgments. The default robustness test varies each by only about 0.03; under uniformly random weights Grant is in the top 10 50.5% of the time.
-  - First place leads by 0.6 points.
+  - First place leads by 0.5 points.
   - Indiana County PA, with Homer City and 2,230 MW of retired coal, misses the 0.2 fiber gate at 0.1996.
   - Loudoun VA fails our queue age gate.
+  - Delivered queue capacity uses the actual online date where LBNL has one and the proposed date otherwise, which covers every ISO-NE project and 82% in the West. It's evidence the queue delivers, not capacity available to a new load.
 
 **Figure:** none. Text slide.
 

@@ -18,7 +18,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from engine.explain import explain  # noqa: E402
+from engine.explain import COLUMN_LABELS, explain, label  # noqa: E402
 from engine.rank import load_features, load_yaml, rank  # noqa: E402
 
 PRESETS = {p.stem: p for p in sorted((ROOT / "engine/conditions").glob("*.yaml"))}
@@ -185,7 +185,8 @@ def show_detail(e, path, mtime, conditions):
         floor = "passes the floor" if e["floor_ok"] else "below the floor on at least one pillar"
         st.markdown(f"**Rank {e['rank']} of {e['of']}** · composite {fmt(e['composite'], '.1f')} · {floor} · "
                     f"robustness {fmt(e['robustness'], '.0%')} · coverage {fmt(e['coverage'], '.0%')}")
-        st.markdown("**Top reasons:** " + (", ".join(r.replace("_", " ") for r in e["top_reasons"])
+        st.markdown("**Top reasons:** " + (", ".join(label(r) if r in COLUMN_LABELS else r.replace("_", " ")
+                                                     for r in e["top_reasons"])
                                            or "no column above the national median"))
     else:
         st.error("Excluded by: " + ", ".join(e["failed_gates"]))
@@ -194,7 +195,11 @@ def show_detail(e, path, mtime, conditions):
     for w in e["warnings"]:
         st.warning(w)
     if e["facts"]:
-        st.caption(" · ".join(f"{label}: {'n/a' if v is None else 'yes' if v else 'no'}" for label, v in e["facts"].items()))
+        st.caption(" · ".join(f"{name}: {'n/a' if v is None else 'yes' if v else 'no'}" for name, v in e["facts"].items()))
+    if e.get("context"):
+        st.caption("Unscored queue context: " + " · ".join(
+            f"{name}: {'n/a' if v is None else format(v, '.0%') if '(share' in name else format(v, ',.0f')}"
+            for name, v in e["context"].items()))
 
     # Floor crossing between horizons, from a cached rank under each horizon.
     floors = {}
