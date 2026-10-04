@@ -106,9 +106,11 @@ serves the new load, so the honest figure is a range. Facility energy is
 For assigning the county to its balancing authority: Grant PUD is the
 county's utility, its plants are all inside the county, and all of them
 are hydro. Against: a balancing authority rate describes what the utility
-generates, not what a new customer receives. The campus would draw 59
-percent of the PUD's 4.13 TWh, and the PUD says new large loads pay for
-new generation. Use the middle row as the working estimate and show the
+generates, not what a new customer receives. The PUD's share of its dams
+averages about 633 MW, below its 2025 load of 757 average MW, and the
+campus would add 279. The PUD says large users fund the generation they
+need (its data center FAQ, 2026-08-28). So the first row is not available
+to a new load. Use the middle row as the working estimate and show the
 range. The county table and the engine keep the subregion value.
 
 ## Results in 2050

@@ -27,13 +27,13 @@ $64M less than in Loudoun County, VA.
 
 | Risk | What the data says | Why it matters | Mitigation | Residual |
 | --- | --- | --- | --- | --- |
-| Power availability | `queue_active_count` 19 projects, 4,550 MW. `queue_median_age_years` 3.5, worse than 66%. `queue_operational_mw_5y` 0. Grant PUD reports about 800 MW of large-load requests waiting and says new large users pay for new generation and transmission. | The campus draws 2.44 TWh a year. That is 59% of the 4.13 TWh the PUD generates (eGRID). Existing data centers in Quincy already draw on that hydro. Nothing published says 300 MW is available. | Apply to the PUD queue before buying land. Fund or contract new clean generation. Energize in phases. | High |
+| Power availability | `queue_active_count` 19 projects, 4,550 MW. `queue_median_age_years` 3.5, worse than 66%. `queue_operational_mw_5y` 0. Grant PUD reports about 800 MW of large-load requests waiting and says large users fund the generation and transmission they need. | The campus averages 279 MW. The PUD's eight data center customers drew about 280 average MW in 2025, so this doubles that load. The PUD's share of its two dams averages about 633 MW, below its 2025 system load of 757 average MW. No hydro is spare. | Apply to the PUD queue before buying land. Fund or contract new clean generation. Energize in phases. | High |
 | Heat | `nri_heat_wave_score` 97.3, worse than 97%. `days_above_95f_hist` 14.5, rising to 35.9 by 2050. | Hot days cut cooling efficiency and load the grid at the same hours. PUE rises from 1.163 to 1.196 by 2050. | Size cooling for 2050 design days. Liquid cooling for dense racks. | Medium |
 | Wildfire | `nri_wildfire_score` 86.9, worse than 87%. The balanced gate excludes above the 95th percentile. | Smoke forces air-side economizers to close. Fire threatens transmission lines. | Closed-loop cooling that doesn't draw outside air. Defensible space. Two transmission paths. | Medium |
 | Water stress | `water_stress_bws` 3.62 (high), worse than 84%, flat to 2050. `water_permit_risk` 1. Managed groundwater status was not researched for Washington. | Evaporative cooling would use 210 million gallons a year, 333 by 2050. The engine's own gate excludes evaporative cooling above a score of 2. | Dry cooling: 28 million gallons a year, for 2% more energy. | Low with dry cooling |
 | Grid carbon | `grid_co2_lb_mwh` 632 is the Northwest average. The PUD's own generation is 100% hydro at 0 lb/MWh (eGRID balancing authority sheet). | The carbon claim depends on which power serves the new load: 0 tons a year at the PUD's rate, 236,000 at BPA's, 700,000 at the regional average. Loudoun: 675,455. | Contract new clean supply and report hourly matching. Don't claim the existing hydro. | Medium |
 | Tax and state policy | `state_policy_risk` 0. The sales tax exemption is open to a new project in a rural county. A 2026 law ended it for replacement servers. A state proceeding on large loads is open. | Servers are replaced every few years, so most of the exemption's value over 30 years is gone. | Model the project with the exemption on the first build only. | Medium |
-| Power price | `industrial_price_cents_kwh` 6.61, a state average, worse than 21%. | The $162M annual cost assumes that price. A new large-load rate would be higher, and no figure exists yet. | Negotiate the rate with the service agreement. | Medium |
+| Power price | `industrial_price_cents_kwh` 6.61, a state average, worse than 21%. | The $162M annual cost assumes that price, so it is a floor. PUD staff have proposed data center rate classes for 2027. `research/implementation.md` covers the rate a new large load would pay. | Negotiate the rate with the service agreement. | Medium |
 | Cluster record | `dc_existing_count` 3 and `dc_existing_mw` 82 in FracTracker, which undercounts the Quincy cluster. `dc_pushback_count` 0. `fiber_share_locations` 0.99. | An existing cluster means fiber, contractors, and a utility that knows the load. No recorded opposition. | None needed. | Low |
 | Flood, hurricane, tornado | `nri_inland_flood_score` 23.3. `nri_hurricane_score` 0. `nri_tornado_score` 8.7. | Low exposure. | Site above the mapped floodplain. | Low |
 
@@ -69,13 +69,15 @@ play if the order lifts.
 
 - County scores are not parcel scores. Wildfire, flood, and fiber need a
   site-level check.
-- The PUD's contract commitments for its hydro were not checked. eGRID
-  assigns Priest Rapids dam (950 MW, in Grant County) to BPA's balancing
-  authority. Whether the PUD owns it was not verified.
+- eGRID understates the PUD's generation. It credits the PUD's balancing
+  authority with 4.13 TWh and assigns Priest Rapids dam to BPA's. The PUD
+  lists both Priest Rapids and Wanapum as its own, averaging about 1,000
+  MW together, and holds rights to 63.31% of the output.
 - The energy cost uses the state average industrial price. A 300 MW
   customer negotiates its own rate.
-- A reported 2027 data center rate class at the PUD could not be
-  confirmed.
+- The 2027 rate classes are a staff proposal, not adopted rates. The PUD
+  adopted limits on data center load growth in March 2025. Both come from
+  news reports.
 - The Washington Department of Revenue's own page on the exemption could
   not be opened. The statute could.
 
@@ -86,7 +88,8 @@ Primary:
 - eGRID2023, BA23 sheet: Grant PUD balancing authority (GCPD), 4,131,457
   MWh, 100% hydro, 0 lb CO2/MWh. BPA: 212 lb/MWh.
   https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx
-- Grant PUD data center FAQ, 2026-08-28:
+- Grant PUD data center FAQ, 2026-08-28: queue, 2025 load, data center
+  load, dam output and the PUD's share.
   https://www.grantpud.org/blog/data-center-faqs
 - RCW 82.08.986: https://app.leg.wa.gov/RCW/default.aspx?cite=82.08.986
 - ESSB 6231, Chapter 266, Laws of 2026:
@@ -102,5 +105,9 @@ Secondary:
 
 - Grant PUD's 2024 queue, 2,897 MW across 75 applicants:
   https://www.publicpower.org/periodical/article/grant-county-pud-details-queue-power-service-requests-large-load-customers
+- Grant PUD load-growth limits for data centers, March 2025:
+  https://columbiabasinherald.com/news/2025/mar/31/grant-pud-places-limits-on-electrical-demand-from-data-centers/
+- Grant PUD proposed data center rate classes, 2026-09-25:
+  https://www.publicpower.org/periodical/article/grant-pud-commissioners-considering-proposal-create-new-electric-rate-classes-data-centers
 - Massachusetts application pause:
   https://www.wbur.org/news/2026/06/26/governor-healey-data-center-tax-incentives
