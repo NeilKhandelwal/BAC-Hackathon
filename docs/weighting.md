@@ -1,354 +1,436 @@
 # Pillar weighting: methods and results
 
 This document answers the question a judge will ask first: why these
-weights? It compares five ways to set or test pillar weights, shows where
-they agree, and recommends a county to feature. The process, decisions, and
-interim results are in `docs/weighting_log.md`. Code and outputs are in
-`scratch/weighting/`. Charts are in `docs/img/`.
+weights? It compares several ways to set or test pillar weights, prices
+each site in dollars and tonnes, and recommends a county to feature. The
+process, decisions, and interim results are in `docs/weighting_log.md`.
+Code and outputs are in `scratch/weighting/`. Charts are in `docs/img/`.
+
+Revision 1 adds a sales and use tax component, uses Grant County's own
+power-timeline evidence in place of the queue proxy, and covers Neil's
+review items. The tax component changed the recommendation.
 
 ## Recommendation
 
-**Feature Clark County, WA.** Two alternatives each win under a stated
-condition.
+**Feature Grant County, WA, with Clark County, WA and Franklin County, NY
+as conditional alternatives.**
 
-| County | Role | Wins when |
+With sales tax in the model, the three counties are within 1.1% of each
+other over 25 years at a $190/t carbon price. The dollar model can't
+separate them. The differences sit inside two uncertainties: the sales tax
+rate at Clark's parcel, and how long Grant waits for power.
+
+| County | 25-year cost at $190/t | Gate-passing rank |
 | --- | --- | --- |
-| Clark, WA | Featured | The base case. It leads the dollar ranking of the shortlist and the six-method consensus without entropy, and it beats Franklin in both Monte Carlo bounds. Clark's lead holds only if it can energize within about 2.25 years. |
-| Franklin, NY | Alternative 1 | Any one of three: the carbon price is above about $200/t with both counties at state-average power ($166/t if delay costs $10M per month); Clark's new-load rate is above about $104/MWh; or Clark waits about 2 months longer for power than the queue proxy says. |
-| Grant, WA | Alternative 2 | Both of two: its interconnection wait shrinks to Clark's level, and its power costs about $2/MWh less than Clark's. With its current queue, it needs power about $18/MWh cheaper than Clark's. |
+| Clark, WA (unincorporated, 8.0% sales tax) | $4.405B | 365 |
+| Grant, WA (12-month delay, from its own evidence) | $4.452B | 407 |
+| Franklin, NY (taxed) | $4.454B | 410 |
 
-**Clark leads in every scenario tested, but not decisively.** At a $190/t
-carbon price, Clark's 25-year cost is $49M below Franklin's, about 1.4%. If
-Clark pays BPA's new-load rate, its breakeven against Franklin is
-$104/MWh, the middle of BPA's $80 to $132 range. Present Clark as the
-leader of a close race, not a runaway winner.
+Grant is featured because it's the only one of the three whose power
+timeline and tax status are both sourced:
+- Grant's delay comes from Grant PUD's queue and transmission plans.
+- Its exemption on initial equipment comes from the statute.
+- Clark's lead ($46M) rests on a generation-queue proxy and on its parcel
+  sitting outside Clark's transit area. Inside the transit area, Clark's
+  tax rate is 8.7%, which adds about $80M and drops it below both Grant
+  and Franklin.
 
-**Featuring Clark means reworking the deck.** `docs/deck.md`,
-`docs/demo_script.md`, `research/implementation.md`, and `research/risk.md`
-are built around Grant. This branch doesn't change them. The team needs to
-decide whether to switch the featured county or to present Grant as the
-engine's pick and Clark as the dollar pick.
+Featuring Grant also matches the existing deck, demo script,
+implementation plan, and risk assessment.
 
-### Diligence items for Clark
+### What each county needs to win
 
-The repo has no research on Clark's utility or sites. These are the first
-things a judge will raise. Each needs a source before a slide claims it.
+| County | Wins when |
+| --- | --- |
+| Grant, WA (featured) | Grant PUD energizes the full 300 MW within about 10 months of the 2-year baseline (it beats Clark) or about 12 months (it beats Franklin). Its evidence-based estimate is 12 months, with a range of 8 to 18.5. Grant also wins if Clark's parcel is inside Clark's transit area (8.7%) or in Vancouver (8.9%). |
+| Clark, WA | Its parcel is outside the transit area (8.0%), it energizes within about 2.25 years, and Grant's delay runs past about 10 months. Without any sales tax in the model, Clark is #1 nationally. |
+| Franklin, NY | New York's Internet data center exemption, Tax Law §1115(a)(37), applies to the campus. Then Franklin is #1 nationally. That needs an operator that sells hosted services from the site, and the exemption must survive the repeal proposals. Without the exemption, Franklin beats Grant only if Grant's delay exceeds about 12 months, and beats Clark only if Clark's parcel is in the transit area. |
 
-1. **Power availability.** Clark's 1-month time-to-power charge comes from
-   a generation-queue age of 2.09 years. If a 300 MW load waits more than
-   about 2.25 years, Franklin passes it. With a 1.5-year queue baseline,
-   Franklin is #1 and Clark is 6th.
-2. **Nearby generation.** Plants within 100 km total 4.7 GW, against
-   16.2 GW for Grant. The gate needs 1.5 GW.
-3. **Land.** Clark's land pillar is at the 22nd percentile because the
-   county is suburban (314 people per km²). That's a density proxy. A
-   150-acre campus is about 0.04% of the county's 1,628 km², so parcel
-   availability is a diligence item, not a disqualifier.
-4. **Fiber.** 29% of locations have fiber. That measures homes, not
-   backbone access.
-5. **No existing cluster.** FracTracker lists no data centers in Clark.
-   Washington County, OR, across the Columbia River, has 9.
+### Counties that rank above all three
 
-## The problem
+With sales tax included, counties in states with full exemptions rank
+above all three: Chesterfield SC, Kootenai ID, Marlboro SC, Florence SC,
+Aiken SC, Emery UT, and Texas and Louisiana counties.
 
-The balanced preset's pillar weights were set by judgment. The #1 county
-changed from Berkshire, MA to Grant, WA when the cost pillar went from about
-2.6% of the composite to 15%. The same change also corrected
-Massachusetts' closed data center tax exemption, so the flip had two causes,
-not one.
+Treat them as a "verify before switching" item, not a featured pick:
+- This rests on 37 state exemption flags in the repo's hand-coded state
+  table. Those flags weren't verified for this analysis, and refreshes are
+  assumed exempt.
+- South Carolina's flag cites a 2026 bill version, not a statute.
+- Idaho's flag is low confidence, and a restriction bill (HB 496) was
+  enrolled there with its scope unverified.
+- If equipment refreshes are taxed everywhere, as Washington now does,
+  only states without a sales tax escape. Umatilla, OR then ranks first,
+  and Clark, Grant, and Franklin rank 14th, 19th, and 22nd.
+
+## Sales and use tax
+
+### Washington
+
+Washington's data center exemption covers eligible server equipment and
+power infrastructure, including installation labor, at an eligible data
+center in a rural county.
+- **Statutes:** [RCW 82.08.986](https://app.leg.wa.gov/RCW/default.aspx?cite=82.08.986)
+  and [RCW 82.12.986](https://app.leg.wa.gov/RCW/default.aspx?cite=82.12.986).
+- **What it doesn't cover:** substations, racks, the building shell, and
+  HVAC.
+- **Rural county:** defined in [RCW 82.14.370](https://app.leg.wa.gov/RCW/default.aspx?cite=82.14.370)
+  as a density under 100 people per square mile, a county with no city
+  over 45,000, or a county under 225 square miles.
+- **Grant qualifies:** 40.1 people per square mile in 2026 per the
+  Office of Financial Management's
+  [rural designation workbook](https://ofm.wa.gov/wp-content/uploads/2026/09/ofm_april1_rural_designations.xlsx).
+- **Clark doesn't:** 875 per square mile, Vancouver is far over 45,000,
+  and the county is 628.5 square miles.
+- **Clark fails the urban route too.** [RCW 82.08.9861](https://app.leg.wa.gov/RCW/default.aspx?cite=82.08.9861)
+  needs a county over 800,000.
+- **DOR's workgroup agrees.** Its
+  [December 2025 preliminary report](https://dor.wa.gov/sites/default/files/2025-12/2025DataCntrWrkgrpPrelimReport.pdf)
+  (Executive Order 25-05) lists Clark among the counties excluded from both
+  exemptions, in adopted finding T.6. The "cannot qualify" sentence in that
+  report comes from a recommendation that failed 11-12; cite T.6 instead.
+- **Since July 1, 2026, replacement server equipment is no longer
+  eligible** (ESSB 6231, 2026 c 266;
+  [final bill report](https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bill%20Reports/Senate/6231-S.E%20SBR%20FBR%2026.pdf)).
+  The model therefore exempts Grant's initial equipment and taxes its
+  refreshes.
+- **Conditions:** at least 100,000 square feet, 35 family-wage jobs
+  within six years, and green building certification within three years.
+  A 300 MW campus would plausibly meet them.
+
+### New York
+
+New York exempts equipment that an Internet data center operator buys
+for Internet website services sold to customers.
+- **Sources:** Tax Law §1115(a)(37) and (y); bulletin
+  [TB-ST-405](https://tax.ny.gov/pubs_and_bulls/tg_bulletins/st/internet_data_centers.htm);
+  memo [TSB-M-00(7)S](https://www.tax.ny.gov/pdf/memos/sales/m00_7s.pdf).
+- **A cloud or colocation operator selling hosting from the site**
+  plausibly qualifies.
+- **An AI training campus with no hosted services for sale** probably
+  doesn't. No guidance addresses that case, so it's a ruling question.
+- **Repeal:** proposed in S9288 (referred to committee in February 2026)
+  and by the governor in September 2026. Neither has passed.
+- **IDA abatements** are discretionary, not statutory. Franklin County's
+  IDA policy is unverified.
+- **The model taxes Franklin in the base case** and shows the exempt case
+  as a sensitivity.
+
+### Rates
+
+All rates are combined state plus local.
+- **States:** Tax Foundation
+  [midyear 2026](https://taxfoundation.org/data/all/state/2026-sales-tax-rates-midyear/)
+  combined rates (`scratch/weighting/sales_tax_rates.csv`).
+- **Washington counties:** WA DOR Q4 2026 unincorporated rates
+  ([CSV](https://dor.wa.gov/taxes-rates/sales-use-tax-rates/lsu-quarterly-tax-rates.csv)).
+  Clark 8.0% (8.7% inside the transit area, 8.9% in Vancouver), Grant 8.2%.
+- **Franklin, NY:** 8.0%, from
+  [Publication 718](https://www.tax.ny.gov/pdf/publications/sales/pub718.pdf).
+
+Tax Foundation's state averages are population-weighted, so they overstate
+rural rates.
+
+### The tax component
+
+- **Formula:** taxable equipment ($4B of IT and electrical equipment per
+  purchase) times the county's combined rate.
+- **Timing:** bought at year 0 and again every 5 years within the 25-year
+  horizon, discounted at 7%.
+- **Exempt counties** pay 0 on exempt purchases.
+- **Size:** at 8% and a 5-year refresh, a fully taxed county pays $910M
+  in present value. Grant pays $604M on refreshes only.
+- **Pillar:** the component maps to permitting, where the engine scores
+  the exemption inside `state_policy_risk`. That mapping is a choice; it
+  could also map to cost.
+
+### With and without tax, and by refresh cycle
+
+Ranks among the 1,565 gate-passing counties at $190/t:
+
+| Case | Clark | Franklin | Grant | #1 |
+| --- | --- | --- | --- | --- |
+| No sales tax | 1 | 2 | 32 | Clark, WA |
+| Tax, 5-year refresh (base) | 365 | 410 | 407 | Chesterfield, SC |
+| Tax, 4-year refresh | 680 | 752 | 755 | Chesterfield, SC |
+| Tax, 6-year refresh | 296 | 349 | 342 | Chesterfield, SC |
+| Tax, Clark parcel at 8.7% | 447 | 409 | 406 | Chesterfield, SC |
+| Tax, Clark parcel at 8.9% | 473 | 409 | 406 | Chesterfield, SC |
+| Tax, New York exempt | 394 | 1 | 436 | Franklin, NY |
+| Tax, refreshes taxed in every state | 14 | 22 | 19 | Umatilla, OR |
+
+BPA Monte Carlo, with Clark and Grant on BPA's $80 to $132/MWh new-load
+rate, 1,000 draws:
+
+| Case | Clark #1 / top 3 | Franklin #1 / top 3 | Grant #1 / top 3 | Clark beats Grant |
+| --- | --- | --- | --- | --- |
+| No sales tax | 27.2% / 31.8% | 20.1% / 33.9% | 0% / 9.8% | 100% |
+| Tax, 5-year refresh | 0.7% / 2.4% | 0.3% / 0.6% | 0.9% / 1.4% | 73% |
+| Tax, 4-year refresh | 0.1% / 0.6% | 0% / 0.1% | 0.3% / 0.4% | 74% |
+| Tax, 6-year refresh | 1.4% / 3.5% | 0.7% / 1.5% | 1.2% / 2.5% | 72% |
+| Tax, Clark parcel at 8.7% | 0.3% / 1.6% | 0.3% / 0.6% | 1.0% / 1.5% | 55% |
+| Tax, New York exempt | 0.1% / 0.6% | 29.7% / 37.6% | 0.2% / 0.2% | 73% |
+
+With tax, Chesterfield SC (21%) and Kootenai ID (14%) take most #1 draws.
 
 ## The framework: screen with the engine, rank in dollars
 
-The recommendation uses two stages.
+1. **Screen and shortlist with the engine.** The gates leave 1,565 of
+   3,109 counties. The shortlist keeps the 161 that at least 1% of random
+   weightings put in the engine's top 10, with the floor off.
+2. **Rank the shortlist in dollars and tonnes** with the monetized model.
+3. **Test robustness** with Monte Carlo over the model's prices and delays,
+   and SMAA over the engine's weights.
 
-1. **Screen and shortlist with the engine.** The gates remove 1,544 of
-   3,109 counties. The shortlist keeps the counties that at least 1% of
-   random weightings put in the engine's top 10, with the floor off: 161
-   counties. That rule doesn't depend on any single set of weights.
-2. **Rank the shortlist in dollars and tonnes.** The monetized model prices
-   each shortlisted county's 25-year cost, including carbon at a stated
-   price.
-3. **Test robustness.** Monte Carlo varies the model's prices and delays.
-   SMAA varies the engine's weights.
+With sales tax, stage 2's #1 is Chesterfield, SC. Clark, Grant, and
+Franklin rank 72nd, 78th, and 80th in the shortlist. The framework
+therefore points away from all three. That result rests on the unverified
+state exemption flags described above.
 
-**Why dollars do the ranking.** Two results show that percentile pillars
-can't stand in for physical units:
-
+**Why dollars do the ranking.** Two results show percentile pillars can't
+stand in for physical units:
 - **The carbon example.** Franklin NY emits 2.7 times less CO2 than Grant
-  WA: 260 against 700 thousand tonnes a year. In the engine, their
-  energy_carbon pillars sit at the 97th and 94th percentiles. The pillar
-  mixes grid carbon with renewable share, clean queue capacity, and clean
-  plants within 100 km, where Grant scores near the top. Percentile scoring
-  compresses a large physical gap into three points.
-- **The weights don't transfer.** Running the engine with the monetized
-  model's own implied weights (cost 0.54, energy_carbon 0.37) gives a top
-  10 of Oklahoma and Texas counties. It shares none of its top 10 with the
-  dollar ranking.
+  WA, but their energy_carbon pillars sit at the 97th and 94th
+  percentiles.
+- **The weights don't transfer.** Running the engine with the dollar
+  model's own implied weights gives a top 10 that shares no counties with
+  the dollar ranking.
 
-The shortlist result holds across four shortlist rules. Clark is #1 in
-dollars whether the threshold is 1% or 5%, with the floor on or off.
-Franklin drops out when the floor is on, because it fails the floor on
-cost.
+## Neil's review items
+
+### Variance shares that can't go negative
+
+Covariance shares can be negative. With variance as the value function, a
+Shapley decomposition reproduces the covariance shares exactly, so it can't
+fix that. Standalone variance shares and a Shapley decomposition with
+standard deviation as the value function can't go negative. With sales tax
+in the model:
+
+| Carbon price | Method | Energy | Carbon | Sales tax | Time to power | Others |
+| --- | --- | --- | --- | --- | --- | --- |
+| $0 | covariance | 0.673 | 0 | 0.241 | 0.072 | 0.014 |
+| $0 | standalone | 0.752 | 0 | 0.169 | 0.059 | 0.019 |
+| $0 | Shapley (SD) | 0.611 | 0 | 0.242 | 0.096 | 0.051 |
+| $190 | covariance | 0.545 | 0.230 | 0.156 | 0.067 | 0.001 |
+| $190 | standalone | 0.469 | 0.376 | 0.105 | 0.037 | 0.012 |
+| $190 | Shapley (SD) | 0.463 | 0.262 | 0.160 | 0.080 | 0.035 |
+| $300 | covariance | 0.344 | 0.533 | 0.080 | 0.047 | -0.004 |
+| $300 | standalone | 0.301 | 0.600 | 0.067 | 0.024 | 0.007 |
+| $300 | Shapley (SD) | 0.335 | 0.461 | 0.114 | 0.063 | 0.027 |
+
+**The order of the top components doesn't change across the three
+methods at any carbon price.** At $0 and $190 the order is energy, then
+carbon, then sales tax, then time to power. At $300, carbon leads energy.
+Only the small components (water, hazard, moratorium) reorder.
+
+With tax in the model, energy and carbon together carry 0.67 of the
+variance at $0, 0.78 at $190, and 0.88 at $300. The balanced preset gives
+them 0.30.
+
+### Time to power
+
+1,072 of 1,565 gate-passing counties have no queue age and take the
+national median. Ranks at $190/t with tax:
+
+| Treatment of imputed counties | Clark | Franklin | Grant | #1 |
+| --- | --- | --- | --- | --- |
+| National median (base) | 365 | 410 | 407 | Chesterfield, SC |
+| Charged $0 | 666 | 726 | 721 | Oconee, SC |
+| Excluded | 183 | 192 | 191 | Chesterfield, SC |
+
+The three move together, and their order holds in all three cases.
+
+### Grant's row
+
+Grant's time to power now comes from its own evidence, not the queue
+proxy (`research/implementation.md`, `research/risk.md`):
+- The first phase follows the 2027 Quincy transmission project.
+- Full load needs the 2029 Wanapum-to-Quincy line.
+- About 800 MW of large-load requests are queued ahead.
+- New supply takes 2 to 2.5 years from contract.
+
+From October 2026, that puts full load around 2029: about 12 months past
+the 2-year baseline. The range is 8 months (the 2029 line lands mid-year
+on time) to 18.5 months (the queue or supply slips, matching the proxy).
+That's an inference from the evidence, not a utility commitment. **No
+other county has equivalent evidence;** every other county uses the queue
+proxy.
+
+| Grant's delay | Grant's rank | Grant minus Clark | Grant minus Franklin |
+| --- | --- | --- | --- |
+| 8 months (evidence low) | 316 | -$54M | -$103M |
+| 12 months (evidence central, base) | 407 | +$46M | -$3M |
+| 18.5 months (evidence high, equals the proxy) | 646 | +$209M | +$160M |
+
+Grant breaks even with Clark at 10.2 months and with Franklin at 12.1
+months.
+
+### Cooling
+
+**County-specific cooling is a modeling choice.** The model uses
+evaporative cooling where Aqueduct water stress is 2 or lower, and dry
+cooling elsewhere. That choice favors Clark (water stress 0) over Grant
+(3.6). With dry cooling everywhere, Clark still costs $35M less than Grant
+at $190/t with tax (ranks 298 and 326).
+
+### Hazard asset value
+
+| Asset value | Clark | Franklin | Grant |
+| --- | --- | --- | --- |
+| $10B (base) | 365 | 410 | 407 |
+| $3B | 383 | 438 | 460 |
+
+Hazard loss is under 2% of the variance, so the asset value barely moves
+the order.
+
+### One table across methods
+
+Top 10 and the ranks of four counties among the 1,565 gate passers:
+
+| Method | Top 10 | Grant | Clark | Franklin | Berkshire |
+| --- | --- | --- | --- | --- | --- |
+| Balanced | Grant WA, Wayne TN, Whitman WA, Mayes OK, Benton WA, Scott IA, Clark WA, Scott TN, Grady OK, Adair OK | 1 | 7 | 986 | 1,013 |
+| Monetized, $190/t with tax | Chesterfield SC, Kootenai ID, Marlboro SC, Florence SC, Aiken SC, Emery UT, El Paso TX, Grayson TX, Bossier LA, Houston TX | 407 | 365 | 410 | 1,552 |
+| SMAA (rank-1, floor on) | Whitman WA, Grant WA, Wayne TN, Trumbull OH, Clark WA, Grady OK, Scott IA, Luzerne PA, Rock Island IL, Clearfield PA | 2 | 5 | never top 10 | never top 10 |
+| CRITIC | Washington OR, Rock Island IL, Dakota MN, Multnomah OR, St. Joseph IN, Scott IA, Monroe NY, Ramsey MN, Onondaga NY, Erie NY | 12 | 27 | 64 | 107 |
+| Entropy | Bexar TX, Milam TX, Salt Lake UT, Clark NV, Cook IL, Washington OR, El Paso CO, Berks PA, Wayne MI, St. Louis MO | 50 | 338 | 392 | 76 |
+| Revealed preference | Dallas TX, Maricopa AZ, Wayne MI, Tarrant TX, Hamilton OH, Montgomery PA, Bexar TX, Salt Lake UT, Washington OR, Allegheny PA | 120 | 103 | 548 | 927 |
+| Consensus (Borda, no entropy) | Grant WA, Scott IA, Washington OR, Whitman WA, Wayne TN, Rock Island IL, Clark WA, Grady OK, Mayes OK, Multnomah OR | 1 | 7 | no points | no points |
+
+How to read the table:
+- **"Never top 10" and "no points" are tie groups, not ranks.** The CSV
+  shows them as 271 and 79.
+- **Grant's consensus #1 is mechanical.** With tax, the dollar top 20 is
+  counties no other method ranks, so Clark lost its 20 points from the
+  dollar method. It isn't new evidence for Grant.
+- **With entropy, Washington, OR leads the consensus.**
 
 ## Methods
 
 ### Monetized total cost
 
 For each gate-passing county, the model prices a 300 MW IT campus over 25
-years at 7%. It counts energy at the state industrial price, carbon at the
-eGRID subregion rate, water, hazard loss, time to power, and moratorium
-delay. Each component's share of the variance in total cost across counties
-is the weight the data implies for that pillar.
+years at 7%. It counts energy, carbon at a stated price, water, hazard
+loss, time to power, moratorium delay, and sales tax on equipment. Each
+component's share of cross-county variance is the weight the data implies.
 
-- **Why it's defensible:** weights come from dollars and stated prices,
-  and every price is a parameter anyone can change.
-- **Main limitation:** energy uses one price per state and carbon one rate
-  per subregion, and together they carry about 90% of the variance. Time to
-  power uses generation-queue age as a proxy, and 68% of counties are
-  imputed. Fiber, land, and community aren't monetized.
+- **Why it's defensible:** weights come from dollars and stated prices.
+- **Main limitation:** energy uses one price per state and carbon one
+  rate per subregion. Time to power uses a generation-queue proxy everywhere
+  except Grant. The sales tax rests on unverified state flags outside WA
+  and NY. Fiber, land, and community aren't monetized.
 
-### Monte Carlo over the monetized model
+### Monte Carlo
 
-The Monte Carlo runs 1,000 draws. Each draw varies:
+The Monte Carlo runs 1,000 draws. Each varies state price and subregion
+carbon rate by ±20%, delay cost from $10M to $50M per month, New York
+moratorium length from 8 to 20 months, and carbon price from $100 to
+$300/t.
 
-- price, ±20% independently per state
-- carbon rate, ±20% independently per subregion
-- delay cost, from $10M to $50M per month
-- New York moratorium, from 8 to 20 months
-- carbon price, from $100 to $300/t
+- **Why it's defensible:** it tests whether the order survives
+  uncertainty in the inputs that matter.
+- **Main limitation:** it ranks state and subregion clusters, and its
+  percentages are sampling error under chosen ranges.
 
-- **Why it's defensible:** it shows whether the #1 survives uncertainty
-  in the inputs that matter.
-- **Main limitation:** counties that share a state and subregion move
-  together, so it ranks clusters. Its head-to-head percentages are
-  sampling error under the chosen ranges, not probabilities about the
-  world.
+### SMAA
 
-### SMAA weight-space mapping
+SMAA draws 5,000 weight vectors uniformly over the eight pillars and
+records how often each county ranks #1 and lands in the top 10.
 
-SMAA draws 5,000 weight vectors uniformly from every possible weighting of
-the eight pillars. It records how often each county ranks #1 and lands in
-the top 10.
+- **Why it's defensible:** it picks no weights at all.
+- **Main limitation:** it inherits the engine's percentile pillars.
 
-- **Why it's defensible:** it doesn't pick weights at all. It shows which
-  counties win under which value systems.
-- **Main limitation:** a uniform draw treats land and community as likely
-  to matter as cost. And it inherits the engine's percentile pillars.
+### CRITIC and entropy
 
-### CRITIC
-
-CRITIC derives objective column weights from each column's spread and its
-correlation with the others. It runs on raw values winsorized at the 1st
+Both derive objective column weights from raw values winsorized at the 1st
 and 99th percentiles and min-max scaled.
 
-- **Why it's defensible:** it's a standard method and down-weights
-  redundant columns.
-- **Main limitation:** correlations here are mostly low, so CRITIC comes
-  out close to equal weight per column. Summed into pillars, its weights
-  follow column count. It gives cost 0.018, because the price has one value
-  per state.
-
-### Entropy
-
-Entropy weights a column by how concentrated its values are.
-
-- **Why it's defensible:** it's a standard objective method.
-- **Main limitation:** here it's an artifact. It puts 0.198 of all weight
-  on existing data center count, because 88% of counties have none, and
-  its weights depend on which way a column is coded. Its top 10 is metros
-  with existing clusters.
+- **Why they're defensible:** they're standard objective methods.
+- **Main limitation:** CRITIC comes out close to equal per column. Entropy
+  is an artifact here: it puts 20% of its weight on existing data center
+  count, and its weights depend on how columns are coded.
 
 ### Revealed preference
 
-A logistic regression predicts whether a county already has a data center
-from every scored column except that count.
+A logistic regression predicts existing data centers from the scored
+columns.
 
-- **Why it's defensible:** it shows what industry has chosen.
+- **Why it's defensible:** it shows what industry chose.
 - **Main limitation:** population alone predicts almost as well (AUC
-  0.855 against 0.905 for all columns). The existing fleet reflects past,
-  latency-driven siting near metros. The weights also mostly run against
-  the pillar direction for land (industry picks dense counties) and
-  permitting.
+  0.855 against 0.905), and the fleet reflects past, latency-driven siting.
 
 ### Consensus
 
-The consensus is a Borda count across the six methods' top 20 lists.
-Within each list, rank 1 earns 20 points.
+The consensus is a Borda count over each method's top 20.
 
-- **Why it's defensible:** a county that ranks well under many methods
-  doesn't depend on one weighting choice.
-- **Main limitation:** it mixes methods of very different quality. It's
-  a cross-check, not the primary ranking.
+- **Why it's defensible:** it shows agreement across methods.
+- **Main limitation:** it mixes methods of very different quality. It's a
+  cross-check.
 
 ## Weights by method
 
-| Pillar | Balanced (judgment) | Monetized at $190/t | CRITIC | Entropy | Revealed preference |
+| Pillar | Balanced | Monetized at $190/t | CRITIC | Entropy | Revealed preference |
 | --- | --- | --- | --- | --- | --- |
-| energy_carbon | 0.153 | 0.372 | 0.180 | 0.268 | 0.173 |
+| energy_carbon | 0.153 | 0.228 | 0.180 | 0.268 | 0.173 |
 | water | 0.119 | 0 | 0.121 | 0.037 | 0.125 |
-| climate_resilience | 0.119 | 0.012 | 0.254 | 0.091 | 0.228 |
-| grid_infrastructure | 0.153 | 0.077 | 0.150 | 0.430 | 0.083 |
+| climate_resilience | 0.119 | 0.010 | 0.254 | 0.091 | 0.228 |
+| grid_infrastructure | 0.153 | 0.066 | 0.150 | 0.430 | 0.083 |
 | land | 0.068 | 0 | 0.044 | 0.008 | 0.129 |
 | community | 0.085 | 0 | 0.136 | 0.141 | 0.146 |
-| permitting | 0.153 | 0 | 0.096 | 0.024 | 0.056 |
-| cost | 0.150 | 0.539 | 0.018 | 0.002 | 0.060 |
+| permitting | 0.153 | 0.155 | 0.096 | 0.024 | 0.056 |
+| cost | 0.150 | 0.541 | 0.018 | 0.002 | 0.060 |
+
+The monetized column holds the covariance shares at $190/t with tax, with
+negative shares set to 0 and the rest renormalized. Permitting's 0.155 is
+the sales tax component. These are weights on dollars, not engine weights.
+Run through the engine, they give an Oklahoma-led top 10 that shares no
+counties with the dollar top 10.
 
 Chart: `docs/img/weights_by_method.png`.
 
-How to read the table:
-
-- **Monetized:** the variance shares at $190/t, with negative shares set
-  to 0 and the rest renormalized. They are weights on dollars, not engine
-  weights. Land and community get 0 because they aren't monetized.
-- **CRITIC and entropy:** column weights summed by pillar, so pillars with
-  more columns get more. Climate resilience has 8 columns; cost has 1.
-- **The carbon-price effect:** the monetized weights move with the carbon
-  price. At $0/t cost takes 0.89. At $300/t energy_carbon takes 0.67.
-
-## Results
-
-### Stage 2: the shortlist ranked in dollars
-
-Top 10 of the 161-county shortlist, by 25-year cost with carbon at $190/t:
-
-| Rank | County | Cost, $B | CO2, kt/yr | Engine floor | Balanced rank |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Clark, WA | 3.496 | 678 | passes | 7 |
-| 2 | Franklin, NY | 3.545 | 260 | fails | 986 |
-| 3 | Clinton, NY | 3.577 | 261 | fails | 1,031 |
-| 4 | Chautauqua, NY | 3.592 | 262 | fails | 1,123 |
-| 5 | Niagara, NY | 3.674 | 268 | fails | 1,097 |
-| 6 | Walla Walla, WA | 3.678 | 701 | passes | 18 |
-| 7 | Chesterfield, SC | 3.682 | 667 | passes | 17 |
-| 8 | Whitman, WA | 3.741 | 682 | passes | 3 |
-| 9 | Marlboro, SC | 3.753 | 669 | passes | 28 |
-| 10 | Oneida, NY | 3.808 | 262 | fails | 1,065 |
-
-Grant, WA is 28th in the shortlist and 92nd of all gate-passing counties.
-
-### Robustness
-
-| Test | Clark, WA | Franklin, NY | Grant, WA |
-| --- | --- | --- | --- |
-| Monte Carlo #1, state-average prices | 26.6% | 24.7% | 0% |
-| Monte Carlo #1, Clark and Grant on BPA rates | 27.2% | 20.1% | 0% |
-| Monte Carlo top 3, BPA rates | 31.8% | 34.3% | 3.8% |
-| SMAA #1, floor on | 6.7% | 0% (fails floor) | 12.4% |
-| SMAA top 10, floor on | 29.6% | 0% | 50.5% |
-| SMAA top 10, floor off | 20.6% | 24.3% | 34.9% |
-
-What the robustness results show:
-
-- **No county wins most draws or most weightings.**
-- **Clark against Franklin:** Clark beats Franklin in 59% of Monte Carlo
-  draws at state-average prices and 53% with BPA rates. The two runs are
-  bounds. BPA's whole range sits above Washington's $66/MWh state average,
-  while Franklin keeps New York's average because no New York new-load rate
-  is sourced.
-- **Clark against Grant:** Clark beats Grant in every draw. The two share
-  a state price and a grid, and Grant has the longer queue and needs dry
-  cooling.
-- **What moves the race:** state electricity prices move the Clark and
-  Franklin gap more than the carbon price, 46% of its variance against
-  28%.
-
-Charts: `docs/img/cost_vs_co2.png`, `docs/img/mc_winners.png`,
-`docs/img/mc_winners_bpa.png`, `docs/img/smaa_acceptability.png`.
-
-### Consensus
-
-Borda count across five methods, entropy excluded:
-
-| Rank | County | Points | Balanced | Monetized | SMAA | CRITIC | Revealed |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Clark, WA | 50 | 7 | 1 | 5 | 27 | 103 |
-| 2 | Whitman, WA | 49 | 3 | 10 | 1 | 78 | 660 |
-| 3 | Grant, WA | 48 | 1 | 92 | 2 | 12 | 120 |
-| 4 | Scott, IA | 44 | 6 | 611 | 7 | 6 | 122 |
-| 5 | Washington, OR | 39 | 120 | 652 | 14 | 1 | 9 |
-| 6 | Wayne, TN | 37 | 2 | 560 | 3 | 208 | 1,475 |
-| 7 | Rock Island, IL | 31 | 200 | 1,099 | 9 | 2 | 106 |
-| 8 | Grady, OK | 27 | 9 | 624 | 6 | 266 | 504 |
-| 9 | Mayes, OK | 26 | 4 | 271 | 12 | 118 | 1,003 |
-| 10 | Multnomah, OR | 26 | 1,005 | 412 | 271 | 4 | 12 |
-
-With entropy included, Washington, OR moves to first (54 points), ahead of
-Clark (50). That reflects how entropy weights columns, not a better site.
-Franklin scores 19 points with or without entropy, held back by the engine
-floor and by revealed preference.
-
 ## Method notes
 
-- **Hazard cost understates hazard risk for a data center.** The monetized
-  model prices hazards with FEMA NRI building expected-annual-loss rates
-  times the campus asset value. Building loss rates cover physical damage
-  only. They exclude downtime, lost revenue, and service-level penalties,
-  which dominate the cost of an outage at a data center. Treat the hazard
-  component as a floor.
-- **The pillar floor is a judgment rule.** The engine ranks every county
-  below the 10th percentile on any non-exempt pillar under every county
-  that isn't. That threshold and the exemption of permitting were chosen,
-  not derived. Floor membership doesn't depend on the weights unless a
-  weight is zero, so no weighting method can lift a county over the floor.
-  Franklin fails on cost: 6.5th percentile against 10.
+- **Hazard cost understates hazard risk for a data center.** Building loss
+  rates exclude downtime, lost revenue, and service-level penalties. Treat
+  the hazard component as a floor.
+- **The pillar floor is a judgment rule.** Its threshold and the
+  permitting exemption were chosen, not derived. Franklin fails it on cost
+  (6.5th percentile against 10).
+- **Cooling by county is a modeling choice.** See Cooling above.
+- **Sales tax maps to permitting by choice.** See The tax component above.
 
 ## Assumptions and parameter defaults
 
-- **Facility:** 300 MW IT load, load factor 0.8 (`etl/impact.py`).
-- **Discounting:** 25 years at 7%, an annuity factor of 11.654.
-- **PUE and WUE:** linear in cooling degree days, from `etl/impact.py`.
-  The evaporative values come from Lei and Masanet; the dry-cooling PUE
-  curve is an unsourced assumption there.
-- **Cooling:** evaporative where Aqueduct water stress is 2 or lower,
-  otherwise dry. PUE and carbon follow the choice. Dry everywhere is a
-  sensitivity.
-- **Energy price:** 2024 state average industrial price from EIA-861.
-- **New-load rate:**
-  - BPA's $80 to $132/MWh (`research/impact.md`) for Clark and Grant as a
-    scenario.
-  - No sourced new-load rate for New York, so Franklin stays at the state
-    average.
-- **Carbon:**
-  - eGRID2023 subregion average rate, not marginal.
-  - BPA-like supply at `BPA_CO2_LB_MWH = 212.458` (`etl/impact.py`).
-  - Prices $0, $51, $190 (EPA 2023 social cost of carbon), and $300 per
-    tonne.
-- **Water:** $7 per 1,000 gallons times (1 + water stress). Unsourced
-  assumption; $3 and $15 are sensitivities.
-- **Hazard:** sum of NRI v1.20 building expected-annual-loss rates over 17
-  hazards, times a $10B asset value.
-  - Drought has no building rate and is excluded.
-  - A missing rate counts as 0.
-  - The sum matches NRI's composite rate to machine precision for 95% of
-    counties.
-- **Time to power:** queue median age beyond 2 years, times 12, times $25M
-  per month, as a one-time cost at year 0.
-  - Counties without a queue age (1,072 of 1,565) take the national median
-    of 2.89 years.
-  - Sensitivities: $10M and $50M per month, time to power off, and
-    baselines of 1.5 and 2.5 years.
-- **Moratorium:**
-  - An active state or county moratorium costs 12 months at p=1. The basis
-    for New York is 8 months left on Executive Order 62 (in effect through
-    2027-06-04), plus about a 1/3 chance that the Responsible Data Center
-    Development Act starts a fresh 12-month clock.
-  - A pending moratorium costs 12 months at p=0.5, and recorded facility
-    pushback 6 months at p=0.3.
-  - Sensitivities: 8 and 20 months.
-- **Not monetized:** fiber, land, community.
-- **Monte Carlo:** 1,000 draws, seed 42, uniform ranges as listed under
-  Methods. Multipliers are independent per state and per eGRID subregion.
-  In the BPA run, Clark and Grant share one BPA rate draw, and BPA carbon
-  has no multiplier.
-- **SMAA:** 5,000 Dirichlet(1) draws over 8 pillars, seed 0, floor on and
-  off.
-- **CRITIC and entropy:** 35 scored columns with data, pillars.yaml
-  transforms, winsorized at the 1st and 99th percentiles, min-max scaled,
-  direction applied. Nulls take the column median for the weight
-  calculation only.
-- **Revealed preference:** L2 logistic regression, C = 1.0, median
-  imputation and standardization inside stratified 5-fold cross validation,
-  seed 0, trained on all 3,109 counties.
+- **Facility:** 300 MW IT load, load factor 0.8.
+- **Discounting:** 25 years at 7%.
+- **PUE and WUE:** linear in cooling degree days (`etl/impact.py`).
+- **Cooling:** evaporative where water stress is 2 or lower, otherwise
+  dry.
+- **Energy:** 2024 state average industrial price. BPA's $80 to $132/MWh
+  for Clark and Grant as a scenario. No sourced New York new-load rate.
+- **Carbon:** eGRID2023 subregion average. BPA-like supply at 212.458
+  lb/MWh. Prices $0, $51, $190, and $300 per tonne.
+- **Water:** $7 per 1,000 gallons times (1 + water stress), unsourced.
+- **Hazard:** NRI v1.20 building loss rates over 17 hazards times a $10B
+  asset value ($3B as a sensitivity).
+- **Time to power:**
+  - Queue age beyond 2 years at $25M per month, one-time.
+  - Imputed counties take the national median of 2.89 years.
+  - Grant uses 12 months from its own evidence (range 8 to 18.5).
+- **Moratorium:** 12 months at p=1 for an active state or county
+  moratorium. Pending moratoria count 12 months at p=0.5, and recorded
+  pushback 6 months at p=0.3.
+- **Sales tax:**
+  - $4B of taxable equipment per purchase, refreshed every 5 years (4 and
+    6 as sensitivities).
+  - Rates as in Sales and use tax above.
+  - WA exemption for rural counties on initial equipment only.
+  - New York taxed in the base case.
+  - Other states follow the repo's state flags, with refreshes exempt.
+- **Monte Carlo:** 1,000 draws, seed 42.
+- **SMAA:** 5,000 draws, seed 0.
+- **CRITIC and entropy:** winsorized 1st and 99th percentiles.
+- **Revealed preference:** L2 logistic regression, C = 1, 5-fold.
 - **Consensus:** Borda over each method's top 20.
 - **Shortlist:** SMAA top-10 acceptability of at least 1%, floor off.
 
@@ -369,7 +451,8 @@ python scratch/weighting/smaa.py
 python scratch/weighting/critic.py
 python scratch/weighting/revealed.py
 python scratch/weighting/consensus.py
+python scratch/weighting/revisions.py
 ```
 
-Each writes its outputs to `scratch/weighting/out/` and its chart to
-`docs/img/`.
+To repeat a tagged Monte Carlo run, pass overrides, for example
+`python scratch/weighting/montecarlo.py --overrides '{"tax": false}' --tag notax`.

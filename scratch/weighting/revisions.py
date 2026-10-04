@@ -93,20 +93,25 @@ def main():
     out["ttp_imputed_excluded"] = ranked(base[~base.queue_imputed])
     out["imputed_count"] = int(base.queue_imputed.sum())
 
-    # Grant's row from its own evidence instead of the queue proxy.
+    # Grant's row: evidence-based months are the base (12); proxy and the evidence range as sensitivities.
     g = {}
-    for label, months in GRANT_EVIDENCE_MONTHS.items():
-        c2 = base.copy()
-        c2.loc["53025", "time_to_power"] = months * p["delay_usd_month"]
-        c2["total_190"] = c2[m.PRIVATE].sum(axis=1) + c2["carbon_190"]
+    for label, months in {"evidence_central_12": 12.0, "evidence_low_8": 8.0, "evidence_high_18.5": 18.5,
+                          "queue_proxy": None}.items():
+        c2 = base if months == 12.0 else run({"ttp_months_override": {} if months is None else {"53025": months}})[2]
         res = ranked(c2)
         gap = float(c2.at["53025", "total_190"] - c2.at["53011", "total_190"])
         res["grant_minus_clark_musd"] = round(gap / 1e6, 1)
         res["grant_minus_franklin_musd"] = round(float(c2.at["53025", "total_190"] - c2.at["36033", "total_190"]) / 1e6, 1)
         res["grant_needs_usd_mwh_below_clark"] = round(gap / (c2.at["53025", "facility_mwh"] * af), 2)
-        g[f"{label}_{months}_months"] = res
+        g[label] = res
     out["grant_evidence"] = g
-    out["grant_proxy_months"] = float(base.at["53025", "delay_months_ttp"])
+    out["grant_proxy_months"] = float(run({"ttp_months_override": {}})[2].at["53025", "delay_months_ttp"])
+    gap12 = float(base.at["53025", "total_190"] - base.at["53011", "total_190"])
+    out["grant_breakeven_months_vs_clark"] = 12.0 - gap12 / p["delay_usd_month"]
+    out["grant_breakeven_months_vs_franklin"] = 12.0 - float(base.at["53025", "total_190"] - base.at["36033", "total_190"]) / p["delay_usd_month"]
+    # Clark's parcel rate: unincorporated 8.0% (base), inside the transit area 8.7%, City of Vancouver 8.9%.
+    out["clark_rate"] = {f"{r:.3f}": ranked(run({"tax_rate_override": {"53011": r}})[2]) for r in (0.087, 0.089)}
+    out["clark_lead_over_franklin_musd"] = round(float(base.at["36033", "total_190"] - base.at["53011", "total_190"]) / 1e6, 1)
 
     # Cooling: dry everywhere for Clark against Grant.
     dry = run({"cooling": "dry"})[2]

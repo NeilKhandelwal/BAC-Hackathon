@@ -168,7 +168,7 @@
   },
   "p_clark_beats_franklin": 0.075,
   "p_clark_beats_franklin_se": 0.008329165624478841,
-  "p_clark_beats_grant": 0.928,
+  "p_clark_beats_grant": 0.722,
   "imputed_queue_share_of_first": 0.014,
   "terciles": {
     "delay_usd_month": [
@@ -269,13 +269,13 @@
     ]
   },
   "grant_bpa": {
-    "median_rank": 800.0,
-    "p_first": 0.0,
-    "p_top3": 0.001,
-    "p10_rank": 153.9,
-    "p90_rank": 1367.0,
-    "p_beats_clark": 0.273,
-    "p_beats_franklin": 0.006
+    "median_rank": 603.5,
+    "p_first": 0.002,
+    "p_top3": 0.002,
+    "p10_rank": 85.9,
+    "p90_rank": 1273.1,
+    "p_beats_clark": 0.376,
+    "p_beats_franklin": 0.025
   },
   "crossover_carbon_usd_t": {
     "base_25M_12mo": 13.206542491868122,
@@ -403,7 +403,7 @@
       {
         "fips": "36033",
         "county": "Franklin, NY",
-        "share": 0.298
+        "share": 0.297
       },
       {
         "fips": "45025",
@@ -460,7 +460,7 @@
       {
         "fips": "36097",
         "county": "Schuyler, NY",
-        "share": 0.337
+        "share": 0.336
       },
       {
         "fips": "36019",
@@ -505,20 +505,20 @@
     ],
     "focus": {
       "Clark, WA": {
-        "p_first": 0.002,
+        "p_first": 0.001,
         "p_top3": 0.006
       },
       "Franklin, NY": {
-        "p_first": 0.298,
+        "p_first": 0.297,
         "p_top3": 0.376
       },
       "Grant, WA": {
-        "p_first": 0.0,
-        "p_top3": 0.001
+        "p_first": 0.002,
+        "p_top3": 0.002
       }
     },
     "cluster_p_first": {
-      "NY / NYUP": 0.298,
+      "NY / NYUP": 0.297,
       "SC / SRVC": 0.15,
       "ID / NWPP": 0.1,
       "UT / NWPP": 0.078,
@@ -536,15 +536,15 @@
       "WY / NWPP": 0.004,
       "IA / MROW": 0.004,
       "OH / RFCW": 0.003,
+      "WA / NWPP": 0.003,
       "VA / SRVC": 0.003,
       "TN / SRTV": 0.002,
-      "WA / NWPP": 0.002,
       "TX / SPSO": 0.001,
       "MT / NWPP": 0.001
     },
     "p_clark_beats_franklin": 0.061,
-    "p_clark_beats_grant": 0.932,
-    "draws_changing_winner": 0.002,
+    "p_clark_beats_grant": 0.726,
+    "draws_changing_winner": 0.003,
     "p_clark_beats_franklin_by_bpa_rate_tercile": {
       "low": {
         "range": [

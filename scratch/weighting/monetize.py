@@ -36,6 +36,12 @@ DEFAULTS = {
     "ttp_delay_usd_month": None,        # time-to-power delay cost; None uses delay_usd_month. 0 turns the proxy off
     "queue_baseline_years": 2.0,        # queue age that costs nothing
     "imputed_queue": "median",          # how counties without a queue age are charged: median or zero
+    # Counties with sourced power-timeline evidence replace the queue proxy. Grant: full 300 MW needs the
+    # 2029 Wanapum-Quincy line, the first phase follows the 2027 Quincy project, about 800 MW of requests
+    # are queued ahead, and new supply takes 2 to 2.5 years from contract (research/implementation.md,
+    # research/risk.md): about 12 months past the 2-year baseline, range 8 to 18.5. No other county has
+    # equivalent evidence.
+    "ttp_months_override": {"53025": 12.0},
     "moratorium_months_active": 12,     # state or county moratorium in force, probability 1
     "moratorium_months_pending": 12,
     "p_pending": 0.5,
@@ -53,6 +59,7 @@ DEFAULTS = {
     # NY Tax Law 1115(a)(37) covers equipment for Internet website services sold to customers. An AI
     # training campus with no hosted services for sale probably doesn't qualify, and repeal is proposed.
     "ny_exempt": False,
+    "tax_rate_override": {},            # fips -> combined rate, e.g. Clark inside the transit area (0.087)
     "cooling": "allowed",               # allowed: evaporative where water stress <= evap_max_stress, else dry
     "evap_max_stress": 2.0,             # the balanced preset's evaporative water stress gate
 }
@@ -103,6 +110,8 @@ def sales_tax_inputs(df, p):
     over = pd.read_csv(here / "sales_tax_counties.csv", dtype={"fips": str}).set_index("fips")
     r_over = df.fips.map(over.combined_rate)
     rate = r_over.where(r_over.notna(), rate)
+    for f, r in (p.get("tax_rate_override") or {}).items():
+        rate = rate.where(df.fips != f, r)
     flag = df.state_sales_tax_exemption.fillna(False).astype(bool)
     initial, refresh = flag.copy(), flag & p["other_refresh_exempt"]
     wa = df.state == "WA"
@@ -140,6 +149,8 @@ def compute(df, p, alr, queue_median):
     fill = p["queue_baseline_years"] if p.get("imputed_queue") == "zero" else queue_median
     q_used = q.fillna(fill).to_numpy(float)
     ttp_months = np.clip(q_used - p["queue_baseline_years"], 0, None) * 12
+    for f, months in (p.get("ttp_months_override") or {}).items():
+        ttp_months = np.where(df.fips.to_numpy() == f, months, ttp_months)
 
     flag = lambda c: df[c].fillna(False).astype(bool).to_numpy()  # noqa: E731
     active = flag("moratorium_state_active") | flag("moratorium_active")

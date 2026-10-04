@@ -271,13 +271,13 @@
     ]
   },
   "grant_bpa": {
-    "median_rank": 246.0,
-    "p_first": 0.032,
-    "p_top3": 0.04,
-    "p10_rank": 12.0,
-    "p90_rank": 1093.3000000000002,
-    "p_beats_clark": 0.136,
-    "p_beats_franklin": 0.16
+    "median_rank": 136.0,
+    "p_first": 0.068,
+    "p_top3": 0.103,
+    "p10_rank": 3.0,
+    "p90_rank": 838.7000000000002,
+    "p_beats_clark": 0.192,
+    "p_beats_franklin": 0.258
   },
   "crossover_carbon_usd_t": {
     "base_25M_12mo": 199.99132494622293,
@@ -465,7 +465,7 @@
       {
         "fips": "36033",
         "county": "Franklin, NY",
-        "share": 0.343
+        "share": 0.339
       },
       {
         "fips": "53011",
@@ -475,7 +475,7 @@
       {
         "fips": "36097",
         "county": "Schuyler, NY",
-        "share": 0.282
+        "share": 0.267
       },
       {
         "fips": "36019",
@@ -485,32 +485,32 @@
       {
         "fips": "45025",
         "county": "Chesterfield, SC",
-        "share": 0.184
+        "share": 0.182
       },
       {
         "fips": "53071",
         "county": "Walla Walla, WA",
-        "share": 0.16
+        "share": 0.153
       },
       {
         "fips": "16055",
         "county": "Kootenai, ID",
-        "share": 0.126
+        "share": 0.122
+      },
+      {
+        "fips": "53025",
+        "county": "Grant, WA",
+        "share": 0.098
       },
       {
         "fips": "49015",
         "county": "Emery, UT",
-        "share": 0.099
+        "share": 0.098
       },
       {
         "fips": "48141",
         "county": "El Paso, TX",
         "share": 0.088
-      },
-      {
-        "fips": "22015",
-        "county": "Bossier, LA",
-        "share": 0.083
       }
     ],
     "focus": {
@@ -520,11 +520,11 @@
       },
       "Franklin, NY": {
         "p_first": 0.201,
-        "p_top3": 0.343
+        "p_top3": 0.339
       },
       "Grant, WA": {
         "p_first": 0.0,
-        "p_top3": 0.038
+        "p_top3": 0.098
       }
     },
     "cluster_p_first": {

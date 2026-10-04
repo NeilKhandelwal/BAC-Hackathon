@@ -16,6 +16,9 @@
     "ttp_delay_usd_month": null,
     "queue_baseline_years": 2.0,
     "imputed_queue": "median",
+    "ttp_months_override": {
+      "53025": 12.0
+    },
     "moratorium_months_active": 12,
     "moratorium_months_pending": 12,
     "p_pending": 0.5,
@@ -29,6 +32,7 @@
     "wa_refresh_exempt": false,
     "other_refresh_exempt": true,
     "ny_exempt": false,
+    "tax_rate_override": {},
     "cooling": "allowed",
     "evap_max_stress": 2.0
   },
@@ -377,78 +381,78 @@
   ],
   "variance_shares": {
     "0": {
-      "energy": 0.6730095973215866,
+      "energy": 0.6731533503123187,
       "carbon": 0.0,
-      "water": -0.008833519282299042,
-      "hazard": 0.004140135393485732,
-      "time_to_power": 0.07157723710557767,
-      "moratorium": 0.019241348283893765,
-      "sales_tax": 0.24086520117775534
+      "water": -0.008829246403746062,
+      "hazard": 0.0041516088214767054,
+      "time_to_power": 0.07150396260118305,
+      "moratorium": 0.01924599138313743,
+      "sales_tax": 0.2407743332856299
     },
     "51": {
-      "energy": 0.6972664145825797,
-      "carbon": -0.024054422469718246,
-      "water": -0.009532126791929241,
-      "hazard": 0.006413669987932883,
-      "time_to_power": 0.07697338789874957,
-      "moratorium": 0.015082562436928583,
-      "sales_tax": 0.2378505143554569
+      "energy": 0.6973735897274065,
+      "carbon": -0.024018717194210792,
+      "water": -0.009526883212145705,
+      "hazard": 0.0064258821642631395,
+      "time_to_power": 0.07692580210187763,
+      "moratorium": 0.015085993417217402,
+      "sales_tax": 0.23773433299559174
     },
     "190": {
-      "energy": 0.5449259084628281,
-      "carbon": 0.23006467743729683,
-      "water": -0.008413141235446743,
-      "hazard": 0.01039608891162838,
-      "time_to_power": 0.06729356318943301,
-      "moratorium": -0.0005099664256449138,
-      "sales_tax": 0.1562428696599052
+      "energy": 0.5449182732208228,
+      "carbon": 0.23015436573238868,
+      "water": -0.008406932287136052,
+      "hazard": 0.010405256693582731,
+      "time_to_power": 0.06732797504056454,
+      "moratorium": -0.0005074236004965938,
+      "sales_tax": 0.15610848520027396
     },
     "300": {
-      "energy": 0.3444079352016542,
-      "carbon": 0.5328222222013801,
-      "water": -0.005933993548159996,
-      "hazard": 0.010015868205519786,
-      "time_to_power": 0.04709895823234643,
-      "moratorium": -0.00819185676768001,
-      "sales_tax": 0.07978086647493952
+      "energy": 0.34438790759921933,
+      "carbon": 0.5328525861142313,
+      "water": -0.005929236676499164,
+      "hazard": 0.010021412013435083,
+      "time_to_power": 0.04717075494591363,
+      "moratorium": -0.0081884689436548,
+      "sales_tax": 0.07968504494735473
     }
   },
   "variance_shares_known_queue_only": {
     "0": {
-      "energy": 0.6585198214743343,
+      "energy": 0.6587949910215033,
       "carbon": 0.0,
-      "water": -0.0074805478479274936,
-      "hazard": 0.003741861837500302,
-      "time_to_power": 0.1384278719863947,
-      "moratorium": 0.011745693554967478,
-      "sales_tax": 0.1950452989947308
+      "water": -0.007471314219597117,
+      "hazard": 0.0037614910238079327,
+      "time_to_power": 0.13830368916799113,
+      "moratorium": 0.011753934532101962,
+      "sales_tax": 0.19485720847419302
     },
     "51": {
-      "energy": 0.6733412185647782,
-      "carbon": -0.014282511949867566,
-      "water": -0.008162800974078213,
-      "hazard": 0.005003954652215833,
-      "time_to_power": 0.1447146837523733,
-      "moratorium": 0.009175131301724475,
-      "sales_tax": 0.19021032465285354
+      "energy": 0.673543569436004,
+      "carbon": -0.014216359593731607,
+      "water": -0.008152117262165711,
+      "hazard": 0.00502419408407332,
+      "time_to_power": 0.14463275419157715,
+      "moratorium": 0.009182082700262004,
+      "sales_tax": 0.18998587644398085
     },
     "190": {
-      "energy": 0.5606407371515981,
-      "carbon": 0.17640238966079602,
-      "water": -0.008103627010210588,
-      "hazard": 0.007162345864515733,
-      "time_to_power": 0.12855901628915392,
-      "moratorium": 0.0004288019353281324,
-      "sales_tax": 0.13491033610881908
+      "energy": 0.5606325685923963,
+      "carbon": 0.1765795400932716,
+      "water": -0.0080912644162028,
+      "hazard": 0.007178426797109706,
+      "time_to_power": 0.12860681397797424,
+      "moratorium": 0.0004344910731125871,
+      "sales_tax": 0.1346594238823382
     },
     "300": {
-      "energy": 0.3988948799040576,
-      "carbon": 0.4277959674015982,
-      "water": -0.0066269736689846545,
-      "hazard": 0.007070072843891811,
-      "time_to_power": 0.0967843256794017,
-      "moratorium": -0.0044461434935532925,
-      "sales_tax": 0.08052787133358852
+      "energy": 0.39884308322838125,
+      "carbon": 0.4278925700971108,
+      "water": -0.006616503759422573,
+      "hazard": 0.007080977070002163,
+      "time_to_power": 0.09690837671513394,
+      "moratorium": -0.0044398667107222066,
+      "sales_tax": 0.08033136335951699
     }
   },
   "data_implied_pillar_weights": {
@@ -504,15 +508,15 @@
   "grant_variants": {
     "regional": {
       "co2_t": 700390.214176708,
-      "private": 3063723246.267349
+      "private": 2900889570.7026668
     },
     "bpa_80": {
       "co2_t": 235547.34837163534,
-      "private": 3459648454.9236765
+      "private": 3296814779.3589945
     },
     "bpa_132": {
       "co2_t": 235547.34837163534,
-      "private": 4940807508.889794
+      "private": 4777973833.325112
     }
   },
   "breakevens": [
@@ -521,7 +525,7 @@
       "county": "Hamilton, NY",
       "co2_kt": 259.4620703260957,
       "private_musd_yr": 363.2142664416155,
-      "regional": 227.5,
+      "regional": 259.2,
       "bpa_80": null,
       "bpa_132": null
     },
@@ -530,7 +534,7 @@
       "county": "Essex, NY",
       "co2_kt": 260.2174577854965,
       "private_musd_yr": 362.69726264366,
-      "regional": 226.7,
+      "regional": 258.5,
       "bpa_80": null,
       "bpa_132": null
     },
@@ -539,7 +543,7 @@
       "county": "Franklin, NY",
       "co2_kt": 260.3677230231153,
       "private_musd_yr": 332.74140549255804,
-      "regional": 158.7,
+      "regional": 190.5,
       "bpa_80": null,
       "bpa_132": null
     },
@@ -650,8 +654,8 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC",
       "gap_1_to_2_pct": 1.85,
-      "rank190_Grant": 647,
-      "rank190_Franklin": 409,
+      "rank190_Grant": 407,
+      "rank190_Franklin": 410,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.545,
       "share190_carbon": 0.23,
@@ -668,8 +672,8 @@
       "top_190": "16055",
       "top5_190": "Kootenai, ID; Chesterfield, SC; Aiken, SC; Marlboro, SC; El Paso, TX",
       "gap_1_to_2_pct": 0.59,
-      "rank190_Grant": 557,
-      "rank190_Franklin": 344,
+      "rank190_Grant": 326,
+      "rank190_Franklin": 345,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.532,
       "share190_carbon": 0.239,
@@ -686,8 +690,8 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Marlboro, SC; Florence, SC; Kootenai, ID; Aiken, SC",
       "gap_1_to_2_pct": 1.63,
-      "rank190_Grant": 663,
-      "rank190_Franklin": 431,
+      "rank190_Grant": 428,
+      "rank190_Franklin": 432,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.544,
       "share190_carbon": 0.228,
@@ -704,8 +708,8 @@
       "top_190": "16055",
       "top5_190": "Kootenai, ID; Chesterfield, SC; Aiken, SC; Emery, UT; Florence, SC",
       "gap_1_to_2_pct": 0.66,
-      "rank190_Grant": 604,
-      "rank190_Franklin": 363,
+      "rank190_Grant": 363,
+      "rank190_Franklin": 364,
       "rank190_Berkshire": 1551,
       "share190_energy": 0.544,
       "share190_carbon": 0.234,
@@ -722,8 +726,8 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Spartanburg, SC",
       "gap_1_to_2_pct": 1.85,
-      "rank190_Grant": 455,
-      "rank190_Franklin": 380,
+      "rank190_Grant": 376,
+      "rank190_Franklin": 381,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.563,
       "share190_carbon": 0.259,
@@ -740,8 +744,8 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC",
       "gap_1_to_2_pct": 1.85,
-      "rank190_Grant": 915,
-      "rank190_Franklin": 453,
+      "rank190_Grant": 450,
+      "rank190_Franklin": 454,
       "rank190_Berkshire": 1548,
       "share190_energy": 0.487,
       "share190_carbon": 0.178,
@@ -758,16 +762,16 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC",
       "gap_1_to_2_pct": 1.85,
-      "rank190_Grant": 649,
+      "rank190_Grant": 410,
       "rank190_Franklin": 321,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.543,
       "share190_carbon": 0.236,
       "share190_water": -0.008,
-      "share190_hazard": 0.01,
+      "share190_hazard": 0.011,
       "share190_time_to_power": 0.067,
       "share190_moratorium": -0.001,
-      "share190_sales_tax": 0.153,
+      "share190_sales_tax": 0.152,
       "share190_ttp_known_queue_only": 0.129
     },
     {
@@ -776,7 +780,7 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC",
       "gap_1_to_2_pct": 1.85,
-      "rank190_Grant": 643,
+      "rank190_Grant": 407,
       "rank190_Franklin": 701,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.547,
@@ -786,7 +790,7 @@
       "share190_time_to_power": 0.067,
       "share190_moratorium": 0.003,
       "share190_sales_tax": 0.163,
-      "share190_ttp_known_queue_only": 0.128
+      "share190_ttp_known_queue_only": 0.129
     },
     {
       "variant": "time to power off",
@@ -812,8 +816,8 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC",
       "gap_1_to_2_pct": 1.85,
-      "rank190_Grant": 657,
-      "rank190_Franklin": 284,
+      "rank190_Grant": 281,
+      "rank190_Franklin": 285,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.534,
       "share190_carbon": 0.227,
@@ -830,8 +834,8 @@
       "top_190": "45025",
       "top5_190": "Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Buncombe, NC",
       "gap_1_to_2_pct": 1.85,
-      "rank190_Grant": 629,
-      "rank190_Franklin": 605,
+      "rank190_Grant": 603,
+      "rank190_Franklin": 606,
       "rank190_Berkshire": 1552,
       "share190_energy": 0.556,
       "share190_carbon": 0.233,
@@ -845,19 +849,19 @@
   ],
   "focus": {
     "Grant, WA": {
-      "rank_private": 1334,
-      "rank_190": 647,
+      "rank_private": 1189,
+      "rank_190": 407,
       "energy": 1882.8,
       "water": 10.5,
       "hazard": 103.4,
-      "time_to_power": 462.8,
+      "time_to_power": 300.0,
       "moratorium": 0.0,
       "sales_tax": 604.2,
       "carbon_190_musd": 1550.8,
       "co2_kt": 700
     },
     "Clark, WA": {
-      "rank_private": 1191,
+      "rank_private": 1192,
       "rank_190": 365,
       "energy": 1823.1,
       "water": 7.9,
@@ -870,7 +874,7 @@
     },
     "Franklin, NY": {
       "rank_private": 1493,
-      "rank_190": 409,
+      "rank_190": 410,
       "energy": 2533.8,
       "water": 9.1,
       "hazard": 125.2,
@@ -882,7 +886,7 @@
     },
     "Clinton, NY": {
       "rank_private": 1497,
-      "rank_190": 521,
+      "rank_190": 522,
       "energy": 2542.2,
       "water": 11.4,
       "hazard": 145.2,
@@ -942,18 +946,18 @@
       "190": 103.99828455638216,
       "300": 105.49867132503637
     },
-    "grant_minus_clark_190_state_avg_usd": 209033338.72015476,
-    "grant_needs_months_less_delay_state_avg": 8.36133354880619,
-    "grant_needs_usd_mwh_discount_state_avg": 7.338667366169775,
+    "grant_minus_clark_190_state_avg_usd": 46199663.155472755,
+    "grant_needs_months_less_delay_state_avg": 1.8479865262189101,
+    "grant_needs_usd_mwh_discount_state_avg": 1.6219611780731407,
     "grant_minus_clark_190_bpa_usd": {
-      "80": 188969563.31611824,
-      "132": 235893074.98811913
+      "80": 26135887.751436234,
+      "132": 73059399.42343712
     },
     "grant_needs_months_less_delay_bpa": {
-      "80": 7.55878253264473,
-      "132": 9.435722999524765
+      "80": 1.0454355100574493,
+      "132": 2.922375976937485
     },
-    "grant_time_to_power_months": 18.51334702258727,
+    "grant_time_to_power_months": 12.0,
     "clark_time_to_power_months": 1.0349075975359323,
     "franklin_new_load_rate": "none sourced; NY state average used"
   },

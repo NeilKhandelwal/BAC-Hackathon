@@ -167,7 +167,7 @@
   },
   "p_clark_beats_franklin": 0.593,
   "p_clark_beats_franklin_se": 0.015535475531827148,
-  "p_clark_beats_grant": 0.928,
+  "p_clark_beats_grant": 0.722,
   "imputed_queue_share_of_first": 0.158,
   "terciles": {
     "delay_usd_month": [
@@ -268,13 +268,13 @@
     ]
   },
   "grant_bpa": {
-    "median_rank": 261.0,
-    "p_first": 0.029,
-    "p_top3": 0.052,
-    "p10_rank": 9.900000000000006,
-    "p90_rank": 1104.5,
-    "p_beats_clark": 0.273,
-    "p_beats_franklin": 0.322
+    "median_rank": 140.5,
+    "p_first": 0.077,
+    "p_top3": 0.109,
+    "p10_rank": 3.0,
+    "p90_rank": 873.2,
+    "p_beats_clark": 0.376,
+    "p_beats_franklin": 0.452
   },
   "crossover_carbon_usd_t": {
     "base_25M_12mo": 199.99132494622293,
@@ -398,12 +398,12 @@
       {
         "fips": "41059",
         "county": "Umatilla, OR",
-        "share": 0.33
+        "share": 0.328
       },
       {
         "fips": "30003",
         "county": "Big Horn, MT",
-        "share": 0.129
+        "share": 0.126
       },
       {
         "fips": "16055",
@@ -418,7 +418,7 @@
       {
         "fips": "53011",
         "county": "Clark, WA",
-        "share": 0.092
+        "share": 0.067
       },
       {
         "fips": "36033",
@@ -426,9 +426,14 @@
         "share": 0.046
       },
       {
+        "fips": "53025",
+        "county": "Grant, WA",
+        "share": 0.036
+      },
+      {
         "fips": "48141",
         "county": "El Paso, TX",
-        "share": 0.032
+        "share": 0.031
       },
       {
         "fips": "49015",
@@ -439,43 +444,38 @@
         "fips": "53071",
         "county": "Walla Walla, WA",
         "share": 0.024
-      },
-      {
-        "fips": "48181",
-        "county": "Grayson, TX",
-        "share": 0.021
       }
     ],
     "p_top3_top": [
       {
         "fips": "41059",
         "county": "Umatilla, OR",
-        "share": 0.46
+        "share": 0.457
       },
       {
         "fips": "30003",
         "county": "Big Horn, MT",
-        "share": 0.239
+        "share": 0.237
       },
       {
         "fips": "41005",
         "county": "Clackamas, OR",
-        "share": 0.226
+        "share": 0.223
       },
       {
         "fips": "16055",
         "county": "Kootenai, ID",
-        "share": 0.222
+        "share": 0.221
       },
       {
         "fips": "45025",
         "county": "Chesterfield, SC",
-        "share": 0.198
+        "share": 0.195
       },
       {
         "fips": "53011",
         "county": "Clark, WA",
-        "share": 0.152
+        "share": 0.151
       },
       {
         "fips": "53071",
@@ -483,43 +483,43 @@
         "share": 0.111
       },
       {
+        "fips": "53025",
+        "county": "Grant, WA",
+        "share": 0.1
+      },
+      {
         "fips": "49015",
         "county": "Emery, UT",
-        "share": 0.102
+        "share": 0.099
       },
       {
         "fips": "36033",
         "county": "Franklin, NY",
         "share": 0.095
-      },
-      {
-        "fips": "48141",
-        "county": "El Paso, TX",
-        "share": 0.076
       }
     ],
     "focus": {
       "Clark, WA": {
-        "p_first": 0.092,
-        "p_top3": 0.152
+        "p_first": 0.067,
+        "p_top3": 0.151
       },
       "Franklin, NY": {
         "p_first": 0.046,
         "p_top3": 0.095
       },
       "Grant, WA": {
-        "p_first": 0.004,
-        "p_top3": 0.05
+        "p_first": 0.036,
+        "p_top3": 0.1
       }
     },
     "cluster_p_first": {
-      "OR / NWPP": 0.33,
-      "WA / NWPP": 0.134,
-      "MT / NWPP": 0.129,
+      "OR / NWPP": 0.328,
+      "WA / NWPP": 0.14,
+      "MT / NWPP": 0.126,
       "SC / SRVC": 0.093,
       "ID / NWPP": 0.093,
       "NY / NYUP": 0.046,
-      "TX / AZNM": 0.032,
+      "TX / AZNM": 0.031,
       "NC / SRVC": 0.026,
       "UT / NWPP": 0.024,
       "TX / ERCT": 0.021,
@@ -536,8 +536,8 @@
       "WY / NWPP": 0.002
     },
     "p_clark_beats_franklin": 0.53,
-    "p_clark_beats_grant": 0.932,
-    "draws_changing_winner": 0.096,
+    "p_clark_beats_grant": 0.726,
+    "draws_changing_winner": 0.103,
     "p_clark_beats_franklin_by_bpa_rate_tercile": {
       "low": {
         "range": [

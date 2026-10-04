@@ -170,7 +170,7 @@
   },
   "p_clark_beats_franklin": 0.593,
   "p_clark_beats_franklin_se": 0.015535475531827148,
-  "p_clark_beats_grant": 0.928,
+  "p_clark_beats_grant": 0.722,
   "imputed_queue_share_of_first": 0.036,
   "terciles": {
     "delay_usd_month": [
@@ -271,13 +271,13 @@
     ]
   },
   "grant_bpa": {
-    "median_rank": 788.5,
-    "p_first": 0.006,
-    "p_top3": 0.01,
-    "p10_rank": 131.0,
-    "p90_rank": 1351.1,
-    "p_beats_clark": 0.273,
-    "p_beats_franklin": 0.322
+    "median_rank": 584.5,
+    "p_first": 0.011,
+    "p_top3": 0.015,
+    "p10_rank": 64.0,
+    "p90_rank": 1259.2,
+    "p_beats_clark": 0.376,
+    "p_beats_franklin": 0.452
   },
   "crossover_carbon_usd_t": {
     "base_25M_12mo": 199.99132494622293,
@@ -423,7 +423,7 @@
       {
         "fips": "49015",
         "county": "Emery, UT",
-        "share": 0.112
+        "share": 0.111
       },
       {
         "fips": "48141",
@@ -500,12 +500,12 @@
       {
         "fips": "22015",
         "county": "Bossier, LA",
-        "share": 0.123
+        "share": 0.122
       },
       {
         "fips": "48225",
         "county": "Houston, TX",
-        "share": 0.112
+        "share": 0.111
       },
       {
         "fips": "48395",
@@ -515,22 +515,22 @@
     ],
     "focus": {
       "Clark, WA": {
-        "p_first": 0.013,
-        "p_top3": 0.026
+        "p_first": 0.007,
+        "p_top3": 0.024
       },
       "Franklin, NY": {
         "p_first": 0.003,
         "p_top3": 0.006
       },
       "Grant, WA": {
-        "p_first": 0.001,
-        "p_top3": 0.008
+        "p_first": 0.009,
+        "p_top3": 0.014
       }
     },
     "cluster_p_first": {
       "SC / SRVC": 0.213,
       "ID / NWPP": 0.136,
-      "UT / NWPP": 0.112,
+      "UT / NWPP": 0.111,
       "TX / AZNM": 0.092,
       "LA / SRMV": 0.088,
       "TX / ERCT": 0.068,
@@ -539,11 +539,11 @@
       "PA / RFCE": 0.043,
       "AR / SRMV": 0.039,
       "OK / SPSO": 0.031,
+      "WA / NWPP": 0.016,
       "OR / NWPP": 0.014,
-      "WA / NWPP": 0.014,
-      "WY / NWPP": 0.007,
       "LA / SPSO": 0.007,
       "KY / SRTV": 0.006,
+      "WY / NWPP": 0.006,
       "IA / MROW": 0.005,
       "TN / SRTV": 0.004,
       "VA / SRVC": 0.004,
@@ -555,8 +555,8 @@
       "GA / SRSO": 0.001
     },
     "p_clark_beats_franklin": 0.53,
-    "p_clark_beats_grant": 0.932,
-    "draws_changing_winner": 0.014,
+    "p_clark_beats_grant": 0.726,
+    "draws_changing_winner": 0.016,
     "p_clark_beats_franklin_by_bpa_rate_tercile": {
       "low": {
         "range": [

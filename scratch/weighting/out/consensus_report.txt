@@ -1,11 +1,11 @@
 consensus top 10, all six methods:
                 county  balanced  monetized  smaa  critic  entropy  revealed  borda_all
 fips                                                                                   
-41067   Washington, OR       120        623    14       1        6         9         54
-53025        Grant, WA         1        647     2      12       50       120         48
-19163        Scott, IA         6        582     7       6      257       122         44
+41067   Washington, OR       120        624    14       1        6         9         54
+53025        Grant, WA         1        407     2      12       50       120         48
+19163        Scott, IA         6        583     7       6      257       122         44
 53075      Whitman, WA         3        296     1      78      318       660         38
-47181        Wayne, TN         2        530     3     208      895      1475         37
+47181        Wayne, TN         2        531     3     208      895      1475         37
 26163        Wayne, MI       304       1303    16      20        9         3         36
 48029        Bexar, TX      1122        187   271     524        1         7         34
 49035    Salt Lake, UT       489         60   227      31        3         8         31
@@ -15,24 +15,24 @@ fips
 consensus top 10, without entropy:
                 county  balanced  monetized  smaa  critic  entropy  revealed  borda_no_entropy
 fips                                                                                          
-53025        Grant, WA         1        647     2      12       50       120                48
-19163        Scott, IA         6        582     7       6      257       122                44
-41067   Washington, OR       120        623    14       1        6         9                39
+53025        Grant, WA         1        407     2      12       50       120                48
+19163        Scott, IA         6        583     7       6      257       122                44
+41067   Washington, OR       120        624    14       1        6         9                39
 53075      Whitman, WA         3        296     1      78      318       660                38
-47181        Wayne, TN         2        530     3     208      895      1475                37
+47181        Wayne, TN         2        531     3     208      895      1475                37
 17161  Rock Island, IL       200       1064     9       2      278       106                31
 53011        Clark, WA         7        365     5      27      338       103                30
-40051        Grady, OK         9        595     6     266      189       504                27
+40051        Grady, OK         9        596     6     266      189       504                27
 40097        Mayes, OK         4        236    12     118       29      1003                26
 41051    Multnomah, OR      1005        380   271       4       59        12                26
 
-focus: {"Clark, WA": {"balanced": 7, "monetized": 365, "smaa": 5, "critic": 27, "entropy": 338, "revealed": 103, "borda_all": 30, "borda_no_entropy": 30}, "Franklin, NY": {"balanced": 986, "monetized": 409, "smaa": 271, "critic": 64, "entropy": 392, "revealed": 548, "borda_all": 0, "borda_no_entropy": 0}, "Grant, WA": {"balanced": 1, "monetized": 647, "smaa": 2, "critic": 12, "entropy": 50, "revealed": 120, "borda_all": 48, "borda_no_entropy": 48}}
+focus: {"Clark, WA": {"balanced": 7, "monetized": 365, "smaa": 5, "critic": 27, "entropy": 338, "revealed": 103, "borda_all": 30, "borda_no_entropy": 30}, "Franklin, NY": {"balanced": 986, "monetized": 410, "smaa": 271, "critic": 64, "entropy": 392, "revealed": 548, "borda_all": 0, "borda_no_entropy": 0}, "Grant, WA": {"balanced": 1, "monetized": 407, "smaa": 2, "critic": 12, "entropy": 50, "revealed": 120, "borda_all": 48, "borda_no_entropy": 48}}
 
 engine with implied weights {'energy_carbon': 0.228, 'water': 0.0, 'climate_resilience': 0.01, 'grid_infrastructure': 0.066, 'land': 0.0, 'community': 0.0, 'permitting': 0.155, 'cost': 0.541}
   top 10: ['Grady, OK', 'Caddo, OK', 'Garfield, OK', 'Oklahoma, OK', 'Canadian, OK', 'Payne, OK', 'Lincoln, OK', 'McClain, OK', 'Cleveland, OK', 'Beaver, OK']
   NPV top 10: ['Chesterfield, SC', 'Kootenai, ID', 'Marlboro, SC', 'Florence, SC', 'Aiken, SC', 'Emery, UT', 'El Paso, TX', 'Grayson, TX', 'Bossier, LA', 'Houston, TX'] overlap 0
 
-shortlist (SMAA top-10 acceptability, floor off, >= 1%): 161 counties; focus in it: {'Clark, WA': True, 'Franklin, NY': True, 'Grant, WA': True} stage-2 ranks: {'Clark, WA': 72, 'Franklin, NY': 79, 'Grant, WA': 101}
+shortlist (SMAA top-10 acceptability, floor off, >= 1%): 161 counties; focus in it: {'Clark, WA': True, 'Franklin, NY': True, 'Grant, WA': True} stage-2 ranks: {'Clark, WA': 72, 'Franklin, NY': 80, 'Grant, WA': 78}
                   county  npv_190_busd  co2_kt  smaa_top10_floor_off  floor_ok  balanced_rank
 fips                                                                                         
 45025   Chesterfield, SC         3.682   667.0                0.0320      True             17

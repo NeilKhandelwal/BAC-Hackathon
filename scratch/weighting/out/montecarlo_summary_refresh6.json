@@ -171,7 +171,7 @@
   },
   "p_clark_beats_franklin": 0.593,
   "p_clark_beats_franklin_se": 0.015535475531827148,
-  "p_clark_beats_grant": 0.923,
+  "p_clark_beats_grant": 0.717,
   "imputed_queue_share_of_first": 0.036,
   "terciles": {
     "delay_usd_month": [
@@ -272,13 +272,13 @@
     ]
   },
   "grant_bpa": {
-    "median_rank": 710.0,
-    "p_first": 0.01,
-    "p_top3": 0.011,
-    "p10_rank": 101.0,
-    "p90_rank": 1328.0,
-    "p_beats_clark": 0.276,
-    "p_beats_franklin": 0.323
+    "median_rank": 505.0,
+    "p_first": 0.015,
+    "p_top3": 0.027,
+    "p10_rank": 49.80000000000001,
+    "p90_rank": 1229.3000000000002,
+    "p_beats_clark": 0.376,
+    "p_beats_franklin": 0.455
   },
   "crossover_carbon_usd_t": {
     "base_25M_12mo": 199.99132494622293,
@@ -475,7 +475,7 @@
       {
         "fips": "16055",
         "county": "Kootenai, ID",
-        "share": 0.223
+        "share": 0.222
       },
       {
         "fips": "49015",
@@ -495,17 +495,17 @@
       {
         "fips": "48181",
         "county": "Grayson, TX",
-        "share": 0.128
+        "share": 0.127
       },
       {
         "fips": "22015",
         "county": "Bossier, LA",
-        "share": 0.123
+        "share": 0.122
       },
       {
         "fips": "45069",
         "county": "Marlboro, SC",
-        "share": 0.122
+        "share": 0.121
       },
       {
         "fips": "48225",
@@ -520,16 +520,16 @@
     ],
     "focus": {
       "Clark, WA": {
-        "p_first": 0.021,
-        "p_top3": 0.036
+        "p_first": 0.014,
+        "p_top3": 0.035
       },
       "Franklin, NY": {
         "p_first": 0.007,
         "p_top3": 0.015
       },
       "Grant, WA": {
-        "p_first": 0.002,
-        "p_top3": 0.01
+        "p_first": 0.012,
+        "p_top3": 0.025
       }
     },
     "cluster_p_first": {
@@ -541,27 +541,27 @@
       "TX / ERCT": 0.067,
       "TX / SRMV": 0.052,
       "NC / SRVC": 0.05,
-      "PA / RFCE": 0.041,
+      "PA / RFCE": 0.04,
       "AR / SRMV": 0.039,
       "OK / SPSO": 0.031,
-      "WA / NWPP": 0.024,
+      "WA / NWPP": 0.027,
       "OR / NWPP": 0.014,
       "NY / NYUP": 0.007,
       "LA / SPSO": 0.007,
       "KY / SRTV": 0.006,
       "WY / NWPP": 0.006,
       "IA / MROW": 0.005,
-      "TN / SRTV": 0.004,
-      "MT / NWPP": 0.004,
+      "TN / SRTV": 0.003,
       "OH / RFCW": 0.003,
       "VA / SRVC": 0.003,
+      "MT / NWPP": 0.003,
       "TX / SPSO": 0.001,
       "MS / SRMV": 0.001,
       "GA / SRSO": 0.001
     },
     "p_clark_beats_franklin": 0.53,
-    "p_clark_beats_grant": 0.931,
-    "draws_changing_winner": 0.023,
+    "p_clark_beats_grant": 0.722,
+    "draws_changing_winner": 0.026,
     "p_clark_beats_franklin_by_bpa_rate_tercile": {
       "low": {
         "range": [

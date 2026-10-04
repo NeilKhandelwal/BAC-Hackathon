@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 03:02 UTC
+- **Updated:** 2026-10-04, end of revision round 1 (clock unreliable)
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,41 +17,28 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** revision round 1 on PR #35 (user request at
-  02:58 UTC, 60-minute timebox, ends about 03:58 UTC). PR is open, not
-  merged.
-- **Done in this round:** AI footer removed from the PR body; PR comments
-  posted asking Neil about a squash merge and surfacing the 90% against
-  30% energy-and-carbon finding.
-- **Committed but switched off:** the sales tax component in
-  `monetize.py` (`"tax": False`) and its use in `montecarlo.py`, plus
-  `scratch/weighting/revisions.py` for Neil's items. The tax needs
-  `scratch/weighting/sales_tax_rates.csv` (state, combined_rate,
-  source_url) and optionally `sales_tax_counties.csv` (fips,
-  combined_rate, source_url) from sourced research; then set `"tax": True`
-  and rerun everything.
-- **In progress:** an Opus research subagent is verifying the WA data
-  center sales tax exemption (RCW 82.08.986, 82.12.986) for Clark and
-  Grant, any NY exemption for Franklin, and sourced sales tax rates. If a
-  new session starts and the result is lost, rerun that research.
-- **Exact next action:** in order, per approved decisions 17 to 21:
-  1. Add the sales tax component to `monetize.py` once the rates and
-     eligibility are sourced (or flagged unverified).
-  2. Neil's review items in `scratch/weighting/revisions.py`:
-     non-negative variance shares, time to power with imputed counties at
-     $0 and excluded, Grant's evidence-based delay, dry cooling everywhere
-     for Clark against Grant, hazard asset value $3B, and one table of the
-     top 10 and the four focus counties' ranks under every method.
-  3. Rerun `montecarlo.py` (BPA run) and `consensus.py` with the tax
-     component; report Clark, Franklin, and Grant with and without tax and
-     at refresh cycles of 4 and 6 years.
-  4. Consult the advisor before writing the final recommendation.
-  5. Update `docs/weighting.md`, this log, and the PR body.
+- **Phase and step:** revision round 1 done. PR #35 is open, ready for
+  review, not merged.
+- **Done:** sales tax component (sourced rates, WA and NY eligibility),
+  Grant's evidence-based time to power as its base row, Neil's review
+  items (`scratch/weighting/revisions.py`), tagged Monte Carlo runs,
+  rewritten `docs/weighting.md`, PR comments to Neil. The recommendation
+  changed from Clark to Grant (see the history).
+- **In progress:** nothing.
+- **Exact next action:** waiting on Neil and the team:
+  1. Neil's answer on a squash merge with a clean message.
+  2. The featured-county decision (the recommendation is Grant).
+  3. Whether to verify the exemption flags for SC, ID, UT, TX, and LA
+     before the deck says anything about them.
+  Never merge PR #35. Don't rewrite history. No AI attribution in new
+  commits or the PR body.
+- **Untracked files:** `scratch/analysis.py` and `scratch/lbnl_unmatched.py`
+  stay uncommitted.
 - **Reproduce:** from the repo root, after fetching raw NRI (below):
   `.venv/Scripts/python.exe scratch/weighting/monetize.py`, then
   `.venv/Scripts/python.exe scratch/weighting/montecarlo.py`, then
   `.venv/Scripts/python.exe scratch/weighting/smaa.py`, `critic.py`,
-  `revealed.py`, and `consensus.py` in that order. Each rewrites its
+  `revealed.py`, `consensus.py`, and `revisions.py` in that order. Each rewrites its
   files in `scratch/weighting/out/` and its chart in `docs/img/`.
 - **Advisor rule (from the user):** consult the advisor before finalizing a
   Monte Carlo design, when judging whether the top 3 is a real tie, before
@@ -900,3 +887,83 @@ state-average power, Clark's new-load rate is above about $104/MWh, or
 Clark's power arrives about 2 months later than the proxy. Alternative 2:
 Grant WA, if its queue clears to Clark's level and its power costs about
 $2/MWh less than Clark's ($18/MWh less with its current queue).
+
+### 2026-10-04 revision round 1: sales tax, Neil's items, recommendation changed
+
+The clock on this machine stalled during this round (it read 03:12 across
+several minutes of work), so this entry has no reliable time. The round
+started at 02:58 UTC.
+
+**Process.** The PR body's AI footer was removed. New commits carry no
+Co-Authored-By trailer. Two PR comments were posted to Neil: one asking
+whether he wants a squash merge with a clean message, one on energy and
+carbon carrying about 90% of dollar variance against balanced's 30%. That
+second comment used pre-tax numbers, so a follow-up was posted with the tax
+figures (0.67 at $0, 0.78 at $190, 0.88 at $300).
+
+**Research (Opus subagent).**
+- WA: RCW 82.08.986 covers rural counties per RCW 82.14.370. Grant
+  qualifies (40.1 per square mile, OFM 2026); Clark doesn't (875 per square
+  mile) and fails the urban statute (RCW 82.08.9861, over 800,000).
+- DOR workgroup preliminary report, December 2025, adopted finding T.6,
+  lists Clark as excluded. The "cannot qualify" sentence is from a
+  recommendation that failed 11-12.
+- ESSB 6231 removed replacement server equipment from July 1, 2026.
+- NY §1115(a)(37) covers Internet website services sold to customers. An
+  AI training campus with no hosted services is probably outside it; repeal
+  is proposed.
+- Rates: Tax Foundation midyear 2026; WA DOR Q4 2026 (Clark 8.0%, 8.7%
+  PTBA, 8.9% Vancouver; Grant 8.2%); NY Publication 718 (Franklin 8%).
+- Unverified: DOR's tax-topic page (403), 2025 c 411's change, the NY
+  statute text from nysenate.gov, Franklin County IDA policy.
+- From the repo: SC's exemption flag cites a 2026 bill version, and
+  Idaho's is low confidence with HB 496 enrolled.
+
+**Model changes.**
+- Sales tax component: $4B per purchase, 5-year refresh, 7%.
+- WA rural counties are exempt on initial equipment only; refreshes are
+  taxed. NY is taxed in the base case. Other states use the repo flags.
+- Grant's time to power is now 12 months from its own evidence
+  (`ttp_months_override`), range 8 to 18.5, instead of the 18.5-month proxy.
+- Clark's parcel rate is a parameter (`tax_rate_override`).
+- Tagged Monte Carlo runs: notax, refresh4, refresh6, nyexempt,
+  refreshtaxed, clark087, grantproxy.
+
+**Advisor consulted before the recommendation.** Changes it made:
+- Check Clark's lead against its parcel-rate swing. At 8.7%, Clark drops
+  below Grant and Franklin.
+- Make Grant's evidence its base row and rerun the Monte Carlo. Clark now
+  beats Grant in 73% of BPA draws, not 100%.
+- Compute Grant's breakeven delay: 10.2 months against Clark, 12.1
+  against Franklin.
+- State that stage 2's #1 with tax is Chesterfield SC.
+- Label Grant's Borda #1 as mechanical.
+- Label tie buckets in the method table.
+- Post a follow-up with the post-tax variance numbers.
+- Rewrite `docs/weighting.md` instead of patching it.
+- The decision rule it set: feature Clark only if its lead exceeds the
+  parcel-rate swing; otherwise feature Grant. Clark's lead ($46M) is below
+  the swing (about $80M), so Grant is featured.
+
+**Key results at $190/t with tax.**
+- Clark $4.405B (rank 365), Grant $4.452B (407), Franklin $4.454B (410).
+- No tax: Clark 1, Franklin 2, Grant 32.
+- NY exempt: Franklin 1.
+- Refreshes taxed everywhere: Umatilla OR first; Clark 14, Grant 19,
+  Franklin 22.
+- Imputed queue charged $0: the three keep their order. Imputed counties
+  excluded: the same.
+- Dry cooling everywhere: Clark is $35M cheaper than Grant.
+- Hazard at $3B: the order holds (Clark 383, Franklin 438, Grant 460).
+- Non-negative shares (standalone variance, SD-Shapley) keep the top-four
+  order at every carbon price.
+
+**Recommendation in `docs/weighting.md`.** Feature Grant, with Clark and
+Franklin as conditional alternatives:
+- **Grant** wins if Grant PUD energizes within about 10 months of the
+  baseline, or if Clark's parcel is in the transit area or Vancouver.
+- **Clark** wins if its parcel is outside the transit area, it energizes
+  within about 2.25 years, and Grant's delay exceeds about 10 months.
+- **Franklin** wins nationally if NY's exemption applies.
+- **Exempt-state counties** (Chesterfield SC, Kootenai ID) rank above all
+  three, but on unverified flags: verify before switching.
