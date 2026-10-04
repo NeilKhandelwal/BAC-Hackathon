@@ -105,8 +105,8 @@ def main():
                 if area > 0.02 * min(a.width * a.height, b.width * b.height):
                     problems.append(f"{label}: '{a.name}' overlaps '{b.name}'")
         notes = slide.notes_slide.notes_text_frame.text if slide.has_notes_slide else ""
-        if "SCRIPT" not in notes:
-            problems.append(f"{label}: no speaker script in the notes")
+        if len(notes.split("\n\n")[0].split()) < 40:
+            problems.append(f"{label}: the notes don't open with a speaker script of 40 or more words")
         drawn = sum(1 for s in shapes if s.shape_type == MSO_SHAPE_TYPE.AUTO_SHAPE)
         if n <= 9 and visual == 0 and drawn < 5:  # five or more drawn shapes count as a native diagram
             problems.append(f"{label}: main slide without a chart, table, picture, or diagram")

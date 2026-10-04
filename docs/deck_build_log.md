@@ -5,139 +5,106 @@ STATE block is overwritten at every step. History is append-only.
 
 ## MORNING SUMMARY
 
-**What's done.** An editable 16:9 pitch template is at
-`docs/deck/pitch_template.pptx`: 9 main slides for about 5 minutes and 6
-appendix slides for Q&A. Every number is a real text box, native chart,
-or native table. The only images are the team map on slide 2 and a cockpit
-screenshot on slide 9. Every slide has a source line and a 30 to 36 second
-speaker script that names the repo file behind each number. PNG previews
-are in `docs/deck/previews/`. Quotes and image credits are in
-`docs/deck/sources.md`. All 68 changeable numbers are in
-`docs/deck/numbers_to_check.md`.
+Updated after round 2 (main at `c239868`, PR #40 merged into this branch).
 
-**Rebuild after tonight's changes.** From the repo root:
+**What changed in round 2.** The deck now pitches the tool, with Grant as a
+worked example. It picks up the sensitive-land and land cover work from PR
+#40, so every number traces to the current `docs/figures/facts.json`,
+`results/`, and research files. Slide text is plain language with no kicker
+labels, no em dashes, and no colons or semicolons. The build stops if a
+string breaks that rule. Every slide fades in, and two slides build on their
+own (the screening steps on slide 2 and the timeline on slide 8).
+PowerPoint for Mac opened the file without a repair prompt and reports the
+transitions and effects.
+
+**Files.** `docs/deck/pitch_template.pptx` (9 main slides, 6 appendix),
+`docs/deck/previews/`, `docs/deck/numbers_to_check.md` (70 rows),
+`docs/deck/sources.md`, and two Streamlit screenshots in `docs/deck/img/`.
+
+**Rebuild after any change tonight.** From the repo root:
 
 ```bash
 .venv/bin/python docs/deck/build_deck.py      # deck, numbers_to_check.md, sources.md
-.venv/bin/python docs/deck/check_deck.py      # overflow, font size, overlap, footer checks
+.venv/bin/python docs/deck/check_deck.py      # overflow, font size, overlap, footer, notes
 .venv/bin/python docs/deck/render_previews.py # PNG previews (needs LibreOffice)
 ```
 
-Numbers from `docs/figures/facts.json` and the SMAA output refresh on a
-rebuild. Numbers from research write-ups are typed into `build_deck.py`
-next to their file. A rebuild overwrites hand edits to the .pptx, so make
-wording changes in the script, or switch to hand edits once numbers are
-final.
-
-**Pull request: not opened.** `gh` is installed but not logged in, and
-opening one needs credentials. Run `gh auth login`, then use the command
-and text under "Pull request text" at the end of this log.
+A rebuild overwrites hand edits to the .pptx.
 
 ### Slides
 
 | # | Headline | Visual |
 | --- | --- | --- |
-| 1 | Where AI campuses go now locks in decades of carbon, water, and cost. | LBNL share-of-electricity chart; NY Executive Order 62 quote |
-| 2 | Grant County, Washington, if the campus funds its own clean power. | Team map with Grant circled; the condition box |
-| 3 | Gates cut 3,109 counties to 1,565. Eight pillars rank the rest. | Flow diagram; eight weighted pillar chips |
-| 4 | Dry cooling cuts water 87%. Carbon depends on the supply we fund. | Water and CO2 charts vs Loudoun; WA Data Center Workgroup quote |
-| 5 | Corrections moved our pick. The price check cuts against Grant. | Rank chart: Berkshire 1 to 1,047; Grant 7, 9, 1, then 79th if WA pays $80/MWh |
-| 6 | Grant makes the top 10 under more weightings than any county. | SMAA top-10 chart; "We didn't tune the weights..." line |
-| 7 | Grant's case rests on power: full load by 2029, near today's price. | Grant PUD supply vs load chart; risk rows; win condition |
-| 8 | Phase in behind new transmission, fund new clean supply, use no evaporative water. | 2027 to 2045 timeline; power, cooling, heat cards; Grant PUD quote |
-| 9 | Change one condition and the engine gives a new, explained answer. | Cockpit screenshot; 1,565 vs 826 chart; hand-off to the live demo |
-| A1 | Percentile pillars squeeze a 2.7x carbon gap into 10 points. | Pillar score vs CO2 charts |
-| A2 | At today's prices, three counties tie within 1.1% over 25 years. | Win-condition table |
-| A3 | Five ways to weight the pillars disagree. That's why we test, not tune. | Weights-by-method chart |
-| A4 | Every county is scored from public data. Proxies are labeled as proxies. | Sources-by-pillar table |
-| A5 | The engine screens on what's installed and average. Feasibility decides. | Proxy table |
-| A6 | Same engine, new region or new question: countries, and industrial reuse. | Global top 5 table; Boone County, IL jobs chart |
+| 1 | Where AI data centers get built locks in their carbon, water, and costs for decades | LBNL share-of-power chart, NY Executive Order 62 quote |
+| 2 | Our tool ranks all 3,109 counties for the project you describe | App screenshot, screening steps that build in, eight weighted factors |
+| 3 | It now accounts for protected land, farmland, and wetlands | Grant's land and permitting scores before and after land cover |
+| 4 | With balanced weights, two counties in eastern Washington tie for first | Team map with Grant and Whitman circled, the hydro condition |
+| 5 | Different weights favor different counties, so the tool shows the spread | Top 10 shares across 5,000 random weightings |
+| 6 | A dry-cooled campus in Grant would use 87% less water | Water and CO2 charts against Loudoun, WA Data Center Workgroup quote |
+| 7 | Power is the biggest risk, so the project has to bring its own | Grant PUD supply and load chart, three rated risks |
+| 8 | The campus would grow with new transmission and new clean power | 2027 to 2045 timeline that builds in, Grant PUD quote |
+| 9 | Change one assumption and the tool gives a new answer with its reasons | App screenshot of Grant excluded, 1,565 against 826 chart |
+| A1 | How our pick changed as we fixed the inputs | Rank chart on a log scale, ending with Grant 77th at BPA's rate |
+| A2 | Why we also check the leaders in dollars and tons | Franklin against Grant CO2, energy and carbon share of cost gaps |
+| A3 | Clark WA and Franklin NY are the alternatives, each with a condition | Cost, win condition, and land check table |
+| A4 | Every county is scored from public data, and proxies are labeled | Sources by factor, now with PAD-US, NLCD, and tribal boundaries |
+| A5 | The tool screens counties. Choosing a parcel still takes site work. | Limits and a proxy table |
+| A6 | The same engine works for other regions and other questions | Global top 5 table, Boone County jobs chart |
 
 ### Placeholders remaining
 
-None on any slide. Every quote on a slide was verified word for word at its
-primary source. Open items that aren't placeholders:
+None. Open items:
 
-- **Photos:** five openly licensed photos were verified but not placed,
-  because every main slide already has a chart. They're in `sources.md`.
-- **Virginia Clean Economy Act:** slide 4's notes say Virginia also sets
-  2045 for Dominion. That's from memory, not verified for this deck. It's
-  why the headline no longer claims the 2045 target as an edge.
-- **Sensitive land and tribal rows:** slide 7 cites `research/risk.md` on
-  the unmerged branch `fix/sensitive-land` at `12a8127`. Rechecked at the
-  end of this session: the protected-land row is unchanged, and the tribal
-  row only dropped an unsourced distance the deck doesn't use.
-- **Boone County, IL jobs (A6):** taken from `docs/demo_script.md`, not
-  rechecked against the county table.
+- The live demo should use the Streamlit app. The React cockpit's data
+  wasn't refreshed for PR #40 (needs `npm run data:engine` in
+  `app/cockpit`), so neither the deck nor the demo should use it until then.
+- Slide 6's notes say Virginia also sets a 2045 clean target for Dominion.
+  That's not verified for this deck.
+- A6's Boone County jobs come from `docs/demo_script.md`, not rechecked.
+- Five openly licensed photos are verified and listed in `sources.md`, not
+  placed.
 
 ### Numbers to check first
 
-All 68 are in `docs/deck/numbers_to_check.md`. These move if the county
-table, presets, or weighting outputs change tonight:
+All 70 are in `docs/deck/numbers_to_check.md`. The ones most likely to move:
 
-- Gate and floor counts: 3,109 / 1,565 / 912 (slides 2, 3, 9; `facts.json`
-  `balanced`).
-- Grant #1, composite 63.7, lead 0.5 points (slide 2, A5; `facts.json`).
-- SMAA top 10: Grant 50.5%, Whitman 45.8%, Wayne 42.4%; rank-1 shares
-  11 to 13% (slides 2, 6; `scratch/weighting/out/smaa_acceptability.csv`).
-- Robustness near balanced weights 99.9% (slide 6; `facts.json`
-  `featured.robustness`).
-- Evaporative cooling: 826 pass, Wayne TN first (slide 9; rerun in step 1).
-- Grant 79th at $80/MWh and 1,146th at $132/MWh with only Washington
-  repriced (slides 5 and 7; scratchpad rerun in step 1, not committed).
-- Three-county tie within 1.1%, $4.405B / $4.452B / $4.454B (slides 2, 7,
-  A2; `docs/weighting.md`).
-- Water 210.2 / 27.8 / 322.8 million gallons; CO2 235,547 / 700,390 /
-  675,455 t (slide 4; `facts.json` `impact`, `grant_ranges`).
-- Energy and carbon pillar: Grant 70.4 (93.6th pctl), Franklin 80.4
-  (98.7th) (A1; engine on main `23bb71c`).
+- 1,565 pass the limits and 883 clear the floor (slides 2 and 4).
+- Grant 63.70 and Whitman 63.69 (slide 4, A5; `results/balanced.csv`).
+- Top 10 shares, Whitman 43.9%, Cuyahoga 36.9%, Clark 35.9%, Grant 35.8%,
+  Hutchinson 35.2% (slide 5; `facts.json` `weights`).
+- Grant in the top 10 near balanced weights, 99.95% (slide 5).
+- Grant land 75.0 to 52.8 and permitting 53.2 to 63.2 (slide 3).
+- Evaporative cooling, 826 pass, 502 clear the floor, Whitman first
+  (slide 9; rerun in step 4).
+- Grant 77th with only Washington at $80/MWh (slide 7 notes, A1; rerun in
+  step 4, not committed).
+- Berkshire 1, 27, 1,164 and Grant 7, 7, 1 (A1; `facts.json` `pick_story`).
 
 ### Decisions a human should confirm
 
-1. **Slide 5 shows the price result.** With only Washington repriced at
-   BPA's $80/MWh, Grant falls to 79th. The advisor argued that hiding it
-   is riskier than showing it. The slide and notes say the comparison is
-   lopsided, because no other state's new-load rate is sourced.
-2. **Story order changed from the brief.** "Why dollars" (Franklin vs
-   Grant) moved to appendix A1, and risk and plan are split into slides 7
-   and 8. Reason: the 2.7x figure uses the regional grid average that
-   slide 4 calls an overstatement, and the brief's "3 percentile points"
-   is stale (it's 5 points on current main).
-3. **Monte Carlo charts aren't in the main deck.** With sales tax, they put
-   Chesterfield SC first and a Washington county first in 0 to 2% of
-   draws. SMAA carries robustness. A2's notes cover the Monte Carlo.
-4. **Tribal consultation shows as "act early", not "Low"**, because WA
-   Workgroup Finding 19c ties hydro load to tribal fisheries.
-5. **No dollar-model ranking claim.** Slide 3 says the dollar model prices
-   the leaders. With tax, Grant is 78th of 162 in the dollar shortlist.
-
-### Found in other docs, not changed here
-
-- `docs/weighting.md` says Franklin's and Grant's energy_carbon pillars
-  sit at the 97th and 94th percentiles. On current main they're the 98.7th
-  and 93.6th.
-- `docs/demo_script.md` gives community weight 10%; the preset is 8.5%.
-  It also calls 2,000 small weight perturbations "random weight draws."
-- Franklin NY is 986th in the demo script and 952nd in `docs/weighting.md`.
-- Whitman's composite is 63.0 in `research/risk.md` and 63.1 in
-  `facts.json`.
+1. **Tool-first story.** Main slides are hook, tool, land, example, weights,
+   impact, risk, plan, and the switch into the demo. "How the pick changed"
+   moved to appendix A1.
+2. **The weights-by-method chart is gone.** Its CRITIC, entropy, and revealed
+   preference weights predate PR #40. A2 keeps the dollar-model finding
+   (energy and carbon carry 67 to 88% of cost differences), which PR #40
+   doesn't affect.
+3. **Grant stays the worked example** because its site research exists,
+   while slides 4, 5, and A5 say it's level with Whitman.
+4. **The land row on slide 7 is rated Low**, following `research/risk.md`.
+   Its text frames tribal consultation as a process step to start early.
 
 ## CURRENT STATE
 
-- **Updated:** 2026-10-04, step 3 (final pass done).
-- **Branch:** `deck/template`, created from `main` at
-  `23bb71cb622fae2d82ba0cfe415b909888b422aa`. Never touched
-  `fix/sensitive-land`.
-- **Pull request:** not opened; `gh` isn't logged in. Text and command are
-  at the end of this log.
-- **Phase:** done, pending a human read and the PR.
-- **Deck:** 15 slides. `check_deck.py` reports no problems. Previews
-  rendered with LibreOffice 26 and inspected slide by slide.
-- **Placeholders left:** none on slides. See the morning summary for open
-  items.
-- **Numbers to check:** 68 rows in `docs/deck/numbers_to_check.md`.
-- **Sensitive-land check:** final fetch shows `origin/fix/sensitive-land`
-  at `12a8127`. Slide 7 cites it.
+- **Updated:** 2026-10-04, step 4 (round 2 rebuilt on main `c239868`).
+- **Branch:** `deck/template`, with `origin/main` at `c239868` merged in
+  (`051b336`, no history rewritten).
+- **Pull request:** to open after the advisor's final review, now that
+  `gh` is logged in as ValsTRM.
+- **Deck:** 15 slides. `check_deck.py` reports no problems. Previews from
+  LibreOffice; PowerPoint for Mac opened and exported the file cleanly.
+- **Placeholders left:** none.
+- **Numbers to check:** 70 rows.
 
 ## Rules for this build
 
@@ -353,6 +320,66 @@ selective the gates are; the ring and larger labels fix readability.
 distance, which the deck doesn't use. Slide 7 now cites `12a8127`, and its
 notes add the consultation triggers from that branch. `origin/main` is
 unchanged at `23bb71c`.
+
+### 2026-10-04, step 4: round 2, tool-first deck on main c239868
+
+**Brief from the user.** Pitch the tool, not one answer. Add the PR #40
+sensitive land and land cover work and the farmland talking points. Use
+natural language with no kicker subheadings or AI-sounding phrasing, no em
+dashes, and few colons or semicolons. Add some motion without overdoing it.
+`gh` is now logged in. The LSEG connector the user added isn't needed for
+this deck (it serves market and financial data).
+
+**Merge.** `git merge origin/main` (`c239868`) into `deck/template` as
+`051b336`. Clean, because main never touched `docs/deck/`.
+
+**Checks and reruns** (scratchpad only; nothing in `results/` or the table):
+
+- `facts.json` matches the briefing. 883 clear the floor. Grant 63.70 and
+  Whitman 63.69 in `results/balanced.csv`. Top 10 shares across 5,000 random
+  weightings put Whitman first (43.9%) and Grant fourth (35.8%), behind
+  Cuyahoga OH and Clark WA.
+- Evaporative cooling gives 826 pass, 502 clear the floor, and Whitman first,
+  matching `docs/demo_script.md`.
+- Price rerun with only Washington at BPA's rate. At $80/MWh Grant is 77th
+  and Whitman 79th, with Mayes OK first. At $132/MWh they're 1,151st and
+  1,152nd.
+- Energy and carbon pillar percentiles are unchanged (Grant 93.6th,
+  Franklin 98.7th), since PR #40 didn't touch those columns.
+- Land shares from the county table. Grant is 12.8% protected, 42.9%
+  cropland, and 1.8% forest and wetland. Whitman is 0.2% protected and
+  71.1% cropland.
+- Farmland in opposition cases. 7 of the 100 rows with stated reasons in
+  `data/processed/opposition_seed_labels.csv`, all inferred by keyword. Top
+  reasons are zoning process (38), water (31), and grid strain (22).
+- Grant and Whitman map positions located from `counties.geojson`
+  (EPSG:5070) against the map's drawn extent.
+
+**Screenshots.** Ran `app/app.py` locally and drove it with Playwright
+through system Chrome. `docs/deck/img/app_overview.png` is the default view
+(1,565 pass, 883 clear the floor). `docs/deck/img/app_cooling_switch.png` is
+Grant under evaporative cooling ("Excluded by
+max_water_stress_if_evaporative"). Removed the React cockpit screenshot,
+because the cockpit's data predates PR #40.
+
+**Rewrite.** New `build_deck.py` slide code on the old helpers. Main slides
+are hook, tool, land, example, weights, impact, risk, plan, and switch.
+Appendix is how the pick changed, dollars and tons, alternatives, sources,
+limits, and extensions. The build rejects slide text with a colon,
+semicolon, or em dash, and bullets of 12 words or more. Notes are spoken
+scripts, then "If someone asks" paragraphs, then the number list.
+
+**Motion.** A fade transition on every slide. Slide 2's four screening steps
+and slide 8's five milestones fade in one after another, without clicks.
+Written as PowerPoint timing XML. PowerPoint for Mac opened the file, reported
+a fade on each slide, 4 effects on slide 2, and 15 on slide 8, and exported
+a PDF that matches the LibreOffice previews.
+
+**Render fixes.** Map title wrapped over the map; several chart titles
+wrapped or hyphenated; slide 5's bottom line overflowed; A1 squeezed ranks 27
+and 1,164 onto a clipped edge, so it now uses a log-scale rank axis; a
+Berkshire label wrapped onto its marker in PowerPoint; four scripts opened
+with "Here's", now varied.
 
 ## Pull request text
 
