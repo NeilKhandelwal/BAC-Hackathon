@@ -18,6 +18,7 @@ export interface MapGeometry {
   paths: string[]; // aligned with data.counties index
   bounds: [[number, number], [number, number]][];
   centroid: [number, number][];
+  borders: string; // county borders within a state, drawn once over the fills
   states: string;
   nation: string;
 }
@@ -55,9 +56,12 @@ export function buildGeometry(topo: Topology, data: CockpitData): MapGeometry {
     const c = path.centroid(f);
     centroid.push([c[0], c[1]]);
   }
-  const states = path(mesh(topo, obj, (a, b) => a !== b && (a.properties as Props).state !== (b.properties as Props).state)) ?? "";
+  const sameState = (a: { properties?: unknown }, b: { properties?: unknown }) =>
+    (a.properties as Props).state === (b.properties as Props).state;
+  const borders = path(mesh(topo, obj, (a, b) => a !== b && sameState(a, b))) ?? "";
+  const states = path(mesh(topo, obj, (a, b) => a !== b && !sameState(a, b))) ?? "";
   const nation = path(mesh(topo, obj, (a, b) => a === b)) ?? "";
-  return { paths, bounds, centroid, states, nation };
+  return { paths, bounds, centroid, borders, states, nation };
 }
 
 interface MapProps {
@@ -142,6 +146,7 @@ export function CountyMap({ data, geo, result, selected, compare, onSelect, cove
           style={{ transform: `translate(${view.tx}px, ${view.ty}px) scale(${view.k})` }}
         >
           <Counties paths={geo.paths} fills={fills} />
+          <path d={geo.borders} className="borders" />
           <path d={geo.states} className="states" />
           <path d={geo.nation} className="nation" />
           {compare !== null && <path d={geo.paths[compare]} className="outline-compare" />}

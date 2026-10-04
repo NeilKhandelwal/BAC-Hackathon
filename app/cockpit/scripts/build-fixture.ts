@@ -1,5 +1,4 @@
 // Builds the cockpit's static data from the repo:
-//   public/data/counties.topo.json  county geometry from data/processed/counties.geojson
 //   public/data/fixture.json        a CockpitData file with SYNTHETIC county values
 //
 // Presets, pillar mapping, gate definitions, and county identities are real
@@ -13,7 +12,6 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
-import { topology } from "topojson-server";
 import { geoArea } from "d3-geo";
 import type { FeatureCollection, Geometry } from "geojson";
 import type {
@@ -383,7 +381,6 @@ const data: CockpitData = {
 
 mkdirSync(out, { recursive: true });
 writeFileSync(resolve(out, "fixture.json"), JSON.stringify(data));
-const topo = topology({ counties: geo as FeatureCollection }, 1e5);
-writeFileSync(resolve(out, "counties.topo.json"), JSON.stringify(topo));
+// counties.topo.json comes from scripts/build-geometry.ts, which keeps shared borders intact.
 console.log(`fixture: ${n} counties, ${metrics.length} metrics, ${gates.length} gates, ${presets.length} presets`);
 console.log(`missing columns: ${missingColumns.join(", ") || "none"}`);

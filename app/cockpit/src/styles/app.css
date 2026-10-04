@@ -611,9 +611,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .counties path {
-  stroke: var(--panel);
-  stroke-width: 0.35px;
-  vector-effect: non-scaling-stroke;
+  stroke: none;
   cursor: pointer;
   transition: fill var(--t-fade) linear;
 }
@@ -634,6 +632,15 @@ input[type="range"]::-moz-range-thumb {
 .c7f { fill: var(--ramp-7); fill-opacity: 0.45; }
 .cx { fill: url(#hatch); }
 .cn { fill: var(--ground); }
+
+.borders {
+  fill: none;
+  stroke: var(--ink);
+  stroke-opacity: 0.22;
+  stroke-width: 0.6px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
 
 .states {
   fill: none;
