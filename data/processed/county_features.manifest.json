@@ -1,126 +1,251 @@
 {
-  "built_at": "2026-10-04T00:12:20+00:00",
+  "built_at": "2026-10-04T01:49:44+00:00",
   "rows": 3109,
   "sources": [
     {
       "name": "Census TIGER and ACS 5-year",
       "version": "TIGER 2024, ACS 2019-2023",
       "url": "https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_county_500k.zip",
-      "fetched_at": "2026-10-03T20:39:26+00:00"
+      "adapter": "tiger_acs",
+      "fetched_at": "2026-10-04T01:32:40+00:00"
     },
     {
       "name": "FEMA NRI",
       "version": "v1.20",
       "url": "https://services.arcgis.com/XG15cJAlne2vxtgt/arcgis/rest/services/National_Risk_Index_Counties/FeatureServer/0",
-      "fetched_at": "2026-10-03T20:39:32+00:00"
+      "adapter": "nri",
+      "fetched_at": "2026-10-04T01:32:49+00:00"
     },
     {
       "name": "CMRA climate projections",
       "version": "LOCA CMIP5, mid-century 2036-2065",
       "url": "https://services3.arcgis.com/0Fs3HcaFfvzXvm7w/arcgis/rest/services/Climate_Mapping_Resilience_and_Adaptation_(CMRA)_Climate_and_Coastal_Inundation_Projections/FeatureServer/0",
-      "fetched_at": "2026-10-03T20:39:42+00:00"
+      "adapter": "cmra",
+      "fetched_at": "2026-10-04T01:32:53+00:00"
     },
     {
       "name": "LBNL Queued Up",
       "version": "2026 edition, queues through 2025",
       "url": "https://eta-publications.lbl.gov/sites/default/files/2026-05/lbnl_ix_queue_data_file_thru2025.xlsx",
-      "fetched_at": "2026-10-03T20:39:26+00:00"
+      "adapter": "lbnl_queue",
+      "fetched_at": "2026-10-03T20:59:51+00:00"
     },
     {
       "name": "FCC Broadband Data Collection (Esri Living Atlas county layer)",
       "version": "December 2024",
       "url": "https://services8.arcgis.com/peDZJliSvYims39Q/arcgis/rest/services/FCC_Broadband_Data_Collection_December_2024_View/FeatureServer/1",
-      "fetched_at": "2026-10-03T20:39:43+00:00"
+      "adapter": "fcc_fiber",
+      "fetched_at": "2026-10-04T01:32:58+00:00"
     },
     {
       "name": "EPA eGRID",
       "version": "eGRID2023 Rev 2",
       "url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
-      "fetched_at": "2026-10-03T20:39:25+00:00"
+      "adapter": "egrid",
+      "fetched_at": "2026-10-04T01:32:59+00:00"
     },
     {
       "name": "US Drought Monitor",
       "version": "weekly county statistics, 2000-2025",
       "url": "https://usdmdataservices.unl.edu/api/CountyStatistics/GetDroughtSeverityStatisticsByAreaPercent",
-      "fetched_at": "2026-10-03T20:46:16+00:00"
+      "adapter": "drought_monitor",
+      "fetched_at": "2026-10-04T01:37:19+00:00"
     },
     {
       "name": "FracTracker Alliance US Data Centers Tracker",
       "version": "live feature service",
       "url": "https://www.fractracker.org/data-centers",
-      "fetched_at": "2026-10-03T20:44:09+00:00"
+      "adapter": "fractracker",
+      "fetched_at": "2026-10-04T01:37:21+00:00"
     },
     {
       "name": "EPA Green Book",
       "version": "county nonattainment history, export 2026-09-30",
       "url": "https://www3.epa.gov/airquality/greenbook/downld/phistory.xls",
-      "fetched_at": "2026-10-03T20:44:59+00:00"
+      "adapter": "air_nonattainment",
+      "fetched_at": "2026-10-04T01:37:23+00:00"
     },
     {
       "name": "Hand-coded state permitting tables",
       "version": "see source_url per row",
       "url": "data/processed/state_policy.csv",
-      "fetched_at": "2026-10-04T00:09:59+00:00"
+      "adapter": "state_tables",
+      "fetched_at": "2026-10-04T01:26:39+00:00"
     },
     {
       "name": "NREL WIND Toolkit",
       "version": "CONUS 100 m mean wind speed, 2 km grid",
       "url": "https://www.nlr.gov/docs/libraries/gis/us-wind-data.zip",
-      "fetched_at": "2026-10-03T20:48:51+00:00"
+      "adapter": "nrel_wind",
+      "fetched_at": "2026-10-04T01:37:33+00:00"
     },
     {
       "name": "Census County Business Patterns",
       "version": "2001 and 2022",
       "url": "https://www2.census.gov/programs-surveys/cbp/datasets/2022/cbp22co.zip",
-      "fetched_at": "2026-10-03T21:03:49+00:00"
+      "adapter": "cbp_manufacturing",
+      "fetched_at": "2026-10-04T01:37:36+00:00"
     },
     {
       "name": "USDA ERS county unemployment (BLS LAUS)",
       "version": "2000-2023 file, 2023 annual average",
       "url": "https://www.ers.usda.gov/media/5497/unemployment-and-median-household-income-for-the-united-states-states-and-counties-2000-23.csv",
-      "fetched_at": "2026-10-03T21:03:49+00:00"
+      "adapter": "ers_unemployment",
+      "fetched_at": "2026-10-04T01:37:39+00:00"
     },
     {
       "name": "Census county population estimates",
       "version": "Vintage 2020 and Vintage 2024",
       "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv",
-      "fetched_at": "2026-10-03T21:03:49+00:00"
+      "adapter": "popest",
+      "fetched_at": "2026-10-04T01:37:39+00:00"
     },
     {
       "name": "EIA-860",
       "version": "2025 final",
       "url": "https://www.eia.gov/electricity/data/eia860/xls/eia8602025.zip",
-      "fetched_at": "2026-10-03T21:03:49+00:00"
+      "adapter": "eia860_coal",
+      "fetched_at": "2026-10-04T01:37:49+00:00"
     },
     {
       "name": "EIA-861 state historical tables",
       "version": "2024, total electric industry",
       "url": "https://www.eia.gov/electricity/data/state/xls/861/HS861%202010-.xlsx",
-      "fetched_at": "2026-10-03T21:19:48+00:00"
+      "adapter": "eia_price",
+      "fetched_at": "2026-10-04T01:38:00+00:00"
     },
     {
       "name": "WRI Aqueduct 4.0",
       "version": "2023-07-05 release",
       "url": "https://files.wri.org/aqueduct/aqueduct-4-0-water-risk-data.zip",
-      "fetched_at": "2026-10-03T21:19:29+00:00"
+      "adapter": "aqueduct",
+      "fetched_at": "2026-10-03T20:59:45+00:00"
     },
     {
       "name": "Census Population of Counties by Decennial Census 1900-1990 (Forstall), NBER mirror",
       "version": "1995 file; plus Census 2000 and 2010 counts and Vintage 2024 estimates",
       "url": "https://data.nber.org/census/population/cencounts/cencounts.csv",
-      "fetched_at": "2026-10-04T00:11:10+00:00"
+      "adapter": "pop_history",
+      "fetched_at": "2026-10-04T01:38:06+00:00"
     },
     {
       "name": "BEA CAEMP25 county employment by industry",
       "version": "CAEMP25S 1969 (SIC), CAEMP25N 2022 (NAICS)",
       "url": "https://apps.bea.gov/regional/zip/CAEMP25S.zip",
-      "fetched_at": "2026-10-04T00:11:10+00:00"
+      "adapter": "bea_manufacturing",
+      "fetched_at": "2026-10-04T01:38:07+00:00"
     },
     {
       "name": "DOE/NETL IRA Energy Community Data Layers",
       "version": "2024 (dataset_version 2024.1)",
       "url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/2024_MSAs_NonMSAs_that_are_Energy_Communities/FeatureServer/0",
-      "fetched_at": "2026-10-04T00:11:11+00:00"
+      "adapter": "netl_energy_communities",
+      "fetched_at": "2026-10-04T01:38:08+00:00"
+    },
+    {
+      "name": "BLS Local Area Unemployment Statistics",
+      "version": "county annual averages, files reissued 2026-05-19",
+      "url": "https://www.bls.gov/lau/laucnty24.xlsx",
+      "observation_period": "2024 annual average; pooled 2022-2024",
+      "license": "Public domain (U.S. Bureau of Labor Statistics)",
+      "resolution": "county (CT planning regions)",
+      "adapter": "bls_laus",
+      "fetched_at": "2026-10-03T20:59:36+00:00"
+    },
+    {
+      "name": "BLS Quarterly Census of Employment and Wages",
+      "version": "annual averages, open-data CSV slices",
+      "url": "https://data.bls.gov/cew/data/api/2024/a/industry/31_33.csv",
+      "observation_period": "annual averages 2015, 2019, 2024 (current); 2025 levels only (first release)",
+      "license": "Public domain (U.S. Bureau of Labor Statistics)",
+      "resolution": "county",
+      "adapter": "bls_qcew",
+      "fetched_at": "2026-10-04T01:39:35+00:00"
+    },
+    {
+      "name": "USDA ERS Rural-Urban Continuum Codes 2023 and County Typology Codes 2025",
+      "version": "RUCC 2023 (January 2024 release); County Typology Codes 2025 edition (April 2025)",
+      "url": "https://www.ers.usda.gov/media/6173/ers-county-typology-codes-2025-edition.xlsx",
+      "observation_period": "RUCC: OMB July 2023 delineation, 2020 Census population. Typology: industry dependence on BEA 2019/2021/2022 average; low employment on ACS 2018-2022; population loss on 2000-2010 and 2010-2020 censuses.",
+      "license": "Public domain (USDA Economic Research Service)",
+      "resolution": "county",
+      "adapter": "usda_ers",
+      "fetched_at": "2026-10-04T01:39:38+00:00"
+    },
+    {
+      "name": "EPA brownfield properties (ACRES)",
+      "version": "Cleanups in My Community sites (refreshed twice monthly); RE-Powering Mapper Sites 2022; Brownfield Properties Over 100 Acres",
+      "url": "https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/Cleanups_in_my_Community_Sites/FeatureServer/0",
+      "urls": [
+        "https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/Cleanups_in_my_Community_Sites/FeatureServer/0",
+        "https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/RE_Powering_Mapper_Sites_2022/FeatureServer/0",
+        "https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/Brownfield_Properties_Over_100_Acres_view/FeatureServer/0"
+      ],
+      "observation_period": "CIMC snapshot at retrieval; acreage from the 2022 RE-Powering snapshot or the curated large-site layer",
+      "license": "Public domain (U.S. EPA)",
+      "resolution": "property points, point-in-polygon to county",
+      "adapter": "epa_brownfields",
+      "fetched_at": "2026-10-04T01:39:54+00:00"
+    },
+    {
+      "name": "FEMA NRI (context fields)",
+      "version": "v1.20",
+      "url": "https://services.arcgis.com/XG15cJAlne2vxtgt/arcgis/rest/services/National_Risk_Index_Counties/FeatureServer/0",
+      "observation_period": "hazard-specific periods of record; see the NRI hazard info table",
+      "license": "Public domain (FEMA)",
+      "resolution": "county (CT planning regions)",
+      "adapter": "nri_context",
+      "fetched_at": "2026-10-04T01:32:49+00:00"
+    },
+    {
+      "name": "WRI Aqueduct 4.0 (context fields)",
+      "version": "2023-07-05 release",
+      "url": "https://files.wri.org/aqueduct/aqueduct-4-0-water-risk-data.zip",
+      "observation_period": "baseline 1979-2019; 2050 business as usual (SSP3-RCP7.0), 2035-2065",
+      "license": "CC BY 4.0, World Resources Institute",
+      "resolution": "HydroBASINS level 6, area-weighted to county in EPSG:5070",
+      "adapter": "aqueduct_context",
+      "fetched_at": "2026-10-03T20:59:45+00:00"
+    },
+    {
+      "name": "CMRA climate projections (context fields)",
+      "version": "LOCA CMIP5, mid-century 2036-2065",
+      "url": "https://services3.arcgis.com/0Fs3HcaFfvzXvm7w/arcgis/rest/services/Climate_Mapping_Resilience_and_Adaptation_(CMRA)_Climate_and_Coastal_Inundation_Projections/FeatureServer/0",
+      "observation_period": "historic and mid-century LOCA CMIP5 periods as in cmra.py",
+      "license": "Public (NOAA / U.S. Global Change Research Program / Esri)",
+      "resolution": "county (2019 vintage; CT old counties re-keyed to planning regions)",
+      "adapter": "cmra_context",
+      "fetched_at": "2026-10-04T01:40:34+00:00"
+    },
+    {
+      "name": "FCC Broadband Data Collection (context fields)",
+      "version": "December 2024",
+      "url": "https://services8.arcgis.com/peDZJliSvYims39Q/arcgis/rest/services/FCC_Broadband_Data_Collection_December_2024_View/FeatureServer/1",
+      "observation_period": "BDC filing in the Esri layer at retrieval",
+      "license": "FCC data are public; layer published by Esri",
+      "resolution": "county",
+      "adapter": "fcc_context",
+      "fetched_at": "2026-10-04T01:32:58+00:00"
+    },
+    {
+      "name": "FracTracker Alliance US Data Centers Tracker (context fields)",
+      "version": "live feature service",
+      "url": "https://www.fractracker.org/data-centers",
+      "observation_period": "live tracker snapshot at retrieval; moratoria ending before 2026-10-03 skipped",
+      "license": "Free for non-commercial use with credit to FracTracker Alliance",
+      "resolution": "facility points and jurisdictions, aggregated to county",
+      "adapter": "fractracker_context",
+      "fetched_at": "2026-10-04T01:37:21+00:00"
+    },
+    {
+      "name": "LBNL Queued Up (alternative queue measures)",
+      "version": "2026 edition, queues through 2025",
+      "url": "https://eta-publications.lbl.gov/sites/default/files/2026-05/lbnl_ix_queue_data_file_thru2025.xlsx",
+      "observation_period": "queue snapshot 2025-12-31; online window 2021-01-01 to 2025-12-31",
+      "license": "Public; cite Lawrence Berkeley National Laboratory, Queued Up 2026 edition",
+      "resolution": "county",
+      "adapter": "lbnl_queue_alt",
+      "fetched_at": "2026-10-03T20:59:51+00:00"
     }
   ],
   "columns_present": [
@@ -204,7 +329,92 @@
     "mfg_emp_share_1969",
     "mfg_emp_share_change_1969_2022",
     "energy_community_coal_closure",
-    "energy_community_ffe"
+    "energy_community_ffe",
+    "unemployment_rate_pct_2024",
+    "unemployment_rate_pct_3yr_2022_2024",
+    "unemployed_persons_2024",
+    "labor_force_2024",
+    "mfg_emp_2015",
+    "mfg_emp_2019",
+    "mfg_emp_2024",
+    "mfg_emp_2025",
+    "mfg_estabs_2015",
+    "mfg_estabs_2019",
+    "mfg_estabs_2024",
+    "mfg_estabs_2025",
+    "mfg_emp_suppressed_2015",
+    "mfg_emp_suppressed_2019",
+    "mfg_emp_suppressed_2024",
+    "mfg_emp_suppressed_2025",
+    "private_emp_2024",
+    "mfg_emp_share_2024",
+    "mfg_emp_change_2015_2024",
+    "mfg_emp_pct_change_2015_2024",
+    "mfg_jobs_lost_2015_2024",
+    "mfg_emp_change_2019_2024",
+    "rucc_2023",
+    "rucc_2023_description",
+    "metro_2023",
+    "ers_high_manufacturing_2025",
+    "ers_high_mining_2025",
+    "ers_low_employment_2025",
+    "ers_population_loss_2025",
+    "ers_industry_dependence_2025",
+    "bf_site_count",
+    "bf_known_acres",
+    "bf_acreage_reporting_share",
+    "bf_sites_50plus_acres",
+    "bf_ready_for_reuse_count",
+    "bf_redevelopment_started_count",
+    "nri_risk_rating",
+    "nri_eal_score",
+    "nri_sovi_score",
+    "nri_resilience_score",
+    "nri_drought_annual_freq",
+    "nri_drought_eal_score",
+    "nri_heat_wave_annual_freq",
+    "nri_heat_wave_eal_score",
+    "nri_wildfire_annual_freq",
+    "nri_wildfire_eal_score",
+    "nri_hurricane_annual_freq",
+    "nri_hurricane_eal_score",
+    "nri_coastal_flood_annual_freq",
+    "nri_coastal_flood_eal_score",
+    "nri_inland_flood_annual_freq",
+    "nri_inland_flood_eal_score",
+    "nri_tornado_annual_freq",
+    "nri_tornado_eal_score",
+    "nri_winter_annual_freq",
+    "nri_winter_eal_score",
+    "nri_hurricane_not_applicable",
+    "nri_coastal_flood_not_applicable",
+    "water_stress_bws_raw_median",
+    "water_stress_bws_cat",
+    "water_stress_high_share",
+    "water_stress_arid_share",
+    "water_stress_area_coverage",
+    "water_stress_2050_cat",
+    "hdd_2050_rcp45",
+    "days_above_95f_2050_rcp45",
+    "days_above_100f_hist",
+    "days_above_100f_2050_rcp45",
+    "days_above_100f_2050_rcp85",
+    "broadband_served_share_locations",
+    "broadband_locations_total",
+    "moratorium_municipal_count",
+    "moratorium_municipal_pending_count",
+    "moratorium_state_pending",
+    "county_dc_restriction_active",
+    "dc_existing_mw_reported",
+    "dc_existing_mw_reporting_share",
+    "dc_proposed_mw_reported",
+    "dc_proposed_mw_reporting_share",
+    "dc_stopped_count",
+    "queue_active_mw_clean_excl_storage",
+    "queue_active_mw_storage_standalone",
+    "queue_operational_mw_online_5y",
+    "queue_operational_projects_online_5y",
+    "queue_operational_online_date_fallback_share"
   ],
   "columns_missing": [
     "permitting_discretionary_risk",
@@ -234,7 +444,35 @@
     "mfg_emp_share_2001": 4,
     "mfg_loss_share_emp_2001": 4,
     "mfg_emp_share_1969": 103,
-    "mfg_emp_share_change_1969_2022": 378
+    "mfg_emp_share_change_1969_2022": 378,
+    "mfg_emp_2015": 298,
+    "mfg_emp_2019": 317,
+    "mfg_emp_2024": 352,
+    "mfg_emp_2025": 637,
+    "mfg_estabs_2015": 9,
+    "mfg_estabs_2019": 9,
+    "mfg_emp_suppressed_2015": 9,
+    "mfg_emp_suppressed_2019": 9,
+    "private_emp_2024": 9,
+    "mfg_emp_share_2024": 356,
+    "mfg_emp_change_2015_2024": 447,
+    "mfg_emp_pct_change_2015_2024": 480,
+    "mfg_jobs_lost_2015_2024": 447,
+    "mfg_emp_change_2019_2024": 436,
+    "ers_high_manufacturing_2025": 9,
+    "ers_high_mining_2025": 9,
+    "ers_population_loss_2025": 10,
+    "ers_industry_dependence_2025": 9,
+    "bf_known_acres": 290,
+    "bf_acreage_reporting_share": 913,
+    "water_stress_bws_raw_median": 45,
+    "hdd_2050_rcp45": 65,
+    "broadband_locations_total": 9,
+    "dc_existing_mw_reported": 72,
+    "dc_existing_mw_reporting_share": 2925,
+    "dc_proposed_mw_reported": 166,
+    "dc_proposed_mw_reporting_share": 2672,
+    "queue_operational_online_date_fallback_share": 2582
   },
   "notes": [
     "nri_*_score hazard columns are national percentiles of the expected annual loss rate (*_ALR_NPCTL). The dollar-loss risk scores (*_RISKS) are kept as nri_*_risks. nri_risk_score is still the composite RISK_SCORE.",
@@ -281,7 +519,40 @@
     "BEA reports the 8 old Connecticut counties. Each planning region takes the share of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
     "energy_community_coal_closure is true when a census tract in the county had a qualifying closure itself: a coal mine closed since 1999 or a coal generator retired since 2009 (453 counties in the table). Tracts that qualify only by adjoining a closure tract don't count. They would add 364 counties, many across a county or state line from the closure, such as Loudoun, VA.",
     "energy_community_ffe is true when the county's MSA or non-MSA meets both the fossil fuel employment threshold and the unemployment test for 2024.",
-    "Both layers list only qualifying areas, so absent counties are false, not null. 2024 is the latest edition NETL publishes. Layers use 2020 geography, so each Connecticut planning region takes the flag of the old county it mostly overlaps."
+    "Both layers list only qualifying areas, so absent counties are false, not null. 2024 is the latest edition NETL publishes. Layers use 2020 geography, so each Connecticut planning region takes the flag of the old county it mostly overlaps.",
+    "LAUS 2024 is the latest complete year. The 2025 file is an 11-month average because October 2025 wasn't collected, so it isn't used.",
+    "unemployment_rate_pct_3yr_2022_2024 pools counts: 100 x sum(unemployed) / sum(labor force) over 2022-2024. It's null unless all three years are present.",
+    "bls.gov/lau refuses requests without a contact address in the User-Agent. Set BLS_CONTACT_EMAIL for the first download; cached files need nothing.",
+    "QCEW manufacturing is NAICS 31-33, private ownership (own_code 5), county by sector (agglvl_code 74). mfg_emp_share_2024 divides by county private total employment (own_code 5, agglvl_code 71), the same ownership.",
+    "Suppressed QCEW cells (disclosure_code N) publish employment as 0; they are null here and flagged in mfg_emp_suppressed_<year>. Establishment counts are still published for them.",
+    "A county with a published private total but no manufacturing row has a confirmed 0.",
+    "mfg_emp_pct_change_2015_2024 is a fraction and is null when 2015 employment is 0 or unknown.",
+    "2024 is the current QCEW year. 2025 annual data are a first release with about twice the suppression of 2024, so 2025 appears as levels only.",
+    "QCEW 2015 and 2019 key Connecticut by its old counties. Job counts aren't split across planning regions, so CT 2015 and 2019 levels and every change column are null for CT.",
+    "Shannon County, SD (46113) is recoded to Oglala Lakota County (46102) when only the old code is published.",
+    "Rurality and county typology are categorical context, not suitability scores, and say nothing about community support for data centers. Edition year is not observation year.",
+    "Typology code 99 (not available) is null.",
+    "ERS Typology 2025 reports the economic and population-loss codes for Connecticut's old counties and the ACS-based codes for planning regions. Binary flags aren't moved across geographies, so CT regions have null ers_high_manufacturing_2025, ers_high_mining_2025, ers_industry_dependence_2025, and ers_population_loss_2025.",
+    "bf_* columns count EPA ACRES brownfield properties, deduplicated on property ID. They mark potential reuse, not available land and not data-center suitability.",
+    "bf_known_acres sums reported acreage only and is null when a county has properties but none report acreage. It is 0 only when the county has no properties. Read it with bf_acreage_reporting_share.",
+    "RE-Powering acreage of 0 is unknown. Acreage above 10,000 acres (larger than any property in EPA's curated 100+ acre layer; these are community-wide assessment records) or above the county's land area is nulled and flagged in brownfield_sites.parquet.",
+    "bf_redevelopment_started_count counts EPA-reported redevelopment start dates. The only national field (100+ acre layer) was empty at retrieval, so it is 0 everywhere. No redevelopment reported never means the site is vacant.",
+    "No national public layer carries brownfield cleanup completion dates.",
+    "nri_<hazard>_annual_freq is NRI's annualized frequency (_AFREQ), the physical-hazard measure: events per year, drought in days per year, wildfire as an annual probability. nri_<hazard>_eal_score (_EALS) is the expected-annual-loss percentile, which scales with exposed value. Neither replaces the scored nri_<hazard>_score.",
+    "nri_hurricane_not_applicable and nri_coastal_flood_not_applicable are true where NRI rates the hazard 'Not Applicable' (_RISKR). Their frequency and EAL score are 0 there, the same rule nri.py uses for scores.",
+    "water_stress_bws_cat and water_stress_2050_cat are the Aqueduct category covering the most county area: -1 arid and low water use, 0 low, 1 low-medium, 2 medium-high, 3 high, 4 extremely high.",
+    "water_stress_bws_raw_median is the area-weighted median of bws_raw, withdrawals over available supply. It is null when the median basin carries Aqueduct's 9999 near-zero-supply sentinel.",
+    "water_stress_high_share is the county area in category 3 or 4; water_stress_arid_share in category -1; water_stress_area_coverage the share of county area with baseline data.",
+    "hdd_2050_rcp45, days_above_95f_2050_rcp45, and the days_above_100f_* columns come from the same CMRA layer as the scored climate columns. LOCA-downscaled CMIP5, not CMIP6.",
+    "broadband_served_share_locations is the share of serviceable locations served at 100/20 Mbps or better by any technology. Like fiber_share_locations it is last-mile availability, not backbone capacity.",
+    "broadband_locations_total is a count, so it isn't copied from an old Connecticut county onto planning regions; it is null for CT.",
+    "dc_*_mw_reported sums MW only for facilities that report it, parsing '10,000' as 10000 and a range like '100-200' as its midpoint. It is 0 when the county has no facilities and null when it has facilities but none report MW. Read it with dc_*_mw_reporting_share. dc_existing_mw and dc_proposed_mw keep main's rule (unparseable or missing MW counts as 0).",
+    "dc_stopped_count counts facilities with status Cancelled or Suspended.",
+    "moratorium_municipal_count and moratorium_municipal_pending_count count active and pending municipal rows of any category (moratorium, ban, zoning restriction, curative amendment). County-subdivision rows carry the county in their GEOID. Incorporated places are assigned to the county holding the place's 2024 Census internal point, so a city spanning counties counts once. Municipal rows never set moratorium_active.",
+    "county_dc_restriction_active is a county-level active row whose category is not moratorium or ban, such as a zoning restriction. moratorium_state_pending is a state-level pending moratorium or ban. Rows whose end_date is before 2026-10-03 are skipped, as in main.",
+    "queue_active_mw_clean_excl_storage differs from queue_active_mw_clean in two ways. Standalone storage (Battery, Pumped Storage) is excluded because it isn't generation. For a hybrid, only the MW of its first clean-generation component counts (mw_1 when type_1 is clean generation, else mw_2 or mw_3 when given), so a Battery+Solar row with no mw_2 adds 0. queue_active_mw_clean counts mw_1 of every active project whose components are all in etl/schema.py CLEAN_SOURCES, which includes battery and other storage.",
+    "queue_active_mw_storage_standalone is mw_1 of active projects whose type_clean is Battery, Pumped Storage, or Storage.",
+    "queue_operational_mw_online_5y keys on completion, not queue entry: operational projects whose on_date falls in 2021-2025, falling back to prop_date (proposed online date) when on_date is blank. queue_operational_mw_5y instead counts operational projects with q_year 2019 or later, plus undated-q_year projects online since 2021. on_date is filled for about 99% of operational PJM, CAISO, and MISO rows but 18% in the West and 0% in ISO-NE; queue_operational_online_date_fallback_share reports how many were dated by prop_date."
   ],
   "joins": {
     "nri": {
@@ -378,10 +649,64 @@
       "rows": 3109,
       "fips_not_in_table": [],
       "counties_without_data": 0
+    },
+    "bls_laus": {
+      "rows": 3221,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "bls_qcew": {
+      "rows": 3226,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "usda_ers": {
+      "rows": 3235,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "epa_brownfields": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "nri_context": {
+      "rows": 3232,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "aqueduct_context": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "cmra_context": {
+      "rows": 3234,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fcc_context": {
+      "rows": 3235,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fractracker_context": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "lbnl_queue_alt": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
     }
   },
   "errors": {},
   "unmatched_name_rows": {
     "lbnl_queue": 623
-  }
+  },
+  "artifacts": [
+    "data/processed/brownfield_sites.parquet"
+  ],
+  "quality_report": "data/processed/county_features_quality_report.json"
 }

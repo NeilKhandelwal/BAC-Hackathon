@@ -160,6 +160,163 @@ here; it's scored in grid and infrastructure.
 | `pct_forest_wetland` | float 0-1 | NLCD | stretch | wetland and habitat permit exposure; listed under Land as well |
 | `permitting_pathway` | str | derived by the engine, not the ETL | n/a | see `docs/permitting.md` |
 
+## Context columns (ETL v2)
+
+Context columns ported from the ETL v2 branch. All are **stretch** and
+none is mapped in `engine/pillars.yaml`, so they don't change scores,
+gates, or results. Each comes from a separate adapter that reads its own
+raw file or main's, and never rewrites a column above. Shares are 0-1;
+columns ending `_pct` are 0-100.
+
+### Labor market: BLS LAUS (`etl/adapters/bls_laus.py`)
+
+| Column | Type | Source | Tier | Notes |
+| --- | --- | --- | --- | --- |
+| `unemployment_rate_pct_2024` | float 0-100 | BLS LAUS `laucnty24.xlsx` | stretch | latest complete year. LAUS 2025 is an 11-month average (October 2025 wasn't collected). `unemployment_rate_pct_2023` stays the scored field. |
+| `unemployment_rate_pct_3yr_2022_2024` | float 0-100 | LAUS 2022-2024 | stretch | pooled: 100 x sum(unemployed) / sum(labor force); null unless all three years exist |
+| `unemployed_persons_2024` | int | LAUS | stretch | |
+| `labor_force_2024` | int | LAUS | stretch | |
+
+### Industrial decline: BLS QCEW (`etl/adapters/bls_qcew.py`)
+
+Private manufacturing: NAICS 31-33, `own_code` 5, county by sector
+(`agglvl_code` 74). The share denominator is county private total
+employment (`own_code` 5, `agglvl_code` 71). These sit beside the CBP and
+BEA manufacturing columns, which stay as they are.
+
+| Column | Type | Source | Tier | Notes |
+| --- | --- | --- | --- | --- |
+| `mfg_emp_2015`, `mfg_emp_2019`, `mfg_emp_2024`, `mfg_emp_2025` | float | QCEW annual average employment | stretch | **null when suppressed**, never 0. 0 only for a published county with no manufacturing row. 2025 is a first release with about twice the suppression; 2024 is the current year. |
+| `mfg_estabs_<year>` | int | QCEW establishments | stretch | published even when employment is suppressed |
+| `mfg_emp_suppressed_<year>` | bool | QCEW `disclosure_code == N` | stretch | separates suppressed from unknown |
+| `private_emp_2024` | float | QCEW private total | stretch | denominator |
+| `mfg_emp_share_2024` | float 0-1 | derived | stretch | |
+| `mfg_emp_change_2015_2024`, `mfg_emp_change_2019_2024` | float | derived | stretch | signed jobs |
+| `mfg_emp_pct_change_2015_2024` | float, fraction | derived | stretch | null when 2015 employment is 0 or unknown |
+| `mfg_jobs_lost_2015_2024` | float | derived | stretch | max(0, 2015 - 2024) |
+
+QCEW 2015 and 2019 use Connecticut's old counties. Job counts aren't split
+across planning regions, so CT 2015 and 2019 levels and every change column
+are null for CT. Shannon County, SD (46113) is recoded to 46102.
+
+### Rurality and economic structure: USDA ERS (`etl/adapters/usda_ers.py`)
+
+Categorical context, not suitability scores. Economic need, industrial
+decline, and community support are different things; none of these says a
+community welcomes a data center.
+
+| Column | Type | Source | Tier | Notes |
+| --- | --- | --- | --- | --- |
+| `rucc_2023` | int 1-9 | Rural-Urban Continuum Codes 2023 | stretch | 1-3 metro, 4-9 nonmetro. OMB July 2023 delineation, 2020 Census population. |
+| `rucc_2023_description` | str | same | stretch | |
+| `metro_2023` | bool | `rucc_2023 <= 3` | stretch | |
+| `ers_high_manufacturing_2025` | bool | County Typology Codes 2025 | stretch | manufacturing at least 25% of earnings or 17% of jobs, BEA 2019/2021/2022 average. Null for CT regions. |
+| `ers_high_mining_2025` | bool | same | stretch | mining at least 11% of earnings or 7% of jobs. Null for CT regions. |
+| `ers_industry_dependence_2025` | str | same | stretch | nonspecialized, farming, mining, manufacturing, government, recreation. Null for CT regions. |
+| `ers_low_employment_2025` | bool | same | stretch | under 63% of residents 25-54 employed, ACS 2018-2022 |
+| `ers_population_loss_2025` | bool | same | stretch | population fell 2000-2010 and 2010-2020. Null for CT regions. |
+
+### Brownfields: EPA ACRES (`etl/adapters/epa_brownfields.py`)
+
+Potential reuse sites. Not confirmed available land, not confirmed
+data-center suitability.
+
+| Column | Type | Source | Tier | Notes |
+| --- | --- | --- | --- | --- |
+| `bf_site_count` | int | EPA Cleanups in My Community, brownfield properties deduplicated on ACRES ID | stretch | 0 when the county has none |
+| `bf_known_acres` | float | RE-Powering Mapper 2022 or Brownfield Properties Over 100 Acres | stretch | sum of reported acreage. 0 only without sites; **null when sites exist but none report acreage**. |
+| `bf_acreage_reporting_share` | float 0-1 | derived | stretch | |
+| `bf_sites_50plus_acres` | int | derived | stretch | |
+| `bf_ready_for_reuse_count` | int | CIMC `BF_READY_FOR_REUSE_IND == Y` | stretch | |
+| `bf_redevelopment_started_count` | int | 100+ acre layer `Redevelopment_Start_Date` | stretch | 0 everywhere: the field was empty at retrieval. "None reported" never means vacant. |
+
+The build also writes `data/processed/brownfield_sites.parquet`, one row per
+property with ID, name, coordinates, county, reported acreage and its
+source, an `acreage_implausible` flag (over 10,000 acres or over the
+county's land area; nulled), funding flags, ready-for-reuse, RE-Powering
+grid and rail distances, and `redevelopment_status` (`none_reported` or
+`redevelopment_started_reported`). The file is gitignored; rebuild it.
+
+### Hazard, water, climate, and broadband context
+
+| Column | Type | Source | Tier | Notes |
+| --- | --- | --- | --- | --- |
+| `nri_risk_rating` | str | NRI `RISK_RATNG` | stretch | |
+| `nri_eal_score`, `nri_sovi_score`, `nri_resilience_score` | float 0-100 | NRI `EAL_SCORE`, `SOVI_SCORE`, `RESL_SCORE` | stretch | social vulnerability and resilience aren't hazards |
+| `nri_<hazard>_annual_freq` | float | NRI `<H>_AFREQ` | stretch | physical frequency: events per year, drought days per year, wildfire annual probability. 0 where NRI rates the hazard Not Applicable. |
+| `nri_<hazard>_eal_score` | float 0-100 | NRI `<H>_EALS` | stretch | expected-annual-loss percentile; scales with exposed value |
+| `nri_hurricane_not_applicable`, `nri_coastal_flood_not_applicable` | bool | NRI `<H>_RISKR == "Not Applicable"` | stretch | the rule `nri.py` already uses to write 0 |
+| `water_stress_bws_cat`, `water_stress_2050_cat` | int -1..4 | Aqueduct `bws_cat`, `bau50_ws_x_c`, category covering most county area | stretch | -1 arid and low water use, 0 low ... 4 extremely high |
+| `water_stress_bws_raw_median` | float | Aqueduct `bws_raw`, area-weighted median | stretch | withdrawals / supply; null where the median basin is the 9999 near-zero-supply sentinel |
+| `water_stress_high_share`, `water_stress_arid_share` | float 0-1 | Aqueduct | stretch | county area in category 3-4, and in -1 |
+| `water_stress_area_coverage` | float 0-1 | Aqueduct | stretch | county area with baseline data |
+| `hdd_2050_rcp45`, `days_above_95f_2050_rcp45` | float | CMRA `RCP45MID_MEAN_*` | stretch | same layer and CT rule as `cmra.py` |
+| `days_above_100f_hist`, `days_above_100f_2050_rcp45`, `days_above_100f_2050_rcp85` | float | CMRA `*_MEAN_TMAX100F` | stretch | |
+| `broadband_served_share_locations` | float 0-1 | Esri FCC layer, `ServedBSLs / TotalBSLs` | stretch | any technology at 100/20 Mbps; last-mile, not backbone |
+| `broadband_locations_total` | int | `TotalBSLs` | stretch | null for CT (a count isn't copied onto regions) |
+
+### FracTracker context (`etl/adapters/fractracker_context.py`)
+
+Same raw files and the same facility-to-county matching as
+`fractracker.py`, so the facility set equals the one behind
+`dc_existing_count`. Main doesn't deduplicate facilities, and neither does
+this.
+
+| Column | Type | Source | Tier | Notes |
+| --- | --- | --- | --- | --- |
+| `dc_existing_mw_reported`, `dc_proposed_mw_reported` | float | FracTracker `mw` | stretch | sum of reported MW only ("10,000" is 10000, "100-200" its midpoint). 0 without facilities; null when none report MW. `dc_existing_mw` keeps main's rule that missing MW counts as 0. |
+| `dc_existing_mw_reporting_share`, `dc_proposed_mw_reporting_share` | float 0-1 | derived | stretch | share of facilities reporting MW |
+| `dc_stopped_count` | int | status Cancelled or Suspended | stretch | |
+| `moratorium_municipal_count`, `moratorium_municipal_pending_count` | int | municipal rows, active or pending, any category | stretch | county subdivisions via GEOID, places via their 2024 internal point. **Never set `moratorium_active`.** |
+| `moratorium_state_pending` | bool | state rows, pending, moratorium or ban | stretch | |
+| `county_dc_restriction_active` | bool | county rows, active, category other than moratorium or ban | stretch | zoning restriction, curative amendment |
+
+### Alternative queue measures (`etl/adapters/lbnl_queue_alt.py`)
+
+Not scored and not gate inputs. Same county placement as `lbnl_queue.py`.
+
+| Column | Type | Differs from | Notes |
+| --- | --- | --- | --- |
+| `queue_active_mw_clean_excl_storage` | float | `queue_active_mw_clean` | excludes standalone storage, which `CLEAN_SOURCES` includes, and counts a hybrid's first clean-generation component once (`mw_1` if `type_1` is clean generation, else `mw_2`/`mw_3` when given; a Battery+Solar row without `mw_2` adds 0) |
+| `queue_active_mw_storage_standalone` | float | | `mw_1` of active Battery, Pumped Storage, or Storage projects |
+| `queue_operational_mw_online_5y`, `queue_operational_projects_online_5y` | float, int | `queue_operational_mw_5y` | keyed on completion: operational projects with `on_date` in 2021-2025, falling back to `prop_date` when `on_date` is blank. `queue_operational_mw_5y` keys on `q_year >= 2019`, which is queue entry, not completion. |
+| `queue_operational_online_date_fallback_share` | float 0-1 | | share of those projects dated by `prop_date`. `on_date` is about 99% filled in PJM, CAISO, and MISO but 18% in the West and 0% in ISO-NE. |
+
+## Frozen artifacts and reproducibility
+
+`data/processed/county_features.parquet` and the committed files in
+`results/` are the canonical frozen hackathon artifacts. The committed table
+keeps main's original 83 columns exactly as they were at `1575003` and
+appends 85 context columns that no pillar or gate uses.
+
+A fresh build, online or `--no-fetch`, is semantically reproducible but may
+not be byte-identical to the frozen table. Spatial calculations depend on
+library versions (geopandas, shapely, rasterio). A rebuild can differ from
+the frozen table by less than `1e-12` in `water_stress_bws` and
+`water_stress_2050`, and by 0.0005 m/s in `wind_speed_100m_ms` for one county
+(18083). Main's own build shows the same differences with or without the
+context columns.
+
+Many counties tie exactly on water stress, at 0 or 5. Differences that small
+can break those ties, which changes percentile ranks and swaps adjacent
+counties outside the leading results. In validation on 2026-10-03, a fresh
+build kept every gate, gate count, winner, top-ten list, pillar ordering,
+and core conclusion. It swapped 40 adjacent pairs in `balanced` (best
+affected rank 142) and 2 in `speed_to_power` (ranks 83 and 84), and moved
+some water pillar scores by up to 0.43 points. One displayed top-25 value
+changed by 0.01 (Monroe County, PA's 2050 shift in `sustainability_first`).
+
+To reproduce the exact committed rankings, run the engine on the committed
+table, not on a rebuilt one:
+
+```bash
+python -m engine rank --conditions engine/conditions/balanced.yaml \
+  --features data/processed/county_features.parquet --out results/balanced.csv
+```
+
+`brownfield_sites.parquet` is a generated artifact and isn't committed.
+Running the ETL produces it.
+
 ## Coverage
 
 | Column | Type | Notes |
@@ -185,6 +342,13 @@ here; it's scored in grid and infrastructure.
 
 The engine reads `columns_missing` and drops those metrics from scoring with
 a warning, so a partial table still runs.
+
+Each `sources` entry also carries `adapter`, and the v2 adapters add
+`observation_period`, `license`, and `resolution`. `artifacts` lists extra
+files adapters wrote (`brownfield_sites.parquet`). `quality_report` points to
+`county_features_quality_report.json`, which holds validation checks
+(`checks`, `checks_failed`), adapter errors, joins, a profile of every column
+(dtype, nulls, min, median, max, zeros), and Connecticut crosswalk limits.
 
 ## County name normalization
 

@@ -1,0 +1,1499 @@
+{
+  "built_at": "2026-10-04T01:49:44+00:00",
+  "rows": 3109,
+  "checks": [
+    {
+      "name": "row_count",
+      "passed": true,
+      "detail": "3109 rows"
+    },
+    {
+      "name": "fips_unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "fips_5_char_string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "state_count",
+      "passed": true,
+      "detail": "49 states"
+    },
+    {
+      "name": "no_ak_hi_territories",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "ct_planning_regions_only",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no_failed_adapters",
+      "passed": true,
+      "detail": "none"
+    },
+    {
+      "name": "v2_context_columns_present",
+      "passed": true,
+      "detail": "all present"
+    },
+    {
+      "name": "v2_context_columns_not_scored_core",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "qcew_suppressed_is_null_not_zero",
+      "passed": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "qcew_pct_change_null_without_positive_base",
+      "passed": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "qcew_change_equals_difference",
+      "passed": true,
+      "detail": "max abs diff 0.0"
+    },
+    {
+      "name": "laus_rate_is_percent_and_matches_counts",
+      "passed": true,
+      "detail": "max abs gap 0.050 points"
+    },
+    {
+      "name": "rucc_covers_every_county",
+      "passed": true,
+      "detail": "0 null"
+    },
+    {
+      "name": "brownfield_acres_zero_only_without_sites",
+      "passed": true,
+      "detail": "0 zero-site counties with acres, 0 null without sites"
+    },
+    {
+      "name": "dc_existing_mw_reported_zero_without_facilities",
+      "passed": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "dc_proposed_mw_reported_zero_without_facilities",
+      "passed": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "municipal_rows_do_not_set_county_flag",
+      "passed": true,
+      "detail": "195 counties have municipal restrictions without a county moratorium flag"
+    },
+    {
+      "name": "nri_hurricane_not_applicable_is_zero",
+      "passed": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "nri_coastal_flood_not_applicable_is_zero",
+      "passed": true,
+      "detail": "0 violations"
+    },
+    {
+      "name": "v2_context_ranges",
+      "passed": true,
+      "detail": "all v2 context columns within expected ranges"
+    }
+  ],
+  "checks_failed": [],
+  "adapter_errors": {},
+  "joins": {
+    "nri": {
+      "rows": 3232,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "cmra": {
+      "rows": 3234,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "lbnl_queue": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fcc_fiber": {
+      "rows": 3235,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "egrid": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "drought_monitor": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fractracker": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "air_nonattainment": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "state_tables": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "nrel_wind": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "cbp_manufacturing": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "ers_unemployment": {
+      "rows": 3221,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "popest": {
+      "rows": 3144,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "eia860_coal": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "eia_price": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "aqueduct": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "pop_history": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "bea_manufacturing": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "netl_energy_communities": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "bls_laus": {
+      "rows": 3221,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "bls_qcew": {
+      "rows": 3226,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "usda_ers": {
+      "rows": 3235,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "epa_brownfields": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "nri_context": {
+      "rows": 3232,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "aqueduct_context": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "cmra_context": {
+      "rows": 3234,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fcc_context": {
+      "rows": 3235,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "fractracker_context": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "lbnl_queue_alt": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    }
+  },
+  "columns": {
+    "fips": {
+      "dtype": "string",
+      "nulls": 0
+    },
+    "county_name": {
+      "dtype": "string",
+      "nulls": 0
+    },
+    "state": {
+      "dtype": "string",
+      "nulls": 0
+    },
+    "state_fips": {
+      "dtype": "string",
+      "nulls": 0
+    },
+    "population": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 52.0,
+      "median": 26056.0,
+      "max": 9848406.0,
+      "zeros": 0
+    },
+    "land_area_sqkm": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 5.300262,
+      "median": 1580.797958,
+      "max": 51976.311347,
+      "zeros": 0
+    },
+    "pop_density_per_sqkm": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.01376514289041714,
+      "median": 17.433010007679364,
+      "max": 27738.248182264844,
+      "zeros": 0
+    },
+    "centroid_lat": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 25.58612,
+      "median": 38.332606,
+      "max": 48.842653,
+      "zeros": 0
+    },
+    "centroid_lon": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": -124.210929,
+      "median": -90.179078,
+      "max": -67.609354,
+      "zeros": 0
+    },
+    "grid_co2_lb_mwh": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 242.089,
+      "median": 861.999,
+      "max": 1397.313,
+      "zeros": 0
+    },
+    "grid_renewable_share": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.006,
+      "median": 0.152,
+      "max": 0.551,
+      "zeros": 0
+    },
+    "queue_active_mw_total": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 80.0,
+      "max": 27161.633,
+      "zeros": 1334
+    },
+    "queue_active_mw_clean": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 65.0,
+      "max": 18289.692673,
+      "zeros": 1402
+    },
+    "queue_median_age_years": {
+      "dtype": "float64",
+      "nulls": 2185,
+      "min": 0.03559206023271732,
+      "median": 2.885010266940452,
+      "max": 19.704312114989733,
+      "zeros": 0
+    },
+    "queue_withdrawal_rate": {
+      "dtype": "float64",
+      "nulls": 1541,
+      "min": 0.0,
+      "median": 0.5882352941176471,
+      "max": 1.0,
+      "zeros": 100
+    },
+    "queue_operational_mw_5y": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 3358.0,
+      "zeros": 2756
+    },
+    "drought_share_weeks_d2plus": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.08416013264554165,
+      "max": 0.4550725865880619,
+      "zeros": 9
+    },
+    "nri_drought_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 51.813953488372086,
+      "max": 100.0,
+      "zeros": 354
+    },
+    "nri_risk_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.031806615776081,
+      "median": 50.12722646310432,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_inland_flood_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.5569306930693069,
+      "median": 51.454207920792086,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_coastal_flood_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 100.0,
+      "zeros": 2685
+    },
+    "nri_wildfire_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0636132315521628,
+      "median": 49.93638676844784,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_hurricane_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 33.72233400402415,
+      "max": 100.0,
+      "zeros": 884
+    },
+    "nri_heat_wave_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 51.46783260462211,
+      "max": 100.0,
+      "zeros": 47
+    },
+    "nri_tornado_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.062015503875969,
+      "median": 51.813953488372086,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_winter_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 50.9907120743034,
+      "max": 100.0,
+      "zeros": 33
+    },
+    "cdd_hist": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.00524,
+      "median": 1138.4384,
+      "max": 4086.539,
+      "zeros": 0
+    },
+    "cdd_2050_rcp45": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.49696,
+      "median": 1733.3927,
+      "max": 5049.472,
+      "zeros": 0
+    },
+    "cdd_2050_rcp85": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 1.38483,
+      "median": 1914.6869,
+      "max": 5325.356,
+      "zeros": 0
+    },
+    "hdd_hist": {
+      "dtype": "float64",
+      "nulls": 65,
+      "min": 174.06321187262984,
+      "median": 4928.757084273882,
+      "max": 8997.0048828125,
+      "zeros": 0
+    },
+    "hdd_2050_rcp85": {
+      "dtype": "float64",
+      "nulls": 65,
+      "min": 84.88678852833097,
+      "median": 3952.517957551527,
+      "max": 7574.35615234375,
+      "zeros": 0
+    },
+    "days_above_95f_hist": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 7.3623,
+      "max": 136.74905,
+      "zeros": 6
+    },
+    "days_above_95f_2050_rcp85": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.00076,
+      "median": 36.89759,
+      "max": 166.49855,
+      "zeros": 0
+    },
+    "fiber_share_locations": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.6240182181530882,
+      "max": 1.0,
+      "zeros": 5
+    },
+    "dc_existing_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 124.0,
+      "zeros": 2925
+    },
+    "dc_existing_mw": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 2200.0,
+      "zeros": 3015
+    },
+    "dc_proposed_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 67.0,
+      "zeros": 2672
+    },
+    "dc_proposed_mw": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 9600.0,
+      "zeros": 2882
+    },
+    "median_household_income": {
+      "dtype": "float64",
+      "nulls": 2,
+      "min": 25425.0,
+      "median": 63495.0,
+      "max": 178707.0,
+      "zeros": 0
+    },
+    "heat_sink_score": {
+      "dtype": "float64",
+      "nulls": 65,
+      "min": 11.009581200969995,
+      "median": 12761.688170686328,
+      "max": 56552.97600562523,
+      "zeros": 0
+    },
+    "dc_pushback_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 6.0,
+      "zeros": 2841
+    },
+    "dc_pushback_any": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 268
+    },
+    "moratorium_active": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 152
+    },
+    "moratorium_pending": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 22
+    },
+    "moratorium_state_active": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 62
+    },
+    "permitting_discretionary_risk": {
+      "dtype": "float64",
+      "nulls": 3109
+    },
+    "permitting_drivers": {
+      "dtype": "string",
+      "nulls": 3109
+    },
+    "air_nonattainment_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 2.0,
+      "zeros": 2906
+    },
+    "water_rights_regime": {
+      "dtype": "string",
+      "nulls": 0
+    },
+    "groundwater_managed_area": {
+      "dtype": "boolean",
+      "nulls": 811,
+      "true": 51
+    },
+    "water_permit_risk": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 2.0,
+      "zeros": 1965
+    },
+    "state_dc_bill_pending": {
+      "dtype": "boolean",
+      "nulls": 105,
+      "true": 554
+    },
+    "state_sales_tax_exemption": {
+      "dtype": "boolean",
+      "nulls": 203,
+      "true": 2669
+    },
+    "state_large_load_tariff": {
+      "dtype": "boolean",
+      "nulls": 414,
+      "true": 1620
+    },
+    "state_policy_risk": {
+      "dtype": "Int64",
+      "nulls": 722,
+      "min": 0.0,
+      "median": 1.0,
+      "max": 2.0,
+      "zeros": 618
+    },
+    "queue_active_count": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 1.0,
+      "max": 95.0,
+      "zeros": 1332
+    },
+    "nri_drought_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 50.57251908396947,
+      "max": 100.0,
+      "zeros": 354
+    },
+    "nri_inland_flood_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.22264631043257,
+      "median": 50.413486005089055,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_coastal_flood_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 100.0,
+      "zeros": 2685
+    },
+    "nri_wildfire_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.095419847328244,
+      "median": 50.09541984732825,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_hurricane_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 35.00208594075928,
+      "max": 100.0,
+      "zeros": 884
+    },
+    "nri_heat_wave_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 50.09633911368015,
+      "max": 100.0,
+      "zeros": 47
+    },
+    "nri_tornado_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.922391857506361,
+      "median": 50.57251908396947,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_winter_risks": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 50.06365372374284,
+      "max": 100.0,
+      "zeros": 33
+    },
+    "grid_subregion": {
+      "dtype": "str",
+      "nulls": 0
+    },
+    "grid_co2_lb_mwh_state": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 42.981,
+      "median": 747.545,
+      "max": 1954.383,
+      "zeros": 0
+    },
+    "grid_renewable_share_state": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.027,
+      "median": 0.135,
+      "max": 0.997,
+      "zeros": 0
+    },
+    "wind_speed_100m_ms": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 3.358272108636672,
+      "median": 6.6352684308014,
+      "max": 9.364967574726613,
+      "zeros": 0
+    },
+    "water_stress_bws": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 2.022859662444991,
+      "max": 5.0,
+      "zeros": 300
+    },
+    "water_stress_2050": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 2.238973366,
+      "max": 5.0,
+      "zeros": 265
+    },
+    "plant_capacity_mw_100km": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 5414.799999999999,
+      "max": 38758.3,
+      "zeros": 10
+    },
+    "plant_clean_capacity_mw_100km": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 1341.4,
+      "max": 16193.3,
+      "zeros": 33
+    },
+    "industrial_price_cents_kwh": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 5.43,
+      "median": 7.73,
+      "max": 21.53,
+      "zeros": 0
+    },
+    "mfg_emp_share_2001": {
+      "dtype": "float64",
+      "nulls": 4,
+      "min": 0.0,
+      "median": 0.16775014132278124,
+      "max": 0.8045977011494253,
+      "zeros": 63
+    },
+    "mfg_loss_share_emp_2001": {
+      "dtype": "float64",
+      "nulls": 4,
+      "min": -19.431506849315067,
+      "median": 0.026615104640582348,
+      "max": 0.6817635270541083,
+      "zeros": 65
+    },
+    "unemployment_rate_pct_2023": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.3,
+      "median": 3.4,
+      "max": 17.3,
+      "zeros": 0
+    },
+    "pop_change_pct_2010_2024": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": -41.51011324561571,
+      "median": 0.11501306162788882,
+      "max": 140.8762310165056,
+      "zeros": 0
+    },
+    "coal_retired_mw": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 2821.8,
+      "zeros": 2884
+    },
+    "pop_change_pct_since_peak": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": -82.66000586528057,
+      "median": -2.435329759962712,
+      "max": 0.0,
+      "zeros": 1274
+    },
+    "mfg_emp_share_1969": {
+      "dtype": "float64",
+      "nulls": 103,
+      "min": 0.0,
+      "median": 0.1517874020102267,
+      "max": 0.6740570112294846,
+      "zeros": 22
+    },
+    "mfg_emp_share_change_1969_2022": {
+      "dtype": "float64",
+      "nulls": 378,
+      "min": -0.5744362090768921,
+      "median": -0.07171152914432352,
+      "max": 0.6305421713189785,
+      "zeros": 0
+    },
+    "energy_community_coal_closure": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 453
+    },
+    "energy_community_ffe": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 870
+    },
+    "unemployment_rate_pct_2024": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 1.3,
+      "median": 3.8,
+      "max": 18.4,
+      "zeros": 0
+    },
+    "unemployment_rate_pct_3yr_2022_2024": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 1.3089283813983186,
+      "median": 3.5544039401072056,
+      "max": 17.14443788036496,
+      "zeros": 0
+    },
+    "unemployed_persons_2024": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 3.0,
+      "median": 463.0,
+      "max": 293980.0,
+      "zeros": 0
+    },
+    "labor_force_2024": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 97.0,
+      "median": 11807.0,
+      "max": 5106364.0,
+      "zeros": 0
+    },
+    "mfg_emp_2015": {
+      "dtype": "float64",
+      "nulls": 298,
+      "min": 0.0,
+      "median": 1237.0,
+      "max": 357554.0,
+      "zeros": 56
+    },
+    "mfg_emp_2019": {
+      "dtype": "float64",
+      "nulls": 317,
+      "min": 0.0,
+      "median": 1278.5,
+      "max": 338308.0,
+      "zeros": 56
+    },
+    "mfg_emp_2024": {
+      "dtype": "float64",
+      "nulls": 352,
+      "min": 0.0,
+      "median": 1282.0,
+      "max": 311242.0,
+      "zeros": 56
+    },
+    "mfg_emp_2025": {
+      "dtype": "float64",
+      "nulls": 637,
+      "min": 0.0,
+      "median": 1506.5,
+      "max": 301831.0,
+      "zeros": 60
+    },
+    "mfg_estabs_2015": {
+      "dtype": "Int64",
+      "nulls": 9,
+      "min": 0.0,
+      "median": 28.0,
+      "max": 12273.0,
+      "zeros": 57
+    },
+    "mfg_estabs_2019": {
+      "dtype": "Int64",
+      "nulls": 9,
+      "min": 0.0,
+      "median": 28.0,
+      "max": 12616.0,
+      "zeros": 58
+    },
+    "mfg_estabs_2024": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 30.0,
+      "max": 11873.0,
+      "zeros": 63
+    },
+    "mfg_estabs_2025": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 30.0,
+      "max": 11719.0,
+      "zeros": 63
+    },
+    "mfg_emp_suppressed_2015": {
+      "dtype": "boolean",
+      "nulls": 9,
+      "true": 289
+    },
+    "mfg_emp_suppressed_2019": {
+      "dtype": "boolean",
+      "nulls": 9,
+      "true": 308
+    },
+    "mfg_emp_suppressed_2024": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 352
+    },
+    "mfg_emp_suppressed_2025": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 637
+    },
+    "private_emp_2024": {
+      "dtype": "float64",
+      "nulls": 9,
+      "min": 14.0,
+      "median": 6738.5,
+      "max": 3933987.0,
+      "zeros": 0
+    },
+    "mfg_emp_share_2024": {
+      "dtype": "float64",
+      "nulls": 356,
+      "min": 0.0,
+      "median": 0.1309170442118419,
+      "max": 0.8353214049039098,
+      "zeros": 56
+    },
+    "mfg_emp_change_2015_2024": {
+      "dtype": "float64",
+      "nulls": 447,
+      "min": -46312.0,
+      "median": 11.0,
+      "max": 25851.0,
+      "zeros": 40
+    },
+    "mfg_emp_pct_change_2015_2024": {
+      "dtype": "float64",
+      "nulls": 480,
+      "min": -0.8427672955974843,
+      "median": 0.025139664804469275,
+      "max": 15.066666666666666,
+      "zeros": 10
+    },
+    "mfg_jobs_lost_2015_2024": {
+      "dtype": "float64",
+      "nulls": 447,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 46312.0,
+      "zeros": 1467
+    },
+    "mfg_emp_change_2019_2024": {
+      "dtype": "float64",
+      "nulls": 436,
+      "min": -45967.0,
+      "median": -5.0,
+      "max": 12315.0,
+      "zeros": 41
+    },
+    "rucc_2023": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 1.0,
+      "median": 6.0,
+      "max": 9.0,
+      "zeros": 0
+    },
+    "rucc_2023_description": {
+      "dtype": "string",
+      "nulls": 0
+    },
+    "metro_2023": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 1180
+    },
+    "ers_high_manufacturing_2025": {
+      "dtype": "boolean",
+      "nulls": 9,
+      "true": 466
+    },
+    "ers_high_mining_2025": {
+      "dtype": "boolean",
+      "nulls": 9,
+      "true": 213
+    },
+    "ers_low_employment_2025": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 313
+    },
+    "ers_population_loss_2025": {
+      "dtype": "boolean",
+      "nulls": 10,
+      "true": 906
+    },
+    "ers_industry_dependence_2025": {
+      "dtype": "string",
+      "nulls": 9
+    },
+    "bf_site_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 2.0,
+      "max": 718.0,
+      "zeros": 913
+    },
+    "bf_known_acres": {
+      "dtype": "float64",
+      "nulls": 290,
+      "min": 0.0,
+      "median": 6.0,
+      "max": 18840.75,
+      "zeros": 913
+    },
+    "bf_acreage_reporting_share": {
+      "dtype": "float64",
+      "nulls": 913,
+      "min": 0.0,
+      "median": 0.7368421052631579,
+      "max": 1.0,
+      "zeros": 290
+    },
+    "bf_sites_50plus_acres": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 25.0,
+      "zeros": 2430
+    },
+    "bf_ready_for_reuse_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 185.0,
+      "zeros": 1603
+    },
+    "bf_redevelopment_started_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 0.0,
+      "zeros": 3109
+    },
+    "nri_risk_rating": {
+      "dtype": "string",
+      "nulls": 0
+    },
+    "nri_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.030940594059406,
+      "median": 49.443069306930695,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_sovi_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 10.62340967,
+      "median": 49.96819338,
+      "max": 99.87277354,
+      "zeros": 0
+    },
+    "nri_resilience_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0318066157760814,
+      "median": 50.31806615776081,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_drought_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 14.267445670030732,
+      "max": 163.30994997649066,
+      "zeros": 216
+    },
+    "nri_drought_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 51.813953488372086,
+      "max": 100.0,
+      "zeros": 354
+    },
+    "nri_heat_wave_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 4.578947368421052,
+      "max": 26.2631578947369,
+      "zeros": 47
+    },
+    "nri_heat_wave_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 51.46783260462211,
+      "max": 100.0,
+      "zeros": 47
+    },
+    "nri_wildfire_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 9.187074859854838e-06,
+      "median": 0.000702943463569,
+      "max": 0.0315816713751726,
+      "zeros": 0
+    },
+    "nri_wildfire_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.095419847328244,
+      "median": 50.09541984732825,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_hurricane_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0115035086430808,
+      "max": 0.4590373664412435,
+      "zeros": 843
+    },
+    "nri_hurricane_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 33.7625754527163,
+      "max": 100.0,
+      "zeros": 884
+    },
+    "nri_coastal_flood_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 11.30596086167903,
+      "zeros": 2658
+    },
+    "nri_coastal_flood_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 100.0,
+      "zeros": 2685
+    },
+    "nri_inland_flood_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.01,
+      "median": 1.0,
+      "max": 12.964285714285714,
+      "zeros": 0
+    },
+    "nri_inland_flood_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.402227722772277,
+      "median": 51.42326732673267,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_tornado_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0004255218208198,
+      "median": 0.3138757533354662,
+      "max": 4.198560870622398,
+      "zeros": 0
+    },
+    "nri_tornado_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.930232558139535,
+      "median": 51.813953488372086,
+      "max": 100.0,
+      "zeros": 0
+    },
+    "nri_winter_annual_freq": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 9.89473684210526,
+      "max": 56.50887392027864,
+      "zeros": 33
+    },
+    "nri_winter_eal_score": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 51.48606811145511,
+      "max": 100.0,
+      "zeros": 33
+    },
+    "nri_hurricane_not_applicable": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 717
+    },
+    "nri_coastal_flood_not_applicable": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 2640
+    },
+    "water_stress_bws_raw_median": {
+      "dtype": "float64",
+      "nulls": 45,
+      "min": 0.0001650374536185,
+      "median": 0.2116032129375642,
+      "max": 11.95575708638591,
+      "zeros": 0
+    },
+    "water_stress_bws_cat": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": -1.0,
+      "median": 2.0,
+      "max": 4.0,
+      "zeros": 1023
+    },
+    "water_stress_high_share": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 1.0,
+      "zeros": 1882
+    },
+    "water_stress_arid_share": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 1.0,
+      "zeros": 2922
+    },
+    "water_stress_area_coverage": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.7463070117500177,
+      "median": 1.0,
+      "max": 1.0,
+      "zeros": 0
+    },
+    "water_stress_2050_cat": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": -1.0,
+      "median": 2.0,
+      "max": 4.0,
+      "zeros": 887
+    },
+    "hdd_2050_rcp45": {
+      "dtype": "float64",
+      "nulls": 65,
+      "min": 101.40956199256176,
+      "median": 4128.755630360479,
+      "max": 7802.6900390625,
+      "zeros": 0
+    },
+    "days_above_95f_2050_rcp45": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 29.08335,
+      "max": 159.68475,
+      "zeros": 2
+    },
+    "days_above_100f_hist": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.67314,
+      "max": 102.86366,
+      "zeros": 41
+    },
+    "days_above_100f_2050_rcp45": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 7.39619,
+      "max": 128.41978,
+      "zeros": 2
+    },
+    "days_above_100f_2050_rcp85": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 11.24502,
+      "max": 135.14766,
+      "zeros": 2
+    },
+    "broadband_served_share_locations": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.022935779816513763,
+      "median": 0.9401137306006397,
+      "max": 1.0,
+      "zeros": 0
+    },
+    "broadband_locations_total": {
+      "dtype": "Int64",
+      "nulls": 9,
+      "min": 131.0,
+      "median": 12826.5,
+      "max": 2049306.0,
+      "zeros": 0
+    },
+    "moratorium_municipal_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 6.0,
+      "zeros": 2895
+    },
+    "moratorium_municipal_pending_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 3.0,
+      "zeros": 3070
+    },
+    "moratorium_state_pending": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 356
+    },
+    "county_dc_restriction_active": {
+      "dtype": "boolean",
+      "nulls": 0,
+      "true": 43
+    },
+    "dc_existing_mw_reported": {
+      "dtype": "float64",
+      "nulls": 72,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 2200.0,
+      "zeros": 2925
+    },
+    "dc_existing_mw_reporting_share": {
+      "dtype": "float64",
+      "nulls": 2925,
+      "min": 0.0,
+      "median": 0.5227272727272727,
+      "max": 1.0,
+      "zeros": 72
+    },
+    "dc_proposed_mw_reported": {
+      "dtype": "float64",
+      "nulls": 166,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 14000.0,
+      "zeros": 2672
+    },
+    "dc_proposed_mw_reporting_share": {
+      "dtype": "float64",
+      "nulls": 2672,
+      "min": 0.0,
+      "median": 0.5,
+      "max": 1.0,
+      "zeros": 166
+    },
+    "dc_stopped_count": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 4.0,
+      "zeros": 2981
+    },
+    "queue_active_mw_clean_excl_storage": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 13989.4018638,
+      "zeros": 1601
+    },
+    "queue_active_mw_storage_standalone": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 9477.192673,
+      "zeros": 2318
+    },
+    "queue_operational_mw_online_5y": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 6522.5,
+      "zeros": 2582
+    },
+    "queue_operational_projects_online_5y": {
+      "dtype": "Int64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 34.0,
+      "zeros": 2582
+    },
+    "queue_operational_online_date_fallback_share": {
+      "dtype": "float64",
+      "nulls": 2582,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 1.0,
+      "zeros": 436
+    }
+  },
+  "core_columns": 55,
+  "stretch_columns_present": 113,
+  "crosswalk_limitations": [
+    "Connecticut: QCEW 2015/2019 and ERS economic typology codes exist only for the old counties, so CT manufacturing change columns and those flags are null.",
+    "Municipal moratoria in incorporated places map to the county holding the place's 2024 Census internal point."
+  ]
+}
