@@ -224,6 +224,54 @@
    "pct_protected_national_percentile": 93.4
   }
  },
+ "other_presets": {
+  "speed_to_power": {
+   "committed_first": "Wayne, TN",
+   "scored_first": "Wayne, TN",
+   "committed_focus": {
+    "Grant, WA": null,
+    "Clark, WA": null,
+    "Franklin, NY": null,
+    "Berkshire, MA": null
+   },
+   "scored_focus": {
+    "Grant, WA": null,
+    "Clark, WA": null,
+    "Franklin, NY": null,
+    "Berkshire, MA": null
+   },
+   "scored_top5": [
+    "Wayne, TN",
+    "Mayes, OK",
+    "Payne, OK",
+    "Giles, TN",
+    "Scott, TN"
+   ]
+  },
+  "sustainability_first": {
+   "committed_first": "Whitman, WA",
+   "scored_first": "Whitman, WA",
+   "committed_focus": {
+    "Grant, WA": 5,
+    "Clark, WA": null,
+    "Franklin, NY": 74,
+    "Berkshire, MA": null
+   },
+   "scored_focus": {
+    "Grant, WA": 6,
+    "Clark, WA": null,
+    "Franklin, NY": 70,
+    "Berkshire, MA": null
+   },
+   "scored_top5": [
+    "Whitman, WA",
+    "Luzerne, PA",
+    "Benton, WA",
+    "Clearfield, PA",
+    "Washington, OR"
+   ]
+  }
+ },
  "b_gate": {
   "0.5": {
    "excluded_gate_passers": 4,

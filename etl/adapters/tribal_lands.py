@@ -20,7 +20,9 @@ NOTES = ["tribal_land_share is the share of the county polygon inside federally 
          "Indian reservations or off-reservation trust land (TIGER 2024 AIANNH classes D2, D3, D5, D8), "
          "unioned so overlaps count once. It measures area inside legal boundaries, not tribal "
          "ownership: reservations can contain non-tribal fee land. Statistical areas such as Oklahoma "
-         "tribal statistical areas are excluded. Context only; not scored."]
+         "tribal statistical areas are excluded. TIGER/Line tribal edges against generalized cartographic "
+         "county edges leave slivers below 0.01% in some counties (Grant WA reads about 0.0001%). Context "
+         "only; not scored."]
 
 
 def fetch(raw_dir):

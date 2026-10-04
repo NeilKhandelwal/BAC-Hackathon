@@ -255,6 +255,7 @@ new 300 MW load gets neither, so the feasibility study has the last word.
   - Fiber is last-mile, not backbone. The heat sink score is a rough stand-in for heat reuse.
   - Coverage is 0.73 to 0.78: 10 of 45 mapped columns aren't in the table.
   - Permitting is three hand-coded state-level integers, so it's exempt from the floor.
+  - The engine doesn't score proximity to protected or sensitive land. We checked it by hand for Grant, Clark, and Franklin: no conflict at Quincy, where the nearest protected land is a state wildlife area 5.8 km away and the nearest tribal land is 75 km away. A county protected-land share was built and measured but isn't scored.
   - Retired coal is 0 in 2,884 counties and acts like a yes/no flag. Counties can rise on population decline, a stated value choice.
 - **Judgment and cutoffs:**
   - The weights are judgments. The default robustness test varies each by only about 0.03; under uniformly random weights Grant is in the top 10 50.5% of the time.
@@ -268,6 +269,7 @@ new 300 MW load gets neither, so the feasibility study has the last word.
 **Speaker note:**
 - Numbers: `docs/figures/facts.json` (`limitations`, `weights`, `gap_first_to_second`).
 - The installed-versus-available gap: `research/risk.md` and `research/implementation.md`.
+- Sensitive land: `research/sensitive_land.md`. Grant County is 12.8% PAD-US GAP 1-2 protected land, the 89th percentile, but none within 5 km of Quincy. Scoring that county share in the land pillar would move Grant from 1st to 4th behind Whitman WA, which is why it isn't scored without a team decision. Section 106 tribal consultation applies only if a federal permit or interconnection is involved.
 - Proxy definitions: `docs/conditions.md` and the manifest notes.
 
 ## 11. The engine as the product

@@ -100,6 +100,20 @@ def main():
                                "pct_protected_national_percentile": round(float((pad.pct_protected < pad.at[f, "pct_protected"]).mean() * 100), 1)}
                            for f, n in FOCUS.items()}
 
+    # Other presets, committed against scored.
+    presets = {}
+    for name in ("speed_to_power", "sustainability_first"):
+        pc = er.load_yaml(ROOT / f"engine/conditions/{name}.yaml")
+        committed = pd.read_csv(ROOT / f"results/{name}.csv", dtype={"fips": str})
+        rp, _, _ = ranked(da, pc, pillars)
+        presets[name] = {"committed_first": f"{committed.county_name.iloc[0]}, {committed.state.iloc[0]}",
+                         "scored_first": f"{rp.county_name.iloc[0]}, {rp.state.iloc[0]}",
+                         "committed_focus": {n: int(committed.set_index("fips")["rank"][f]) if f in set(committed.fips)
+                                             else None for f, n in FOCUS.items()},
+                         "scored_focus": focus_ranks(rp),
+                         "scored_top5": rp.head(5)[["county_name", "state"]].agg(", ".join, axis=1).tolist()}
+    out["other_presets"] = presets
+
     # (b) gate: exclude counties whose protected share exceeds a threshold. The engine has no such gate
     # yet, so this filters the committed ranking's gate passers and reranks them unchanged otherwise.
     gates = {}

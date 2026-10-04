@@ -175,3 +175,95 @@ parentheses):
   this scoring.
 
 The ship decision waits on Phase 1, per the decision rule.
+
+### 2026-10-04 05:48 UTC, Phase 1 research in; advisor on plausibility and shipping
+
+**Phase 1 (Opus subagent, live GIS queries against PAD-US 4.1, TIGERweb
+2024 tribal layers, USFS, APA Blue Line):** no protected-land, tribal, or
+legal conflict blocks a campus at Quincy, Vancouver, or Malone.
+- **Quincy:** nearest protected land is a WDFW Columbia Basin Wildlife Area
+  parcel 5.8 km W; Quincy Lakes Unit 8.6 km S; BLM parcels 7.2 km NE. No
+  federal conservation designation within 30 km. No NPS unit or wilderness
+  within 50 km. Nearest tribal land 74.7 km N (Colville trust land).
+  Columbia NWR is 41 km S; Hanford Reach National Monument 54 km SE.
+- **Process risk:** Quincy appears to sit inside the Yakama 1855 ceded
+  area. That's the subagent's reading of the treaty text, not checked
+  against an official map.
+- **Stop condition not met.** The decision rule applies: Grant's county
+  share comes from holdings that don't constrain the Quincy area, so Phase 3
+  is measured but not shipped.
+
+**Advisor consulted on plausibility and the ship decision.** Don't ship
+(a) or build (b) overnight; keep the frozen table, `results/`, figures,
+demo, and deck numbers unchanged.
+- **(a) fails the ship test** (it doesn't match Phase 1 for the featured
+  county), and percentile scoring amplifies a modest gap.
+- **(b) needs an engine change** (a new gate in `engine/rank.py`, plus a
+  `pillars.yaml` change so the column isn't also scored) and a threshold
+  the team should choose.
+
+Checks it asked for before the write-up:
+1. Grant's 12.8% broken down by unit and distance.
+2. The other presets with the column scored.
+3. A concrete list of what would go stale.
+4. An empty diff against `main` for frozen artifacts.
+
+Write-up guidance:
+- A new `research/sensitive_land.md` with the full tables and the
+  unverified list.
+- Two Grant rows in `research/risk.md`: protected land, and tribal
+  consultation. Use cautious wording: "appears to" for the ceded area, no
+  claim about Wanapum recognition status, Colville as an expected
+  consulting party.
+- A short Clark and Franklin subsection.
+- A deck limitation bullet, with the 1-to-4 effect in the speaker note.
+- A morning summary that leads with the decision and the a/b/c options.
+
+### 2026-10-04 05:55 UTC, checks done and Phase 1 written up
+
+**Check 1, what Grant's 12.8% is made of**
+(`scratch/sensitive_land/grant_breakdown.py`, PAD-US 4.1 feature service
+clipped to the county):
+- Total: 229,095 acres of GAP 1-2, matching the county table.
+- Hanford Reach (69,441 acres, 54 km from Quincy), the Desert Unit (54,808
+  acres, 23 km), and Columbia NWR (15,358 acres, 41 km) make up 61%.
+- 57,563 acres lie within 10 km of Quincy: Columbia Basin Wildlife Area
+  parcels at 5.9 km, Beezley Hills (NGO) at 6.1 km, and Quincy Lakes at
+  8.5 km.
+- None lies within 5 km.
+- So the docs say "nearby, not a conflict", not "none near Quincy".
+
+**Check 2, other presets with the column scored.** `speed_to_power` keeps
+Wayne TN first (Grant fails that preset's gates either way).
+`sustainability_first` keeps Whitman WA first, and Grant moves from 5 to
+6. The #1 flip happens only under `balanced`.
+
+**Check 3, what would go stale if Phase 3 shipped:**
+- `data/processed/county_features.parquet`, its manifest, and the quality
+  report.
+- `results/*` for all three presets.
+- `docs/figures/*.png`, `facts.json`, and `freeze_balanced_ranks.csv`.
+- `docs/deck.md` lines 26, 29-30, 60-62, 78, 256, 260-261, and 282:
+  Grant first of 1,565, the 0.5-point lead, the 50.5% robustness, and the
+  "10 of 45" coverage.
+- `docs/demo_script.md` lines 28, 31, and 43 (Rank 1 of 1565).
+- `research/risk.md` line 43 (the comparison order).
+- `research/implementation.md` lines 53-54.
+- `etl/schema.py` STRETCH and the `etl/build_features.py` ADAPTERS list.
+
+**Phase 1 docs.**
+- New `research/sensitive_land.md`: per-county tables, the Grant
+  breakdown, tribal consultation, county shares, and an 11-item unverified
+  list.
+- `research/risk.md`: two Grant rows (protected land, Low; tribal
+  consultation and cultural resources, Low), a Clark and Franklin
+  subsection, and a limits line.
+- `docs/deck.md`: a limitation bullet, with the 1-to-4 effect in the
+  speaker note.
+- The Phase 1 report and query outputs are copied into
+  `scratch/sensitive_land/phase1/`.
+
+**Tests.** New `tests/test_sensitive_land.py` checks both adapters and
+skips when raw files are absent. The tribal check for Grant uses a
+tolerance, because TIGER/Line against cartographic county edges leaves a
+sliver of about 0.0001%. Suite: 185 passed, 15 skipped, 1 xfailed.
