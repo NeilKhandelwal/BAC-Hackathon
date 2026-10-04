@@ -81,3 +81,53 @@ Overwritten after every step.
   Big Horn MT 70.6%, Apache AZ 68.3%, Osage OK about 100%. All are
   plausible against the known reservation geography.
 - `etl/append_columns.py` added for the Phase 3 table update.
+
+### 2026-10-04 05:39 UTC, PAD-US source found and first measurement
+
+**Source.** USGS PAD-US 4.1 Summary Statistics, county table
+`PADUS4_1VectorAnalysis_Uni_Counties_Clip_CENSUS2022.csv` (ScienceBase
+item 6759b69fd34edfeb8710a3ea, 4 MB zip, direct URL). USGS built it from
+the flattened Vector Analysis layer, with overlaps removed. The full 1.52 GB
+national geodatabase and the state files are S3-hosted and download only in
+a browser. They aren't needed.
+
+**First numbers** (GAP 1-2 share of total county area; GAP 1-3 in
+parentheses):
+- Grant WA 12.8% (23.4%): WDFW wildlife areas 127k acres, USFWS 91k acres
+  (Columbia National Wildlife Refuge).
+- Clark WA 2.8% (18.4%).
+- Franklin NY 32.0% (50.1%): Adirondack Forest Preserve, GAP 1, 265k acres.
+- Berkshire MA 18.0%.
+- National median 1.85%. Grant sits at the 89th percentile.
+
+**Scratch run** (balanced, `pct_protected` scored in the land pillar as
+`engine/pillars.yaml` already specifies):
+- New top 10: Whitman WA 63.09, Scott IA, Mayes OK, Grant WA 62.22, Clark
+  WA, Wayne TN, Payne OK, Washington AR, Grady OK, Benton WA.
+- Grant falls from 1 to 4, and its land pillar from 75.0 to 53.6. Clark
+  moves from 7 to 5. Franklin goes from 952 to 1,011, Berkshire from 1,047
+  to 1,102.
+- The top five sit within 0.9 points of each other.
+
+**Advisor consulted on the data source, definition, and the flip.**
+- **Approved:** the PAD-US 4.1 county CSV; GAP 1-2 for `pct_protected`;
+  GAP 1-3 as context.
+- **Added checks in the adapter:** keys unique, exactly 3,109 matched, and
+  CSV total acres within 2% of Census land plus water for every county.
+- **Denominator:** total area, from the same clip. State that it dilutes
+  coastal and lake counties, and show land-only shares as a sensitivity.
+- **Overlap:** American Indian lands are GAP 4 in this file, so
+  `pct_protected` and `tribal_land_share` don't double count.
+- **Decision rule for Phase 3.**
+  - If Phase 1 finds a real conflict near Quincy, that's the stop condition.
+  - If Grant's 12.8% comes from holdings that don't constrain the Quincy
+    area, the county screen disagrees with the site check. Shipping would
+    then change the deck's #1, which is more than a numbers update. Record
+    Phase 3 as measured but not shipped, and put the decision at the top
+    of the morning summary.
+  - Keep `pct_protected` out of the frozen table unless shipping.
+    Appending it is shipping, because the pillar map already scores it.
+- **Compute first:** tribal and protected shares of the new top 10; Grant's
+  SMAA top-10 share with the column scored; and three options with their
+  effects: (a) score it, (b) use it as a gate, as `docs/schema.md`
+  describes, (c) context only.
