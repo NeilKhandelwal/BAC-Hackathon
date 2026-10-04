@@ -1,0 +1,72 @@
+positives 184 of 3109 (5.9%); out-of-fold AUC 0.905; population-only AUC 0.855; lift +0.050
+
+coefficients (standardized), largest first:
+                                            pillar   coef  univariate_r  pillar_direction  sign_conflict
+pop_density_per_sqkm                          land  0.885         0.321                -1           True
+population                               community  0.769         0.341                 1          False
+grid_co2_lb_mwh                      energy_carbon -0.690        -0.101                -1          False
+industrial_price_cents_kwh                    cost -0.651        -0.002                -1          False
+pop_change_pct_since_peak                community -0.581         0.101                -1          False
+cdd_hist                                     water -0.579         0.018                -1          False
+land_area_sqkm                                land  0.509        -0.019                 1          False
+nri_hurricane_score             climate_resilience -0.489         0.015                -1          False
+plant_capacity_mw_100km        grid_infrastructure  0.486         0.154                 1          False
+nri_heat_wave_score             climate_resilience -0.458        -0.128                -1          False
+state_policy_risk                       permitting  0.443         0.075                -1           True
+wind_speed_100m_ms                   energy_carbon -0.436        -0.069                 1           True
+nri_inland_flood_score          climate_resilience -0.326        -0.096                -1          False
+nri_drought_score                            water  0.318         0.032                -1           True
+days_above_95f_hist             climate_resilience  0.298         0.028                -1           True
+fiber_share_locations          grid_infrastructure  0.296         0.065                 1          False
+drought_share_weeks_d2plus                   water  0.287        -0.003                -1          False
+nri_tornado_score               climate_resilience  0.267        -0.044                -1          False
+queue_active_mw_clean                energy_carbon  0.264         0.118                 1          False
+nri_coastal_flood_score         climate_resilience -0.263         0.022                -1          False
+nri_winter_score                climate_resilience  0.199        -0.077                -1          False
+plant_clean_capacity_mw_100km        energy_carbon  0.199         0.106                 1          False
+water_stress_bws                             water -0.164         0.019                -1          False
+nri_wildfire_score              climate_resilience -0.157        -0.127                -1          False
+queue_operational_mw_5y              energy_carbon  0.143         0.123                 1          False
+grid_renewable_share                 energy_carbon  0.137        -0.033                 1          False
+heat_sink_score                          community  0.137         0.243                 1          False
+water_permit_risk                       permitting -0.099         0.009                -1          False
+unemployment_rate_pct_2023               community -0.088        -0.017                 1           True
+queue_withdrawal_rate          grid_infrastructure -0.081        -0.043                -1          False
+air_nonattainment_count                 permitting -0.065         0.183                -1          False
+queue_median_age_years         grid_infrastructure -0.020        -0.003                -1          False
+coal_retired_mw                grid_infrastructure  0.017         0.119                 1          False
+mfg_emp_share_1969                       community  0.001         0.086                 1          False
+
+pillar weights:
+                     revealed  share_from_sign_conflicts  balanced  critic
+climate_resilience      0.227                      0.121     0.119   0.254
+community               0.146                      0.056     0.085   0.136
+cost                    0.060                      0.000     0.150   0.018
+energy_carbon           0.173                      0.233     0.153   0.180
+grid_infrastructure     0.083                      0.000     0.153   0.150
+land                    0.129                      0.635     0.068   0.044
+permitting              0.056                      0.730     0.153   0.096
+water                   0.125                      0.236     0.119   0.121
+
+industry picks (gate passers without a data center):
+                county  p_industry  rank_monetized_190  rank_balanced
+41051    Multnomah, OR       0.846                 412           1005
+48141      El Paso, TX       0.829                  31           1360
+37183         Wake, NC       0.702                 190            430
+36055       Monroe, NY       0.693                  23           1106
+27123       Ramsey, MN       0.689                1289           1185
+48135        Ector, TX       0.639                  86            998
+42043      Dauphin, PA       0.626                 226            386
+42133         York, PA       0.606                 141            370
+21111    Jefferson, KY       0.587                 857            952
+45083  Spartanburg, SC       0.584                  42            972
+
+five biggest disagreements (revealed vs monetized $190, combined top 20):
+              county  rank_revealed  rank_monetized_190  rank_balanced  has_dc
+17031       Cook, IL             19                1409            641    True
+32003      Clark, NV             18                1408            719    True
+26163      Wayne, MI              3                1386            304    True
+27053   Hennepin, MN             16                1320           1139    True
+42003  Allegheny, PA             10                1271            401    True
+
+focus: {'Clark, WA': {'p_industry': 0.327, 'rank_revealed': 103, 'has_dc': False}, 'Franklin, NY': {'p_industry': 0.038, 'rank_revealed': 548, 'has_dc': False}, 'Grant, WA': {'p_industry': 0.284, 'rank_revealed': 120, 'has_dc': True}}

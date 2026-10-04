@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:53 UTC
+- **Updated:** 2026-10-04 01:58 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,13 +17,13 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** Phase 3 done. Phase 4 (revealed preference) starting. The user
+- **Phase and step:** Phase 4 done. Next: the BPA fairness fix (item 3 below), then Phase 5. The user
   approved running Phases 3 and 4 back to back without a check-in unless
   something blocks.
 - **Done:** Phase 0. Phase 1 (`monetize.py`). Monte Carlo
   (`montecarlo.py`). Phase 2 (`smaa.py`). `docs/weighting.md` stub with
   the hazard-downtime and floor notes. Results are in the history.
-- **In progress:** Phase 4.
+- **In progress:** BPA fairness fix in `monetize.py` and `montecarlo.py`.
 - **Exact next action:** in order, per approved decisions 13 to 16:
   1. `scratch/weighting/critic.py`: raw-value CRITIC and entropy only
      (winsorize 1st/99th, min-max, direction applied, column-level
@@ -145,7 +145,7 @@ exemption. Don't attribute the whole flip to weights.
 | 1 | Monetized total cost of siting | done | `scratch/weighting/monetize.py`, `docs/img/cost_vs_co2.png` |
 | 2 | Weight-space mapping (SMAA) | done | `scratch/weighting/smaa.py`, `docs/img/smaa_acceptability.png` |
 | 3 | CRITIC and entropy weights | done | `scratch/weighting/critic.py` |
-| 4 | Revealed preference | not started | `scratch/weighting/revealed.py` |
+| 4 | Revealed preference | done | `scratch/weighting/revealed.py` |
 | 5 | Consensus and write-up | not started | `scratch/weighting/consensus.py`, `docs/weighting.md`, `docs/img/` |
 
 ## Rules
@@ -678,3 +678,62 @@ beat Clark (shorter delay or a lower rate).
 
 **Phase 5 heads-up.** Land isn't monetized, and Clark's land pillar is at
 the 22nd percentile. The recommendation must address it.
+
+### 2026-10-04 01:58 UTC, Phase 4: revealed preference
+
+Script: `scratch/weighting/revealed.py`. Printout:
+`scratch/weighting/out/revealed_report.txt`. Ranks:
+`scratch/weighting/out/revealed_ranks.csv`. JSON:
+`scratch/weighting/out/revealed_summary.json`. Outcome: at least one
+existing FracTracker data center (184 of 3,109 counties, 5.9%). 34
+features, every scored column with data except `dc_existing_count`. L2
+logistic regression, median imputation and standardization fit inside
+stratified 5-fold cross validation, seed 0, trained on all counties.
+
+**Fit.** Out-of-fold AUC 0.905, above the 0.65 stop rule. Population
+alone gives 0.855, so the other 33 columns add 0.050. Most of what
+predicts an existing data center is population.
+
+**Pillar weights from absolute standardized coefficients:**
+
+| Pillar | Revealed | Share from sign conflicts | Balanced | CRITIC |
+| --- | --- | --- | --- | --- |
+| climate_resilience | 0.227 | 0.12 | 0.119 | 0.254 |
+| energy_carbon | 0.173 | 0.23 | 0.153 | 0.180 |
+| community | 0.146 | 0.06 | 0.085 | 0.136 |
+| land | 0.129 | 0.64 | 0.068 | 0.044 |
+| water | 0.125 | 0.24 | 0.119 | 0.121 |
+| grid_infrastructure | 0.083 | 0 | 0.153 | 0.150 |
+| cost | 0.060 | 0 | 0.150 | 0.018 |
+| permitting | 0.056 | 0.73 | 0.153 | 0.096 |
+
+**Sign conflicts**, where industry's preference runs against the pillar
+direction and the univariate correlation agrees with the coefficient:
+`pop_density_per_sqkm` (industry prefers dense counties; land prefers
+sparse), `state_policy_risk` (more data centers where states have
+restriction bills, likely reverse causation), `wind_speed_100m_ms`,
+`nri_drought_score`, `days_above_95f_hist`, `unemployment_rate_pct_2023`.
+Aligned and strong: lower grid CO2 (-0.69), lower industrial price
+(-0.65), more plant capacity within 100 km (+0.49), fewer hurricanes and
+heat waves.
+
+**Industry picks** (gate passers with no data center, highest
+predicted probability): Multnomah OR, El Paso TX, Wake NC, Monroe NY,
+Ramsey MN, Ector TX, Dauphin PA, York PA, Jefferson KY, Spartanburg SC.
+Their monetized $190/t ranks run from 23 (Monroe) to 1,289 (Ramsey).
+
+**Five biggest disagreements** (largest rank gaps in the combined top 20
+of revealed preference and monetized $190/t): Cook IL (revealed 19,
+monetized 1,409), Clark NV (18 against 1,408), Wayne MI (3 against
+1,386), Hennepin MN (16 against 1,320), Allegheny PA (10 against 1,271).
+All five are metros with existing clusters on carbon-heavy or expensive
+grids. Revealed preference and the sustainability rankings measure
+different things.
+
+**Focus counties.** Clark WA: probability 0.33, revealed rank 103, no
+existing data center. Grant WA: 0.28, rank 120, has data centers.
+Franklin NY: 0.04, rank 548.
+
+**Caveat.** FracTracker's existing facilities reflect past siting, much
+of it near metros for latency, not where a 300 MW AI campus would go.
+The weights describe the existing fleet, not a target.
