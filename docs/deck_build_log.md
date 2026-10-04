@@ -5,17 +5,19 @@ STATE block is overwritten at every step. History is append-only.
 
 ## CURRENT STATE
 
-- **Updated:** 2026-10-04, step 1 (story decided).
+- **Updated:** 2026-10-04, step 2 (first full deck).
 - **Branch:** `deck/template`, created from `main` at
   `23bb71cb622fae2d82ba0cfe415b909888b422aa`.
 - **Pull request:** none yet. `gh` is installed but not logged in, so the
   PR step waits for the end.
-- **Phase:** story structure decided with the advisor. Quote and photo
-  research is running in a subagent. Next: write `docs/deck/build_deck.py`.
-- **Rendering:** LibreOffice 26 and PyMuPDF are installed, so PNG previews
-  are possible.
-- **Placeholders left:** not started.
-- **Numbers to check:** not started.
+- **Phase:** first full deck built, rendered, and inspected. Next: a
+  structural check script, a final visual pass, and the advisor's review
+  before finalizing.
+- **Deck:** `docs/deck/pitch_template.pptx`, 9 main slides and 6 appendix
+  slides. Rebuild with `.venv/bin/python docs/deck/build_deck.py`, render
+  with `.venv/bin/python docs/deck/render_previews.py`.
+- **Placeholders left:** none. Every quote on a slide is verified.
+- **Numbers to check:** 67 rows in `docs/deck/numbers_to_check.md`.
 - **Sensitive-land check:** `origin/fix/sensitive-land` at `d2ed911` has
   both rows in `research/risk.md`. Slide 7 uses them.
 
@@ -123,3 +125,64 @@ STATE block is overwritten at every step. History is append-only.
 5. Slide 7 uses the sensitive-land and tribal rows from
    `origin/fix/sensitive-land` (`d2ed911`, `research/risk.md`), cited as
    unmerged.
+
+### 2026-10-04, step 2: quotes, builder, first full deck
+
+**Quote and photo research (Opus subagent).** Every quote was opened at
+its primary source and matched word for word. Results:
+
+- Used on slides: New York Executive Order 62, WHEREAS clause 9 (slide 1);
+  Washington Data Center Workgroup Preliminary Report, Finding 19 (slide
+  4); Grant PUD Data Center FAQs, Q6 (slide 7) and Q5 (slide 8).
+- Verified and kept in the quote bank in `docs/deck/sources.md`: IEA
+  Energy and AI, DOE press release, LBNL report sentences (the slide 1
+  chart values), LBNL on cooling-tower water, WA Workgroup Findings 6 and
+  18b, WA UTC media advisory, BPA new large single load fact sheet.
+- Not used: the "at its water right limits" line. It's a Department of
+  Ecology meeting summary of a City of Quincy staff member's remarks, not
+  a City statement, and it blames food processing, not data centers.
+- No verified source says siting matters "for decades". The slide 1
+  headline is the team's claim, not a quote.
+- New risk for Q&A: WA Workgroup Finding 19c says new load on hydropower
+  competes with Tribal and state fisheries efforts. Added to slide 7
+  notes.
+- Photos: five public-domain or CC BY-SA images were verified (Wanapum
+  Dam, Quincy aerial, NASA US at night, NREL liquid-cooled HPC, Priest
+  Rapids spillway). None is on a slide, because every main slide already
+  has a chart. They're listed in `sources.md` for a swap.
+
+**Build decisions:**
+
+- `docs/deck/build_deck.py` writes the deck, `numbers_to_check.md`, and
+  `sources.md` in one run, reading `facts.json` and the committed SMAA
+  output, so a rebuild after tonight's changes keeps all three in sync.
+  Numbers from research write-ups are typed in next to their source file.
+- Native charts on slides 1, 4, 5, 6, 7, 9, A1, A3, and A6; native
+  shapes for the flow (slide 3) and timeline (slide 8); native tables on
+  A2, A4, A5, and A6. Only slide 2's map is a PNG.
+- Slide 5 uses a native rank chart instead of `pick_story.png`, because
+  the PNG's labels were too small to read from the back of a room.
+  Berkshire's last point (#1,047) is drawn at the bottom edge and labeled.
+- A6 uses a native table from `results/global_balanced.csv` instead of
+  `global_table.png`, for the same reason.
+- Arial throughout, set in the theme, so previews match PowerPoint on
+  Windows. Theme colors are the cockpit palette.
+- Theme shape styles are removed from every drawn shape, so no theme
+  shadow renders.
+- No em dashes in the deck. Quote attributions sit on their own line.
+- Speaker scripts are 75 to 90 words (30 to 36 seconds at 150 words a
+  minute). The nine main scripts total about 770 words, about 5 minutes.
+  "IF ASKED" blocks in the notes carry Q&A material outside the script.
+
+**First render fixes:** two-line headlines crowded content (content now
+starts at 2.2 in); slide 1 bullets overflowed into the source line; the
+rule line and boxes showed theme shadows; "Research" broke mid-word; chart
+titles wrapped; a custom data label on one bar hid the others in
+LibreOffice (moved the text into the category name); the rank chart's
+category axis sat on top (now crosses at the maximum); quote attributions
+overflowed (short slide citations, full ones in `sources.md`).
+
+**Mistake caught and fixed:** a script-trimming pass matched only
+f-string notes, so new text for slides 1, 8, and A2 landed on slides 2,
+9, and A4. The notes were restored from the original text and the
+intended scripts applied by line. Word counts confirm each slide's script.
