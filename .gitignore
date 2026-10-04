@@ -17,3 +17,6 @@ __pycache__/
 .env
 .DS_Store
 .ipynb_checkpoints/
+
+# Full audit tables; regenerate with python research/etl_semantics_audit/run_audit.py
+research/etl_semantics_audit/outputs/
