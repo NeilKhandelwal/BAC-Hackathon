@@ -1,72 +1,72 @@
-positives 184 of 3109 (5.9%); out-of-fold AUC 0.905; population-only AUC 0.855; lift +0.050
+positives 184 of 3109 (5.9%); out-of-fold AUC 0.906; population-only AUC 0.855; lift +0.051
 
 coefficients (standardized), largest first:
-                                            pillar   coef  univariate_r  pillar_direction  sign_conflict
-pop_density_per_sqkm                          land  0.885         0.321                -1           True
-population                               community  0.769         0.341                 1          False
-grid_co2_lb_mwh                      energy_carbon -0.690        -0.101                -1          False
-industrial_price_cents_kwh                    cost -0.651        -0.002                -1          False
-pop_change_pct_since_peak                community -0.581         0.101                -1          False
-cdd_hist                                     water -0.579         0.018                -1          False
-land_area_sqkm                                land  0.509        -0.019                 1          False
-nri_hurricane_score             climate_resilience -0.489         0.015                -1          False
-plant_capacity_mw_100km        grid_infrastructure  0.486         0.154                 1          False
-nri_heat_wave_score             climate_resilience -0.458        -0.128                -1          False
-state_policy_risk                       permitting  0.443         0.075                -1           True
-wind_speed_100m_ms                   energy_carbon -0.436        -0.069                 1           True
-nri_inland_flood_score          climate_resilience -0.326        -0.096                -1          False
-nri_drought_score                            water  0.318         0.032                -1           True
-days_above_95f_hist             climate_resilience  0.298         0.028                -1           True
-fiber_share_locations          grid_infrastructure  0.296         0.065                 1          False
-drought_share_weeks_d2plus                   water  0.287        -0.003                -1          False
-nri_tornado_score               climate_resilience  0.267        -0.044                -1          False
-queue_active_mw_clean                energy_carbon  0.264         0.118                 1          False
-nri_coastal_flood_score         climate_resilience -0.263         0.022                -1          False
-nri_winter_score                climate_resilience  0.199        -0.077                -1          False
-plant_clean_capacity_mw_100km        energy_carbon  0.199         0.106                 1          False
-water_stress_bws                             water -0.164         0.019                -1          False
-nri_wildfire_score              climate_resilience -0.157        -0.127                -1          False
-queue_operational_mw_5y              energy_carbon  0.143         0.123                 1          False
-grid_renewable_share                 energy_carbon  0.137        -0.033                 1          False
-heat_sink_score                          community  0.137         0.243                 1          False
-water_permit_risk                       permitting -0.099         0.009                -1          False
-unemployment_rate_pct_2023               community -0.088        -0.017                 1           True
-queue_withdrawal_rate          grid_infrastructure -0.081        -0.043                -1          False
-air_nonattainment_count                 permitting -0.065         0.183                -1          False
-queue_median_age_years         grid_infrastructure -0.020        -0.003                -1          False
-coal_retired_mw                grid_infrastructure  0.017         0.119                 1          False
-mfg_emp_share_1969                       community  0.001         0.086                 1          False
+                                                 pillar   coef  univariate_r  pillar_direction  sign_conflict
+pop_density_per_sqkm                               land  1.134         0.321                -1           True
+grid_co2_lb_mwh                           energy_carbon -0.707        -0.101                -1          False
+industrial_price_cents_kwh                         cost -0.647        -0.002                -1          False
+population                                    community  0.603         0.341                 1          False
+land_area_sqkm                                     land  0.602        -0.019                 1          False
+cdd_hist                                          water -0.586         0.018                -1          False
+pop_change_pct_since_peak                     community -0.575         0.101                -1          False
+plant_capacity_mw_100km             grid_infrastructure  0.508         0.154                 1          False
+nri_hurricane_score                  climate_resilience -0.507         0.015                -1          False
+nri_heat_wave_score                  climate_resilience -0.470        -0.128                -1          False
+wind_speed_100m_ms                        energy_carbon -0.425        -0.069                 1           True
+state_policy_risk                            permitting  0.421         0.075                -1           True
+nri_drought_score                                 water  0.323         0.032                -1           True
+nri_inland_flood_score               climate_resilience -0.318        -0.096                -1          False
+days_above_95f_hist                  climate_resilience  0.300         0.028                -1           True
+drought_share_weeks_d2plus                        water  0.288        -0.003                -1          False
+fiber_share_locations               grid_infrastructure  0.281         0.065                 1          False
+nri_tornado_score                    climate_resilience  0.267        -0.044                -1          False
+nri_coastal_flood_score              climate_resilience -0.240         0.022                -1          False
+queue_operational_mw_online_5y            energy_carbon  0.232         0.116                 1          False
+nri_winter_score                     climate_resilience  0.214        -0.077                -1          False
+queue_active_mw_clean_excl_storage        energy_carbon  0.195         0.041                 1          False
+nri_wildfire_score                   climate_resilience -0.173        -0.127                -1          False
+grid_renewable_share                      energy_carbon  0.170        -0.033                 1          False
+plant_clean_capacity_mw_100km             energy_carbon  0.170         0.106                 1          False
+water_stress_bws                                  water -0.169         0.019                -1          False
+heat_sink_score                               community  0.130         0.243                 1          False
+queue_withdrawal_rate               grid_infrastructure -0.113        -0.043                -1          False
+unemployment_rate_pct_2023                    community -0.105        -0.017                 1           True
+air_nonattainment_count                      permitting -0.083         0.183                -1          False
+water_permit_risk                            permitting -0.083         0.009                -1          False
+queue_median_age_years              grid_infrastructure -0.036        -0.003                -1          False
+mfg_emp_share_1969                            community  0.022         0.086                 1          False
+coal_retired_mw                     grid_infrastructure  0.018         0.119                 1          False
 
 pillar weights:
                      revealed  share_from_sign_conflicts  balanced  critic
-climate_resilience      0.227                      0.121     0.119   0.254
-community               0.146                      0.056     0.085   0.136
-cost                    0.060                      0.000     0.150   0.018
-energy_carbon           0.173                      0.233     0.153   0.180
-grid_infrastructure     0.083                      0.000     0.153   0.150
-land                    0.129                      0.635     0.068   0.044
-permitting              0.056                      0.730     0.153   0.096
-water                   0.125                      0.236     0.119   0.121
+climate_resilience      0.224                      0.121     0.119   0.252
+community               0.129                      0.073     0.085   0.136
+cost                    0.058                      0.000     0.150   0.018
+energy_carbon           0.171                      0.224     0.153   0.185
+grid_infrastructure     0.086                      0.000     0.153   0.150
+land                    0.156                      0.653     0.068   0.044
+permitting              0.053                      0.717     0.153   0.096
+water                   0.123                      0.236     0.119   0.120
 
 industry picks (gate passers without a data center):
-                county  p_industry  rank_monetized_190  rank_balanced
-41051    Multnomah, OR       0.846                 380           1005
-48141      El Paso, TX       0.829                   7           1360
-37183         Wake, NC       0.702                 155            430
-36055       Monroe, NY       0.693                 917           1106
-27123       Ramsey, MN       0.689                1217           1185
-48135        Ector, TX       0.639                  54            998
-42043      Dauphin, PA       0.626                 191            386
-42133         York, PA       0.606                 107            370
-21111    Jefferson, KY       0.587                 827            952
-45083  Spartanburg, SC       0.584                  12            972
+              county  p_industry  rank_monetized_190  rank_balanced
+48141    El Paso, TX       0.838                   7           1359
+41051  Multnomah, OR       0.813                 380           1076
+27123     Ramsey, MN       0.736                1217           1169
+37183       Wake, NC       0.696                 155            449
+48135      Ector, TX       0.658                  54           1002
+36055     Monroe, NY       0.655                 917           1143
+42133       York, PA       0.648                 107            386
+39025   Clermont, OH       0.618                 586            128
+42043    Dauphin, PA       0.594                 191            383
+37067    Forsyth, NC       0.594                 230           1257
 
 five biggest disagreements (revealed vs monetized $190, combined top 20):
               county  rank_revealed  rank_monetized_190  rank_balanced  has_dc
-17031       Cook, IL             19                1327            641    True
-32003      Clark, NV             18                1326            719    True
-26163      Wayne, MI              3                1303            304    True
-27053   Hennepin, MN             16                1244           1139    True
-42003  Allegheny, PA             10                1203            401    True
+32003      Clark, NV              8                1326            618    True
+26163      Wayne, MI              4                1303            445    True
+27053   Hennepin, MN             13                1244           1128    True
+42003  Allegheny, PA             10                1203            409    True
+04013   Maricopa, AZ              1                1164           1418    True
 
-focus: {'Clark, WA': {'p_industry': 0.327, 'rank_revealed': 103, 'has_dc': False}, 'Franklin, NY': {'p_industry': 0.038, 'rank_revealed': 548, 'has_dc': False}, 'Grant, WA': {'p_industry': 0.284, 'rank_revealed': 120, 'has_dc': True}}
+focus: {'Clark, WA': {'p_industry': 0.357, 'rank_revealed': 92, 'has_dc': False}, 'Franklin, NY': {'p_industry': 0.051, 'rank_revealed': 452, 'has_dc': False}, 'Grant, WA': {'p_industry': 0.251, 'rank_revealed': 148, 'has_dc': True}}

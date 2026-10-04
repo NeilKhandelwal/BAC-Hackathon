@@ -12,69 +12,69 @@
     "permitting"
   ],
   "counties": 1565,
-  "floor_ok_counties": 915,
+  "floor_ok_counties": 912,
   "self_check_top10": [
     "53025",
     "47181",
     "53075",
     "40097",
-    "53005",
     "19163",
+    "53005",
     "53011",
     "47151",
-    "40051",
-    "40001"
+    "40001",
+    "40051"
   ],
   "rank1_floor_on": [
     {
       "fips": "53075",
       "county": "Whitman, WA",
-      "share": 0.124
+      "share": 0.129
     },
     {
       "fips": "53025",
       "county": "Grant, WA",
-      "share": 0.124
+      "share": 0.115
     },
     {
       "fips": "47181",
       "county": "Wayne, TN",
-      "share": 0.109
-    },
-    {
-      "fips": "39155",
-      "county": "Trumbull, OH",
-      "share": 0.091
-    },
-    {
-      "fips": "53011",
-      "county": "Clark, WA",
-      "share": 0.067
-    },
-    {
-      "fips": "40051",
-      "county": "Grady, OK",
-      "share": 0.04
-    },
-    {
-      "fips": "19163",
-      "county": "Scott, IA",
-      "share": 0.038
+      "share": 0.108
     },
     {
       "fips": "42079",
       "county": "Luzerne, PA",
-      "share": 0.034
+      "share": 0.102
+    },
+    {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "share": 0.069
+    },
+    {
+      "fips": "39155",
+      "county": "Trumbull, OH",
+      "share": 0.059
+    },
+    {
+      "fips": "19163",
+      "county": "Scott, IA",
+      "share": 0.043
+    },
+    {
+      "fips": "40051",
+      "county": "Grady, OK",
+      "share": 0.038
     },
     {
       "fips": "17161",
       "county": "Rock Island, IL",
-      "share": 0.034
+      "share": 0.027
     },
     {
-      "fips": "42033",
-      "county": "Clearfield, PA",
-      "share": 0.033
+      "fips": "40097",
+      "county": "Mayes, OK",
+      "share": 0.027
     }
   ],
   "top10_floor_on": [
@@ -86,106 +86,106 @@
     {
       "fips": "53075",
       "county": "Whitman, WA",
-      "share": 0.447
+      "share": 0.458
     },
     {
       "fips": "47181",
       "county": "Wayne, TN",
-      "share": 0.421
-    },
-    {
-      "fips": "39155",
-      "county": "Trumbull, OH",
-      "share": 0.324
-    },
-    {
-      "fips": "53011",
-      "county": "Clark, WA",
-      "share": 0.296
+      "share": 0.424
     },
     {
       "fips": "42079",
       "county": "Luzerne, PA",
-      "share": 0.295
-    },
-    {
-      "fips": "42033",
-      "county": "Clearfield, PA",
-      "share": 0.24
-    },
-    {
-      "fips": "53005",
-      "county": "Benton, WA",
-      "share": 0.232
-    },
-    {
-      "fips": "47151",
-      "county": "Scott, TN",
-      "share": 0.207
-    },
-    {
-      "fips": "40097",
-      "county": "Mayes, OK",
-      "share": 0.198
-    }
-  ],
-  "rank1_floor_off": [
-    {
-      "fips": "53025",
-      "county": "Grant, WA",
-      "share": 0.08
-    },
-    {
-      "fips": "47181",
-      "county": "Wayne, TN",
-      "share": 0.075
-    },
-    {
-      "fips": "39061",
-      "county": "Hamilton, OH",
-      "share": 0.072
-    },
-    {
-      "fips": "39155",
-      "county": "Trumbull, OH",
-      "share": 0.072
-    },
-    {
-      "fips": "36033",
-      "county": "Franklin, NY",
-      "share": 0.071
-    },
-    {
-      "fips": "53075",
-      "county": "Whitman, WA",
-      "share": 0.071
+      "share": 0.364
     },
     {
       "fips": "53011",
       "county": "Clark, WA",
-      "share": 0.049
+      "share": 0.306
+    },
+    {
+      "fips": "39155",
+      "county": "Trumbull, OH",
+      "share": 0.274
+    },
+    {
+      "fips": "42033",
+      "county": "Clearfield, PA",
+      "share": 0.229
+    },
+    {
+      "fips": "53005",
+      "county": "Benton, WA",
+      "share": 0.226
+    },
+    {
+      "fips": "47151",
+      "county": "Scott, TN",
+      "share": 0.208
+    },
+    {
+      "fips": "19163",
+      "county": "Scott, IA",
+      "share": 0.205
+    }
+  ],
+  "rank1_floor_off": [
+    {
+      "fips": "36033",
+      "county": "Franklin, NY",
+      "share": 0.103
+    },
+    {
+      "fips": "39061",
+      "county": "Hamilton, OH",
+      "share": 0.074
+    },
+    {
+      "fips": "47181",
+      "county": "Wayne, TN",
+      "share": 0.072
+    },
+    {
+      "fips": "53025",
+      "county": "Grant, WA",
+      "share": 0.069
+    },
+    {
+      "fips": "53075",
+      "county": "Whitman, WA",
+      "share": 0.062
+    },
+    {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "share": 0.053
+    },
+    {
+      "fips": "42079",
+      "county": "Luzerne, PA",
+      "share": 0.047
+    },
+    {
+      "fips": "39155",
+      "county": "Trumbull, OH",
+      "share": 0.045
     },
     {
       "fips": "40015",
       "county": "Caddo, OK",
-      "share": 0.034
+      "share": 0.042
     },
     {
-      "fips": "47163",
-      "county": "Sullivan, TN",
-      "share": 0.032
-    },
-    {
-      "fips": "36041",
-      "county": "Hamilton, NY",
-      "share": 0.03
+      "fips": "40007",
+      "county": "Beaver, OK",
+      "share": 0.035
     }
   ],
   "top10_floor_off": [
     {
       "fips": "53025",
       "county": "Grant, WA",
-      "share": 0.349
+      "share": 0.342
     },
     {
       "fips": "53075",
@@ -195,198 +195,198 @@
     {
       "fips": "47181",
       "county": "Wayne, TN",
-      "share": 0.308
-    },
-    {
-      "fips": "39155",
-      "county": "Trumbull, OH",
-      "share": 0.248
+      "share": 0.305
     },
     {
       "fips": "36033",
       "county": "Franklin, NY",
-      "share": 0.243
-    },
-    {
-      "fips": "53011",
-      "county": "Clark, WA",
-      "share": 0.206
-    },
-    {
-      "fips": "40015",
-      "county": "Caddo, OK",
-      "share": 0.199
+      "share": 0.293
     },
     {
       "fips": "36049",
       "county": "Lewis, NY",
-      "share": 0.195
+      "share": 0.265
     },
     {
       "fips": "42079",
       "county": "Luzerne, PA",
-      "share": 0.19
+      "share": 0.262
+    },
+    {
+      "fips": "39155",
+      "county": "Trumbull, OH",
+      "share": 0.211
+    },
+    {
+      "fips": "40015",
+      "county": "Caddo, OK",
+      "share": 0.211
+    },
+    {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "share": 0.209
     },
     {
       "fips": "39061",
       "county": "Hamilton, OH",
-      "share": 0.17
+      "share": 0.172
     }
   ],
   "central_floor_on": {
     "Whitman, WA (53075)": {
-      "rank1": 0.124,
+      "rank1": 0.129,
       "central_weights": {
-        "energy_carbon": 0.166,
-        "water": 0.188,
-        "climate_resilience": 0.089,
+        "energy_carbon": 0.169,
+        "water": 0.186,
+        "climate_resilience": 0.088,
         "grid_infrastructure": 0.073,
-        "land": 0.195,
-        "community": 0.056,
-        "cost": 0.117,
+        "land": 0.191,
+        "community": 0.057,
+        "cost": 0.119,
         "permitting": 0.116
       }
     },
     "Grant, WA (53025)": {
-      "rank1": 0.124,
+      "rank1": 0.115,
       "central_weights": {
-        "energy_carbon": 0.162,
+        "energy_carbon": 0.155,
         "water": 0.059,
-        "climate_resilience": 0.098,
-        "grid_infrastructure": 0.207,
-        "land": 0.171,
-        "community": 0.126,
-        "cost": 0.076,
-        "permitting": 0.102
+        "climate_resilience": 0.093,
+        "grid_infrastructure": 0.215,
+        "land": 0.17,
+        "community": 0.128,
+        "cost": 0.081,
+        "permitting": 0.098
       }
     },
     "Wayne, TN (47181)": {
-      "rank1": 0.109,
+      "rank1": 0.108,
       "central_weights": {
         "energy_carbon": 0.049,
         "water": 0.091,
         "climate_resilience": 0.096,
-        "grid_infrastructure": 0.125,
+        "grid_infrastructure": 0.126,
         "land": 0.115,
-        "community": 0.1,
-        "cost": 0.14,
-        "permitting": 0.284
+        "community": 0.101,
+        "cost": 0.141,
+        "permitting": 0.283
       }
     },
-    "Trumbull, OH (39155)": {
-      "rank1": 0.091,
+    "Luzerne, PA (42079)": {
+      "rank1": 0.102,
       "central_weights": {
-        "energy_carbon": 0.077,
-        "water": 0.184,
-        "climate_resilience": 0.079,
-        "grid_infrastructure": 0.126,
-        "land": 0.058,
-        "community": 0.275,
-        "cost": 0.126,
-        "permitting": 0.076
+        "energy_carbon": 0.151,
+        "water": 0.204,
+        "climate_resilience": 0.108,
+        "grid_infrastructure": 0.111,
+        "land": 0.077,
+        "community": 0.23,
+        "cost": 0.042,
+        "permitting": 0.077
       }
     },
     "Clark, WA (53011)": {
-      "rank1": 0.067,
+      "rank1": 0.069,
       "central_weights": {
-        "energy_carbon": 0.101,
-        "water": 0.27,
-        "climate_resilience": 0.143,
-        "grid_infrastructure": 0.052,
-        "land": 0.039,
-        "community": 0.105,
-        "cost": 0.165,
-        "permitting": 0.123
+        "energy_carbon": 0.1,
+        "water": 0.26,
+        "climate_resilience": 0.145,
+        "grid_infrastructure": 0.055,
+        "land": 0.04,
+        "community": 0.111,
+        "cost": 0.171,
+        "permitting": 0.117
       }
     }
   },
   "central_floor_off": {
-    "Grant, WA (53025)": {
-      "rank1": 0.08,
+    "Franklin, NY (36033)": {
+      "rank1": 0.103,
       "central_weights": {
-        "energy_carbon": 0.141,
-        "water": 0.063,
-        "climate_resilience": 0.1,
-        "grid_infrastructure": 0.218,
-        "land": 0.175,
-        "community": 0.125,
-        "cost": 0.078,
-        "permitting": 0.1
-      }
-    },
-    "Wayne, TN (47181)": {
-      "rank1": 0.075,
-      "central_weights": {
-        "energy_carbon": 0.051,
-        "water": 0.091,
-        "climate_resilience": 0.082,
-        "grid_infrastructure": 0.13,
-        "land": 0.116,
-        "community": 0.097,
-        "cost": 0.139,
-        "permitting": 0.294
+        "energy_carbon": 0.2,
+        "water": 0.236,
+        "climate_resilience": 0.086,
+        "grid_infrastructure": 0.097,
+        "land": 0.121,
+        "community": 0.089,
+        "cost": 0.038,
+        "permitting": 0.131
       }
     },
     "Hamilton, OH (39061)": {
-      "rank1": 0.072,
+      "rank1": 0.074,
       "central_weights": {
         "energy_carbon": 0.052,
-        "water": 0.107,
-        "climate_resilience": 0.157,
-        "grid_infrastructure": 0.335,
-        "land": 0.052,
-        "community": 0.126,
-        "cost": 0.093,
-        "permitting": 0.078
+        "water": 0.106,
+        "climate_resilience": 0.156,
+        "grid_infrastructure": 0.332,
+        "land": 0.053,
+        "community": 0.13,
+        "cost": 0.094,
+        "permitting": 0.077
       }
     },
-    "Trumbull, OH (39155)": {
+    "Wayne, TN (47181)": {
       "rank1": 0.072,
       "central_weights": {
-        "energy_carbon": 0.08,
-        "water": 0.185,
-        "climate_resilience": 0.075,
-        "grid_infrastructure": 0.106,
-        "land": 0.061,
-        "community": 0.292,
-        "cost": 0.128,
-        "permitting": 0.074
+        "energy_carbon": 0.049,
+        "water": 0.092,
+        "climate_resilience": 0.081,
+        "grid_infrastructure": 0.133,
+        "land": 0.116,
+        "community": 0.098,
+        "cost": 0.14,
+        "permitting": 0.292
       }
     },
-    "Franklin, NY (36033)": {
-      "rank1": 0.071,
+    "Grant, WA (53025)": {
+      "rank1": 0.069,
       "central_weights": {
-        "energy_carbon": 0.165,
-        "water": 0.266,
-        "climate_resilience": 0.091,
-        "grid_infrastructure": 0.089,
-        "land": 0.138,
-        "community": 0.094,
-        "cost": 0.035,
-        "permitting": 0.123
+        "energy_carbon": 0.131,
+        "water": 0.062,
+        "climate_resilience": 0.096,
+        "grid_infrastructure": 0.23,
+        "land": 0.173,
+        "community": 0.129,
+        "cost": 0.082,
+        "permitting": 0.096
+      }
+    },
+    "Whitman, WA (53075)": {
+      "rank1": 0.062,
+      "central_weights": {
+        "energy_carbon": 0.144,
+        "water": 0.192,
+        "climate_resilience": 0.087,
+        "grid_infrastructure": 0.073,
+        "land": 0.185,
+        "community": 0.057,
+        "cost": 0.168,
+        "permitting": 0.095
       }
     }
   },
   "focus": {
     "Clark, WA": {
-      "rank1_floor_on": 0.0672,
-      "top10_floor_on": 0.2958,
-      "rank1_floor_off": 0.0492,
-      "top10_floor_off": 0.2062,
+      "rank1_floor_on": 0.0694,
+      "top10_floor_on": 0.3062,
+      "rank1_floor_off": 0.0526,
+      "top10_floor_off": 0.2092,
       "floor_ok": true
     },
     "Franklin, NY": {
       "rank1_floor_on": 0.0,
       "top10_floor_on": 0.0,
-      "rank1_floor_off": 0.0714,
-      "top10_floor_off": 0.2434,
+      "rank1_floor_off": 0.103,
+      "top10_floor_off": 0.2926,
       "floor_ok": false
     },
     "Grant, WA": {
-      "rank1_floor_on": 0.1238,
-      "top10_floor_on": 0.505,
-      "rank1_floor_off": 0.0798,
-      "top10_floor_off": 0.3486,
+      "rank1_floor_on": 0.1146,
+      "top10_floor_on": 0.5054,
+      "rank1_floor_off": 0.0688,
+      "top10_floor_off": 0.3422,
       "floor_ok": true
     }
   },
@@ -396,13 +396,13 @@
   "floor_percentile": 10,
   "energy_carbon_boundary_floor_off": {
     "Franklin vs Grant": {
-      "weight": 0.788,
+      "weight": 0.49,
       "valid": true,
       "franklin_ahead_above": true,
       "balanced_energy_carbon": 0.153
     },
     "Franklin vs Clark": {
-      "weight": 0.384,
+      "weight": 0.304,
       "valid": true,
       "franklin_ahead_above": true,
       "balanced_energy_carbon": 0.153

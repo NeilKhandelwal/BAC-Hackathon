@@ -10,7 +10,8 @@ the bottom is append-only and timestamped.
 Overwritten at every update.
 
 - **Updated:** 2026-10-04, end of revision round 1 (clock unreliable)
-- **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
+- **Branch:** `feat/weighting-methods`, based on `main` at `1575003`,
+  with `main` at `b7ddfe6` merged in (`3ea4d57`).
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
   description, fetch the current body with
@@ -30,9 +31,8 @@ Overwritten at every update.
   2. The featured-county decision (the recommendation is Grant).
   3. Whether to verify the exemption flags for SC, ID, UT, TX, and LA
      before the deck says anything about them.
-  4. Whether to merge current `main` into this branch and refresh the
-     engine-based tables (small drift; dollar results unchanged; see the
-     drift-check entry).
+  (Done: current `main` merged and engine-based tables refreshed; see
+  the merge entry in the history.)
   Never merge PR #35. Don't rewrite history. No AI attribution in new
   commits or the PR body.
 - **Untracked files:** `scratch/analysis.py` and `scratch/lbnl_unmatched.py`
@@ -1024,3 +1024,32 @@ If the branch merges `main` before the PR merges, rerun `smaa.py`,
 `critic.py`, `revealed.py`, `consensus.py`, and `revisions.py`, and
 refresh the engine-based tables in `docs/weighting.md`. Waiting on the user
 for that decision.
+
+### 2026-10-04 04:56 UTC, merged main and refreshed the engine-based tables
+
+On the user's go-ahead, merged `origin/main` (`b7ddfe6`) into this branch
+(`3ea4d57`, clean merge, no history rewritten). Tests on the merged branch:
+182 passed, 16 skipped (raw files absent), 1 xfailed. Reran every
+weighting script. The monetized model, every Monte Carlo summary, and their
+charts came out byte-identical, so no dollar figure changes. Refreshed in
+`docs/weighting.md`:
+
+- **Balanced:** Grant 1, Clark 7, Franklin 952, Berkshire 1,047.
+- **SMAA, floor on:** Grant 11.5% rank-1 and 50.5% top-10; Clark 6.9% and
+  30.6%. Franklin is 0% with the floor on and 10.3% / 29.3% with it off.
+  Luzerne PA joins the rank-1 leaders.
+- **CRITIC:** Grant 11, Clark 48, Franklin 34; Rock Island IL leads.
+- **Entropy:** Grant 41, Clark 462, Franklin 251; Clark NV leads.
+- **Revealed preference:** AUC 0.906, population alone 0.855; Grant 148,
+  Clark 92, Franklin 452.
+- **Consensus without entropy:** Grant 1, Clark 6. With entropy: Grant 1,
+  Clark 9 (Washington OR no longer leads).
+- **Shortlist:** 162 counties; stage 2 has Chesterfield SC first, and
+  Clark, Grant, and Franklin at 73, 78, and 80.
+- **Pillar weights** for CRITIC, entropy, and revealed preference updated.
+  The engine run with the dollar-implied weights still shares 0 of the
+  dollar top 10.
+- **Floor-off energy_carbon weight for Franklin to pass** Grant and Clark:
+  0.49 and 0.30 (before: 0.79 and 0.38).
+
+The recommendation is unchanged: feature Grant.

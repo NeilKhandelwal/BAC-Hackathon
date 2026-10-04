@@ -1,531 +1,531 @@
 {
   "counties": 3109,
   "positives": 184,
-  "auc": 0.904689706428837,
+  "auc": 0.9063006317354144,
   "auc_population_only": 0.8551616499442587,
-  "auc_lift": 0.04952805648457825,
+  "auc_lift": 0.051138981791155724,
   "columns": {
     "pop_density_per_sqkm": {
       "pillar": "land",
-      "coef": 0.8846,
+      "coef": 1.1337,
       "univariate_r": 0.3209,
       "pillar_direction": -1,
       "sign_conflict": true,
-      "abs_coef": 0.8846
-    },
-    "population": {
-      "pillar": "community",
-      "coef": 0.7693,
-      "univariate_r": 0.3413,
-      "pillar_direction": 1,
-      "sign_conflict": false,
-      "abs_coef": 0.7693
+      "abs_coef": 1.1337
     },
     "grid_co2_lb_mwh": {
       "pillar": "energy_carbon",
-      "coef": -0.69,
+      "coef": -0.7069,
       "univariate_r": -0.1015,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.69
+      "abs_coef": 0.7069
     },
     "industrial_price_cents_kwh": {
       "pillar": "cost",
-      "coef": -0.6506,
+      "coef": -0.6469,
       "univariate_r": -0.0016,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.6506
+      "abs_coef": 0.6469
     },
-    "pop_change_pct_since_peak": {
+    "population": {
       "pillar": "community",
-      "coef": -0.581,
-      "univariate_r": 0.1006,
-      "pillar_direction": -1,
+      "coef": 0.6031,
+      "univariate_r": 0.3413,
+      "pillar_direction": 1,
       "sign_conflict": false,
-      "abs_coef": 0.581
-    },
-    "cdd_hist": {
-      "pillar": "water",
-      "coef": -0.5789,
-      "univariate_r": 0.0179,
-      "pillar_direction": -1,
-      "sign_conflict": false,
-      "abs_coef": 0.5789
+      "abs_coef": 0.6031
     },
     "land_area_sqkm": {
       "pillar": "land",
-      "coef": 0.5088,
+      "coef": 0.6019,
       "univariate_r": -0.0185,
       "pillar_direction": 1,
       "sign_conflict": false,
-      "abs_coef": 0.5088
+      "abs_coef": 0.6019
     },
-    "nri_hurricane_score": {
-      "pillar": "climate_resilience",
-      "coef": -0.4889,
-      "univariate_r": 0.0152,
+    "cdd_hist": {
+      "pillar": "water",
+      "coef": -0.5861,
+      "univariate_r": 0.0179,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.4889
+      "abs_coef": 0.5861
+    },
+    "pop_change_pct_since_peak": {
+      "pillar": "community",
+      "coef": -0.5751,
+      "univariate_r": 0.1006,
+      "pillar_direction": -1,
+      "sign_conflict": false,
+      "abs_coef": 0.5751
     },
     "plant_capacity_mw_100km": {
       "pillar": "grid_infrastructure",
-      "coef": 0.486,
+      "coef": 0.508,
       "univariate_r": 0.1544,
       "pillar_direction": 1,
       "sign_conflict": false,
-      "abs_coef": 0.486
+      "abs_coef": 0.508
+    },
+    "nri_hurricane_score": {
+      "pillar": "climate_resilience",
+      "coef": -0.5068,
+      "univariate_r": 0.0152,
+      "pillar_direction": -1,
+      "sign_conflict": false,
+      "abs_coef": 0.5068
     },
     "nri_heat_wave_score": {
       "pillar": "climate_resilience",
-      "coef": -0.4578,
+      "coef": -0.4698,
       "univariate_r": -0.1281,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.4578
-    },
-    "state_policy_risk": {
-      "pillar": "permitting",
-      "coef": 0.443,
-      "univariate_r": 0.0747,
-      "pillar_direction": -1,
-      "sign_conflict": true,
-      "abs_coef": 0.443
+      "abs_coef": 0.4698
     },
     "wind_speed_100m_ms": {
       "pillar": "energy_carbon",
-      "coef": -0.4364,
+      "coef": -0.4254,
       "univariate_r": -0.0688,
       "pillar_direction": 1,
       "sign_conflict": true,
-      "abs_coef": 0.4364
+      "abs_coef": 0.4254
     },
-    "nri_inland_flood_score": {
-      "pillar": "climate_resilience",
-      "coef": -0.3256,
-      "univariate_r": -0.0965,
+    "state_policy_risk": {
+      "pillar": "permitting",
+      "coef": 0.421,
+      "univariate_r": 0.0747,
       "pillar_direction": -1,
-      "sign_conflict": false,
-      "abs_coef": 0.3256
+      "sign_conflict": true,
+      "abs_coef": 0.421
     },
     "nri_drought_score": {
       "pillar": "water",
-      "coef": 0.3184,
+      "coef": 0.3229,
       "univariate_r": 0.0325,
       "pillar_direction": -1,
       "sign_conflict": true,
-      "abs_coef": 0.3184
+      "abs_coef": 0.3229
+    },
+    "nri_inland_flood_score": {
+      "pillar": "climate_resilience",
+      "coef": -0.3183,
+      "univariate_r": -0.0965,
+      "pillar_direction": -1,
+      "sign_conflict": false,
+      "abs_coef": 0.3183
     },
     "days_above_95f_hist": {
       "pillar": "climate_resilience",
-      "coef": 0.2985,
+      "coef": 0.3001,
       "univariate_r": 0.0282,
       "pillar_direction": -1,
       "sign_conflict": true,
-      "abs_coef": 0.2985
-    },
-    "fiber_share_locations": {
-      "pillar": "grid_infrastructure",
-      "coef": 0.2956,
-      "univariate_r": 0.0654,
-      "pillar_direction": 1,
-      "sign_conflict": false,
-      "abs_coef": 0.2956
+      "abs_coef": 0.3001
     },
     "drought_share_weeks_d2plus": {
       "pillar": "water",
-      "coef": 0.2871,
+      "coef": 0.2878,
       "univariate_r": -0.0035,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.2871
+      "abs_coef": 0.2878
+    },
+    "fiber_share_locations": {
+      "pillar": "grid_infrastructure",
+      "coef": 0.2811,
+      "univariate_r": 0.0654,
+      "pillar_direction": 1,
+      "sign_conflict": false,
+      "abs_coef": 0.2811
     },
     "nri_tornado_score": {
       "pillar": "climate_resilience",
-      "coef": 0.2675,
+      "coef": 0.2668,
       "univariate_r": -0.0443,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.2675
-    },
-    "queue_active_mw_clean": {
-      "pillar": "energy_carbon",
-      "coef": 0.2644,
-      "univariate_r": 0.1178,
-      "pillar_direction": 1,
-      "sign_conflict": false,
-      "abs_coef": 0.2644
+      "abs_coef": 0.2668
     },
     "nri_coastal_flood_score": {
       "pillar": "climate_resilience",
-      "coef": -0.2635,
+      "coef": -0.2404,
       "univariate_r": 0.0217,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.2635
+      "abs_coef": 0.2404
+    },
+    "queue_operational_mw_online_5y": {
+      "pillar": "energy_carbon",
+      "coef": 0.232,
+      "univariate_r": 0.1162,
+      "pillar_direction": 1,
+      "sign_conflict": false,
+      "abs_coef": 0.232
     },
     "nri_winter_score": {
       "pillar": "climate_resilience",
-      "coef": 0.1991,
+      "coef": 0.2136,
       "univariate_r": -0.0775,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.1991
+      "abs_coef": 0.2136
     },
-    "plant_clean_capacity_mw_100km": {
+    "queue_active_mw_clean_excl_storage": {
       "pillar": "energy_carbon",
-      "coef": 0.1987,
-      "univariate_r": 0.1063,
+      "coef": 0.1949,
+      "univariate_r": 0.0407,
       "pillar_direction": 1,
       "sign_conflict": false,
-      "abs_coef": 0.1987
-    },
-    "water_stress_bws": {
-      "pillar": "water",
-      "coef": -0.1644,
-      "univariate_r": 0.0186,
-      "pillar_direction": -1,
-      "sign_conflict": false,
-      "abs_coef": 0.1644
+      "abs_coef": 0.1949
     },
     "nri_wildfire_score": {
       "pillar": "climate_resilience",
-      "coef": -0.1569,
+      "coef": -0.1726,
       "univariate_r": -0.1266,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.1569
-    },
-    "queue_operational_mw_5y": {
-      "pillar": "energy_carbon",
-      "coef": 0.1432,
-      "univariate_r": 0.1228,
-      "pillar_direction": 1,
-      "sign_conflict": false,
-      "abs_coef": 0.1432
+      "abs_coef": 0.1726
     },
     "grid_renewable_share": {
       "pillar": "energy_carbon",
-      "coef": 0.137,
+      "coef": 0.1699,
       "univariate_r": -0.0327,
       "pillar_direction": 1,
       "sign_conflict": false,
-      "abs_coef": 0.137
+      "abs_coef": 0.1699
+    },
+    "plant_clean_capacity_mw_100km": {
+      "pillar": "energy_carbon",
+      "coef": 0.1697,
+      "univariate_r": 0.1063,
+      "pillar_direction": 1,
+      "sign_conflict": false,
+      "abs_coef": 0.1697
+    },
+    "water_stress_bws": {
+      "pillar": "water",
+      "coef": -0.1689,
+      "univariate_r": 0.0186,
+      "pillar_direction": -1,
+      "sign_conflict": false,
+      "abs_coef": 0.1689
     },
     "heat_sink_score": {
       "pillar": "community",
-      "coef": 0.1367,
+      "coef": 0.1301,
       "univariate_r": 0.2434,
       "pillar_direction": 1,
       "sign_conflict": false,
-      "abs_coef": 0.1367
-    },
-    "water_permit_risk": {
-      "pillar": "permitting",
-      "coef": -0.0991,
-      "univariate_r": 0.0086,
-      "pillar_direction": -1,
-      "sign_conflict": false,
-      "abs_coef": 0.0991
-    },
-    "unemployment_rate_pct_2023": {
-      "pillar": "community",
-      "coef": -0.0883,
-      "univariate_r": -0.0169,
-      "pillar_direction": 1,
-      "sign_conflict": true,
-      "abs_coef": 0.0883
+      "abs_coef": 0.1301
     },
     "queue_withdrawal_rate": {
       "pillar": "grid_infrastructure",
-      "coef": -0.0814,
+      "coef": -0.1126,
       "univariate_r": -0.0432,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.0814
+      "abs_coef": 0.1126
+    },
+    "unemployment_rate_pct_2023": {
+      "pillar": "community",
+      "coef": -0.1048,
+      "univariate_r": -0.0169,
+      "pillar_direction": 1,
+      "sign_conflict": true,
+      "abs_coef": 0.1048
     },
     "air_nonattainment_count": {
       "pillar": "permitting",
-      "coef": -0.065,
+      "coef": -0.0832,
       "univariate_r": 0.1832,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.065
+      "abs_coef": 0.0832
+    },
+    "water_permit_risk": {
+      "pillar": "permitting",
+      "coef": -0.0826,
+      "univariate_r": 0.0086,
+      "pillar_direction": -1,
+      "sign_conflict": false,
+      "abs_coef": 0.0826
     },
     "queue_median_age_years": {
       "pillar": "grid_infrastructure",
-      "coef": -0.0198,
+      "coef": -0.0362,
       "univariate_r": -0.003,
       "pillar_direction": -1,
       "sign_conflict": false,
-      "abs_coef": 0.0198
-    },
-    "coal_retired_mw": {
-      "pillar": "grid_infrastructure",
-      "coef": 0.0166,
-      "univariate_r": 0.1187,
-      "pillar_direction": 1,
-      "sign_conflict": false,
-      "abs_coef": 0.0166
+      "abs_coef": 0.0362
     },
     "mfg_emp_share_1969": {
       "pillar": "community",
-      "coef": 0.0013,
+      "coef": 0.0219,
       "univariate_r": 0.0862,
       "pillar_direction": 1,
       "sign_conflict": false,
-      "abs_coef": 0.0013
+      "abs_coef": 0.0219
+    },
+    "coal_retired_mw": {
+      "pillar": "grid_infrastructure",
+      "coef": 0.0181,
+      "univariate_r": 0.1187,
+      "pillar_direction": 1,
+      "sign_conflict": false,
+      "abs_coef": 0.0181
     }
   },
   "pillar_weights": {
     "climate_resilience": {
-      "revealed": 0.2275,
-      "share_from_sign_conflicts": 0.1214,
+      "revealed": 0.2239,
+      "share_from_sign_conflicts": 0.1206,
       "balanced": 0.119,
-      "critic": 0.2535
+      "critic": 0.2521
     },
     "community": {
-      "revealed": 0.1459,
-      "share_from_sign_conflicts": 0.056,
+      "revealed": 0.1291,
+      "share_from_sign_conflicts": 0.073,
       "balanced": 0.085,
-      "critic": 0.1364
+      "critic": 0.1356
     },
     "cost": {
-      "revealed": 0.0602,
+      "revealed": 0.0582,
       "share_from_sign_conflicts": 0.0,
       "balanced": 0.15,
-      "critic": 0.0178
+      "critic": 0.0177
     },
     "energy_carbon": {
-      "revealed": 0.1731,
-      "share_from_sign_conflicts": 0.2334,
+      "revealed": 0.1709,
+      "share_from_sign_conflicts": 0.2241,
       "balanced": 0.153,
-      "critic": 0.1799
+      "critic": 0.1847
     },
     "grid_infrastructure": {
-      "revealed": 0.0832,
+      "revealed": 0.086,
       "share_from_sign_conflicts": 0.0,
       "balanced": 0.153,
-      "critic": 0.1505
+      "critic": 0.15
     },
     "land": {
-      "revealed": 0.129,
-      "share_from_sign_conflicts": 0.6349,
+      "revealed": 0.1562,
+      "share_from_sign_conflicts": 0.6532,
       "balanced": 0.068,
-      "critic": 0.0445
+      "critic": 0.0441
     },
     "permitting": {
-      "revealed": 0.0562,
-      "share_from_sign_conflicts": 0.7296,
+      "revealed": 0.0528,
+      "share_from_sign_conflicts": 0.7174,
       "balanced": 0.153,
-      "critic": 0.0965
+      "critic": 0.0959
     },
     "water": {
-      "revealed": 0.1249,
-      "share_from_sign_conflicts": 0.2361,
+      "revealed": 0.1229,
+      "share_from_sign_conflicts": 0.2364,
       "balanced": 0.119,
-      "critic": 0.1209
+      "critic": 0.12
     }
   },
   "sign_conflicts": [
     "pop_density_per_sqkm",
-    "state_policy_risk",
     "wind_speed_100m_ms",
+    "state_policy_risk",
     "nri_drought_score",
     "days_above_95f_hist",
     "unemployment_rate_pct_2023"
   ],
   "industry_picks_no_dc": [
     {
-      "fips": "41051",
-      "county": "Multnomah, OR",
-      "p_industry": 0.8456174679158555,
-      "rank_monetized_190": 380,
-      "rank_balanced": 1005
-    },
-    {
       "fips": "48141",
       "county": "El Paso, TX",
-      "p_industry": 0.8286598701208934,
+      "p_industry": 0.8384696535102242,
       "rank_monetized_190": 7,
-      "rank_balanced": 1360
+      "rank_balanced": 1359
     },
     {
-      "fips": "37183",
-      "county": "Wake, NC",
-      "p_industry": 0.7022508655534964,
-      "rank_monetized_190": 155,
-      "rank_balanced": 430
-    },
-    {
-      "fips": "36055",
-      "county": "Monroe, NY",
-      "p_industry": 0.6929257665446183,
-      "rank_monetized_190": 917,
-      "rank_balanced": 1106
+      "fips": "41051",
+      "county": "Multnomah, OR",
+      "p_industry": 0.8128118938193833,
+      "rank_monetized_190": 380,
+      "rank_balanced": 1076
     },
     {
       "fips": "27123",
       "county": "Ramsey, MN",
-      "p_industry": 0.6891427977842073,
+      "p_industry": 0.7356004720514308,
       "rank_monetized_190": 1217,
-      "rank_balanced": 1185
+      "rank_balanced": 1169
+    },
+    {
+      "fips": "37183",
+      "county": "Wake, NC",
+      "p_industry": 0.6964391715399324,
+      "rank_monetized_190": 155,
+      "rank_balanced": 449
     },
     {
       "fips": "48135",
       "county": "Ector, TX",
-      "p_industry": 0.6385749145058941,
+      "p_industry": 0.6583124249088178,
       "rank_monetized_190": 54,
-      "rank_balanced": 998
+      "rank_balanced": 1002
     },
     {
-      "fips": "42043",
-      "county": "Dauphin, PA",
-      "p_industry": 0.6258085241601077,
-      "rank_monetized_190": 191,
-      "rank_balanced": 386
+      "fips": "36055",
+      "county": "Monroe, NY",
+      "p_industry": 0.6552688295383134,
+      "rank_monetized_190": 917,
+      "rank_balanced": 1143
     },
     {
       "fips": "42133",
       "county": "York, PA",
-      "p_industry": 0.6059334889433687,
+      "p_industry": 0.647796617235638,
       "rank_monetized_190": 107,
-      "rank_balanced": 370
+      "rank_balanced": 386
     },
     {
-      "fips": "21111",
-      "county": "Jefferson, KY",
-      "p_industry": 0.5869408783381765,
-      "rank_monetized_190": 827,
-      "rank_balanced": 952
+      "fips": "39025",
+      "county": "Clermont, OH",
+      "p_industry": 0.618448244554854,
+      "rank_monetized_190": 586,
+      "rank_balanced": 128
     },
     {
-      "fips": "45083",
-      "county": "Spartanburg, SC",
-      "p_industry": 0.5837397615729991,
-      "rank_monetized_190": 12,
-      "rank_balanced": 972
+      "fips": "42043",
+      "county": "Dauphin, PA",
+      "p_industry": 0.594094573259199,
+      "rank_monetized_190": 191,
+      "rank_balanced": 383
+    },
+    {
+      "fips": "37067",
+      "county": "Forsyth, NC",
+      "p_industry": 0.5938361093787085,
+      "rank_monetized_190": 230,
+      "rank_balanced": 1257
     }
   ],
   "top10_revealed_all": [
     {
-      "index": "48113",
-      "county": "Dallas, TX",
-      "p_industry": 0.9644419020103737,
-      "has_dc": true
-    },
-    {
       "index": "04013",
       "county": "Maricopa, AZ",
-      "p_industry": 0.9573003224718869,
+      "p_industry": 0.9637000954180257,
       "has_dc": true
     },
     {
-      "index": "26163",
-      "county": "Wayne, MI",
-      "p_industry": 0.9441241349260375,
-      "has_dc": true
-    },
-    {
-      "index": "48439",
-      "county": "Tarrant, TX",
-      "p_industry": 0.918092395533354,
+      "index": "48113",
+      "county": "Dallas, TX",
+      "p_industry": 0.9592070427374387,
       "has_dc": true
     },
     {
       "index": "39061",
       "county": "Hamilton, OH",
-      "p_industry": 0.9164497596126536,
+      "p_industry": 0.9269016764139952,
+      "has_dc": true
+    },
+    {
+      "index": "26163",
+      "county": "Wayne, MI",
+      "p_industry": 0.9198627692126837,
+      "has_dc": true
+    },
+    {
+      "index": "48439",
+      "county": "Tarrant, TX",
+      "p_industry": 0.9154395402003979,
       "has_dc": true
     },
     {
       "index": "42091",
       "county": "Montgomery, PA",
-      "p_industry": 0.9145148563546115,
+      "p_industry": 0.9145658148041176,
       "has_dc": true
     },
     {
       "index": "48029",
       "county": "Bexar, TX",
-      "p_industry": 0.904915144652585,
+      "p_industry": 0.9042460788446273,
+      "has_dc": true
+    },
+    {
+      "index": "32003",
+      "county": "Clark, NV",
+      "p_industry": 0.9031501488435383,
       "has_dc": true
     },
     {
       "index": "49035",
       "county": "Salt Lake, UT",
-      "p_industry": 0.9027106228903068,
-      "has_dc": true
-    },
-    {
-      "index": "41067",
-      "county": "Washington, OR",
-      "p_industry": 0.8780430591357633,
+      "p_industry": 0.885756342603311,
       "has_dc": true
     },
     {
       "index": "42003",
       "county": "Allegheny, PA",
-      "p_industry": 0.8673798544688543,
+      "p_industry": 0.8687753304864045,
       "has_dc": true
     }
   ],
   "disagreements": [
     {
-      "index": "17031",
-      "county": "Cook, IL",
-      "rank_revealed": 19,
-      "rank_monetized_190": 1327,
-      "rank_balanced": 641,
-      "diff": 1308
-    },
-    {
       "index": "32003",
       "county": "Clark, NV",
-      "rank_revealed": 18,
+      "rank_revealed": 8,
       "rank_monetized_190": 1326,
-      "rank_balanced": 719,
-      "diff": 1308
+      "rank_balanced": 618,
+      "diff": 1318
     },
     {
       "index": "26163",
       "county": "Wayne, MI",
-      "rank_revealed": 3,
+      "rank_revealed": 4,
       "rank_monetized_190": 1303,
-      "rank_balanced": 304,
-      "diff": 1300
+      "rank_balanced": 445,
+      "diff": 1299
     },
     {
       "index": "27053",
       "county": "Hennepin, MN",
-      "rank_revealed": 16,
+      "rank_revealed": 13,
       "rank_monetized_190": 1244,
-      "rank_balanced": 1139,
-      "diff": 1228
+      "rank_balanced": 1128,
+      "diff": 1231
     },
     {
       "index": "42003",
       "county": "Allegheny, PA",
       "rank_revealed": 10,
       "rank_monetized_190": 1203,
-      "rank_balanced": 401,
+      "rank_balanced": 409,
       "diff": 1193
+    },
+    {
+      "index": "04013",
+      "county": "Maricopa, AZ",
+      "rank_revealed": 1,
+      "rank_monetized_190": 1164,
+      "rank_balanced": 1418,
+      "diff": 1163
     }
   ],
   "focus": {
     "Clark, WA": {
-      "p_industry": 0.327,
-      "rank_revealed": 103,
+      "p_industry": 0.357,
+      "rank_revealed": 92,
       "has_dc": false
     },
     "Franklin, NY": {
-      "p_industry": 0.038,
-      "rank_revealed": 548,
+      "p_industry": 0.051,
+      "rank_revealed": 452,
       "has_dc": false
     },
     "Grant, WA": {
-      "p_industry": 0.284,
-      "rank_revealed": 120,
+      "p_industry": 0.251,
+      "rank_revealed": 148,
       "has_dc": true
     }
   }

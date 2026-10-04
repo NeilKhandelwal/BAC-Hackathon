@@ -393,17 +393,17 @@
     "Wayne, TN",
     "Whitman, WA",
     "Mayes, OK",
-    "Benton, WA",
     "Scott, IA",
+    "Benton, WA",
     "Clark, WA",
     "Scott, TN",
-    "Grady, OK",
-    "Adair, OK"
+    "Adair, OK",
+    "Grady, OK"
    ],
    "Clark, WA": 7,
-   "Franklin, NY": 986,
+   "Franklin, NY": 952,
    "Grant, WA": 1,
-   "Berkshire, MA": 1013
+   "Berkshire, MA": 1047
   },
   "monetized": {
    "top10": [
@@ -428,108 +428,108 @@
     "Whitman, WA",
     "Grant, WA",
     "Wayne, TN",
-    "Trumbull, OH",
-    "Clark, WA",
-    "Grady, OK",
-    "Scott, IA",
     "Luzerne, PA",
+    "Clark, WA",
+    "Trumbull, OH",
+    "Scott, IA",
+    "Grady, OK",
     "Rock Island, IL",
-    "Clearfield, PA"
+    "Mayes, OK"
    ],
    "Clark, WA": 5,
-   "Franklin, NY": 271,
+   "Franklin, NY": 280,
    "Grant, WA": 2,
-   "Berkshire, MA": 271
+   "Berkshire, MA": 280
   },
   "critic": {
    "top10": [
-    "Washington, OR",
     "Rock Island, IL",
-    "Dakota, MN",
-    "Multnomah, OR",
     "St. Joseph, IN",
+    "Dakota, MN",
+    "Henry, IL",
+    "Washington, OR",
     "Scott, IA",
-    "Monroe, NY",
     "Ramsey, MN",
     "Onondaga, NY",
-    "Erie, NY"
+    "Cass, MI",
+    "Winnebago, IL"
    ],
-   "Clark, WA": 27,
-   "Franklin, NY": 64,
-   "Grant, WA": 12,
-   "Berkshire, MA": 107
+   "Clark, WA": 48,
+   "Franklin, NY": 34,
+   "Grant, WA": 11,
+   "Berkshire, MA": 204
   },
   "entropy": {
    "top10": [
+    "Clark, NV",
     "Bexar, TX",
     "Milam, TX",
-    "Salt Lake, UT",
-    "Clark, NV",
-    "Cook, IL",
-    "Washington, OR",
-    "El Paso, CO",
     "Berks, PA",
-    "Wayne, MI",
-    "St. Louis, MO"
+    "Cook, IL",
+    "Mecklenburg, VA",
+    "Salt Lake, UT",
+    "St. Louis, MO",
+    "El Paso, CO",
+    "Will, IL"
    ],
-   "Clark, WA": 338,
-   "Franklin, NY": 392,
-   "Grant, WA": 50,
-   "Berkshire, MA": 76
+   "Clark, WA": 462,
+   "Franklin, NY": 251,
+   "Grant, WA": 41,
+   "Berkshire, MA": 172
   },
   "revealed": {
    "top10": [
-    "Dallas, TX",
     "Maricopa, AZ",
+    "Dallas, TX",
+    "Hamilton, OH",
     "Wayne, MI",
     "Tarrant, TX",
-    "Hamilton, OH",
     "Montgomery, PA",
     "Bexar, TX",
+    "Clark, NV",
     "Salt Lake, UT",
-    "Washington, OR",
     "Allegheny, PA"
    ],
-   "Clark, WA": 103,
-   "Franklin, NY": 548,
-   "Grant, WA": 120,
-   "Berkshire, MA": 927
+   "Clark, WA": 92,
+   "Franklin, NY": 452,
+   "Grant, WA": 148,
+   "Berkshire, MA": 974
   },
   "consensus": {
    "top10": [
     "Grant, WA",
     "Scott, IA",
-    "Washington, OR",
     "Whitman, WA",
     "Wayne, TN",
     "Rock Island, IL",
     "Clark, WA",
-    "Grady, OK",
     "Mayes, OK",
-    "Multnomah, OR"
+    "Chesterfield, SC",
+    "Luzerne, PA",
+    "Grady, OK"
    ],
-   "Clark, WA": 7,
-   "Franklin, NY": 79,
+   "Clark, WA": 6,
+   "Franklin, NY": 82,
    "Grant, WA": 1,
-   "Berkshire, MA": 79
+   "Berkshire, MA": 82
   },
   "consensus_with_entropy": {
    "top10": [
-    "Washington, OR",
     "Grant, WA",
     "Scott, IA",
     "Whitman, WA",
     "Wayne, TN",
-    "Wayne, MI",
+    "Clark, NV",
     "Bexar, TX",
     "Rock Island, IL",
-    "Dallas, TX",
-    "Salt Lake, UT"
+    "Washington, OR",
+    "Clark, WA",
+    "Maricopa, AZ"
    ],
-   "Clark, WA": 11,
-   "Franklin, NY": 87,
-   "Grant, WA": 2,
-   "Berkshire, MA": 87
+   "Clark, WA": 9,
+   "Franklin, NY": 90,
+   "Grant, WA": 1,
+   "Berkshire, MA": 90
   }
  }
 }

@@ -1,46 +1,46 @@
 1565 counties, 35 columns; nulls: {'queue_median_age_years': 1072, 'queue_withdrawal_rate': 710, 'heat_sink_score': 8, 'mfg_emp_share_1969': 14, 'state_policy_risk': 349}
 
 column weights (top 12 by CRITIC):
-                                     pillar  critic  entropy     std  sum_1_minus_r
-queue_active_mw_clean         energy_carbon  0.0423   0.0412  0.3581        33.2405
-nri_hurricane_score      climate_resilience  0.0374   0.0143  0.3134        33.6110
-state_policy_risk                permitting  0.0362   0.0145  0.2849        35.7820
-grid_renewable_share          energy_carbon  0.0357   0.0313  0.2909        34.5220
-nri_heat_wave_score      climate_resilience  0.0352   0.0123  0.2839        34.9122
-nri_inland_flood_score   climate_resilience  0.0347   0.0152  0.2825        34.5606
-fiber_share_locations   grid_infrastructure  0.0343   0.0116  0.2777        34.7821
-nri_winter_score         climate_resilience  0.0341   0.0162  0.2900        33.1497
-nri_drought_score                     water  0.0340   0.0160  0.2890        33.1759
-water_stress_bws                      water  0.0328   0.0091  0.2728        33.8593
-nri_wildfire_score       climate_resilience  0.0322   0.0111  0.2773        32.7430
-nri_tornado_score        climate_resilience  0.0322   0.0160  0.2640        34.3054
+                                                 pillar  critic  entropy     std  sum_1_minus_r
+queue_active_mw_clean_excl_storage        energy_carbon  0.0427   0.0521  0.3601        33.5522
+nri_hurricane_score                  climate_resilience  0.0371   0.0147  0.3134        33.5588
+state_policy_risk                            permitting  0.0360   0.0148  0.2849        35.8043
+grid_renewable_share                      energy_carbon  0.0354   0.0321  0.2909        34.5210
+nri_heat_wave_score                  climate_resilience  0.0351   0.0126  0.2839        35.0064
+nri_inland_flood_score               climate_resilience  0.0345   0.0156  0.2825        34.6140
+fiber_share_locations               grid_infrastructure  0.0341   0.0119  0.2777        34.8101
+nri_winter_score                     climate_resilience  0.0339   0.0167  0.2900        33.1597
+nri_drought_score                                 water  0.0338   0.0164  0.2890        33.1642
+queue_operational_mw_online_5y            energy_carbon  0.0335   0.1421  0.2788        34.0233
+water_stress_bws                                  water  0.0326   0.0093  0.2728        33.8716
+nri_wildfire_score                   climate_resilience  0.0320   0.0114  0.2773        32.7239
 
 lowest 6 by CRITIC:
                                          pillar  critic  entropy     std  sum_1_minus_r
-land_area_sqkm                             land  0.0163   0.0020  0.1332        34.4112
-queue_median_age_years      grid_infrastructure  0.0177   0.0038  0.1475        33.8470
-industrial_price_cents_kwh                 cost  0.0178   0.0016  0.1403        35.6555
-nri_coastal_flood_score      climate_resilience  0.0208   0.0019  0.1663        35.2860
-dc_existing_count           grid_infrastructure  0.0209   0.1981  0.1777        33.1072
-grid_co2_lb_mwh                   energy_carbon  0.0226   0.0104  0.1836        34.5860
+land_area_sqkm                             land  0.0162   0.0021  0.1332        34.3568
+queue_median_age_years      grid_infrastructure  0.0177   0.0039  0.1475        33.9564
+industrial_price_cents_kwh                 cost  0.0177   0.0017  0.1403        35.7316
+nri_coastal_flood_score      climate_resilience  0.0207   0.0020  0.1663        35.2418
+dc_existing_count           grid_infrastructure  0.0208   0.2031  0.1777        33.2111
+grid_co2_lb_mwh                   energy_carbon  0.0224   0.0107  0.1836        34.6329
 
 pillar weights (sum of column weights):
                      columns  critic  entropy  balanced  equal_per_column
-climate_resilience         8   0.254    0.091     0.119             0.229
-community                  5   0.136    0.141     0.085             0.143
+climate_resilience         8   0.252    0.094     0.119             0.229
+community                  5   0.136    0.145     0.085             0.143
 cost                       1   0.018    0.002     0.150             0.029
-energy_carbon              6   0.180    0.268     0.153             0.171
-grid_infrastructure        6   0.151    0.430     0.153             0.171
+energy_carbon              6   0.185    0.249     0.153             0.171
+grid_infrastructure        6   0.150    0.441     0.153             0.171
 land                       2   0.044    0.008     0.068             0.057
-permitting                 3   0.097    0.024     0.153             0.086
-water                      4   0.121    0.037     0.119             0.114
+permitting                 3   0.096    0.024     0.153             0.086
+water                      4   0.120    0.038     0.119             0.114
 
 |r| > 0.8 pairs (mean CRITIC column weight 0.0286):
-   {'a': 'cdd_hist', 'b': 'days_above_95f_hist', 'r': 0.801, 'critic_a': 0.0261, 'critic_b': 0.0269, 'entropy_a': 0.0062, 'entropy_b': 0.0043}
-   {'a': 'pop_density_per_sqkm', 'b': 'population', 'r': -0.865, 'critic_a': 0.0282, 'critic_b': 0.0266, 'entropy_a': 0.0057, 'entropy_b': 0.015}
+   {'a': 'cdd_hist', 'b': 'days_above_95f_hist', 'r': 0.801, 'critic_a': 0.0259, 'critic_b': 0.0267, 'entropy_a': 0.0063, 'entropy_b': 0.0044}
+   {'a': 'pop_density_per_sqkm', 'b': 'population', 'r': -0.865, 'critic_a': 0.0279, 'critic_b': 0.0266, 'entropy_a': 0.0059, 'entropy_b': 0.0154}
 
-critic top 10: [('Washington, OR', 0.6714, 'floor ok'), ('Rock Island, IL', 0.6629, 'floor ok'), ('Dakota, MN', 0.651, 'fails floor'), ('Multnomah, OR', 0.6482, 'fails floor'), ('St. Joseph, IN', 0.642, 'floor ok'), ('Scott, IA', 0.6384, 'floor ok'), ('Monroe, NY', 0.6361, 'fails floor'), ('Ramsey, MN', 0.6334, 'fails floor'), ('Onondaga, NY', 0.6327, 'fails floor'), ('Erie, NY', 0.6284, 'fails floor')]
-critic focus ranks: {'Clark, WA': 27, 'Franklin, NY': 64, 'Grant, WA': 12}
+critic top 10: [('Rock Island, IL', 0.657, 'floor ok'), ('St. Joseph, IN', 0.6409, 'floor ok'), ('Dakota, MN', 0.6398, 'fails floor'), ('Henry, IL', 0.6355, 'floor ok'), ('Washington, OR', 0.6343, 'floor ok'), ('Scott, IA', 0.6336, 'floor ok'), ('Ramsey, MN', 0.6303, 'fails floor'), ('Onondaga, NY', 0.6301, 'fails floor'), ('Cass, MI', 0.6254, 'floor ok'), ('Winnebago, IL', 0.6228, 'floor ok')]
+critic focus ranks: {'Clark, WA': 48, 'Franklin, NY': 34, 'Grant, WA': 11}
 
-entropy top 10: [('Bexar, TX', 0.7353, 'fails floor'), ('Milam, TX', 0.662, 'floor ok'), ('Salt Lake, UT', 0.6342, 'floor ok'), ('Clark, NV', 0.6131, 'floor ok'), ('Cook, IL', 0.61, 'floor ok'), ('Washington, OR', 0.5988, 'floor ok'), ('El Paso, CO', 0.5896, 'floor ok'), ('Berks, PA', 0.5651, 'floor ok'), ('Wayne, MI', 0.5641, 'floor ok'), ('St. Louis, MO', 0.5632, 'fails floor')]
-entropy focus ranks: {'Clark, WA': 338, 'Franklin, NY': 392, 'Grant, WA': 50}
+entropy top 10: [('Clark, NV', 0.7806, 'floor ok'), ('Bexar, TX', 0.7058, 'fails floor'), ('Milam, TX', 0.6432, 'floor ok'), ('Berks, PA', 0.6149, 'floor ok'), ('Cook, IL', 0.595, 'floor ok'), ('Mecklenburg, VA', 0.5935, 'floor ok'), ('Salt Lake, UT', 0.5879, 'floor ok'), ('St. Louis, MO', 0.5776, 'fails floor'), ('El Paso, CO', 0.576, 'floor ok'), ('Will, IL', 0.5581, 'floor ok')]
+entropy focus ranks: {'Clark, WA': 462, 'Franklin, NY': 251, 'Grant, WA': 41}

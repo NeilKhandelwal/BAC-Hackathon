@@ -10,40 +10,28 @@
   "top": 20,
   "consensus_top10_all": [
     {
-      "fips": "41067",
-      "county": "Washington, OR",
-      "balanced": 120,
-      "monetized": 624,
-      "smaa": 14,
-      "critic": 1,
-      "entropy": 6,
-      "revealed": 9,
-      "borda_all": 54,
-      "borda_no_entropy": 39
-    },
-    {
       "fips": "53025",
       "county": "Grant, WA",
       "balanced": 1,
       "monetized": 407,
       "smaa": 2,
-      "critic": 12,
-      "entropy": 50,
-      "revealed": 120,
-      "borda_all": 48,
-      "borda_no_entropy": 48
+      "critic": 11,
+      "entropy": 41,
+      "revealed": 148,
+      "borda_all": 49,
+      "borda_no_entropy": 49
     },
     {
       "fips": "19163",
       "county": "Scott, IA",
-      "balanced": 6,
+      "balanced": 5,
       "monetized": 583,
       "smaa": 7,
       "critic": 6,
-      "entropy": 257,
-      "revealed": 122,
-      "borda_all": 44,
-      "borda_no_entropy": 44
+      "entropy": 274,
+      "revealed": 126,
+      "borda_all": 45,
+      "borda_no_entropy": 45
     },
     {
       "fips": "53075",
@@ -51,9 +39,9 @@
       "balanced": 3,
       "monetized": 296,
       "smaa": 1,
-      "critic": 78,
-      "entropy": 318,
-      "revealed": 660,
+      "critic": 83,
+      "entropy": 362,
+      "revealed": 672,
       "borda_all": 38,
       "borda_no_entropy": 38
     },
@@ -63,71 +51,83 @@
       "balanced": 2,
       "monetized": 531,
       "smaa": 3,
-      "critic": 208,
-      "entropy": 895,
-      "revealed": 1475,
+      "critic": 199,
+      "entropy": 943,
+      "revealed": 1478,
       "borda_all": 37,
       "borda_no_entropy": 37
     },
     {
-      "fips": "26163",
-      "county": "Wayne, MI",
-      "balanced": 304,
-      "monetized": 1303,
-      "smaa": 16,
-      "critic": 20,
-      "entropy": 9,
-      "revealed": 3,
-      "borda_all": 36,
-      "borda_no_entropy": 24
-    },
-    {
       "fips": "48029",
       "county": "Bexar, TX",
-      "balanced": 1122,
+      "balanced": 1161,
       "monetized": 187,
-      "smaa": 271,
-      "critic": 524,
-      "entropy": 1,
+      "smaa": 280,
+      "critic": 679,
+      "entropy": 2,
       "revealed": 7,
-      "borda_all": 34,
+      "borda_all": 33,
       "borda_no_entropy": 14
     },
     {
-      "fips": "49035",
-      "county": "Salt Lake, UT",
-      "balanced": 489,
-      "monetized": 60,
-      "smaa": 227,
-      "critic": 31,
-      "entropy": 3,
+      "fips": "32003",
+      "county": "Clark, NV",
+      "balanced": 618,
+      "monetized": 1326,
+      "smaa": 77,
+      "critic": 54,
+      "entropy": 1,
       "revealed": 8,
-      "borda_all": 31,
+      "borda_all": 33,
       "borda_no_entropy": 13
-    },
-    {
-      "fips": "48113",
-      "county": "Dallas, TX",
-      "balanced": 179,
-      "monetized": 108,
-      "smaa": 19,
-      "critic": 264,
-      "entropy": 12,
-      "revealed": 1,
-      "borda_all": 31,
-      "borda_no_entropy": 22
     },
     {
       "fips": "17161",
       "county": "Rock Island, IL",
-      "balanced": 200,
+      "balanced": 210,
       "monetized": 1064,
       "smaa": 9,
-      "critic": 2,
-      "entropy": 278,
-      "revealed": 106,
+      "critic": 1,
+      "entropy": 312,
+      "revealed": 107,
+      "borda_all": 32,
+      "borda_no_entropy": 32
+    },
+    {
+      "fips": "41067",
+      "county": "Washington, OR",
+      "balanced": 234,
+      "monetized": 624,
+      "smaa": 96,
+      "critic": 5,
+      "entropy": 13,
+      "revealed": 14,
       "borda_all": 31,
-      "borda_no_entropy": 31
+      "borda_no_entropy": 23
+    },
+    {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "balanced": 7,
+      "monetized": 365,
+      "smaa": 5,
+      "critic": 48,
+      "entropy": 462,
+      "revealed": 92,
+      "borda_all": 30,
+      "borda_no_entropy": 30
+    },
+    {
+      "fips": "04013",
+      "county": "Maricopa, AZ",
+      "balanced": 1418,
+      "monetized": 1164,
+      "smaa": 280,
+      "critic": 1035,
+      "entropy": 11,
+      "revealed": 1,
+      "borda_all": 30,
+      "borda_no_entropy": 20
     }
   ],
   "consensus_top10_no_entropy": [
@@ -137,35 +137,23 @@
       "balanced": 1,
       "monetized": 407,
       "smaa": 2,
-      "critic": 12,
-      "entropy": 50,
-      "revealed": 120,
-      "borda_all": 48,
-      "borda_no_entropy": 48
+      "critic": 11,
+      "entropy": 41,
+      "revealed": 148,
+      "borda_all": 49,
+      "borda_no_entropy": 49
     },
     {
       "fips": "19163",
       "county": "Scott, IA",
-      "balanced": 6,
+      "balanced": 5,
       "monetized": 583,
       "smaa": 7,
       "critic": 6,
-      "entropy": 257,
-      "revealed": 122,
-      "borda_all": 44,
-      "borda_no_entropy": 44
-    },
-    {
-      "fips": "41067",
-      "county": "Washington, OR",
-      "balanced": 120,
-      "monetized": 624,
-      "smaa": 14,
-      "critic": 1,
-      "entropy": 6,
-      "revealed": 9,
-      "borda_all": 54,
-      "borda_no_entropy": 39
+      "entropy": 274,
+      "revealed": 126,
+      "borda_all": 45,
+      "borda_no_entropy": 45
     },
     {
       "fips": "53075",
@@ -173,9 +161,9 @@
       "balanced": 3,
       "monetized": 296,
       "smaa": 1,
-      "critic": 78,
-      "entropy": 318,
-      "revealed": 660,
+      "critic": 83,
+      "entropy": 362,
+      "revealed": 672,
       "borda_all": 38,
       "borda_no_entropy": 38
     },
@@ -185,23 +173,23 @@
       "balanced": 2,
       "monetized": 531,
       "smaa": 3,
-      "critic": 208,
-      "entropy": 895,
-      "revealed": 1475,
+      "critic": 199,
+      "entropy": 943,
+      "revealed": 1478,
       "borda_all": 37,
       "borda_no_entropy": 37
     },
     {
       "fips": "17161",
       "county": "Rock Island, IL",
-      "balanced": 200,
+      "balanced": 210,
       "monetized": 1064,
       "smaa": 9,
-      "critic": 2,
-      "entropy": 278,
-      "revealed": 106,
-      "borda_all": 31,
-      "borda_no_entropy": 31
+      "critic": 1,
+      "entropy": 312,
+      "revealed": 107,
+      "borda_all": 32,
+      "borda_no_entropy": 32
     },
     {
       "fips": "53011",
@@ -209,47 +197,59 @@
       "balanced": 7,
       "monetized": 365,
       "smaa": 5,
-      "critic": 27,
-      "entropy": 338,
-      "revealed": 103,
+      "critic": 48,
+      "entropy": 462,
+      "revealed": 92,
       "borda_all": 30,
       "borda_no_entropy": 30
-    },
-    {
-      "fips": "40051",
-      "county": "Grady, OK",
-      "balanced": 9,
-      "monetized": 596,
-      "smaa": 6,
-      "critic": 266,
-      "entropy": 189,
-      "revealed": 504,
-      "borda_all": 27,
-      "borda_no_entropy": 27
     },
     {
       "fips": "40097",
       "county": "Mayes, OK",
       "balanced": 4,
       "monetized": 236,
-      "smaa": 12,
+      "smaa": 10,
       "critic": 118,
-      "entropy": 29,
-      "revealed": 1003,
+      "entropy": 24,
+      "revealed": 968,
+      "borda_all": 28,
+      "borda_no_entropy": 28
+    },
+    {
+      "fips": "45025",
+      "county": "Chesterfield, SC",
+      "balanced": 14,
+      "monetized": 1,
+      "smaa": 48,
+      "critic": 167,
+      "entropy": 574,
+      "revealed": 625,
+      "borda_all": 27,
+      "borda_no_entropy": 27
+    },
+    {
+      "fips": "42079",
+      "county": "Luzerne, PA",
+      "balanced": 27,
+      "monetized": 256,
+      "smaa": 4,
+      "critic": 12,
+      "entropy": 55,
+      "revealed": 45,
       "borda_all": 26,
       "borda_no_entropy": 26
     },
     {
-      "fips": "41051",
-      "county": "Multnomah, OR",
-      "balanced": 1005,
-      "monetized": 380,
-      "smaa": 271,
-      "critic": 4,
-      "entropy": 59,
-      "revealed": 12,
-      "borda_all": 26,
-      "borda_no_entropy": 26
+      "fips": "40051",
+      "county": "Grady, OK",
+      "balanced": 10,
+      "monetized": 596,
+      "smaa": 8,
+      "critic": 242,
+      "entropy": 253,
+      "revealed": 481,
+      "borda_all": 24,
+      "borda_no_entropy": 24
     }
   ],
   "focus": {
@@ -257,19 +257,19 @@
       "balanced": 7,
       "monetized": 365,
       "smaa": 5,
-      "critic": 27,
-      "entropy": 338,
-      "revealed": 103,
+      "critic": 48,
+      "entropy": 462,
+      "revealed": 92,
       "borda_all": 30,
       "borda_no_entropy": 30
     },
     "Franklin, NY": {
-      "balanced": 986,
+      "balanced": 952,
       "monetized": 410,
-      "smaa": 271,
-      "critic": 64,
-      "entropy": 392,
-      "revealed": 548,
+      "smaa": 280,
+      "critic": 34,
+      "entropy": 251,
+      "revealed": 452,
       "borda_all": 0,
       "borda_no_entropy": 0
     },
@@ -277,11 +277,11 @@
       "balanced": 1,
       "monetized": 407,
       "smaa": 2,
-      "critic": 12,
-      "entropy": 50,
-      "revealed": 120,
-      "borda_all": 48,
-      "borda_no_entropy": 48
+      "critic": 11,
+      "entropy": 41,
+      "revealed": 148,
+      "borda_all": 49,
+      "borda_no_entropy": 49
     }
   },
   "method_top10": {
@@ -290,12 +290,12 @@
       "Wayne, TN",
       "Whitman, WA",
       "Mayes, OK",
-      "Benton, WA",
       "Scott, IA",
+      "Benton, WA",
       "Clark, WA",
       "Scott, TN",
-      "Grady, OK",
-      "Adair, OK"
+      "Adair, OK",
+      "Grady, OK"
     ],
     "monetized": [
       "Chesterfield, SC",
@@ -313,48 +313,48 @@
       "Whitman, WA",
       "Grant, WA",
       "Wayne, TN",
-      "Trumbull, OH",
-      "Clark, WA",
-      "Grady, OK",
-      "Scott, IA",
       "Luzerne, PA",
+      "Clark, WA",
+      "Trumbull, OH",
+      "Scott, IA",
+      "Grady, OK",
       "Rock Island, IL",
-      "Clearfield, PA"
+      "Mayes, OK"
     ],
     "critic": [
-      "Washington, OR",
       "Rock Island, IL",
-      "Dakota, MN",
-      "Multnomah, OR",
       "St. Joseph, IN",
+      "Dakota, MN",
+      "Henry, IL",
+      "Washington, OR",
       "Scott, IA",
-      "Monroe, NY",
       "Ramsey, MN",
       "Onondaga, NY",
-      "Erie, NY"
+      "Cass, MI",
+      "Winnebago, IL"
     ],
     "entropy": [
+      "Clark, NV",
       "Bexar, TX",
       "Milam, TX",
-      "Salt Lake, UT",
-      "Clark, NV",
-      "Cook, IL",
-      "Washington, OR",
-      "El Paso, CO",
       "Berks, PA",
-      "Wayne, MI",
-      "St. Louis, MO"
+      "Cook, IL",
+      "Mecklenburg, VA",
+      "Salt Lake, UT",
+      "St. Louis, MO",
+      "El Paso, CO",
+      "Will, IL"
     ],
     "revealed": [
-      "Dallas, TX",
       "Maricopa, AZ",
+      "Dallas, TX",
+      "Hamilton, OH",
       "Wayne, MI",
       "Tarrant, TX",
-      "Hamilton, OH",
       "Montgomery, PA",
       "Bexar, TX",
+      "Clark, NV",
       "Salt Lake, UT",
-      "Washington, OR",
       "Allegheny, PA"
     ]
   },
@@ -374,12 +374,12 @@
       "Caddo, OK",
       "Garfield, OK",
       "Oklahoma, OK",
-      "Canadian, OK",
+      "Beaver, OK",
       "Payne, OK",
       "Lincoln, OK",
-      "McClain, OK",
-      "Cleveland, OK",
-      "Beaver, OK"
+      "Woodward, OK",
+      "Murray, OK",
+      "Curry, NM"
     ],
     "npv_top10": [
       "Chesterfield, SC",
@@ -397,7 +397,7 @@
   },
   "shortlist": {
     "rule": "SMAA top-10 acceptability, floor off, >= 1%",
-    "size": 161,
+    "size": 162,
     "stage2_top10_by_190": [
       {
         "fips": "45025",
@@ -406,52 +406,61 @@
         "co2_kt": 667.0,
         "smaa_top10_floor_off": 0.032,
         "floor_ok": true,
-        "balanced_rank": 17
+        "balanced_rank": 14
       },
       {
         "fips": "45069",
         "county": "Marlboro, SC",
         "npv_190_busd": 3.753,
         "co2_kt": 669.0,
-        "smaa_top10_floor_off": 0.0194,
+        "smaa_top10_floor_off": 0.0208,
         "floor_ok": true,
-        "balanced_rank": 28
+        "balanced_rank": 26
+      },
+      {
+        "fips": "45003",
+        "county": "Aiken, SC",
+        "npv_190_busd": 3.78,
+        "co2_kt": 709.0,
+        "smaa_top10_floor_off": 0.0102,
+        "floor_ok": true,
+        "balanced_rank": 46
       },
       {
         "fips": "49015",
         "county": "Emery, UT",
         "npv_190_busd": 3.822,
         "co2_kt": 688.0,
-        "smaa_top10_floor_off": 0.068,
+        "smaa_top10_floor_off": 0.0878,
         "floor_ok": false,
-        "balanced_rank": 1078
+        "balanced_rank": 1029
       },
       {
         "fips": "48139",
         "county": "Ellis, TX",
         "npv_190_busd": 3.907,
         "co2_kt": 843.0,
-        "smaa_top10_floor_off": 0.0412,
+        "smaa_top10_floor_off": 0.0444,
         "floor_ok": true,
-        "balanced_rank": 157
+        "balanced_rank": 160
       },
       {
         "fips": "48503",
         "county": "Young, TX",
         "npv_190_busd": 3.934,
         "co2_kt": 840.0,
-        "smaa_top10_floor_off": 0.076,
+        "smaa_top10_floor_off": 0.0704,
         "floor_ok": false,
-        "balanced_rank": 926
+        "balanced_rank": 923
       },
       {
         "fips": "37045",
         "county": "Cleveland, NC",
         "npv_190_busd": 3.95,
         "co2_kt": 686.0,
-        "smaa_top10_floor_off": 0.012,
+        "smaa_top10_floor_off": 0.0132,
         "floor_ok": true,
-        "balanced_rank": 267
+        "balanced_rank": 262
       },
       {
         "fips": "48179",
@@ -460,34 +469,25 @@
         "co2_kt": 854.0,
         "smaa_top10_floor_off": 0.0148,
         "floor_ok": false,
-        "balanced_rank": 962
+        "balanced_rank": 958
       },
       {
         "fips": "22077",
         "county": "Pointe Coupee, LA",
         "npv_190_busd": 3.965,
         "co2_kt": 849.0,
-        "smaa_top10_floor_off": 0.0112,
+        "smaa_top10_floor_off": 0.0116,
         "floor_ok": true,
-        "balanced_rank": 71
+        "balanced_rank": 66
       },
       {
         "fips": "48227",
         "county": "Howard, TX",
         "npv_190_busd": 3.984,
         "co2_kt": 891.0,
-        "smaa_top10_floor_off": 0.075,
+        "smaa_top10_floor_off": 0.056,
         "floor_ok": false,
-        "balanced_rank": 933
-      },
-      {
-        "fips": "42115",
-        "county": "Susquehanna, PA",
-        "npv_190_busd": 4.001,
-        "co2_kt": 644.0,
-        "smaa_top10_floor_off": 0.0182,
-        "floor_ok": true,
-        "balanced_rank": 189
+        "balanced_rank": 936
       }
     ],
     "stage2_top5_private": [
@@ -503,7 +503,7 @@
       "Grant, WA": true
     },
     "focus_stage2_rank": {
-      "Clark, WA": 72,
+      "Clark, WA": 73,
       "Franklin, NY": 80,
       "Grant, WA": 78
     }
@@ -530,9 +530,9 @@
       "cost": 0.541
     },
     "CRITIC (pillar sums)": {
-      "energy_carbon": 0.18,
-      "water": 0.121,
-      "climate_resilience": 0.254,
+      "energy_carbon": 0.185,
+      "water": 0.12,
+      "climate_resilience": 0.252,
       "grid_infrastructure": 0.15,
       "land": 0.044,
       "community": 0.136,
@@ -540,24 +540,24 @@
       "cost": 0.018
     },
     "Entropy (pillar sums)": {
-      "energy_carbon": 0.268,
-      "water": 0.037,
-      "climate_resilience": 0.091,
-      "grid_infrastructure": 0.43,
+      "energy_carbon": 0.249,
+      "water": 0.038,
+      "climate_resilience": 0.094,
+      "grid_infrastructure": 0.441,
       "land": 0.008,
-      "community": 0.141,
+      "community": 0.144,
       "permitting": 0.024,
       "cost": 0.002
     },
     "Revealed preference": {
-      "energy_carbon": 0.173,
-      "water": 0.125,
-      "climate_resilience": 0.228,
-      "grid_infrastructure": 0.083,
-      "land": 0.129,
-      "community": 0.146,
-      "permitting": 0.056,
-      "cost": 0.06
+      "energy_carbon": 0.171,
+      "water": 0.123,
+      "climate_resilience": 0.224,
+      "grid_infrastructure": 0.086,
+      "land": 0.156,
+      "community": 0.129,
+      "permitting": 0.053,
+      "cost": 0.058
     }
   },
   "chart": "docs/img/weights_by_method.png"

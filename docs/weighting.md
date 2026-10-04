@@ -6,6 +6,11 @@ each site in dollars and tonnes, and recommends a county to feature. The
 process, decisions, and interim results are in `docs/weighting_log.md`.
 Code and outputs are in `scratch/weighting/`. Charts are in `docs/img/`.
 
+Engine-based results (SMAA, CRITIC, entropy, revealed preference,
+consensus, and the shortlist) are computed on `main` as of `b7ddfe6`, which
+includes the queue-semantics correction. The dollar model gives identical
+results before and after that merge.
+
 Revision 1 adds a sales and use tax component, uses Grant County's own
 power-timeline evidence in place of the queue proxy, and covers Neil's
 review items. The tax component changed the recommendation.
@@ -203,14 +208,14 @@ With tax, Chesterfield SC (21%) and Kootenai ID (14%) take most #1 draws.
 ## The framework: screen with the engine, rank in dollars
 
 1. **Screen and shortlist with the engine.** The gates leave 1,565 of
-   3,109 counties. The shortlist keeps the 161 that at least 1% of random
+   3,109 counties. The shortlist keeps the 162 that at least 1% of random
    weightings put in the engine's top 10, with the floor off.
 2. **Rank the shortlist in dollars and tonnes** with the monetized model.
 3. **Test robustness** with Monte Carlo over the model's prices and delays,
    and SMAA over the engine's weights.
 
 With sales tax, stage 2's #1 is Chesterfield, SC. Clark, Grant, and
-Franklin rank 72nd, 78th, and 80th in the shortlist. The framework
+Franklin rank 73rd, 78th, and 80th in the shortlist. The framework
 therefore points away from all three. That result rests on the unverified
 state exemption flags described above.
 
@@ -320,13 +325,13 @@ Top 10 and the ranks of four counties among the 1,565 gate passers:
 
 | Method | Top 10 | Grant | Clark | Franklin | Berkshire |
 | --- | --- | --- | --- | --- | --- |
-| Balanced | Grant WA, Wayne TN, Whitman WA, Mayes OK, Benton WA, Scott IA, Clark WA, Scott TN, Grady OK, Adair OK | 1 | 7 | 986 | 1,013 |
+| Balanced | Grant WA, Wayne TN, Whitman WA, Mayes OK, Scott IA, Benton WA, Clark WA, Scott TN, Adair OK, Grady OK | 1 | 7 | 952 | 1,047 |
 | Monetized, $190/t with tax (other states' refreshes exempt) | Chesterfield SC, Kootenai ID, Marlboro SC, Florence SC, Aiken SC, Emery UT, El Paso TX, Grayson TX, Bossier LA, Houston TX | 407 | 365 | 410 | 1,552 |
-| SMAA (rank-1, floor on) | Whitman WA, Grant WA, Wayne TN, Trumbull OH, Clark WA, Grady OK, Scott IA, Luzerne PA, Rock Island IL, Clearfield PA | 2 | 5 | never top 10 | never top 10 |
-| CRITIC | Washington OR, Rock Island IL, Dakota MN, Multnomah OR, St. Joseph IN, Scott IA, Monroe NY, Ramsey MN, Onondaga NY, Erie NY | 12 | 27 | 64 | 107 |
-| Entropy | Bexar TX, Milam TX, Salt Lake UT, Clark NV, Cook IL, Washington OR, El Paso CO, Berks PA, Wayne MI, St. Louis MO | 50 | 338 | 392 | 76 |
-| Revealed preference | Dallas TX, Maricopa AZ, Wayne MI, Tarrant TX, Hamilton OH, Montgomery PA, Bexar TX, Salt Lake UT, Washington OR, Allegheny PA | 120 | 103 | 548 | 927 |
-| Consensus (Borda, no entropy) | Grant WA, Scott IA, Washington OR, Whitman WA, Wayne TN, Rock Island IL, Clark WA, Grady OK, Mayes OK, Multnomah OR | 1 | 7 | no points | no points |
+| SMAA (rank-1, floor on) | Whitman WA, Grant WA, Wayne TN, Luzerne PA, Clark WA, Trumbull OH, Scott IA, Grady OK, Rock Island IL, Mayes OK | 2 | 5 | never top 10 | never top 10 |
+| CRITIC | Rock Island IL, St. Joseph IN, Dakota MN, Henry IL, Washington OR, Scott IA, Ramsey MN, Onondaga NY, Cass MI, Winnebago IL | 11 | 48 | 34 | 204 |
+| Entropy | Clark NV, Bexar TX, Milam TX, Berks PA, Cook IL, Mecklenburg VA, Salt Lake UT, St. Louis MO, El Paso CO, Will IL | 41 | 462 | 251 | 172 |
+| Revealed preference | Maricopa AZ, Dallas TX, Hamilton OH, Wayne MI, Tarrant TX, Montgomery PA, Bexar TX, Clark NV, Salt Lake UT, Allegheny PA | 148 | 92 | 452 | 974 |
+| Consensus (Borda, no entropy) | Grant WA, Scott IA, Whitman WA, Wayne TN, Rock Island IL, Clark WA, Mayes OK, Chesterfield SC, Luzerne PA, Grady OK | 1 | 6 | no points | no points |
 
 How to read the table:
 - **"Never top 10" and "no points" are tie groups, not ranks.** The CSV
@@ -334,7 +339,7 @@ How to read the table:
 - **Grant's consensus #1 is mechanical.** With tax, the dollar top 20 is
   counties no other method ranks, so Clark lost its 20 points from the
   dollar method. It isn't new evidence for Grant.
-- **With entropy, Washington, OR leads the consensus.**
+- **With entropy included, Grant still leads the consensus;** Clark is 9th.
 
 ## Methods
 
@@ -388,7 +393,7 @@ columns.
 
 - **Why it's defensible:** it shows what industry chose.
 - **Main limitation:** population alone predicts almost as well (AUC
-  0.855 against 0.905), and the fleet reflects past, latency-driven siting.
+  0.855 against 0.906), and the fleet reflects past, latency-driven siting.
 
 ### Consensus
 
@@ -402,14 +407,14 @@ The consensus is a Borda count over each method's top 20.
 
 | Pillar | Balanced | Monetized at $190/t | CRITIC | Entropy | Revealed preference |
 | --- | --- | --- | --- | --- | --- |
-| energy_carbon | 0.153 | 0.228 | 0.180 | 0.268 | 0.173 |
-| water | 0.119 | 0 | 0.121 | 0.037 | 0.125 |
-| climate_resilience | 0.119 | 0.010 | 0.254 | 0.091 | 0.228 |
-| grid_infrastructure | 0.153 | 0.066 | 0.150 | 0.430 | 0.083 |
-| land | 0.068 | 0 | 0.044 | 0.008 | 0.129 |
-| community | 0.085 | 0 | 0.136 | 0.141 | 0.146 |
-| permitting | 0.153 | 0.155 | 0.096 | 0.024 | 0.056 |
-| cost | 0.150 | 0.541 | 0.018 | 0.002 | 0.060 |
+| energy_carbon | 0.153 | 0.228 | 0.185 | 0.249 | 0.171 |
+| water | 0.119 | 0 | 0.120 | 0.038 | 0.123 |
+| climate_resilience | 0.119 | 0.010 | 0.252 | 0.094 | 0.224 |
+| grid_infrastructure | 0.153 | 0.066 | 0.150 | 0.441 | 0.086 |
+| land | 0.068 | 0 | 0.044 | 0.008 | 0.156 |
+| community | 0.085 | 0 | 0.136 | 0.144 | 0.129 |
+| permitting | 0.153 | 0.155 | 0.096 | 0.024 | 0.053 |
+| cost | 0.150 | 0.541 | 0.018 | 0.002 | 0.058 |
 
 The monetized column holds the covariance shares at $190/t with tax, with
 negative shares set to 0 and the rest renormalized. Permitting's 0.155 is
