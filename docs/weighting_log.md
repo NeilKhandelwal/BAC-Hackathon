@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:36 UTC
+- **Updated:** 2026-10-04 01:38 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,24 +17,26 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** pre-Phase 2 checks done (Clark queue check, Monte
-  Carlo, hazard note). Phase 2 (SMAA) not started.
+- **Phase and step:** Phase 2 done. Phase 3 (CRITIC and entropy) not
+  started.
 - **Done:** Phase 0. Phase 1 (`monetize.py`). Monte Carlo
-  (`montecarlo.py`, `docs/img/mc_winners.png`). `docs/weighting.md` stub
-  with the hazard-downtime and floor notes. Results are in the history.
+  (`montecarlo.py`). Phase 2 (`smaa.py`). `docs/weighting.md` stub with
+  the hazard-downtime and floor notes. Results are in the history.
 - **In progress:** nothing.
-- **Exact next action:** write `scratch/weighting/smaa.py`. Start with the
-  self-check that balanced weights through the vectorized composite
-  reproduce the top 10 in `results/balanced.csv`. Run 5,000 Dirichlet(1)
-  draws over the 8 pillars with the floor on and off. Report rank-1 and
-  top-10 acceptability, central weights for the top 5, and Clark WA,
-  Franklin NY, and Grant WA under both settings. Franklin fails the floor
-  on cost (6.5 against 10), so its floor-on rank-1 acceptability is 0 by
-  construction.
+- **Exact next action:** write `scratch/weighting/critic.py` per approved
+  decision 4: primary CRITIC and entropy on gate-passing counties' raw
+  values for every scored column, winsorized at the 1st and 99th
+  percentiles, then min-max scaled with the pillar direction applied;
+  percentile version as the sensitivity. Apply the weights at the column
+  level in a scratch composite (keep the floor on and off as in Phase 2).
+  Report column weights, pillar-summed weights for comparison with the
+  column-count bias noted, the top 10 under each, and column pairs with
+  |r| above 0.8.
 - **Reproduce:** from the repo root, after fetching raw NRI (below):
   `.venv/Scripts/python.exe scratch/weighting/monetize.py`, then
-  `.venv/Scripts/python.exe scratch/weighting/montecarlo.py`. Both rewrite
-  `scratch/weighting/out/` and their charts in `docs/img/`.
+  `.venv/Scripts/python.exe scratch/weighting/montecarlo.py`, then
+  `.venv/Scripts/python.exe scratch/weighting/smaa.py`. Each rewrites its
+  files in `scratch/weighting/out/` and its chart in `docs/img/`.
 - **Advisor rule (from the user):** consult the advisor before finalizing a
   Monte Carlo design, when judging whether the top 3 is a real tie, before
   writing the Phase 5 recommendation, and whenever results look
@@ -120,7 +122,7 @@ exemption. Don't attribute the whole flip to weights.
 | --- | --- | --- | --- |
 | 0 | Get current, summarize, plan | done | this file |
 | 1 | Monetized total cost of siting | done | `scratch/weighting/monetize.py`, `docs/img/cost_vs_co2.png` |
-| 2 | Weight-space mapping (SMAA) | not started | `scratch/weighting/smaa.py` |
+| 2 | Weight-space mapping (SMAA) | done | `scratch/weighting/smaa.py`, `docs/img/smaa_acceptability.png` |
 | 3 | CRITIC and entropy weights | not started | `scratch/weighting/critic.py` |
 | 4 | Revealed preference | not started | `scratch/weighting/revealed.py` |
 | 5 | Consensus and write-up | not started | `scratch/weighting/consensus.py`, `docs/weighting.md`, `docs/img/` |
@@ -495,3 +497,60 @@ age win 1.1% of draws.
 
 Earlier history headings were re-stamped from commit times; the first
 versions used estimated times.
+
+### 2026-10-04 01:38 UTC, Phase 2: SMAA weight-space mapping
+
+Script: `scratch/weighting/smaa.py`. Printout:
+`scratch/weighting/out/smaa_report.txt`. Per-county table:
+`scratch/weighting/out/smaa_acceptability.csv`. JSON:
+`scratch/weighting/out/smaa_summary.json`. Chart:
+`docs/img/smaa_acceptability.png`. 5,000 Dirichlet(1) weight vectors over
+the 8 pillars, seed 0. The self-check reproduced the top 10 in
+`results/balanced.csv` exactly.
+
+**No county wins under most weightings.** The best rank-1 acceptability is
+12.4%. Grant WA has the highest top-10 acceptability under both settings.
+
+| County | Rank-1, floor on | Top-10, floor on | Rank-1, floor off | Top-10, floor off |
+| --- | --- | --- | --- | --- |
+| Grant, WA | 12.4% | 50.5% | 8.0% | 34.9% |
+| Whitman, WA | 12.4% | 44.7% | 7.1% | 31.3% |
+| Wayne, TN | 10.9% | 42.1% | 7.5% | 30.8% |
+| Trumbull, OH | 9.1% | 32.4% | 7.2% | 24.8% |
+| Clark, WA | 6.7% | 29.6% | 4.9% | 20.6% |
+| Franklin, NY | 0% (fails floor) | 0% (fails floor) | 7.1% | 24.3% |
+
+Floor off adds Hamilton OH (7.2%), Caddo OK, Sullivan TN, and Hamilton NY
+to the rank-1 list. All of them fail the floor.
+
+**Value system behind each winner** (mean weights over the draws it
+wins, floor on unless noted):
+
+- Grant WA: grid 0.21, land 0.17, energy_carbon 0.16; cost 0.08, water
+  0.06.
+- Whitman WA: land 0.20, water 0.19, energy_carbon 0.17.
+- Wayne TN: permitting 0.28.
+- Trumbull OH: community 0.28, water 0.18.
+- Clark WA: water 0.27, cost 0.17, climate 0.14.
+- Franklin NY, floor off: water 0.27, energy_carbon 0.17, cost 0.035.
+
+**Franklin and the floor.** Franklin fails on cost: 6.5th percentile
+against a floor of 10, a 3.5-point miss. With the floor on, its rank-1
+and top-10 acceptability are 0 by construction. No energy_carbon weight
+changes that, because floor membership doesn't depend on positive
+weights.
+
+**Franklin against Grant and Clark with the floor off**, raising the
+energy_carbon weight and scaling the other pillars in balanced
+proportion: Franklin passes Clark at an energy_carbon weight of 0.384 and
+Grant at 0.788. Balanced uses 0.153.
+
+**Engine and monetized model disagree, and percentiles are why.** In
+dollars, Franklin emits 2.7 times less CO2 than Grant (260 against 700
+kt/yr). In the engine, Grant's energy_carbon pillar sits at the 94th
+percentile and Franklin's at the 97th. The pillar mixes grid carbon with
+renewable share, clean queue MW, and clean capacity within 100 km, where
+Grant scores near the top, and percentile scoring compresses a large
+physical gap into a few points. That's why the engine needs an
+energy_carbon weight of 0.79 before Franklin passes Grant, while the
+monetized model has Franklin passing Grant at $99/t.

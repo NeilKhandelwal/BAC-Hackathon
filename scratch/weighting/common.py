@@ -12,7 +12,7 @@ OUT = Path(__file__).resolve().parent / "out"
 IMG = ROOT / "docs/img"
 FEATURES = ROOT / "data/processed/county_features.parquet"
 # Counties every report names, so results stay comparable across phases.
-FOCUS = {"53025": "Grant, WA", "36033": "Franklin, NY", "36019": "Clinton, NY", "25003": "Berkshire, MA",
+FOCUS = {"53025": "Grant, WA", "53011": "Clark, WA", "36033": "Franklin, NY", "36019": "Clinton, NY", "25003": "Berkshire, MA",
          "51107": "Loudoun, VA", "48113": "Dallas, TX"}
 
 
