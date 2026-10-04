@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-03T23:16:32+00:00",
+  "built_at": "2026-10-04T00:12:20+00:00",
   "rows": 3109,
   "sources": [
     {
@@ -60,7 +60,7 @@
       "name": "Hand-coded state permitting tables",
       "version": "see source_url per row",
       "url": "data/processed/state_policy.csv",
-      "fetched_at": "2026-10-03T21:02:25+00:00"
+      "fetched_at": "2026-10-04T00:09:59+00:00"
     },
     {
       "name": "NREL WIND Toolkit",
@@ -72,25 +72,25 @@
       "name": "Census County Business Patterns",
       "version": "2001 and 2022",
       "url": "https://www2.census.gov/programs-surveys/cbp/datasets/2022/cbp22co.zip",
-      "fetched_at": "2026-10-03T20:45:16+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
     },
     {
       "name": "USDA ERS county unemployment (BLS LAUS)",
       "version": "2000-2023 file, 2023 annual average",
       "url": "https://www.ers.usda.gov/media/5497/unemployment-and-median-household-income-for-the-united-states-states-and-counties-2000-23.csv",
-      "fetched_at": "2026-10-03T20:46:18+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
     },
     {
       "name": "Census county population estimates",
       "version": "Vintage 2020 and Vintage 2024",
       "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/counties/totals/co-est2024-alldata.csv",
-      "fetched_at": "2026-10-03T20:45:17+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
     },
     {
       "name": "EIA-860",
       "version": "2025 final",
       "url": "https://www.eia.gov/electricity/data/eia860/xls/eia8602025.zip",
-      "fetched_at": "2026-10-03T20:46:18+00:00"
+      "fetched_at": "2026-10-03T21:03:49+00:00"
     },
     {
       "name": "EIA-861 state historical tables",
@@ -108,19 +108,19 @@
       "name": "Census Population of Counties by Decennial Census 1900-1990 (Forstall), NBER mirror",
       "version": "1995 file; plus Census 2000 and 2010 counts and Vintage 2024 estimates",
       "url": "https://data.nber.org/census/population/cencounts/cencounts.csv",
-      "fetched_at": "2026-10-03T23:09:23+00:00"
+      "fetched_at": "2026-10-04T00:11:10+00:00"
     },
     {
       "name": "BEA CAEMP25 county employment by industry",
       "version": "CAEMP25S 1969 (SIC), CAEMP25N 2022 (NAICS)",
       "url": "https://apps.bea.gov/regional/zip/CAEMP25S.zip",
-      "fetched_at": "2026-10-03T23:06:27+00:00"
+      "fetched_at": "2026-10-04T00:11:10+00:00"
     },
     {
       "name": "DOE/NETL IRA Energy Community Data Layers",
       "version": "2024 (dataset_version 2024.1)",
       "url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/2024_MSAs_NonMSAs_that_are_Energy_Communities/FeatureServer/0",
-      "fetched_at": "2026-10-03T23:13:16+00:00"
+      "fetched_at": "2026-10-04T00:11:11+00:00"
     }
   ],
   "columns_present": [
