@@ -26,6 +26,7 @@ MANIFEST = OUT_DIR / "county_features.manifest.json"
 
 def append(names, fetch=True):
     table = pd.read_parquet(TABLE)
+    frozen_dtypes = table.dtypes  # merging on fips can change its dtype; existing columns keep theirs
     manifest = json.loads(MANIFEST.read_text())
     added = []
     for name in names:
@@ -57,6 +58,8 @@ def append(names, fetch=True):
 
     stretch = [c for c in STRETCH if c in table]
     table = table[[*CORE, *stretch]].sort_values("fips").reset_index(drop=True)
+    for c, dtype in frozen_dtypes.items():
+        table[c] = table[c].astype(dtype)
     empty = [c for c in table.columns if table[c].isna().all()]
     manifest["columns_present"] = [c for c in table.columns if c not in empty]
     manifest["columns_missing"] = empty + [c for c in STRETCH if c not in table]

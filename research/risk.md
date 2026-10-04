@@ -41,8 +41,10 @@ $64M less than in Loudoun County, VA.
 
 ## Comparison
 
-The two counties that follow Grant once electricity cost is its own
-pillar. PR #28 gives the order: Grant 63.7, Wayne 63.2, Whitman 63.0.
+The counties that followed Grant once electricity cost became its own
+pillar. PR #28 gave the order Grant 63.7, Wayne 63.2, Whitman 63.0. With
+protected land and land cover scored, the order is Grant 63.70, Whitman
+63.69, Benton 62.7, and Wayne falls out of the top 10.
 
 - **Wayne County, TN (47181).** Worst three: inland flooding (83.1, worse
   than 83%), hurricane (57.7, worse than 69%), workforce (population
@@ -86,10 +88,10 @@ play if the order lifts.
 
 - County scores are not parcel scores. Wildfire, flood, and fiber need a
   site-level check.
-- The engine doesn't score proximity to protected or tribal land. It was
-  checked by hand for Grant, Clark, and Franklin
+- The engine scores protected land and cropland as county shares, and has
+  optional protected and tribal land gates. Proximity was also checked by hand for Grant, Clark, and Franklin
   (`research/sensitive_land.md`). A county protected-land share was built
-  and measured but isn't in the table; a county share is a screen, not a
+  and is now scored in the land pillar; a county share is a screen, not a
   siting check.
 - eGRID understates the PUD's generation. It credits the PUD's balancing
   authority with 4.13 TWh and assigns Priest Rapids dam to BPA's. The PUD

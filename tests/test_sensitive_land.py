@@ -34,3 +34,27 @@ def test_tribal_land_share_counts_reservations_and_trust_land_only():
     assert d.at["36033", "tribal_land_share"] > 0  # St. Regis Mohawk Reservation
     assert d.at["53077", "tribal_land_share"] > 0.3  # Yakima County: Yakama Nation
     assert d.at["40143", "tribal_land_share"] < 0.5  # Tulsa: statistical areas excluded
+
+
+def test_frozen_table_carries_the_land_columns():
+    import pandas as pd
+    t = pd.read_parquet("data/processed/county_features.parquet").set_index("fips")
+    for c in ("pct_protected", "pct_protected_gap1to3", "tribal_land_share", "pct_cropland",
+              "pct_cultivated_crops", "pct_developed", "pct_forest_wetland"):
+        assert c in t and t[c].between(0, 1).all(), c
+    assert t.at["53025", "pct_protected"] == pytest.approx(0.128, abs=0.002)
+
+
+def test_sensitive_land_gates_are_off_by_default_and_exclude_when_set():
+    from engine.rank import load_features, load_yaml, rank
+    df, _ = load_features("data/processed/county_features.parquet")
+    pillars = load_yaml("engine/pillars.yaml")
+    base = {**load_yaml("engine/conditions/balanced.yaml"), "robustness": {"samples": 0}}
+    assert base["gates"]["max_pct_protected"] is None and base["gates"]["max_tribal_land_share"] is None
+    _, _, report = rank(df, base, pillars)
+    gated = {**base, "gates": {**base["gates"], "max_pct_protected": 0.25, "max_tribal_land_share": 0.25}}
+    ranked, excluded, report_g = rank(df, gated, pillars)
+    assert report_g["passed"] < report["passed"]
+    assert "53025" in set(ranked.fips)  # Grant: 12.8% protected, no tribal land
+    hit = excluded.failed_gates.str.contains("max_pct_protected|max_tribal_land_share")
+    assert hit.any()

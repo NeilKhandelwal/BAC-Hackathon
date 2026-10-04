@@ -51,7 +51,9 @@ Grant's rank depends on whether electricity cost is scored on its own:
 - Under the seven-pillar balanced preset at the data-freeze tag, Grant ranks
   7th of 1,565 gate-passing counties (composite 61.4, robustness 0.65).
 - With cost as an eighth pillar, weighted 0.15 (PR #28), Grant ranks 1st
-  (composite 63.7, robustness 1.00).
+  (composite 63.7, robustness 1.00). With protected land and land cover
+  scored (PR #40), Grant is still 1st at 63.70, level with Whitman WA at
+  63.69.
 
 The team picked Grant because of that second ranking. A site-selection lead
 pays the power bill, and a ranking that ignores it put Berkshire County, MA,

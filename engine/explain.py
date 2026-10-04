@@ -22,6 +22,11 @@ COLUMN_LABELS = {
     "queue_operational_mw_5y": "Legacy: operational, entered the queue 2019 or later (MW, not scored)",
     "queue_operational_online_date_fallback_share":
         "Delivered projects dated by proposed online date (share, not scored)",
+    # Land and sensitive-area shares are county screens, not siting checks.
+    "pct_protected": "Protected land, PAD-US GAP 1-2 (share of county)",
+    "pct_cropland": "Cropland, NLCD pasture and crops (share of county)",
+    "pct_developed": "Developed land, NLCD (share of county)",
+    "pct_forest_wetland": "Forest and wetland, NLCD (share of county)",
 }
 # Unscored queue context shown beside the scores, so storage and legacy measures stay visible.
 QUEUE_CONTEXT = ["queue_active_mw_storage_standalone", "queue_operational_online_date_fallback_share",

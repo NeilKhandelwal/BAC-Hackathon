@@ -16,6 +16,7 @@ SOURCE = {"name": "IPUMS NHGIS land cover summaries (NLCD)", "version": "NLCD 20
                       "S. IPUMS National Historical Geographic Information System. Minneapolis, MN: IPUMS.",
           "resolution": "NLCD 30 m classes summarized to county polygons by NHGIS (exactextractr)"}
 RAW = "nhgis/nhgis_county2020_tl2020_nlcd_timebycolumn.zip"
+OPTIONAL = True  # the raw file needs a free IPUMS NHGIS account; without it the build warns and the columns stay null
 CSV = "nhgis_county2020_tl2020_nlcd.csv"
 YEAR = 2021
 # column -> NLCD classes

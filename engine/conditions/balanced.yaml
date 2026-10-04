@@ -31,6 +31,8 @@ gates:
   max_permitting_risk: null             # needs permitting_discretionary_risk; no model ships, so keep null
   exclude_air_nonattainment: false
   min_population: 5000
+  max_pct_protected: null              # 0-1 share of the county in PAD-US GAP 1-2; null disables
+  max_tribal_land_share: null          # 0-1 share inside reservations or trust land; null disables
 
 weights:                               # cost 0.15 and the other seven scaled by 0.85: energy is the largest operating cost, and the brief asks for long-term economic viability
   energy_carbon: 0.153

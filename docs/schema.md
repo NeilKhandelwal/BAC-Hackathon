@@ -111,16 +111,18 @@ inland, the ETL writes 0. "Insufficient Data" stays null.
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
-| `pct_developed` | float 0-1 | NLCD 2021 via IPUMS NHGIS county summaries (`etl/adapters/nlcd_landcover.py`) | stretch | classes 21-24. Built and measured on `fix/sensitive-land`; not in the frozen table. |
-| `pct_cropland` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | classes 81 (pasture/hay) and 82 (cultivated crops). Land cover, not soil quality: not the same as prime farmland. Built and measured; not in the frozen table. |
+| `pct_developed` | float 0-1 | NLCD 2021 via IPUMS NHGIS county summaries (`etl/adapters/nlcd_landcover.py`) | stretch | classes 21-24. |
+| `pct_cropland` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | classes 81 (pasture/hay) and 82 (cultivated crops). Land cover, not soil quality: not the same as prime farmland. |
 | `pct_cultivated_crops` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | class 82 only; context, not scored |
-| `pct_forest_wetland` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | classes 41-43, 90, 95. Scored in the permitting pillar when present. Built and measured; not in the frozen table. |
-| `pct_protected` | float 0-1 | USGS PAD-US 4.1 Summary Statistics, county table, GAP 1-2 acres over total county acres (`etl/adapters/pad_us.py`) | stretch | Scored in the land pillar when present (lower is better). Total area includes water, so lake and coastal counties read lower than a land-only share. Built and measured on `fix/sensitive-land`; not in the frozen table (see `docs/sensitive_land_log.md`). |
+| `pct_forest_wetland` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | classes 41-43, 90, 95. Scored in the permitting pillar when present. |
+| `pct_protected` | float 0-1 | USGS PAD-US 4.1 Summary Statistics, county table, GAP 1-2 acres over total county acres (`etl/adapters/pad_us.py`) | stretch | Scored in the land pillar when present (lower is better). Total area includes water, so lake and coastal counties read lower than a land-only share. |
 | `pct_protected_gap1to3` | float 0-1 | same table, GAP 1-3 | stretch | context, not scored. GAP 3 is multiple-use land (most national forest and BLM land). |
 | `tribal_land_share` | float 0-1 | Census TIGER/Line 2024 AIANNH, classes D2, D3, D5, D8, unioned and intersected with county polygons in EPSG:5070 (`etl/adapters/tribal_lands.py`) | stretch | context, not scored. Area inside federally recognized reservations and off-reservation trust land; not tribal ownership. Excludes statistical areas such as Oklahoma tribal statistical areas. |
 
-Until the stretch columns land, land availability uses `pop_density_per_sqkm`
-and `land_area_sqkm` only. County protected and tribal shares are a screen,
+Land availability scores `pop_density_per_sqkm`, `land_area_sqkm`,
+`pct_developed`, `pct_protected`, and `pct_cropland`; `pct_forest_wetland`
+scores in permitting. These columns were appended to the frozen table with
+`etl/append_columns.py` (see the manifest's `patches`). County protected and tribal shares are a screen,
 not a siting check: a 150-acre campus can avoid protected land inside a
 county, so a parcel-level check belongs in feasibility.
 
@@ -299,7 +301,10 @@ is the same as `lbnl_queue.py`. The evidence is in
 ## Frozen artifacts and reproducibility
 
 `data/processed/county_features.parquet` and the committed files in
-`results/` are the canonical frozen hackathon artifacts. The committed table
+`results/` are the canonical frozen hackathon artifacts. Seven land and
+sensitive-area columns (PR #40) were later appended at the end of the table
+with `etl/append_columns.py`, which keeps every earlier column's position,
+dtype, and values; the manifest's `patches` entry records it. The committed table
 keeps main's original 83 columns exactly as they were at `1575003` and
 appends 85 context columns. Two of them are scored queue measures (see
 "Queue measures"); no gate uses any of them. The queue-semantics

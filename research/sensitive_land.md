@@ -1,12 +1,12 @@
 # Sensitive and protected land near the candidate counties
 
-The brief asks about "proximity to sensitive areas and ecosystems." The
-engine doesn't score that: the land pillar's `pct_protected` column was
-never built, so land is scored on population density and county area only.
-This note records the check done by hand for Grant County, WA (the
-featured county), Clark County, WA, and Franklin County, NY, and a
-county-level protected-land share that was built and measured but not
-shipped.
+The brief asks about "proximity to sensitive areas and ecosystems." Until
+PR #40 the engine didn't score that: the land pillar's `pct_protected` and
+land cover columns were never built. They're now in the county table and
+scored, with optional protected and tribal land gates. This note records
+the check done by hand for Grant County, WA (the featured county), Clark
+County, WA, and Franklin County, NY, and what the county shares do to the
+ranking.
 
 **Bottom line.** None of the three reference sites has a protected-land,
 tribal-land, or legal conflict that would block a 300 MW campus. Grant
@@ -169,33 +169,48 @@ constraints:
 [Tribal Historic Preservation Office](https://www.srmt-nsn.gov/programs/tribal-historic-preservation-office)
 handles Section 106 consultation.
 
-## County shares (built, measured, not shipped)
+## County shares in the engine
 
-`etl/adapters/pad_us.py` and `etl/adapters/tribal_lands.py` compute
-county shares. The measurement is in
-`scratch/sensitive_land/measure.py`.
+`etl/adapters/pad_us.py` (PAD-US 4.1), `etl/adapters/tribal_lands.py`
+(Census TIGER 2024 AIANNH), and `etl/adapters/nlcd_landcover.py` (NLCD 2021
+via IPUMS NHGIS) compute the shares. They were appended to the frozen
+county table with `etl/append_columns.py`.
 
-| County | GAP 1-2 (`pct_protected`) | National percentile | GAP 1-3 | Tribal land share |
-| --- | --- | --- | --- | --- |
-| Grant, WA | 12.8% | 89th | 23.4% | 0% |
-| Clark, WA | 2.8% | 59th | 18.4% | 0.04% |
-| Franklin, NY | 32.0% | 98th | 50.1% | 1.2% |
-| Berkshire, MA | 18.0% | 93rd | 34.8% | 0% |
+| County | GAP 1-2 (`pct_protected`) | National percentile | GAP 1-3 | Tribal land share | Cropland (NLCD 81-82) |
+| --- | --- | --- | --- | --- | --- |
+| Grant, WA | 12.8% | 89th | 23.4% | 0% | 42.9% |
+| Clark, WA | 2.8% | 59th | 18.4% | 0.04% | 16.2% |
+| Franklin, NY | 32.0% | 98th | 50.1% | 1.2% | 8.1% |
+| Berkshire, MA | 18.0% | 93rd | 34.8% | 0% | 5.9% |
 
-**Scored in the land pillar** (as `engine/pillars.yaml` specifies):
-- Grant falls from 1st to 4th under `balanced`. Whitman WA becomes 1st,
-  0.87 points ahead of Grant.
+**What's scored**, as `engine/pillars.yaml` maps it:
+- The land pillar scores `pct_protected`, `pct_cropland`, and
+  `pct_developed` (lower is better), alongside density and county area.
+- The permitting pillar scores `pct_forest_wetland` (lower is better).
+- `tribal_land_share`, `pct_protected_gap1to3`, and `pct_cultivated_crops`
+  are context.
+- The gates `max_pct_protected` and `max_tribal_land_share` are available
+  in every conditions file and off by default.
+
+**Effect on the balanced ranking.**
+- Grant stays 1st at 63.70, level with Whitman WA at 63.69. Benton WA is
+  3rd at 62.7.
+- Grant's land pillar falls from 75.0 to 52.8. Its permitting pillar rises
+  from 53.2 to 63.2, because it has little forest or wetland.
 - Grant's share of random weightings that put it in the top 10 falls from
-  50.5% to 14.0%.
-- The other presets keep their #1: Wayne TN for `speed_to_power`, Whitman
-  WA for `sustainability_first`.
-- No top-10 county under that scoring has much protected or tribal land.
+  50.5% to 35.8%. Whitman WA leads at 43.9%.
+- `speed_to_power`'s #1 changes from Wayne TN to Mayes OK.
+  `sustainability_first` keeps Whitman WA.
 
-The column wasn't shipped because, for the featured county, the county
-share disagrees with the site check: the protected land is real but isn't
-at Quincy. Percentile scoring also turns a modest gap into a large one
-(0.2% against 12.8% is about 89 percentile points). As a gate instead of
-a score, a 25% or 50% cap leaves the top 10 unchanged and Grant passes.
+**Scoring the columns one at a time gives a different answer**
+(`scratch/sensitive_land/measure.py`, `measure_landcover.py`):
+- Protected land alone would put Grant 4th.
+- Cropland alone would put it 2nd.
+- Shipped together, as designed, they offset.
+
+Percentile scoring amplifies modest gaps: Whitman's 0.2% protected and
+Grant's 12.8% are about 89 percentile points apart. As a gate, a 25% or
+50% protected cap leaves the top 10 unchanged, and Grant passes.
 
 **A county share is a screen, not a siting check.** A 150-acre campus can
 avoid protected land inside a county, so a parcel-level check belongs in

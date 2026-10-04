@@ -24,11 +24,12 @@ agree on this.
 
 **Headline:** Grant County, Washington is the strongest site for a 300 MW
 sustainable AI campus: first of 1,565 qualifying counties, and in the top 10
-under 99.9% of weight resamples.
+under 99.95% of weight resamples.
 
-- Grant ranks first with a composite of 63.7, ahead of Wayne TN (63.2) and
-  Whitman WA (63.1). Its lead is 0.5 points, so the robustness number
-  carries the claim, not the rank.
+- Grant ranks first with a composite of 63.70, level with Whitman WA (63.69)
+  and ahead of Benton WA (62.7). With protected land and land cover now
+  scored, its lead is 0.01 points, so the robustness number and the site
+  conditions carry the claim, not the rank.
 - **Why it wins:** cheap power, favorable state policy, room to build, and an
   existing data center cluster with 99% fiber coverage.
 - **Condition for it to hold:** the campus is sited next to hydro, powered by
@@ -57,10 +58,11 @@ strength.
   15%, cost of power 15%, water 12%, climate 12%, community 8%, land 7%. A
   county below the 10th percentile on any pillar ranks after every county
   that isn't.
-- **The weights are stated judgments, not fitted values.** Grant is also first
-  under equal weights, sharing 7 of the top 10. Across uniformly random
-  weightings it lands in the top 10 50.5% of the time, more than any other
-  county.
+- **The weights are stated judgments, not fitted values.** Under equal
+  weights Grant is second, behind Whitman WA, and the two top 10s share 8
+  counties. Across uniformly random weightings Grant lands in the top 10
+  35.8% of the time; Whitman WA leads at 43.9%. The engine's job is to show
+  that spread, not to hide it.
 
 **Figure:** `docs/figures/framework.png`
 
@@ -74,17 +76,17 @@ are in `docs/figures/facts.json` (`weights`), computed by
 **Headline:** Every one of 3,109 counties is scored from 20 documented
 sources, and the proxies are labeled as proxies.
 
-- 3,109 counties in the contiguous US by 83 columns. 35 of the 45 mapped
-  columns are populated, so coverage is 0.73 to 0.78 across the top 10.
+- 3,109 counties in the contiguous US by 175 columns. 39 of the 45 mapped
+  columns are populated, so coverage is 0.84 to 0.87 across the top 10.
 - Sources by pillar:
   - **Energy and carbon:** eGRID2023 subregions, the LBNL interconnection queue (clean generation excluding storage, and capacity delivered 2021-2025), the NREL WIND Toolkit, and eGRID plants within 100 km.
   - **Water:** the Drought Monitor, FEMA NRI, WRI Aqueduct 4.0, and CMRA.
   - **Climate:** FEMA NRI loss rates and CMRA projections.
   - **Grid:** the LBNL queue, FCC fiber, FracTracker, and EIA-860.
   - **Cost:** EIA-861 state industrial prices.
-  - **Land:** Census TIGER.
+  - **Land:** Census TIGER, USGS PAD-US 4.1 protected areas (GAP 1-2), and NLCD 2021 land cover via IPUMS NHGIS (cropland, developed). Census tribal boundaries are a context column and an optional gate.
   - **Community:** ACS, BLS LAUS, BEA 1969 employment, and Census history since 1950.
-  - **Permitting:** the EPA Green Book and hand-coded state tables.
+  - **Permitting:** the EPA Green Book, hand-coded state tables, and NLCD forest and wetland cover.
 - Proxies:
   - **Fiber:** last-mile residential fiber stands in for backbone.
   - **Nearby capacity:** plant capacity within 100 km stands in for deliverable power.
@@ -107,15 +109,15 @@ means.
 - **Seven pillars:** with price as one of seven grid columns (2.6% of the
   composite), Berkshire County, MA ranked first at 18.19 cents/kWh, and Grant
   seventh. Correcting a closed Massachusetts tax exemption, recomputed with
-  today's queue measures, moves Berkshire to fifth and Grant to ninth.
+  today's inputs, moves Berkshire to 27th and Grant to seventh.
 - **Cost as its own pillar:** at 15%, cost moved Grant to first and Berkshire
-  to 1,047th. Berkshire would pay $435M a year for power against Loudoun's
+  to 1,164th. Berkshire would pay $435M a year for power against Loudoun's
   $226M and Grant's $162M.
 - **Then feasibility:** research found that $162M uses a state average price
   a new load won't get. At BPA's new-load rate the same energy costs $196M to
   $323M. Earlier, FEMA's dollar-loss scores had excluded Grant, Polk IA, and
-  Dallas TX. Loss rates fixed that, and Grant is first even without the
-  existing-facility column (fourth).
+  Dallas TX. Loss rates fixed that. Without the existing-facility column,
+  Grant is second.
 
 **Figure:** `docs/figures/pick_story.png`, with `docs/figures/corrections.png`
 as a second build.
@@ -253,13 +255,13 @@ new 300 MW load gets neither, so the feasibility study has the last word.
   - NWPP's 632 lb/MWh overstates Pacific Northwest emissions.
 - **Proxies and gaps:**
   - Fiber is last-mile, not backbone. The heat sink score is a rough stand-in for heat reuse.
-  - Coverage is 0.73 to 0.78: 10 of 45 mapped columns aren't in the table.
+  - Coverage is 0.84 to 0.87: 6 of 45 mapped columns aren't in the table.
   - Permitting is three hand-coded state-level integers, so it's exempt from the floor.
-  - The engine doesn't score proximity to protected or sensitive land. We checked it by hand for Grant, Clark, and Franklin: no conflict at Quincy, where the nearest protected land is a state wildlife area 5.8 km away and the nearest tribal land is 75 km away. A county protected-land share was built and measured but isn't scored.
+  - Protected land, tribal land, and land cover are county shares: a screen, not a siting check. Grant County is 12.8% protected, but we checked by hand: the nearest protected land is a state wildlife area 5.8 km from Quincy, and the nearest tribal land is 75 km away.
   - Retired coal is 0 in 2,884 counties and acts like a yes/no flag. Counties can rise on population decline, a stated value choice.
 - **Judgment and cutoffs:**
-  - The weights are judgments. The default robustness test varies each by only about 0.03; under uniformly random weights Grant is in the top 10 50.5% of the time.
-  - First place leads by 0.5 points.
+  - The weights are judgments. The default robustness test varies each by only about 0.03; under uniformly random weights Grant is in the top 10 35.8% of the time, and Whitman WA 43.9%.
+  - First place leads by 0.01 points: Grant and Whitman WA are level.
   - Indiana County PA, with Homer City and 2,230 MW of retired coal, misses the 0.2 fiber gate at 0.1996.
   - Loudoun VA fails our queue age gate.
   - Delivered queue capacity uses the actual online date where LBNL has one and the proposed date otherwise, which covers every ISO-NE project and 82% in the West. It's evidence the queue delivers, not capacity available to a new load.
@@ -269,7 +271,7 @@ new 300 MW load gets neither, so the feasibility study has the last word.
 **Speaker note:**
 - Numbers: `docs/figures/facts.json` (`limitations`, `weights`, `gap_first_to_second`).
 - The installed-versus-available gap: `research/risk.md` and `research/implementation.md`.
-- Sensitive land: `research/sensitive_land.md`. Grant County is 12.8% PAD-US GAP 1-2 protected land, the 89th percentile, but none within 5 km of Quincy. Scoring that county share in the land pillar would move Grant from 1st to 4th behind Whitman WA, which is why it isn't scored without a team decision. A federal connection, such as a federal permit or a BPA interconnection, triggers Section 106 tribal consultation; state funding triggers Washington Executive Order 21-02 review.
+- Sensitive land: `research/sensitive_land.md`. Scoring protected land and land cover lowered Grant's land pillar from 75.0 to 52.8 (cropland 43%, protected 12.8%), and its low forest and wetland share raised permitting from 53.2 to 63.2. Its 0.5-point lead became 0.01. A federal connection, such as a federal permit or a BPA interconnection, triggers Section 106 tribal consultation; state funding triggers Washington Executive Order 21-02 review. Optional gates `max_pct_protected` and `max_tribal_land_share` are off in every preset.
 - Proxy definitions: `docs/conditions.md` and the manifest notes.
 
 ## 11. The engine as the product
@@ -282,8 +284,8 @@ conditions file and you get a new, explained shortlist in seconds.
   ranking.
 - Three presets show the range:
   - **balanced:** 1,565 pass, and Grant WA is first.
-  - **speed_to_power:** 779 pass, and Wayne TN is first.
-  - **sustainability_first:** 179 pass, and Whitman WA is first. Grant is fifth.
+  - **speed_to_power:** 779 pass, and Mayes OK is first.
+  - **sustainability_first:** 179 pass, and Whitman WA is first. Grant is fourth.
 - Every ranked county comes with its reasons, its gate log, its coverage,
   and any flag, such as the 30 ranked counties under a state moratorium. No
   network calls are made at run time.

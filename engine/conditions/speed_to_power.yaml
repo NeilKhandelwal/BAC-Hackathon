@@ -33,6 +33,8 @@ gates:
   max_permitting_risk: null             # needs permitting_discretionary_risk; no model ships, so keep null
   exclude_air_nonattainment: false
   min_population: 10000
+  max_pct_protected: null              # 0-1 share of the county in PAD-US GAP 1-2; null disables
+  max_tribal_land_share: null          # 0-1 share inside reservations or trust land; null disables
 
 weights:                               # cost 0.18, a little above balanced, others scaled by 0.82: a developer with a signed tenant prices power into the lease, so cheap power is part of speed to revenue
   energy_carbon: 0.066

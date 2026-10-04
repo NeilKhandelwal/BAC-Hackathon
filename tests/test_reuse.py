@@ -150,7 +150,7 @@ def test_default_rankings_match_committed_results():
     shipped = pd.read_csv("results/balanced.csv", dtype={"fips": str})
     assert ranked.fips.tolist() == shipped.fips.tolist()
     assert (ranked.composite.round(2).values == shipped.composite.values).all()
-    assert report["floor_ok"] == 912 and ranked.iloc[0].county_name == "Grant"
+    assert report["floor_ok"] == 883 and ranked.iloc[0].county_name == "Grant"
 
 
 # --- app -----------------------------------------------------------------------------
