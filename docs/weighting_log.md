@@ -9,17 +9,23 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:15 UTC
+- **Updated:** 2026-10-04 01:30 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
-- **Phase and step:** Phase 1 done and committed. Step: opening the draft PR.
+- **Pull request:** draft PR #35,
+  https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
+  description, fetch the current body with
+  `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
+  and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
+  Keep the body file outside the repo.
+- **Phase and step:** Phase 1 done, committed, and in the PR description.
+  Phase 2 not started.
 - **Done:** Phase 0. Phase 1 (`scratch/weighting/common.py`,
   `scratch/weighting/monetize.py`, outputs in `scratch/weighting/out/`,
   chart `docs/img/cost_vs_co2.png`). Results are in the history below.
-- **In progress:** draft PR creation. Check
-  `gh pr list --head feat/weighting-methods` before creating one, so you
-  don't open a duplicate.
-- **Exact next action:** open the draft PR if none exists, then start Phase
-  2 (`scratch/weighting/smaa.py`).
+- **In progress:** nothing.
+- **Exact next action:** write `scratch/weighting/smaa.py` (Phase 2). Start
+  with the self-check: the balanced weights through the vectorized
+  composite must reproduce the top 10 in `results/balanced.csv`.
 - **Reproduce Phase 1:** `.venv/Scripts/python.exe scratch/weighting/monetize.py`
   from the repo root, after fetching raw NRI (below). It rewrites
   `scratch/weighting/out/` and `docs/img/cost_vs_co2.png`.
@@ -342,3 +348,9 @@ much its top 10 overlaps the NPV top 10.
 - Water's share is slightly negative. Evaporative cooling raises water
   cost but lowers PUE, so the counties that get it pay more for water and
   less for energy and carbon. Water cost therefore moves against the total.
+
+### 2026-10-04 01:30 UTC, draft PR opened
+
+Draft PR #35 opened from `feat/weighting-methods` to `main`, with the
+problem statement, methods table, Phase 1 results, assumptions, known
+limitations, and the phase checklist.
