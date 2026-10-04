@@ -111,9 +111,10 @@ inland, the ETL writes 0. "Insufficient Data" stays null.
 
 | Column | Type | Source | Tier | Notes |
 | --- | --- | --- | --- | --- |
-| `pct_developed` | float 0-1 | NLCD 2021 via NHGIS, or NLCD 2024 zonal | stretch | classes 21-24 |
-| `pct_cropland` | float 0-1 | NLCD | stretch | classes 81-82 |
-| `pct_forest_wetland` | float 0-1 | NLCD | stretch | classes 41-43, 90, 95 |
+| `pct_developed` | float 0-1 | NLCD 2021 via IPUMS NHGIS county summaries (`etl/adapters/nlcd_landcover.py`) | stretch | classes 21-24. Built and measured on `fix/sensitive-land`; not in the frozen table. |
+| `pct_cropland` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | classes 81 (pasture/hay) and 82 (cultivated crops). Land cover, not soil quality: not the same as prime farmland. Built and measured; not in the frozen table. |
+| `pct_cultivated_crops` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | class 82 only; context, not scored |
+| `pct_forest_wetland` | float 0-1 | NLCD 2021 via IPUMS NHGIS | stretch | classes 41-43, 90, 95. Scored in the permitting pillar when present. Built and measured; not in the frozen table. |
 | `pct_protected` | float 0-1 | USGS PAD-US 4.1 Summary Statistics, county table, GAP 1-2 acres over total county acres (`etl/adapters/pad_us.py`) | stretch | Scored in the land pillar when present (lower is better). Total area includes water, so lake and coastal counties read lower than a land-only share. Built and measured on `fix/sensitive-land`; not in the frozen table (see `docs/sensitive_land_log.md`). |
 | `pct_protected_gap1to3` | float 0-1 | same table, GAP 1-3 | stretch | context, not scored. GAP 3 is multiple-use land (most national forest and BLM land). |
 | `tribal_land_share` | float 0-1 | Census TIGER/Line 2024 AIANNH, classes D2, D3, D5, D8, unioned and intersected with county polygons in EPSG:5070 (`etl/adapters/tribal_lands.py`) | stretch | context, not scored. Area inside federally recognized reservations and off-reservation trust land; not tribal ownership. Excludes statistical areas such as Oklahoma tribal statistical areas. |

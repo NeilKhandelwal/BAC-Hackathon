@@ -309,3 +309,51 @@ without touching any file on this branch.
 - It flags that `docs/schema.md` documents two columns `etl/schema.py`
   doesn't list yet (intentional).
 - It gives ship steps for each option, with the auto-ship warning first.
+
+### 2026-10-04 06:31 UTC, NLCD land cover built and measured (user request)
+
+The user created an IPUMS NHGIS account and supplied
+`nhgis_county2020_tl2020_nlcd_timebycolumn.zip`, now in
+`data/raw/nhgis/` (gitignored; IPUMS terms forbid redistribution).
+
+**Adapter.** `etl/adapters/nlcd_landcover.py` builds four NLCD 2021
+columns:
+- `pct_cropland`: classes 81 and 82
+- `pct_cultivated_crops`: class 82, context only
+- `pct_developed`: classes 21 to 24
+- `pct_forest_wetland`: classes 41 to 43, 90, and 95
+
+Connecticut planning regions take the shares of the old county they mostly
+overlap, as other sources do. All 3,109 counties are covered with no nulls.
+
+**Spot checks** (cropland, of which cultivated):
+- Grant 42.9% (41.9%)
+- Whitman 71.1% (68.1%)
+- Scott IA 68.6%
+- Mayes OK 52.9% (2.9%, mostly pasture)
+- Clark 16.2% (0.4%)
+- Franklin NY 8.1%
+- Cook IL 83.9% developed
+
+**Measurement** (`scratch/sensitive_land/measure_landcover.py`, balanced,
+in memory only):
+
+| Scenario | #1 | Grant | Clark | Whitman | Grant SMAA top-10 |
+| --- | --- | --- | --- | --- | --- |
+| Committed | Grant | 1 | 7 | 3 | 50.5% |
+| `pct_cropland` scored | Wayne TN (Grant 0.42 behind) | 2 | 3 | 8 | 29.5% |
+| Cultivated crops only, in its place | Wayne TN | 5 | 2 | 10 | n/a |
+| All NLCD columns the pillar map lists (cropland, developed, forest/wetland) | Grant (64.42) | 1 | 4 | 2 | 54.4% |
+| All NLCD plus `pct_protected` (the land pillar as designed) | Grant (63.70, Whitman 63.69) | 1 | 6 | 2 | 35.8% |
+
+**Why the combined runs keep Grant first.** `pct_forest_wetland` is
+scored in the permitting pillar, where lower is better. Grant is 1.8%
+forest or wetland, so its permitting pillar rises from 53.2 to 63.2, which
+offsets the land-pillar losses from cropland and protected land. Whether
+arid farm counties should gain on permitting this way is itself a value
+choice.
+
+**Adapter wiring.** Appending this adapter to the frozen table would ship
+the "all NLCD" row automatically, because `pillars.yaml` already maps all
+three scored columns. Nothing was appended. `docs/schema.md` rows are
+updated to say "built and measured; not in the frozen table".
