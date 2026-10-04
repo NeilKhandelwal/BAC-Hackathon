@@ -34,7 +34,7 @@
     "hazard_percentile_max.nri_wildfire_score": 3109,
     "hazard_percentile_max.nri_hurricane_score": 2225
   },
-  "floor_ok": 516,
+  "floor_ok": 489,
   "moratorium_state_active_ranked": 0,
   "pillars": [
     "energy_carbon",
@@ -43,18 +43,20 @@
     "grid_infrastructure",
     "land",
     "community",
+    "cost",
     "permitting"
   ],
   "pillar_floor_exempt": [
     "permitting"
   ],
   "weights_used": {
-    "energy_carbon": 0.08,
-    "water": 0.07,
-    "climate_resilience": 0.08,
-    "grid_infrastructure": 0.3,
-    "land": 0.07,
-    "community": 0.1,
-    "permitting": 0.3
+    "energy_carbon": 0.066,
+    "water": 0.057,
+    "climate_resilience": 0.066,
+    "grid_infrastructure": 0.246,
+    "land": 0.057,
+    "community": 0.082,
+    "cost": 0.18,
+    "permitting": 0.246
   }
 }
