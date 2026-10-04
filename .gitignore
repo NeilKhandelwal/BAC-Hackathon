@@ -2,6 +2,7 @@
 data/raw/
 *.parquet
 !data/processed/county_features.parquet
+!data/processed/global_country_features.parquet
 *.zip
 *.tif
 *.gpkg
