@@ -5,20 +5,21 @@ STATE block is overwritten at every step. History is append-only.
 
 ## MORNING SUMMARY
 
-Updated after round 2 (main at `c239868`, PR #40 merged into this branch).
+Updated after round 2 (deck built on main `c239868`; main `f98054f` merged
+in afterward, which changed only `app/cockpit`).
 
-**What changed in round 2.** The deck now pitches the tool, with Grant as a
-worked example. It picks up the sensitive-land and land cover work from PR
-#40, so every number traces to the current `docs/figures/facts.json`,
+**What changed in round 2.** The deck pitches the tool, with Grant as a worked
+example that ties Whitman. It picks up the sensitive-land and land cover work
+from PR #40, so every number traces to the current `docs/figures/facts.json`,
 `results/`, and research files. Slide text is plain language with no kicker
-labels, no em dashes, and no colons or semicolons. The build stops if a
-string breaks that rule. Every slide fades in, and two slides build on their
-own (the screening steps on slide 2 and the timeline on slide 8).
-PowerPoint for Mac opened the file without a repair prompt and reports the
-transitions and effects.
+labels, no em dashes, and no colons or semicolons. The build stops if a string
+breaks that rule. Every slide fades in, and two slides build on their own (the
+screening steps on slide 2 and the phase-in timeline on slide 7). PowerPoint
+for Mac opened the file without a repair prompt and reports the transitions
+and effects.
 
-**Files.** `docs/deck/pitch_template.pptx` (9 main slides, 6 appendix),
-`docs/deck/previews/`, `docs/deck/numbers_to_check.md` (70 rows),
+**Files.** `docs/deck/pitch_template.pptx` (8 main slides, 6 appendix),
+`docs/deck/previews/`, `docs/deck/numbers_to_check.md` (73 rows),
 `docs/deck/sources.md`, and two Streamlit screenshots in `docs/deck/img/`.
 
 **Rebuild after any change tonight.** From the repo root:
@@ -33,6 +34,9 @@ A rebuild overwrites hand edits to the .pptx.
 
 ### Slides
 
+The eight main scripts total about 710 words, a little under 5 minutes, which
+leaves time for the demo.
+
 | # | Headline | Visual |
 | --- | --- | --- |
 | 1 | Where AI data centers get built locks in their carbon, water, and costs for decades | LBNL share-of-power chart, NY Executive Order 62 quote |
@@ -40,13 +44,12 @@ A rebuild overwrites hand edits to the .pptx.
 | 3 | It now accounts for protected land, farmland, and wetlands | Grant's land and permitting scores before and after land cover |
 | 4 | With balanced weights, two counties in eastern Washington tie for first | Team map with Grant and Whitman circled, the hydro condition |
 | 5 | Different weights favor different counties, so the tool shows the spread | Top 10 shares across 5,000 random weightings |
-| 6 | A dry-cooled campus in Grant would use 87% less water | Water and CO2 charts against Loudoun, WA Data Center Workgroup quote |
-| 7 | Power is the biggest risk, so the project has to bring its own | Grant PUD supply and load chart, three rated risks |
-| 8 | The campus would grow with new transmission and new clean power | 2027 to 2045 timeline that builds in, Grant PUD quote |
-| 9 | Change one assumption and the tool gives a new answer with its reasons | App screenshot of Grant excluded, 1,565 against 826 chart |
+| 6 | A dry-cooled campus in Grant would use 87% less water than an evaporative one | Water and CO2 charts against Loudoun, WA Data Center Workgroup quote |
+| 7 | For Grant, everything turns on full power by late 2029 at near today's price | Grant PUD supply and load chart, phase-in timeline, three rated risks |
+| 8 | Change one assumption and the tool gives a new answer with its reasons | App screenshot of Grant excluded, 1,565 against 826 chart, then the demo |
 | A1 | How our pick changed as we fixed the inputs | Rank chart on a log scale, ending with Grant 77th at BPA's rate |
 | A2 | Why we also check the leaders in dollars and tons | Franklin against Grant CO2, energy and carbon share of cost gaps |
-| A3 | Clark WA and Franklin NY are the alternatives, each with a condition | Cost, win condition, and land check table |
+| A3 | In 25-year dollars, four leading counties land within 3% of each other | Whitman, Clark, Grant, and Franklin with conditions and land checks |
 | A4 | Every county is scored from public data, and proxies are labeled | Sources by factor, now with PAD-US, NLCD, and tribal boundaries |
 | A5 | The tool screens counties. Choosing a parcel still takes site work. | Limits and a proxy table |
 | A6 | The same engine works for other regions and other questions | Global top 5 table, Boone County jobs chart |
@@ -55,56 +58,67 @@ A rebuild overwrites hand edits to the .pptx.
 
 None. Open items:
 
-- The live demo should use the Streamlit app. The React cockpit's data
-  wasn't refreshed for PR #40 (needs `npm run data:engine` in
-  `app/cockpit`), so neither the deck nor the demo should use it until then.
-- Slide 6's notes say Virginia also sets a 2045 clean target for Dominion.
-  That's not verified for this deck.
+- **Fix before rehearsal, outside the deck.** `docs/demo_script.md` still says
+  robustness is "the share of 2,000 random weight draws" (it's 2,000 small
+  changes to our weights, which slide 5 distinguishes from 5,000 random
+  weightings). It gives "cheap power" as Grant's top reason, and its likely
+  questions put community at 10% (the preset is 8.5%). Not edited here,
+  because teammates own that file.
+- **Which app to demo.** The deck's screenshots and script follow the
+  Streamlit app. PR #42 (`ae2b364`) says it restored the React cockpit's
+  parity with the sensitive-land engine. Check the cockpit's numbers before
+  demoing it instead.
+- Slide 6's notes say Virginia also sets a 2045 clean target for Dominion. The
+  notes say we haven't checked Virginia's law.
 - A6's Boone County jobs come from `docs/demo_script.md`, not rechecked.
 - Five openly licensed photos are verified and listed in `sources.md`, not
   placed.
 
 ### Numbers to check first
 
-All 70 are in `docs/deck/numbers_to_check.md`. The ones most likely to move:
+All 73 are in `docs/deck/numbers_to_check.md`. The ones most likely to move:
 
 - 1,565 pass the limits and 883 clear the floor (slides 2 and 4).
 - Grant 63.70 and Whitman 63.69 (slide 4, A5; `results/balanced.csv`).
 - Top 10 shares, Whitman 43.9%, Cuyahoga 36.9%, Clark 35.9%, Grant 35.8%,
   Hutchinson 35.2% (slide 5; `facts.json` `weights`).
-- Grant in the top 10 near balanced weights, 99.95% (slide 5).
+- Grant 99.95% and Whitman 99.4% in the top 10 near balanced weights (slide 5).
 - Grant land 75.0 to 52.8 and permitting 53.2 to 63.2 (slide 3).
-- Evaporative cooling, 826 pass, 502 clear the floor, Whitman first
-  (slide 9; rerun in step 4).
+- Evaporative cooling, 826 pass, 502 clear the floor, Whitman first (slide 8;
+  rerun in step 4).
 - Grant 77th with only Washington at $80/MWh (slide 7 notes, A1; rerun in
   step 4, not committed).
-- Berkshire 1, 27, 1,164 and Grant 7, 7, 1 (A1; `facts.json` `pick_story`).
+- 25-year costs, Whitman $4.330B, Clark $4.405B, Grant $4.452B, Franklin
+  $4.454B (A3; `docs/weighting.md`, `scratch/weighting/out/monetized_costs.csv`).
+- Grid carbon 242 to 1,397 lb/MWh across counties (slide 1).
 
 ### Decisions a human should confirm
 
-1. **Tool-first story.** Main slides are hook, tool, land, example, weights,
-   impact, risk, plan, and the switch into the demo. "How the pick changed"
-   moved to appendix A1.
-2. **The weights-by-method chart is gone.** Its CRITIC, entropy, and revealed
-   preference weights predate PR #40. A2 keeps the dollar-model finding
-   (energy and carbon carry 67 to 88% of cost differences), which PR #40
-   doesn't affect.
-3. **Grant stays the worked example** because its site research exists,
-   while slides 4, 5, and A5 say it's level with Whitman.
-4. **The land row on slide 7 is rated Low**, following `research/risk.md`.
-   Its text frames tribal consultation as a process step to start early.
+1. **Eight main slides, not nine.** Risk and the 30-year plan are one slide
+   again, as in the first brief, so the middle of the deck doesn't turn into a
+   site pitch and the demo gets about 30 more seconds.
+2. **Tool-first story.** "How the pick changed" is appendix A1.
+3. **Whitman is in the dollar table.** It's the cheapest of the four leaders,
+   but its power timeline is an assumption. Grant stays the worked example
+   because its site research exists.
+4. **The weights-by-method chart is gone.** Its CRITIC, entropy, and revealed
+   preference weights predate PR #40. A2 keeps the dollar-model finding.
+5. **Your robustness line is in the notes, not on a slide.** The advisor read
+   it as a formulaic "not this, but that" line on screen. Slide 5's headline
+   makes the same point.
 
 ## CURRENT STATE
 
-- **Updated:** 2026-10-04, step 4 (round 2 rebuilt on main `c239868`).
-- **Branch:** `deck/template`, with `origin/main` at `c239868` merged in
-  (`051b336`, no history rewritten).
-- **Pull request:** to open after the advisor's final review, now that
-  `gh` is logged in as ValsTRM.
-- **Deck:** 15 slides. `check_deck.py` reports no problems. Previews from
-  LibreOffice; PowerPoint for Mac opened and exported the file cleanly.
+- **Updated:** 2026-10-04, step 5 (round 2 final).
+- **Branch:** `deck/template`, with `origin/main` at `f98054f` merged in
+  (`da29599`, no history rewritten).
+- **Pull request:** opened from `deck/template` to `main`, not merged. Link
+  in the session summary.
+- **Deck:** 14 slides. `check_deck.py` reports no problems. PowerPoint for
+  Mac opened and exported the file, with a fade on every slide, 4 effects on
+  slide 2, and 12 on slide 7.
 - **Placeholders left:** none.
-- **Numbers to check:** 70 rows.
+- **Numbers to check:** 73 rows.
 
 ## Rules for this build
 
@@ -381,64 +395,43 @@ and 1,164 onto a clipped edge, so it now uses a log-scale rank axis; a
 Berkshire label wrapped onto its marker in PowerPoint; four scripts opened
 with "Here's", now varied.
 
+### 2026-10-04, step 5: advisor review of round 2
+
+**Advisor (Opus subagent), points adopted:**
+
+- **Whitman is cheaper than Grant in the dollar model.** Checked in
+  `scratch/weighting/out/monetized_costs.csv`. Whitman is $4.330B at $190 per
+  ton with tax, against Clark $4.405B, Grant $4.452B, and Franklin $4.454B,
+  but its time to power is the imputed national median. A3 now shows all four
+  and says so. Slide 4's notes mention it.
+- **Grid carbon is nearly sixfold, not fourfold.** Checked in the county
+  table, 242 to 1,397 lb/MWh. Slide 1 is fixed.
+- **Farmland wording.** NLCD 81 and 82 include pasture and hay, so the notes
+  say "farmland, counting crops and pasture." The slide 3 line is now
+  "Building on farmland avoids wild habitat but takes land out of farming.
+  You set the balance."
+- **Slide 5.** Bullets say Grant and Whitman both stay in the top 10 near our
+  weights (99.95% and 99.4%). The energy and carbon point moved to A2. The
+  on-slide tagline is gone.
+- **Slide 6** headline adds "than an evaporative one."
+- **Slides 7 and 8 merged** into "For Grant, everything turns on full power
+  by late 2029 at near today's price," with the utility chart, a four-step
+  timeline, and three rated risks. The land card says a hand check found no
+  protected land within 5 km, so it doesn't read as a tool claim.
+- **Phrasing.** Several notes were rewritten to sound spoken.
+
+**Not adopted:**
+
+- Covering the map's baked "Grant, WA rank 1" label. Tried it, but the cover
+  boxes left white holes over grey land. The title band now says Grant and
+  Whitman are tied, and the baked label is still accurate.
+- Editing `docs/demo_script.md`. Flagged in the morning summary instead.
+
+**Final merge.** `origin/main` moved to `f98054f` (PR #42, cockpit only).
+Merged as `da29599`. A rebuild gave the same deck numbers.
+
 ## Pull request text
 
-Command, after `gh auth login`:
-
-```bash
-gh pr create --base main --head deck/template \
-  --title "Add an editable pitch deck template with sources and numbers to check" \
-  --body-file <file with the text below>
-```
-
-Text:
-
-> **What this adds**
->
-> - `docs/deck/pitch_template.pptx`: 16:9, 9 main slides (about 5
->   minutes) and 6 appendix slides. Native charts, tables, and text
->   boxes, so every number is editable. Source line and speaker script on
->   every slide.
-> - `docs/deck/build_deck.py`: rebuilds the deck, `numbers_to_check.md`,
->   and `sources.md` from `docs/figures/facts.json` and the committed
->   weighting outputs.
-> - `docs/deck/check_deck.py`: structural checks (overflow, font size,
->   overlap, footer).
-> - `docs/deck/render_previews.py` and `docs/deck/previews/`: PNG renders
->   through LibreOffice.
-> - `docs/deck/img/cockpit_cooling_switch.png`: cockpit screenshot for
->   slide 9.
-> - `docs/deck_build_log.md`: decisions, advisor reviews, and a morning
->   summary.
->
-> **Structure**
->
-> 1 hook, 2 the answer, 3 how it decides, 4 sustainability impact, 5 how
-> the pick changed (including the price check), 6 robustness (SMAA), 7 risk
-> and win condition, 8 the 30-year plan, 9 the engine and demo hand-off.
-> Appendix: A1 why tonnes, not percentiles; A2 three-county tie; A3 weights
-> by method; A4 data sources; A5 limitations; A6 global run and Stage 2
-> reuse.
->
-> **Placeholders**
->
-> None on slides. Quotes on slides are verified at primary sources
-> (`sources.md`). Open items: Virginia's 2045 target in slide 4's notes is
-> unverified; slide 7 cites `research/risk.md` from the unmerged
-> `fix/sensitive-land` branch (`12a8127`); A6's Boone County numbers come
-> from `docs/demo_script.md`.
->
-> **Numbers to check**
->
-> All 68 are in `docs/deck/numbers_to_check.md`, also marked `[[CHECK]]`
-> in the speaker notes. The ones most likely to move tonight: 1,565 / 912
-> gate and floor counts, Grant 63.7 and its 0.5-point lead, SMAA 50.5%,
-> robustness 99.9%, 826 under evaporative cooling, Grant 79th with
-> Washington at $80/MWh, and the 1.1% three-county tie.
->
-> **Needs a decision**
->
-> Slide 5 shows that Grant falls to 79th when only Washington is repriced
-> at BPA's new-load rate. The story order differs from the brief ("why
-> dollars" moved to A1). Details in the morning summary of
-> `docs/deck_build_log.md`.
+The PR was opened with `gh pr create` from `deck/template` to `main`. Its body
+summarizes the files, story, placeholders, numbers to check, and decisions
+above.

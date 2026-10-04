@@ -102,7 +102,6 @@ in the slide's source line if you add one.
 - Slide 6. Washington Data Center Workgroup, Preliminary Report, Finding 19, p. 13, https://dor.wa.gov/sites/default/files/2025-12/2025DataCntrWrkgrpPrelimReport.pdf
 - Slide 7. Grant PUD data center FAQ, 2026-08-28, https://www.grantpud.org/blog/data-center-faqs
 - Slide 7. Washington Data Center Workgroup, Preliminary Report, Findings 6 and 19c, https://dor.wa.gov/sites/default/files/2025-12/2025DataCntrWrkgrpPrelimReport.pdf
-- Slide 8. Grant PUD Data Center FAQs, Q5, https://www.grantpud.org/blog/data-center-faqs
 
 ## Data claims checked for this deck
 

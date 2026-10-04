@@ -8,14 +8,14 @@ published in the notes and aren't repeated here.
 
 | Slide | Number | Value in the deck | Source file | Field |
 | --- | --- | --- | --- | --- |
-| 1 | Grid carbon varies about fourfold across candidate counties | 242 to 911 lb/MWh | `research/impact.md` | dry cooling table |
+| 1 | Grid carbon across all counties | 242 to 1,397 lb/MWh, nearly sixfold | `data/processed/county_features.parquet` | grid_co2_lb_mwh (eGRID2023 subregions) |
 | 2 | Counties | 3,109 | `docs/figures/facts.json` | balanced.counties |
 | 2 | Counties that pass the hard limits | 1,565 | `docs/figures/facts.json` | balanced.passed |
 | 2 | Counties with no weak factor (pillar floor) | 883 | `docs/figures/facts.json` | balanced.floor_ok |
 | 2 | Balanced weights | energy_carbon 0.153, water 0.119, climate_resilience 0.119, grid_infrastructure 0.153, land 0.068, community 0.085, permitting 0.153, cost 0.150 | `docs/figures/facts.json` | weights.balanced |
 | 3 | Grant land score before and after | 75.0 to 52.8 | `docs/figures/facts.json and research/sensitive_land.md` | featured.pillars.land |
 | 3 | Grant permitting score before and after | 53.2 to 63.2 | `docs/figures/facts.json and research/sensitive_land.md` | featured.pillars.permitting |
-| 3 | Grant cropland share | 42.9% | `research/sensitive_land.md` | County shares table |
+| 3 | Grant farmland share (crops and pasture, NLCD 81 and 82) | 42.9% | `research/sensitive_land.md` | County shares table |
 | 3 | Grant protected share (GAP 1-2) | 12.8% | `research/sensitive_land.md` | County shares table |
 | 3 | Grant rank with protected land alone or cropland alone | 4th or 2nd | `research/sensitive_land.md` | Effect on the balanced ranking |
 | 3 | Farmland in opposition cases with stated reasons | 7 of 100 | `data/processed/opposition_seed_labels.csv` | reasons column |
@@ -29,6 +29,8 @@ published in the notes and aren't repeated here.
 | 5 | Top 10 share, Grant, WA | 35.8% | `docs/figures/facts.json` | weights.uniform_weightings_top10_share |
 | 5 | Top 10 share, Hutchinson, TX | 35.2% | `docs/figures/facts.json` | weights.uniform_weightings_top10_share |
 | 5 | Grant in the top 10 near balanced weights | 99.95% | `docs/figures/facts.json` | featured.robustness (2,000 small perturbations) |
+| 5 | Whitman in the top 10 near balanced weights | 99.4% | `docs/figures/facts.json` | top10[1].robustness |
+| 5 | Rank under equal weights | Grant 2nd, Whitman 1st | `docs/figures/facts.json` | weights.equal_weights_featured_rank |
 | 5 | Energy and carbon weight in the balanced preset | about 30% | `docs/weighting.md` | Variance shares |
 | 6 | Grant water, evaporative | 210.2 million gallons a year | `docs/figures/facts.json` | impact['Grant, WA'].water_million_gal_evap |
 | 6 | Grant water, dry | 27.8 million gallons a year | `docs/figures/facts.json` | impact['Grant, WA'].water_million_gal_dry |
@@ -39,20 +41,20 @@ published in the notes and aren't repeated here.
 | 6 | Loudoun CO2, dry | 675,455 t a year | `docs/figures/facts.json` | impact['Loudoun, VA'].co2_tonnes_dry |
 | 6 | Dry cooling energy penalty | about 2% | `research/risk.md` | Water stress row |
 | 7 | Campus average load | 279 aMW | `research/risk.md and etl/impact.py` | Power availability row |
+| 7 | New solar to match yearly use | about 1 GW (1,030 MW at 27% capacity factor) | `research/implementation.md` | Where new clean supply comes from |
 | 7 | Days above 95°F | 14.5 today, 35.9 by 2050 | `docs/figures/facts.json` | featured.horizon_2050_raw.days_above_95f_hist |
 | 7 | Nearest protected land to Quincy | 5.8 km | `research/sensitive_land.md` | Grant County table |
 | 7 | Nearest tribal land to Quincy | 74.7 km | `research/sensitive_land.md` | Grant County table |
 | 7 | Grant rank with only WA at BPA's $80 and $132 per MWh | 77 and 1,151 | `docs/deck_build_log.md` | step 4 price rerun |
 | 7 | Delay cost | $25M a month (assumption) | `docs/weighting.md` | Time to power |
 | 7 | Grant break-even with Clark and Franklin | 10.2 and 12.1 months past a 2-year baseline | `docs/weighting.md` | Grant's row |
-| 8 | New solar to match yearly use | about 1 GW (1,030 MW at 27% capacity factor) | `research/implementation.md` | Where new clean supply comes from |
-| 8 | Dry cooling water | 27.8 million gallons a year | `docs/figures/facts.json` | impact['Grant, WA'].water_million_gal_dry |
-| 9 | Counties that pass, dry cooling | 1,565 | `docs/figures/facts.json` | balanced.passed |
-| 9 | Counties that pass, evaporative cooling | 826 | `docs/deck_build_log.md step 4 and docs/demo_script.md` | evaporative cooling step |
-| 9 | Counties with no weak factor, evaporative | 502 | `docs/deck_build_log.md step 4 and docs/demo_script.md` | evaporative cooling step |
-| 9 | Grant water stress | 3.6 of 5 | `docs/figures/facts.json` | featured.horizon_2050_raw.water_stress_bws.today |
-| 9 | First place under evaporative cooling | Whitman, WA | `docs/deck_build_log.md step 4` |  |
-| 9 | Preset leaders | speed_to_power Mayes OK, sustainability_first Whitman WA with Grant 4th | `docs/figures/facts.json and docs/deck.md` | presets |
+| 7 | Dry cooling water | 27.8 million gallons a year | `docs/figures/facts.json` | impact['Grant, WA'].water_million_gal_dry |
+| 8 | Counties that pass, dry cooling | 1,565 | `docs/figures/facts.json` | balanced.passed |
+| 8 | Counties that pass, evaporative cooling | 826 | `docs/deck_build_log.md step 4 and docs/demo_script.md` | evaporative cooling step |
+| 8 | Counties with no weak factor, evaporative | 502 | `docs/deck_build_log.md step 4 and docs/demo_script.md` | evaporative cooling step |
+| 8 | Grant water stress | 3.6 of 5 | `docs/figures/facts.json` | featured.horizon_2050_raw.water_stress_bws.today |
+| 8 | First place under evaporative cooling | Whitman, WA | `docs/deck_build_log.md step 4` |  |
+| 8 | Preset leaders | speed_to_power Mayes OK, sustainability_first Whitman WA with Grant 4th | `docs/figures/facts.json and docs/deck.md` | presets |
 | A1 | Berkshire ranks by step | 1 / 27 / 1164 | `docs/figures/facts.json` | pick_story.ranks['Berkshire, MA'] |
 | A1 | Grant ranks by step | 7 / 7 / 1 | `docs/figures/facts.json` | pick_story.ranks['Grant, WA'] |
 | A1 | Grant rank with only WA at BPA's $80 per MWh | 77 | `docs/deck_build_log.md` | step 4 price rerun |
@@ -62,12 +64,13 @@ published in the notes and aren't repeated here.
 | A2 | Carbon score, Franklin | 80.4 (98.7th percentile) | `docs/deck_build_log.md` | step 4 |
 | A2 | CO2, Grant at the regional average | 700,390 t a year | `docs/figures/facts.json` | grant_ranges.co2_tonnes.nwpp_table |
 | A2 | CO2, Franklin | 262,168 t a year | `research/impact.md` | dry cooling table |
-| A3 | 25-year cost, Clark, WA | $4.405B | `docs/weighting.md` | Recommendation table |
-| A3 | 25-year cost, Grant, WA | $4.452B | `docs/weighting.md` | Recommendation table |
-| A3 | 25-year cost, Franklin, NY | $4.454B | `docs/weighting.md` | Recommendation table |
+| A3 | 25-year cost, Whitman, WA | $4.330B | `docs/weighting.md and scratch/weighting/out/monetized_costs.csv` | total_190 |
+| A3 | 25-year cost, Clark, WA | $4.405B | `docs/weighting.md and scratch/weighting/out/monetized_costs.csv` | total_190 |
+| A3 | 25-year cost, Grant, WA | $4.452B | `docs/weighting.md and scratch/weighting/out/monetized_costs.csv` | total_190 |
+| A3 | 25-year cost, Franklin, NY | $4.454B | `docs/weighting.md and scratch/weighting/out/monetized_costs.csv` | total_190 |
+| A3 | Whitman time to power | national median queue age, 2.89 years (imputed) | `scratch/weighting/out/monetized_costs.csv` | queue_age_used, queue_imputed |
 | A3 | Grant break-even with Clark and Franklin | 10.2 and 12.1 months | `docs/weighting.md` | Grant's row |
-| A3 | Franklin share inside the Adirondack Park | 68% | `research/sensitive_land.md` | Franklin County |
-| A3 | Malone distance to the Blue Line | 6.1 km | `research/sensitive_land.md` | Franklin County |
+| A3 | Malone distance to the Adirondack Blue Line | 6.1 km | `research/sensitive_land.md` | Franklin County |
 | A4 | Counties | 3,109 | `docs/figures/facts.json` | balanced.counties |
 | A4 | Columns with data, of those planned | 39 of 45 | `docs/figures/facts.json` | limitations.scored_columns_present and scored_columns_mapped |
 | A4 | Coverage across the top 10 | 0.84 to 0.87 | `docs/figures/facts.json` | limitations.coverage_top10 |
