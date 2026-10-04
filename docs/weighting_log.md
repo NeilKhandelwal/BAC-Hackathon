@@ -17,15 +17,23 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** Phase 1 done, committed, and in the PR description.
-  Phase 2 not started.
+- **Phase and step:** pre-Phase 2 checks. Step: writing
+  `scratch/weighting/montecarlo.py` (parameter uncertainty over the
+  monetized model). Then Phase 2 (SMAA).
 - **Done:** Phase 0. Phase 1 (`scratch/weighting/common.py`,
   `scratch/weighting/monetize.py`, outputs in `scratch/weighting/out/`,
   chart `docs/img/cost_vs_co2.png`). Results are in the history below.
-- **In progress:** nothing.
-- **Exact next action:** write `scratch/weighting/smaa.py` (Phase 2). Start
-  with the self-check: the balanced weights through the vectorized
-  composite must reproduce the top 10 in `results/balanced.csv`.
+- **In progress:** pre-Phase 2 Monte Carlo. Nothing from it is committed
+  yet.
+- **Exact next action:** write and run `scratch/weighting/montecarlo.py`
+  per the design in the 01:45 UTC history entry. Then write
+  `scratch/weighting/smaa.py`, starting with the self-check that balanced
+  weights reproduce the top 10 in `results/balanced.csv`. Run SMAA with the
+  floor on and off.
+- **Advisor rule (from the user):** consult the advisor before finalizing a
+  Monte Carlo design, when judging whether the top 3 is a real tie, before
+  writing the Phase 5 recommendation, and whenever results look
+  implausible. Log each consultation and what changed.
 - **Reproduce Phase 1:** `.venv/Scripts/python.exe scratch/weighting/monetize.py`
   from the repo root, after fetching raw NRI (below). It rewrites
   `scratch/weighting/out/` and `docs/img/cost_vs_co2.png`.
@@ -79,6 +87,17 @@ Overwritten at every update.
      after Phase 5. Never merge. Never push to `main`.
   10. Logging: update this log, then commit and push it, after each phase,
       after each decision, and before any long-running step.
+  11. Pre-Phase 2 checks (2026-10-04 01:40 UTC): report whether Clark's
+      queue age is real; if imputed, rerun $190/t with imputed counties at
+      the 75th-percentile queue age. Run 1,000 Monte Carlo draws: state
+      price ±20%, subregion carbon rate ±20%, delay cost U($10M, $50M), NY
+      moratorium U(8, 20) months, carbon price U($100, $300). Report each
+      county's share of draws at #1 and in the top 3. Note in
+      `docs/weighting.md` that hazard costs exclude downtime.
+  12. Phase 2 additions: run SMAA with the floor on and off. Report which
+      pillar fails Franklin's floor and by how much. Report rank-1 and
+      top-10 acceptability for Clark WA, Franklin NY, and Grant WA under
+      both settings.
 - **Open questions waiting on the user:** none.
 
 ## Background
@@ -354,3 +373,47 @@ much its top 10 overlaps the NPV top 10.
 Draft PR #35 opened from `feat/weighting-methods` to `main`, with the
 problem statement, methods table, Phase 1 results, assumptions, known
 limitations, and the phase checklist.
+
+### 2026-10-04 01:45 UTC, pre-Phase 2 checks and Monte Carlo design
+
+**Clark WA's queue age is real**, not imputed: 2.09 years, a $25.9M
+time-to-power charge, against Grant's 3.54 years and $463M. The
+75th-percentile imputation rerun was conditional on Clark being imputed,
+so it was not triggered. For reference, the national 75th-percentile
+queue age is 4.01 years.
+
+**Franklin NY's floor failure.** Franklin passes the gates but fails the
+pillar floor on cost: its cost pillar is at the 6.5th national
+percentile, 3.5 points under the floor of 10. NY's industrial price is
+9.17 cents/kWh. Floor membership doesn't depend on the weights unless a
+weight is 0, so no energy and carbon weight lifts Franklin over the floor.
+It clears only if the cost weight is 0, cost is exempt, or the floor is 6.5
+or lower. With the floor on, Franklin's SMAA rank-1 acceptability is 0 by
+construction.
+
+**`docs/weighting.md` created** as a stub with two method notes: hazard
+cost uses building loss rates and excludes downtime, so it understates
+hazard risk; and the pillar floor is a judgment rule.
+
+**Advisor consulted on the Monte Carlo design.** Changes it made:
+
+- Price and carbon multipliers are drawn independently per state and per
+  eGRID subregion in each draw, not as one national multiplier, which would
+  only rescale costs. Delay cost, moratorium months, and carbon price are
+  drawn once per draw. The delay cost applies to both time to power and
+  moratorium. Only active-moratorium months vary.
+- Self-check before the run: with multipliers 1, $25M, 12 months, and
+  $190/t, one draw must reproduce `total_190` exactly.
+- Counties that share a state and subregion move together, so the run
+  ranks state-and-subregion clusters. Report a cluster-level #1 share next
+  to the per-county shares. Grant against Clark is structural (same price
+  and grid, Grant has the longer queue and dry cooling); if Clark wins every
+  draw, report that as structural, not as a probability.
+- Answer "is the tie real" with P(Clark beats Franklin) and its standard
+  error, plus win rates by tercile of delay cost, moratorium months, and
+  carbon price.
+- Report the share of #1 draws won by counties with an imputed queue age.
+- Grant with BPA-like supply goes on its own labeled line, computed on the
+  same draws: energy at U($80, $132)/MWh and carbon at 212 lb/MWh. It stays
+  out of the main ranking because no other county gets a contracted-supply
+  scenario.
