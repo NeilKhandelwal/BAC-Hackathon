@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:30 UTC
+- **Updated:** 2026-10-04 01:36 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,26 +17,28 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** pre-Phase 2 checks. Step: writing
-  `scratch/weighting/montecarlo.py` (parameter uncertainty over the
-  monetized model). Then Phase 2 (SMAA).
-- **Done:** Phase 0. Phase 1 (`scratch/weighting/common.py`,
-  `scratch/weighting/monetize.py`, outputs in `scratch/weighting/out/`,
-  chart `docs/img/cost_vs_co2.png`). Results are in the history below.
-- **In progress:** pre-Phase 2 Monte Carlo. Nothing from it is committed
-  yet.
-- **Exact next action:** write and run `scratch/weighting/montecarlo.py`
-  per the design in the 01:45 UTC history entry. Then write
-  `scratch/weighting/smaa.py`, starting with the self-check that balanced
-  weights reproduce the top 10 in `results/balanced.csv`. Run SMAA with the
-  floor on and off.
+- **Phase and step:** pre-Phase 2 checks done (Clark queue check, Monte
+  Carlo, hazard note). Phase 2 (SMAA) not started.
+- **Done:** Phase 0. Phase 1 (`monetize.py`). Monte Carlo
+  (`montecarlo.py`, `docs/img/mc_winners.png`). `docs/weighting.md` stub
+  with the hazard-downtime and floor notes. Results are in the history.
+- **In progress:** nothing.
+- **Exact next action:** write `scratch/weighting/smaa.py`. Start with the
+  self-check that balanced weights through the vectorized composite
+  reproduce the top 10 in `results/balanced.csv`. Run 5,000 Dirichlet(1)
+  draws over the 8 pillars with the floor on and off. Report rank-1 and
+  top-10 acceptability, central weights for the top 5, and Clark WA,
+  Franklin NY, and Grant WA under both settings. Franklin fails the floor
+  on cost (6.5 against 10), so its floor-on rank-1 acceptability is 0 by
+  construction.
+- **Reproduce:** from the repo root, after fetching raw NRI (below):
+  `.venv/Scripts/python.exe scratch/weighting/monetize.py`, then
+  `.venv/Scripts/python.exe scratch/weighting/montecarlo.py`. Both rewrite
+  `scratch/weighting/out/` and their charts in `docs/img/`.
 - **Advisor rule (from the user):** consult the advisor before finalizing a
   Monte Carlo design, when judging whether the top 3 is a real tie, before
   writing the Phase 5 recommendation, and whenever results look
   implausible. Log each consultation and what changed.
-- **Reproduce Phase 1:** `.venv/Scripts/python.exe scratch/weighting/monetize.py`
-  from the repo root, after fetching raw NRI (below). It rewrites
-  `scratch/weighting/out/` and `docs/img/cost_vs_co2.png`.
 - **Files a new session must recreate** (gitignored, not in the repo):
   - Python env: `python -m venv .venv`, then
     `.venv/Scripts/pip install -r requirements.txt` (Windows) or
@@ -87,7 +89,7 @@ Overwritten at every update.
      after Phase 5. Never merge. Never push to `main`.
   10. Logging: update this log, then commit and push it, after each phase,
       after each decision, and before any long-running step.
-  11. Pre-Phase 2 checks (2026-10-04 01:40 UTC): report whether Clark's
+  11. Pre-Phase 2 checks (2026-10-04 01:20 UTC): report whether Clark's
       queue age is real; if imputed, rerun $190/t with imputed counties at
       the 75th-percentile queue age. Run 1,000 Monte Carlo draws: state
       price ±20%, subregion carbon rate ±20%, delay cost U($10M, $50M), NY
@@ -183,7 +185,7 @@ coefficient becomes a weight. The phase stops if AUC is below 0.65.
 
 ## History
 
-### 2026-10-04 00:30 UTC, Phase 0: get current
+### 2026-10-04 01:00 UTC (approximate), Phase 0: get current
 
 **Repo state.** `main` is at `1575003` (PR #33, BPA rate constant). The test
 suite gives 138 passed, 8 skipped, 1 xfailed. The skips are adapter tests
@@ -254,7 +256,7 @@ primary run with column-level weights, delay cost and moratorium duration
 sensitivities added, a queue-imputation check added, and the git and pull
 request rules.
 
-### 2026-10-04 01:15 UTC, Phase 1: monetized cost
+### 2026-10-04 01:14 UTC, Phase 1: monetized cost
 
 Script: `scratch/weighting/monetize.py`. Full printout:
 `scratch/weighting/out/monetize_report.txt`. Per-county costs:
@@ -368,13 +370,13 @@ much its top 10 overlaps the NPV top 10.
   cost but lowers PUE, so the counties that get it pay more for water and
   less for energy and carbon. Water cost therefore moves against the total.
 
-### 2026-10-04 01:30 UTC, draft PR opened
+### 2026-10-04 01:18 UTC, draft PR opened
 
 Draft PR #35 opened from `feat/weighting-methods` to `main`, with the
 problem statement, methods table, Phase 1 results, assumptions, known
 limitations, and the phase checklist.
 
-### 2026-10-04 01:45 UTC, pre-Phase 2 checks and Monte Carlo design
+### 2026-10-04 01:29 UTC, pre-Phase 2 checks and Monte Carlo design
 
 **Clark WA's queue age is real**, not imputed: 2.09 years, a $25.9M
 time-to-power charge, against Grant's 3.54 years and $463M. The
@@ -417,3 +419,79 @@ hazard risk; and the pillar floor is a judgment rule.
   same draws: energy at U($80, $132)/MWh and carbon at 212 lb/MWh. It stays
   out of the main ranking because no other county gets a contracted-supply
   scenario.
+
+### 2026-10-04 01:36 UTC, Monte Carlo results: the tie is real and two-way
+
+Script: `scratch/weighting/montecarlo.py`. Printout:
+`scratch/weighting/out/montecarlo_report.txt`. JSON:
+`scratch/weighting/out/montecarlo_summary.json`. Chart:
+`docs/img/mc_winners.png`. 1,000 draws, seed 42. The self-check reproduced
+the $190/t totals from `monetize.py` exactly.
+
+**Headline.** Franklin NY overtakes Clark WA above a carbon price of about
+$200/t at base prices, $25M per month of delay, and a 12-month NY
+moratorium. Below it, Clark wins. The crossover moves with the delay
+assumptions:
+
+| Delay cost | NY moratorium | Crossover carbon price |
+| --- | --- | --- |
+| $25M per month | 12 months | $200/t |
+| $10M per month | 12 months | $166/t |
+| $50M per month | 12 months | $256/t |
+| $25M per month | 8 months | $180/t |
+| $25M per month | 20 months | $241/t |
+
+**Shares across draws.** No county is #1 in a majority of draws:
+
+| County | #1 | Top 3 |
+| --- | --- | --- |
+| Clark, WA | 26.6% | 35.2% |
+| Franklin, NY | 24.7% | 34.3% |
+| Chesterfield, SC | 11.2% | 18.3% |
+| Schuyler, NY | 0% | 30.1% |
+| Clinton, NY | 0% | 23.2% |
+| Grant, WA | 0% | 0% |
+
+Clark beats Franklin in 59.3% ± 3.0% of draws (95% interval). That number
+is Monte Carlo sampling error under the chosen ranges, which are centered
+near the $200/t crossover. It isn't a probability about the world.
+
+**What drives the Clark versus Franklin gap.** A linear regression of the
+gap on the seven drivers has R² 0.983. Share of the gap's variance: NY
+price 0.31, carbon price 0.28, WA price 0.15, NWPP carbon rate 0.12, delay
+cost 0.08, NY moratorium months 0.04, NYUP carbon rate 0.02. State
+electricity prices together (0.46) move the gap more than the carbon
+price. The earlier commit message `eb090db` said carbon price drives it;
+that was wrong, and this entry corrects it. Carbon price is the largest
+single policy lever.
+
+**Grant WA.** Clark beats Grant in every draw. That's structural: same
+state price, same eGRID subregion, and Grant has the longer queue and dry
+cooling. Grant's place in the Phase 1 near tie depended on removing its
+time-to-power charge. With BPA-like supply (energy U($80, $132)/MWh,
+212 lb/MWh), Grant's median rank is 246, it's #1 in 3.2% of draws, and it
+beats Clark in 13.6%.
+
+**Cluster check.** Counties that share a state and subregion move
+together. Clark wins every draw its cluster (WA / NWPP) wins, and Franklin
+every draw NY / NYUP wins, so the county and cluster shares are the same.
+The other 49% of #1 draws go to 22 other clusters. Their winning state's
+drawn price multiplier averages 0.84 to 0.88, against 0.90 for Clark and
+0.91 for Franklin, so minor winners need a deeper price cut. Treat
+Chesterfield SC's 11% as a contender only with that caveat.
+
+**Imputation isn't steering the winner.** Counties with an imputed queue
+age win 1.1% of draws.
+
+**Advisor consulted on whether the tie is real.** Changes it made:
+
+- Lead with the crossover carbon price, not with 59%. Overlay crossover
+  lines on the chart.
+- Regress the gap on all drivers before claiming one dominates. That
+  regression reversed the carbon-price claim.
+- Check the winners' price multipliers before reading minor-state wins as
+  contenders.
+- State plainly that Grant isn't in the tie under the monetized model.
+
+Earlier history headings were re-stamped from commit times; the first
+versions used estimated times.

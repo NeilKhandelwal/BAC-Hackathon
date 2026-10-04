@@ -111,6 +111,45 @@ def main():
                          "p_wa_first": round(float(is_wa[sel].mean()), 3)})
         terciles[name] = rows
 
+    # Crossover: the carbon price at which Franklin's total equals Clark's, at base parameters, as a
+    # function of delay cost D and NY moratorium months M. Both totals are linear in carbon price.
+    cl, fr = c.loc[CLARK], c.loc[FRANKLIN]
+    fixed = lambda r: r.energy + r.water + r.hazard  # noqa: E731
+    d_co2 = af * (cl.co2_t - fr.co2_t)  # dollars per $/t of carbon price that Clark pays over Franklin
+    i_f = i[FRANKLIN]
+
+    def crossover(D, M):
+        franklin = fixed(fr) + fr.delay_months_ttp * D + (extra["active"][i_f] * M + extra["fixed_months"][i_f]) * D
+        clark = fixed(cl) + cl.delay_months_ttp * D + (extra["active"][i[CLARK]] * M
+                                                       + extra["fixed_months"][i[CLARK]]) * D
+        return (franklin - clark) / d_co2
+
+    cross = {"base_25M_12mo": crossover(25e6, 12), "10M_12mo": crossover(10e6, 12),
+             "50M_12mo": crossover(50e6, 12), "25M_8mo": crossover(25e6, 8), "25M_20mo": crossover(25e6, 20)}
+    check = totals(c, extra, af, 1.0, 1.0, 25e6, 12, cross["base_25M_12mo"])
+    assert abs(check[i[CLARK]] - check[i_f]) < 1.0, "crossover check failed"
+
+    # Which driver moves the Clark - Franklin gap? Linear regression on all seven drivers per draw.
+    s_of = {s: k for k, s in enumerate(states)}
+    r_of = {r: k for k, r in enumerate(subs)}
+    X = pd.DataFrame({
+        "price_mult_WA": price_m[:, s_of["WA"]], "price_mult_NY": price_m[:, s_of["NY"]],
+        "carbon_mult_NWPP": carbon_m[:, r_of["NWPP"]], "carbon_mult_NYUP": carbon_m[:, r_of["NYUP"]],
+        "delay_usd_month": delay, "moratorium_months": months, "carbon_usd_t": cprice})
+    gap = T[:, i[CLARK]] - T[:, i_f]
+    A = np.column_stack([np.ones(N), X.to_numpy()])
+    beta, *_ = np.linalg.lstsq(A, gap, rcond=None)
+    r2 = 1 - ((gap - A @ beta) ** 2).sum() / ((gap - gap.mean()) ** 2).sum()
+    # Independent drivers, so each one's share of the gap's variance is beta^2 var(x) / var(gap).
+    drv_share = {k: float(b ** 2 * X[k].var() / gap.var()) for k, b in zip(X.columns, beta[1:])}
+
+    # Do minor-state winners win on a lucky price draw? Mean drawn price multiplier of the winning state.
+    win_mult = price_m[np.arange(N), s_idx[first]]
+    win_cluster = cluster.to_numpy()[first]
+    lucky = pd.Series(win_mult).groupby(win_cluster).agg(["mean", "size"]).sort_values("size", ascending=False)
+    within = {"WA / NWPP won by Clark": float((fips[first][win_cluster == "WA / NWPP"] == CLARK).mean()),
+              "NY / NYUP won by Franklin": float((fips[first][win_cluster == "NY / NYUP"] == FRANKLIN).mean())}
+
     # Grant with BPA-like supply, on the same draws, kept out of the main ranking.
     g = c.loc[GRANT]
     g_bpa = (T[:, i[GRANT]] - g.facility_mwh * g.price_usd_mwh * price_m[:, s_idx[i[GRANT]]] * af
@@ -134,14 +173,21 @@ def main():
         sel = win_state == s
         ax.scatter(cprice[sel], delay[sel] / 1e6, s=14, alpha=0.8, color=style[s][0],
                    label=f"{style[s][1]} ({sel.mean():.0%} of draws)")
+    dd = np.linspace(10e6, 50e6, 50)
+    for M, ls in ((12, "-"), (8, ":"), (20, "--")):
+        ax.plot([crossover(D, M) for D in dd], dd / 1e6, ls, color="black", lw=1.2,
+                label=f"Franklin = Clark at base prices, NY moratorium {M} months")
+    ax.set_xlim(95, 305)
     ax.set_xlabel(r"Carbon price, \$ per tonne CO2")
     ax.set_ylabel(r"Delay cost, \$M per month (time to power and moratorium)")
     ax.set_title("Which state's county ranks #1 across 1,000 parameter draws", fontsize=13, loc="left")
-    ax.legend(fontsize=9, frameon=True, framealpha=0.95, edgecolor="none", loc="upper left")
+    ax.legend(fontsize=8, frameon=True, framealpha=0.95, edgecolor="none", loc="upper left")
     ax.grid(alpha=0.3)
     fig.text(0.01, 0.005, "Each dot is one draw. Also varied: price ±20% per state, carbon rate ±20% per eGRID "
-             "subregion, NY moratorium 8 to 20 months. 300 MW IT, 25 years at 7%.", fontsize=7, color="#555")
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
+             "subregion, NY moratorium 8 to 20 months. 300 MW IT, 25 years at 7%.\n"
+             "Right of a line, Franklin NY costs less than Clark WA at base prices. Price draws move the "
+             "winner as much as carbon price does.", fontsize=7, color="#555")
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
     chart = IMG / "mc_winners.png"
     fig.savefig(chart)
     plt.close(fig)
@@ -156,6 +202,12 @@ def main():
         "p_clark_beats_franklin": pcf, "p_clark_beats_franklin_se": se,
         "p_clark_beats_grant": float(clark_beats_grant.mean()),
         "imputed_queue_share_of_first": imputed_p1, "terciles": terciles, "grant_bpa": grant_bpa,
+        "crossover_carbon_usd_t": cross, "gap_regression_r2": float(r2),
+        "gap_regression_beta": dict(zip(["intercept", *X.columns], map(float, beta))),
+        "gap_variance_share_by_driver": drv_share,
+        "winner_state_price_mult": {k: {"mean": round(float(v["mean"]), 3), "wins": int(v["size"])}
+                                    for k, v in lucky.iterrows()},
+        "within_cluster": within,
         "chart": "docs/img/mc_winners.png",
     }
     (OUT / "montecarlo_summary.json").write_text(json.dumps(summary, indent=2))
@@ -170,6 +222,10 @@ def main():
         print(k, [(r["tercile"], [round(x / 1e6, 1) if k == "delay_usd_month" else round(x, 1) for x in r["range"]],
                    r["p_clark_beats_franklin"], r["p_ny_first"], r["p_wa_first"]) for r in rows])
     print("Grant with BPA supply:", grant_bpa)
+    print("crossover carbon price, $/t:", {k: round(v, 1) for k, v in cross.items()})
+    print(f"gap regression R2 {r2:.3f}; variance share by driver:", {k: round(v, 3) for k, v in drv_share.items()})
+    print("winner state price multiplier by cluster:\n", lucky.head(12).round(3).to_string())
+    print("within cluster:", within)
 
 
 if __name__ == "__main__":

@@ -279,5 +279,134 @@
     "p_beats_clark": 0.136,
     "p_beats_franklin": 0.16
   },
+  "crossover_carbon_usd_t": {
+    "base_25M_12mo": 199.99132494622293,
+    "10M_12mo": 166.2128251878046,
+    "50M_12mo": 256.28882454358677,
+    "25M_8mo": 179.45433445639807,
+    "25M_20mo": 241.06530592587265
+  },
+  "gap_regression_r2": 0.9828058716662462,
+  "gap_regression_beta": {
+    "intercept": -517419859.6629766,
+    "price_mult_WA": 1796114082.3835335,
+    "price_mult_NY": -2559890545.9143057,
+    "carbon_mult_NWPP": 1572916830.1828995,
+    "carbon_mult_NYUP": -599694019.0115627,
+    "delay_usd_month": -12.526928186416626,
+    "moratorium_months": -28720723.09391102,
+    "carbon_usd_t": 4830752.747995278
+  },
+  "gap_variance_share_by_driver": {
+    "price_mult_WA": 0.153551725965644,
+    "price_mult_NY": 0.3090104732358341,
+    "carbon_mult_NWPP": 0.11867457158791195,
+    "carbon_mult_NYUP": 0.016351141690237932,
+    "delay_usd_month": 0.07826883802860053,
+    "moratorium_months": 0.036604771252584885,
+    "carbon_usd_t": 0.2807673630134033
+  },
+  "winner_state_price_mult": {
+    "WA / NWPP": {
+      "mean": 0.895,
+      "wins": 266
+    },
+    "NY / NYUP": {
+      "mean": 0.913,
+      "wins": 247
+    },
+    "SC / SRVC": {
+      "mean": 0.877,
+      "wins": 112
+    },
+    "LA / SRMV": {
+      "mean": 0.866,
+      "wins": 51
+    },
+    "ID / NWPP": {
+      "mean": 0.851,
+      "wins": 49
+    },
+    "NM / SPSO": {
+      "mean": 0.871,
+      "wins": 47
+    },
+    "TX / AZNM": {
+      "mean": 0.857,
+      "wins": 44
+    },
+    "UT / NWPP": {
+      "mean": 0.845,
+      "wins": 40
+    },
+    "TX / ERCT": {
+      "mean": 0.871,
+      "wins": 38
+    },
+    "TX / SRMV": {
+      "mean": 0.85,
+      "wins": 27
+    },
+    "NC / SRVC": {
+      "mean": 0.847,
+      "wins": 22
+    },
+    "PA / RFCE": {
+      "mean": 0.835,
+      "wins": 20
+    },
+    "AR / SRMV": {
+      "mean": 0.848,
+      "wins": 16
+    },
+    "OK / SPSO": {
+      "mean": 0.846,
+      "wins": 7
+    },
+    "OH / RFCW": {
+      "mean": 0.824,
+      "wins": 2
+    },
+    "KY / SRTV": {
+      "mean": 0.849,
+      "wins": 2
+    },
+    "VA / SRVC": {
+      "mean": 0.811,
+      "wins": 2
+    },
+    "OR / NWPP": {
+      "mean": 0.835,
+      "wins": 2
+    },
+    "IA / MROW": {
+      "mean": 0.819,
+      "wins": 1
+    },
+    "LA / SPSO": {
+      "mean": 0.881,
+      "wins": 1
+    },
+    "MT / NWPP": {
+      "mean": 0.809,
+      "wins": 1
+    },
+    "TN / SRTV": {
+      "mean": 0.82,
+      "wins": 1
+    },
+    "TX / SPSO": {
+      "mean": 0.819,
+      "wins": 1
+    },
+    "WY / NWPP": {
+      "mean": 0.805,
+      "wins": 1
+    }
+  },
+  "within_cluster": {
+    "WA / NWPP won by Clark": 1.0,
+    "NY / NYUP won by Franklin": 1.0
+  },
   "chart": "docs/img/mc_winners.png"
 }

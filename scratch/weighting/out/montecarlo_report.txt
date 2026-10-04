@@ -7,3 +7,20 @@ delay_usd_month [('low', [10.1, 22.9], 0.491, 0.368, 0.243), ('mid', [22.9, 37.3
 moratorium_months_active [('low', [8.0, 11.6], 0.479, 0.332, 0.216), ('mid', [11.6, 15.6], 0.622, 0.219, 0.273), ('high', [15.6, 20.0], 0.679, 0.189, 0.309)]
 carbon_usd_t [('low', [100.1, 162.6], 0.859, 0.033, 0.35), ('mid', [163.1, 231.2], 0.568, 0.246, 0.246), ('high', [231.5, 300.0], 0.351, 0.462, 0.201)]
 Grant with BPA supply: {'median_rank': 246.0, 'p_first': 0.032, 'p_top3': 0.04, 'p10_rank': 12.0, 'p90_rank': 1093.3000000000002, 'p_beats_clark': 0.136, 'p_beats_franklin': 0.16}
+crossover carbon price, $/t: {'base_25M_12mo': np.float64(200.0), '10M_12mo': np.float64(166.2), '50M_12mo': np.float64(256.3), '25M_8mo': np.float64(179.5), '25M_20mo': np.float64(241.1)}
+gap regression R2 0.983; variance share by driver: {'price_mult_WA': 0.154, 'price_mult_NY': 0.309, 'carbon_mult_NWPP': 0.119, 'carbon_mult_NYUP': 0.016, 'delay_usd_month': 0.078, 'moratorium_months': 0.037, 'carbon_usd_t': 0.281}
+winner state price multiplier by cluster:
+             mean  size
+WA / NWPP  0.895   266
+NY / NYUP  0.913   247
+SC / SRVC  0.877   112
+LA / SRMV  0.866    51
+ID / NWPP  0.851    49
+NM / SPSO  0.871    47
+TX / AZNM  0.857    44
+UT / NWPP  0.845    40
+TX / ERCT  0.871    38
+TX / SRMV  0.850    27
+NC / SRVC  0.847    22
+PA / RFCE  0.835    20
+within cluster: {'WA / NWPP won by Clark': 1.0, 'NY / NYUP won by Franklin': 1.0}
