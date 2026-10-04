@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 02:59 UTC
+- **Updated:** 2026-10-04 03:02 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -23,6 +23,13 @@ Overwritten at every update.
 - **Done in this round:** AI footer removed from the PR body; PR comments
   posted asking Neil about a squash merge and surfacing the 90% against
   30% energy-and-carbon finding.
+- **Committed but switched off:** the sales tax component in
+  `monetize.py` (`"tax": False`) and its use in `montecarlo.py`, plus
+  `scratch/weighting/revisions.py` for Neil's items. The tax needs
+  `scratch/weighting/sales_tax_rates.csv` (state, combined_rate,
+  source_url) and optionally `sales_tax_counties.csv` (fips,
+  combined_rate, source_url) from sourced research; then set `"tax": True`
+  and rerun everything.
 - **In progress:** an Opus research subagent is verifying the WA data
   center sales tax exemption (RCW 82.08.986, 82.12.986) for Clark and
   Grant, any NY exemption for Franklin, and sourced sales tax rates. If a

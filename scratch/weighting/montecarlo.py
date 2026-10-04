@@ -30,11 +30,11 @@ RANGES = {"price_mult": (0.8, 1.2), "carbon_rate_mult": (0.8, 1.2), "delay_usd_m
 CLARK, FRANKLIN, GRANT = "53011", "36033", "53025"
 
 
-def components(df, passed):
+def components(df, passed, overrides=None):
     """Base components from monetize.compute, plus the parts each draw scales."""
     alr, _, _ = m.hazard_rates()
     queue_median = float(df.queue_median_age_years.median())
-    p, allc, costs = m.run(df, passed, alr, queue_median)
+    p, allc, costs = m.run(df, passed, alr, queue_median, overrides)
     sub = df[passed].set_index("fips")
     flag = lambda c: sub[c].fillna(False).astype(bool).to_numpy()  # noqa: E731
     active = flag("moratorium_state_active") | flag("moratorium_active")
@@ -51,13 +51,19 @@ def totals(c, extra, af, price_mult, carbon_mult, delay, months, carbon_usd):
     carbon = c.co2_t.to_numpy() * carbon_mult * carbon_usd * af
     ttp = c.delay_months_ttp.to_numpy() * delay
     mor = (extra["active"] * months + extra["fixed_months"]) * delay
-    return energy + carbon + ttp + mor + c.water.to_numpy() + c.hazard.to_numpy()
+    return energy + carbon + ttp + mor + c.water.to_numpy() + c.hazard.to_numpy() + c.sales_tax.to_numpy()
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--overrides", default="{}", help="JSON of monetize.DEFAULTS overrides, e.g. '{\"tax\": false}'")
+    ap.add_argument("--tag", default="", help="suffix for the summary file; a tagged run writes no charts")
+    args = ap.parse_args()
+    overrides, tag = json.loads(args.overrides), args.tag
     setup_out()
     df, cond, pillars, passed = load("balanced")
-    p, c, extra = components(df, passed)
+    p, c, extra = components(df, passed, overrides)
     af = m.annuity(p["rate"], p["years"])
     fips = c.index.to_numpy()
     n = len(fips)
@@ -114,7 +120,7 @@ def main():
     # Crossover: the carbon price at which Franklin's total equals Clark's, at base parameters, as a
     # function of delay cost D and NY moratorium months M. Both totals are linear in carbon price.
     cl, fr = c.loc[CLARK], c.loc[FRANKLIN]
-    fixed = lambda r: r.energy + r.water + r.hazard  # noqa: E731
+    fixed = lambda r: r.energy + r.water + r.hazard + r.sales_tax  # noqa: E731
     d_co2 = af * (cl.co2_t - fr.co2_t)  # dollars per $/t of carbon price that Clark pays over Franklin
     i_f = i[FRANKLIN]
 
@@ -173,7 +179,7 @@ def main():
         energy = r.facility_mwh * r.price_usd_mwh * price_m[:, s_idx[k]] * af
         carbon = r.co2_t * carbon_m[:, r_idx[k]] * cprice * af
         rest = (r.delay_months_ttp * delay + (extra["active"][k] * months + extra["fixed_months"][k]) * delay
-                + r.water + r.hazard)
+                + r.water + r.hazard + r.sales_tax)
         assert np.allclose(energy + carbon + rest, T[:, k]), "BPA self-check failed"
         T_bpa[:, k] = (rest + r.facility_mwh * bpa_usd * af
                        + impact.co2_tonnes(r.facility_mwh, impact.BPA_CO2_LB_MWH) * cprice * af)
@@ -208,7 +214,7 @@ def main():
     def clark_breakeven_rate(cp, D=25e6, M=12):
         franklin = (fixed(fr) + fr.delay_months_ttp * D + (extra["active"][i_f] * M + extra["fixed_months"][i_f]) * D
                     + fr.co2_t * cp * af)
-        clark_rest = (cl.water + cl.hazard + cl.delay_months_ttp * D
+        clark_rest = (cl.water + cl.hazard + cl.sales_tax + cl.delay_months_ttp * D
                       + (extra["active"][i_c] * M + extra["fixed_months"][i_c]) * D + clark_bpa_co2 * cp * af)
         return (franklin - clark_rest) / (cl.facility_mwh * af)
 
@@ -239,7 +245,8 @@ def main():
              "No new-load rate is sourced for New York. Other Washington counties keep the state average. "
              "Below a line, Clark costs less than Franklin.", fontsize=7, color="#555")
     fig.tight_layout(rect=(0, 0.04, 1, 1))
-    fig.savefig(IMG / "mc_winners_bpa.png")
+    if not tag:
+        fig.savefig(IMG / "mc_winners_bpa.png")
     plt.close(fig)
 
     # Chart: which state wins, by carbon price and delay cost.
@@ -267,7 +274,8 @@ def main():
              "winner as much as carbon price does.", fontsize=7, color="#555")
     fig.tight_layout(rect=(0, 0.04, 1, 1))
     chart = IMG / "mc_winners.png"
-    fig.savefig(chart)
+    if not tag:
+        fig.savefig(chart)
     plt.close(fig)
 
     names = c.county
@@ -288,7 +296,8 @@ def main():
         "within_cluster": within, "bpa_scenario": bpa,
         "chart": "docs/img/mc_winners.png",
     }
-    (OUT / "montecarlo_summary.json").write_text(json.dumps(summary, indent=2))
+    summary["overrides"] = overrides
+    (OUT / f"montecarlo_summary{'_' + tag if tag else ''}.json").write_text(json.dumps(summary, indent=2))
 
     print(f"self-check max diff ${err:.4f}")
     print("P(#1):", [(r["county"], r["share"]) for r in top(p1)])

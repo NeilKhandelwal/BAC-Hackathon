@@ -11,6 +11,7 @@ year 0. Fiber, land, and community are not monetized; they stay gates or unscore
 """
 import json
 import textwrap
+from pathlib import Path
 
 import matplotlib
 
@@ -34,17 +35,27 @@ DEFAULTS = {
     "delay_usd_month": 25e6,
     "ttp_delay_usd_month": None,        # time-to-power delay cost; None uses delay_usd_month. 0 turns the proxy off
     "queue_baseline_years": 2.0,        # queue age that costs nothing
+    "imputed_queue": "median",          # how counties without a queue age are charged: median or zero
     "moratorium_months_active": 12,     # state or county moratorium in force, probability 1
     "moratorium_months_pending": 12,
     "p_pending": 0.5,
     "pushback_months": 6,
     "p_pushback": 0.3,
+    "tax": False,                       # sales and use tax on equipment; off until sourced rates are in sales_tax_rates.csv
+    "tax_equipment_usd": 4e9,           # taxable IT and electrical equipment per purchase cycle
+    "tax_refresh_years": 5,             # equipment is bought at year 0 and again every this many years
+    # WA exemption (RCW 82.08.986) is limited to rural counties as RCW 82.14.370 defines them:
+    # fewer than 100 people per square mile, or under 225 square miles of land.
+    "wa_rural_max_density_per_sqkm": 100 / 2.589988,
+    "wa_rural_max_area_sqkm": 225 * 2.589988,
+    "ny_exempt": False,                 # set from research; see docs/weighting.md
     "cooling": "allowed",               # allowed: evaporative where water stress <= evap_max_stress, else dry
     "evap_max_stress": 2.0,             # the balanced preset's evaporative water stress gate
 }
-PRIVATE = ["energy", "water", "hazard", "time_to_power", "moratorium"]
-COMPONENTS = ["energy", "carbon", "water", "hazard", "time_to_power", "moratorium"]
-PILLAR_OF = {"energy": "cost", "carbon": "energy_carbon", "water": "water", "hazard": "climate_resilience",
+PRIVATE = ["energy", "water", "hazard", "time_to_power", "moratorium", "sales_tax"]
+COMPONENTS = ["energy", "carbon", "water", "hazard", "time_to_power", "moratorium", "sales_tax"]
+PILLAR_OF = {"sales_tax": "permitting",  # the engine scores the exemption inside state_policy_risk
+             "energy": "cost", "carbon": "energy_carbon", "water": "water", "hazard": "climate_resilience",
              "time_to_power": "grid_infrastructure", "moratorium": "permitting"}
 GRANT, CLARK, FRANKLIN = "53025", "53011", "36033"
 BPA_USD_MWH = (80, 132)  # BPA rate range for a new large load, research/impact.md
@@ -70,6 +81,31 @@ def hazard_rates():
                        "max_rel_diff": float(rel.max()), "max_rel_diff_fips": rel.idxmax()}
 
 
+def sales_tax_inputs(df, p):
+    """Combined sales tax rate and exemption flag per county.
+
+    Rates: scratch/weighting/sales_tax_rates.csv (state combined rate, sourced) with county overrides
+    in scratch/weighting/sales_tax_counties.csv. Exemption: the state table's
+    state_sales_tax_exemption flag (unknown counts as taxed), narrowed to rural counties in WA and set
+    by ny_exempt in NY. Other states' conditions (investment, jobs, county tiers) aren't modeled.
+    """
+    here = Path(__file__).resolve().parent
+    rates = pd.read_csv(here / "sales_tax_rates.csv").set_index("state").combined_rate
+    rate = df.state.map(rates).astype(float)
+    exempt = df.state_sales_tax_exemption.fillna(False).astype(bool)
+    wa = df.state == "WA"
+    rural = (df.pop_density_per_sqkm < p["wa_rural_max_density_per_sqkm"]) | (
+        df.land_area_sqkm < p["wa_rural_max_area_sqkm"])
+    exempt = exempt.where(~wa, rural)
+    exempt = exempt.where(df.state != "NY", bool(p["ny_exempt"]))
+    over_path = here / "sales_tax_counties.csv"
+    if over_path.exists():
+        over = pd.read_csv(over_path, dtype={"fips": str}).set_index("fips")
+        r_over = df.fips.map(over.combined_rate)
+        rate = r_over.where(r_over.notna(), rate)
+    return rate.fillna(0).to_numpy(float), exempt.to_numpy(bool)
+
+
 def compute(df, p, alr, queue_median):
     """One row per county with every cost component as an NPV in dollars."""
     af = annuity(p["rate"], p["years"])
@@ -89,7 +125,10 @@ def compute(df, p, alr, queue_median):
 
     q = df.queue_median_age_years
     imputed = q.isna().to_numpy()
-    q_used = q.fillna(queue_median).to_numpy(float)
+    # imputed_queue: "median" charges counties without a queue age the national median; "zero" charges them
+    # nothing (as if they energize within the baseline).
+    fill = p["queue_baseline_years"] if p.get("imputed_queue") == "zero" else queue_median
+    q_used = q.fillna(fill).to_numpy(float)
     ttp_months = np.clip(q_used - p["queue_baseline_years"], 0, None) * 12
 
     flag = lambda c: df[c].fillna(False).astype(bool).to_numpy()  # noqa: E731
@@ -111,6 +150,15 @@ def compute(df, p, alr, queue_median):
                                        else p["ttp_delay_usd_month"]),
         "moratorium": mor_months * p["delay_usd_month"],
     })
+    if p["tax"]:
+        tax_rate, tax_exempt = sales_tax_inputs(df, p)
+    else:
+        tax_rate, tax_exempt = np.zeros(len(df)), np.zeros(len(df), bool)
+    pv_purchases = sum((1 + p["rate"]) ** -t for t in range(0, p["years"], p["tax_refresh_years"]))
+    out["sales_tax_rate"] = tax_rate
+    out["sales_tax_exempt"] = tax_exempt
+    out["sales_tax"] = (0.0 if not p["tax"] else
+                        np.where(tax_exempt, 0.0, tax_rate * p["tax_equipment_usd"] * pv_purchases))
     out["private"] = out[PRIVATE].sum(axis=1)
     for c in p["carbon_prices"]:
         out[f"carbon_{c}"] = co2 * c * af
@@ -337,7 +385,7 @@ def main():
     conditions = winning_conditions(costs, p)
     img = plot(costs, frontier, variants, loudoun, p, clark_variants)
 
-    keep = ["county", "cooling", "pue", "co2_t", "water_mgal", "price_usd_mwh", "hazard_alr", "queue_age_used",
+    keep = ["county", "cooling", "pue", "sales_tax_rate", "sales_tax_exempt", "co2_t", "water_mgal", "price_usd_mwh", "hazard_alr", "queue_age_used",
             "queue_imputed", "delay_months_moratorium"] + COMPONENTS[:1] + PRIVATE[1:] + ["private"] + \
         [f"carbon_{c}" for c in p["carbon_prices"]] + [f"total_{c}" for c in p["carbon_prices"]]
     keep = [k for k in keep if k in costs.columns]
