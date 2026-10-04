@@ -41,14 +41,15 @@ gates:
   exclude_air_nonattainment: false
   min_population: 5000
 
-weights:
-  energy_carbon: 0.30
-  water: 0.25
-  climate_resilience: 0.15
-  grid_infrastructure: 0.08
-  land: 0.05
-  community: 0.07
-  permitting: 0.10
+weights:                               # cost 0.10, a little below balanced, others scaled by 0.90: a 24/7 carbon-free buyer pays a premium for clean power, so price matters less than carbon and water
+  energy_carbon: 0.27
+  water: 0.225
+  climate_resilience: 0.135
+  grid_infrastructure: 0.072
+  land: 0.045
+  community: 0.063
+  permitting: 0.09
+  cost: 0.1
 
 pillar_floor_percentile: 15            # at 25 its four highest composites sat below the floor; 15 keeps it the strictest preset
 pillar_floor_exempt: [permitting]       # three coarse state-level integers; one step moved a county 380 ranks

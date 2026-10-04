@@ -101,7 +101,7 @@ inland, the ETL writes 0. "Insufficient Data" stays null.
 | `dc_proposed_mw` | float | FracTracker, same filter | core | |
 | `plant_capacity_mw_100km` | float | eGRID2023 PLNT sheet `NAMEPCAP`, `LAT`, `LON` | stretch | nameplate MW of power plants within 100 km (great circle) of the county internal point. A naive check that the nearby grid can carry the facility. |
 | `plant_clean_capacity_mw_100km` | float | eGRID2023 PLNT sheet, `PLFUELCT` is clean | stretch | same radius, by plant primary fuel category. Same definition of clean as `queue_active_mw_clean`; eGRID has no storage category. |
-| `industrial_price_cents_kwh` | float | EIA-861 state historical tables, 2024, industrial sector, total electric industry | stretch | state average retail price, the same for every county in a state. Lower is better. |
+| `industrial_price_cents_kwh` | float | EIA-861 state historical tables, 2024, industrial sector, total electric industry | stretch | state average retail price, the same for every county in a state. Lower is better. Scored as the cost pillar. |
 | `saidi_minutes` | float | EIA-861 reliability, customer-weighted | stretch | |
 | `dist_ixp_km` | float | PeeringDB, nearest internet exchange | stretch | backbone proxy |
 
