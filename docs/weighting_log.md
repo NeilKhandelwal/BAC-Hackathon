@@ -9,14 +9,20 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:08 UTC
+- **Updated:** 2026-10-04 01:15 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
-- **Phase and step:** Phase 1, monetized cost. Step: writing
-  `scratch/weighting/common.py` and `scratch/weighting/monetize.py`.
-- **Done:** Phase 0 (summary, plan, decisions approved).
-- **In progress:** Phase 1 code. Nothing from Phase 1 is committed yet.
-- **Exact next action:** finish `monetize.py`, run it, write the Phase 1
-  results into the history, commit, push, and open the draft PR.
+- **Phase and step:** Phase 1 done and committed. Step: opening the draft PR.
+- **Done:** Phase 0. Phase 1 (`scratch/weighting/common.py`,
+  `scratch/weighting/monetize.py`, outputs in `scratch/weighting/out/`,
+  chart `docs/img/cost_vs_co2.png`). Results are in the history below.
+- **In progress:** draft PR creation. Check
+  `gh pr list --head feat/weighting-methods` before creating one, so you
+  don't open a duplicate.
+- **Exact next action:** open the draft PR if none exists, then start Phase
+  2 (`scratch/weighting/smaa.py`).
+- **Reproduce Phase 1:** `.venv/Scripts/python.exe scratch/weighting/monetize.py`
+  from the repo root, after fetching raw NRI (below). It rewrites
+  `scratch/weighting/out/` and `docs/img/cost_vs_co2.png`.
 - **Files a new session must recreate** (gitignored, not in the repo):
   - Python env: `python -m venv .venv`, then
     `.venv/Scripts/pip install -r requirements.txt` (Windows) or
@@ -86,7 +92,7 @@ exemption. Don't attribute the whole flip to weights.
 | Phase | Method | Status | Output |
 | --- | --- | --- | --- |
 | 0 | Get current, summarize, plan | done | this file |
-| 1 | Monetized total cost of siting | in progress | `scratch/weighting/monetize.py` |
+| 1 | Monetized total cost of siting | done | `scratch/weighting/monetize.py`, `docs/img/cost_vs_co2.png` |
 | 2 | Weight-space mapping (SMAA) | not started | `scratch/weighting/smaa.py` |
 | 3 | CRITIC and entropy weights | not started | `scratch/weighting/critic.py` |
 | 4 | Revealed preference | not started | `scratch/weighting/revealed.py` |
@@ -222,3 +228,89 @@ decisions in CURRENT STATE: CRITIC and entropy flipped to raw values as the
 primary run with column-level weights, delay cost and moratorium duration
 sensitivities added, a queue-imputation check added, and the git and pull
 request rules.
+
+### 2026-10-04 01:15 UTC, Phase 1: monetized cost
+
+Script: `scratch/weighting/monetize.py`. Full printout:
+`scratch/weighting/out/monetize_report.txt`. Per-county costs:
+`scratch/weighting/out/monetized_costs.csv`. Key numbers as JSON:
+`scratch/weighting/out/monetize_summary.json`.
+
+**Setup.** 1,565 gate-passing counties, annuity factor 11.654 (7%, 25
+years). Cooling: 826 evaporative, 739 dry. The NRI building loss rates
+summed over 17 hazards match NRI's own EAL_VALB / BUILDVALUE to within
+0.00045. Queue age is null for 1,072 of 1,565 counties (68%). They take the
+national median of 2.89 years, which is a $265M one-time time-to-power cost
+each at $25M per month.
+
+**Rankings by 25-year NPV.**
+
+| Basis | Top 10 |
+| --- | --- |
+| Private only ($0 carbon) | Curry NM, Bossier LA, Richland LA, Payne OK, Choctaw OK, St. Landry LA, Noble OK, Hansford TX, Tulsa OK, Pittsburg OK |
+| Private + $51/t | Curry NM, Clark WA, Bossier LA, Richland LA, El Paso TX, Grayson TX, Robertson TX, Houston TX, Payne OK, Choctaw OK |
+| Private + $190/t | Clark WA ($3.50B), Franklin NY ($3.54B), Schuyler NY, Clinton NY, Chautauqua NY, Tompkins NY, Niagara NY, Walla Walla WA, Chesterfield SC, Whitman WA |
+| Private + $300/t | Franklin NY, Schuyler NY, Clinton NY, Chautauqua NY, Tompkins NY, Niagara NY, Saratoga NY, Ontario NY, Oneida NY, Lewis NY |
+
+Grant, WA ranks 546th on private cost and 92nd at $190. Two things cost it:
+a $463M time-to-power charge from its LBNL queue median age of 3.54 years,
+and dry cooling forced by Aqueduct water stress of 3.6. Clark, WA has the
+same state price and eGRID subregion, a queue age of 2.09 years, and
+evaporative cooling, so Clark dominates Grant on both cost and CO2. Grant
+is not on the Pareto frontier.
+
+**Variance shares, the data-implied weights.** Share of the cross-county
+variance in total NPV, cov(component, total) / var(total):
+
+| Carbon price | energy (cost) | carbon (energy_carbon) | time to power (grid) | hazard (climate) | water | moratorium (permitting) |
+| --- | --- | --- | --- | --- | --- | --- |
+| $0 | 0.885 | 0.000 | 0.106 | 0.006 | -0.010 | 0.013 |
+| $51 | 0.887 | -0.002 | 0.111 | 0.009 | -0.011 | 0.005 |
+| $190 | 0.550 | 0.379 | 0.079 | 0.012 | -0.008 | -0.014 |
+| $300 | 0.295 | 0.668 | 0.048 | 0.010 | -0.005 | -0.017 |
+
+With imputed queue counties excluded (n=493), time to power's share at
+$190 rises from 0.079 to 0.151, and energy and carbon become 0.573 and
+0.282. Land and community get 0 because they aren't monetized. Under any
+carbon price, energy and carbon explain about 90% of the spread, while
+water, hazard, and moratorium are each under 2%.
+
+**Pareto frontier**, cleanest first: Hamilton NY, Essex NY, Franklin NY,
+Haywood NC, Avery NC, Susquehanna PA, Buncombe NC, Lancaster SC, Kershaw
+SC, Chesterfield SC, Clark WA, El Paso TX, Bossier LA, Curry NM.
+
+**Breakeven carbon price against Grant.** Against Grant at the Northwest
+average rate (700 kt/yr, $211M/yr private), Franklin overtakes Grant at
+$99/t, Essex and Hamilton at about $155/t, Buncombe NC at $51/t, and
+Kershaw SC at $37/t. Chesterfield SC and Clark WA are already cheaper and
+cleaner. Against Grant with BPA-like supply (212 lb/MWh, 236 kt/yr), no
+gate-passing county is cleaner, so no breakeven exists. At BPA's $80/MWh,
+Grant ($245M/yr, 236 kt) beats Franklin ($255M/yr, 260 kt) on both axes. At
+$132/MWh, Grant costs $372M/yr.
+
+**Sensitivities** (#1 at private + $190; Grant and Franklin ranks):
+
+| Variant | #1 | Grant | Franklin | Energy share | Carbon share | Time-to-power share |
+| --- | --- | --- | --- | --- | --- | --- |
+| Base | Clark WA | 92 | 2 | 0.550 | 0.379 | 0.079 |
+| Dry cooling everywhere | Clark WA | 63 | 2 | 0.531 | 0.392 | 0.078 |
+| Water $3 / $15 per kgal | Clark WA | 102 / 74 | 2 / 2 | about 0.55 | about 0.38 | 0.079 |
+| Delay $10M per month | Franklin NY | 35 | 1 | 0.561 | 0.419 | 0.021 |
+| Delay $50M per month | Clark WA | 255 | 10 | 0.494 | 0.298 | 0.221 |
+| NY moratorium 8 months | Franklin NY | 93 | 1 | 0.543 | 0.383 | 0.079 |
+| NY moratorium 20 months | Clark WA | 74 | 5 | 0.563 | 0.371 | 0.081 |
+
+**Implausible or fragile.**
+
+- Energy uses one state average price, so energy cost doesn't vary inside
+  a state. Carbon uses the eGRID subregion average, not marginal or
+  contracted supply. Together they carry about 90% of the variance.
+- Time to power uses LBNL generation-queue age as a proxy for how long a
+  new load waits. It isn't a load-interconnection measure, and 68% of
+  counties are imputed.
+- Only Grant gets a new-load rate scenario (BPA). Other counties are priced
+  at their state average, which may also understate what a new large load
+  pays.
+- Water's share is slightly negative. Water is cheap at $7 per 1,000
+  gallons, and evaporative cooling, which uses more water, is allowed only
+  where electricity is also cheaper to save.

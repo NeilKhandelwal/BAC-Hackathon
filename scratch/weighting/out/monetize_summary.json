@@ -1,0 +1,803 @@
+{
+  "params": {
+    "mw": 300,
+    "load_factor": 0.8,
+    "years": 25,
+    "rate": 0.07,
+    "carbon_prices": [
+      0,
+      51,
+      190,
+      300
+    ],
+    "water_usd_per_kgal": 7.0,
+    "asset_usd": 10000000000.0,
+    "delay_usd_month": 25000000.0,
+    "queue_baseline_years": 2.0,
+    "moratorium_months_active": 12,
+    "moratorium_months_pending": 12,
+    "p_pending": 0.5,
+    "pushback_months": 6,
+    "p_pushback": 0.3,
+    "cooling": "allowed",
+    "evap_max_stress": 2.0
+  },
+  "annuity_factor": 11.653583178253722,
+  "counties": 1565,
+  "queue_imputed": 1072,
+  "queue_national_median_years": 2.885010266940452,
+  "hazard_columns": [
+    "AVLN_ALRB",
+    "CFLD_ALRB",
+    "CWAV_ALRB",
+    "ERQK_ALRB",
+    "HAIL_ALRB",
+    "HWAV_ALRB",
+    "HRCN_ALRB",
+    "ISTM_ALRB",
+    "LNDS_ALRB",
+    "LTNG_ALRB",
+    "IFLD_ALRB",
+    "SWND_ALRB",
+    "TRND_ALRB",
+    "TSUN_ALRB",
+    "VLCN_ALRB",
+    "WFIR_ALRB",
+    "WNTW_ALRB"
+  ],
+  "hazard_sum_vs_eal_ratio_max_abs_diff": 0.0004462488440067315,
+  "cooling_counts": {
+    "evaporative": 826,
+    "dry": 739
+  },
+  "top10_private": [
+    {
+      "fips": "35009",
+      "county": "Curry, NM",
+      "npv_busd": 1.729,
+      "co2_kt": 1000
+    },
+    {
+      "fips": "22015",
+      "county": "Bossier, LA",
+      "npv_busd": 1.883,
+      "co2_kt": 896
+    },
+    {
+      "fips": "22083",
+      "county": "Richland, LA",
+      "npv_busd": 1.906,
+      "co2_kt": 901
+    },
+    {
+      "fips": "40119",
+      "county": "Payne, OK",
+      "npv_busd": 1.909,
+      "co2_kt": 985
+    },
+    {
+      "fips": "40023",
+      "county": "Choctaw, OK",
+      "npv_busd": 1.911,
+      "co2_kt": 991
+    },
+    {
+      "fips": "22097",
+      "county": "St. Landry, LA",
+      "npv_busd": 1.95,
+      "co2_kt": 1003
+    },
+    {
+      "fips": "40103",
+      "county": "Noble, OK",
+      "npv_busd": 1.951,
+      "co2_kt": 986
+    },
+    {
+      "fips": "48195",
+      "county": "Hansford, TX",
+      "npv_busd": 1.958,
+      "co2_kt": 1016
+    },
+    {
+      "fips": "40143",
+      "county": "Tulsa, OK",
+      "npv_busd": 1.961,
+      "co2_kt": 983
+    },
+    {
+      "fips": "40121",
+      "county": "Pittsburg, OK",
+      "npv_busd": 1.962,
+      "co2_kt": 987
+    }
+  ],
+  "top10_total_0": [
+    {
+      "fips": "35009",
+      "county": "Curry, NM",
+      "npv_busd": 1.729,
+      "co2_kt": 1000
+    },
+    {
+      "fips": "22015",
+      "county": "Bossier, LA",
+      "npv_busd": 1.883,
+      "co2_kt": 896
+    },
+    {
+      "fips": "22083",
+      "county": "Richland, LA",
+      "npv_busd": 1.906,
+      "co2_kt": 901
+    },
+    {
+      "fips": "40119",
+      "county": "Payne, OK",
+      "npv_busd": 1.909,
+      "co2_kt": 985
+    },
+    {
+      "fips": "40023",
+      "county": "Choctaw, OK",
+      "npv_busd": 1.911,
+      "co2_kt": 991
+    },
+    {
+      "fips": "22097",
+      "county": "St. Landry, LA",
+      "npv_busd": 1.95,
+      "co2_kt": 1003
+    },
+    {
+      "fips": "40103",
+      "county": "Noble, OK",
+      "npv_busd": 1.951,
+      "co2_kt": 986
+    },
+    {
+      "fips": "48195",
+      "county": "Hansford, TX",
+      "npv_busd": 1.958,
+      "co2_kt": 1016
+    },
+    {
+      "fips": "40143",
+      "county": "Tulsa, OK",
+      "npv_busd": 1.961,
+      "co2_kt": 983
+    },
+    {
+      "fips": "40121",
+      "county": "Pittsburg, OK",
+      "npv_busd": 1.962,
+      "co2_kt": 987
+    }
+  ],
+  "top10_total_51": [
+    {
+      "fips": "35009",
+      "county": "Curry, NM",
+      "npv_busd": 2.324,
+      "co2_kt": 1000
+    },
+    {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "npv_busd": 2.397,
+      "co2_kt": 678
+    },
+    {
+      "fips": "22015",
+      "county": "Bossier, LA",
+      "npv_busd": 2.415,
+      "co2_kt": 896
+    },
+    {
+      "fips": "22083",
+      "county": "Richland, LA",
+      "npv_busd": 2.442,
+      "co2_kt": 901
+    },
+    {
+      "fips": "48141",
+      "county": "El Paso, TX",
+      "npv_busd": 2.479,
+      "co2_kt": 840
+    },
+    {
+      "fips": "48181",
+      "county": "Grayson, TX",
+      "npv_busd": 2.494,
+      "co2_kt": 836
+    },
+    {
+      "fips": "48395",
+      "county": "Robertson, TX",
+      "npv_busd": 2.494,
+      "co2_kt": 853
+    },
+    {
+      "fips": "48225",
+      "county": "Houston, TX",
+      "npv_busd": 2.494,
+      "co2_kt": 849
+    },
+    {
+      "fips": "40119",
+      "county": "Payne, OK",
+      "npv_busd": 2.494,
+      "co2_kt": 985
+    },
+    {
+      "fips": "40023",
+      "county": "Choctaw, OK",
+      "npv_busd": 2.5,
+      "co2_kt": 991
+    }
+  ],
+  "top10_total_190": [
+    {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "npv_busd": 3.496,
+      "co2_kt": 678
+    },
+    {
+      "fips": "36033",
+      "county": "Franklin, NY",
+      "npv_busd": 3.545,
+      "co2_kt": 260
+    },
+    {
+      "fips": "36097",
+      "county": "Schuyler, NY",
+      "npv_busd": 3.563,
+      "co2_kt": 261
+    },
+    {
+      "fips": "36019",
+      "county": "Clinton, NY",
+      "npv_busd": 3.577,
+      "co2_kt": 261
+    },
+    {
+      "fips": "36013",
+      "county": "Chautauqua, NY",
+      "npv_busd": 3.592,
+      "co2_kt": 262
+    },
+    {
+      "fips": "36109",
+      "county": "Tompkins, NY",
+      "npv_busd": 3.644,
+      "co2_kt": 262
+    },
+    {
+      "fips": "36063",
+      "county": "Niagara, NY",
+      "npv_busd": 3.674,
+      "co2_kt": 268
+    },
+    {
+      "fips": "53071",
+      "county": "Walla Walla, WA",
+      "npv_busd": 3.678,
+      "co2_kt": 701
+    },
+    {
+      "fips": "45025",
+      "county": "Chesterfield, SC",
+      "npv_busd": 3.682,
+      "co2_kt": 667
+    },
+    {
+      "fips": "53075",
+      "county": "Whitman, WA",
+      "npv_busd": 3.741,
+      "co2_kt": 682
+    }
+  ],
+  "top10_total_300": [
+    {
+      "fips": "36033",
+      "county": "Franklin, NY",
+      "npv_busd": 3.878,
+      "co2_kt": 260
+    },
+    {
+      "fips": "36097",
+      "county": "Schuyler, NY",
+      "npv_busd": 3.898,
+      "co2_kt": 261
+    },
+    {
+      "fips": "36019",
+      "county": "Clinton, NY",
+      "npv_busd": 3.912,
+      "co2_kt": 261
+    },
+    {
+      "fips": "36013",
+      "county": "Chautauqua, NY",
+      "npv_busd": 3.928,
+      "co2_kt": 262
+    },
+    {
+      "fips": "36109",
+      "county": "Tompkins, NY",
+      "npv_busd": 3.979,
+      "co2_kt": 262
+    },
+    {
+      "fips": "36063",
+      "county": "Niagara, NY",
+      "npv_busd": 4.017,
+      "co2_kt": 268
+    },
+    {
+      "fips": "36091",
+      "county": "Saratoga, NY",
+      "npv_busd": 4.139,
+      "co2_kt": 262
+    },
+    {
+      "fips": "36069",
+      "county": "Ontario, NY",
+      "npv_busd": 4.142,
+      "co2_kt": 262
+    },
+    {
+      "fips": "36065",
+      "county": "Oneida, NY",
+      "npv_busd": 4.143,
+      "co2_kt": 262
+    },
+    {
+      "fips": "36049",
+      "county": "Lewis, NY",
+      "npv_busd": 4.147,
+      "co2_kt": 260
+    }
+  ],
+  "variance_shares": {
+    "0": {
+      "energy": 0.8852102334146725,
+      "carbon": 0.0,
+      "water": -0.010141013811436072,
+      "hazard": 0.005692673322748233,
+      "time_to_power": 0.10632622174973994,
+      "moratorium": 0.012911885324275564
+    },
+    "51": {
+      "energy": 0.8871397874208135,
+      "carbon": -0.001816733750503392,
+      "water": -0.010662252756812199,
+      "hazard": 0.008949486807858686,
+      "time_to_power": 0.11149461739330599,
+      "moratorium": 0.004895094885337495
+    },
+    "190": {
+      "energy": 0.5501644145042812,
+      "carbon": 0.37947481010130224,
+      "water": -0.0076526828199438455,
+      "hazard": 0.012312942266221365,
+      "time_to_power": 0.0794342394649887,
+      "moratorium": -0.013733723516849835
+    },
+    "300": {
+      "energy": 0.29456494798644944,
+      "carbon": 0.668196956838749,
+      "water": -0.004693974901557427,
+      "hazard": 0.010470655179067208,
+      "time_to_power": 0.0484310171073678,
+      "moratorium": -0.016969602210076457
+    }
+  },
+  "variance_shares_known_queue_only": {
+    "0": {
+      "energy": 0.8043585554350097,
+      "carbon": 0.0,
+      "water": -0.008465195960270915,
+      "hazard": 0.00548012421252857,
+      "time_to_power": 0.19092320035031596,
+      "moratorium": 0.007703315962417148
+    },
+    "51": {
+      "energy": 0.801728009294308,
+      "carbon": 0.0012565277111393851,
+      "water": -0.009143155461421162,
+      "hazard": 0.007166344793183205,
+      "time_to_power": 0.19557342729369814,
+      "moratorium": 0.0034188463690923553
+    },
+    "190": {
+      "energy": 0.5727571392151185,
+      "carbon": 0.2819986512253625,
+      "water": -0.008107187075624758,
+      "hazard": 0.008924006233013284,
+      "time_to_power": 0.15149340987882132,
+      "moratorium": -0.0070660194766907335
+    },
+    "300": {
+      "energy": 0.3604934610921688,
+      "carbon": 0.545380677794919,
+      "water": -0.00605193637799417,
+      "hazard": 0.007909278515106376,
+      "time_to_power": 0.10244568873744177,
+      "moratorium": -0.010177169761641833
+    }
+  },
+  "data_implied_pillar_weights": {
+    "0": {
+      "cost": 0.885,
+      "energy_carbon": 0.0,
+      "water": -0.01,
+      "climate_resilience": 0.006,
+      "grid_infrastructure": 0.106,
+      "permitting": 0.013
+    },
+    "51": {
+      "cost": 0.887,
+      "energy_carbon": -0.002,
+      "water": -0.011,
+      "climate_resilience": 0.009,
+      "grid_infrastructure": 0.111,
+      "permitting": 0.005
+    },
+    "190": {
+      "cost": 0.55,
+      "energy_carbon": 0.379,
+      "water": -0.008,
+      "climate_resilience": 0.012,
+      "grid_infrastructure": 0.079,
+      "permitting": -0.014
+    },
+    "300": {
+      "cost": 0.295,
+      "energy_carbon": 0.668,
+      "water": -0.005,
+      "climate_resilience": 0.01,
+      "grid_infrastructure": 0.048,
+      "permitting": -0.017
+    }
+  },
+  "frontier": [
+    "36041",
+    "36031",
+    "36033",
+    "37087",
+    "37011",
+    "42115",
+    "37021",
+    "45057",
+    "45055",
+    "45025",
+    "53011",
+    "48141",
+    "22015",
+    "35009"
+  ],
+  "grant_variants": {
+    "regional": {
+      "co2_t": 700390.214176708,
+      "private": 2459481484.2108755
+    },
+    "bpa_80": {
+      "co2_t": 235547.34837163534,
+      "private": 2855406692.8672028
+    },
+    "bpa_132": {
+      "co2_t": 235547.34837163534,
+      "private": 4336565746.833322
+    }
+  },
+  "breakevens": [
+    {
+      "fips": "36041",
+      "county": "Hamilton, NY",
+      "co2_kt": 259.4620703260957,
+      "private_musd_yr": 279.9012052204422,
+      "regional": 156.2,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "36031",
+      "county": "Essex, NY",
+      "co2_kt": 260.2174577854965,
+      "private_musd_yr": 279.3842014224867,
+      "regional": 155.2,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "36033",
+      "county": "Franklin, NY",
+      "co2_kt": 260.3677230231153,
+      "private_musd_yr": 254.69638327131838,
+      "regional": 99.2,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "37087",
+      "county": "Haywood, NC",
+      "co2_kt": 638.8101171886003,
+      "private_musd_yr": 225.54721978307774,
+      "regional": 235.4,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "37011",
+      "county": "Avery, NC",
+      "co2_kt": 639.6729078888485,
+      "private_musd_yr": 221.9531813433351,
+      "regional": 179.6,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "42115",
+      "county": "Susquehanna, PA",
+      "co2_kt": 643.6045254538437,
+      "private_musd_yr": 221.04640777834516,
+      "regional": 176.0,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "37021",
+      "county": "Buncombe, NC",
+      "co2_kt": 645.6016866317023,
+      "private_musd_yr": 213.83423148972744,
+      "regional": 50.8,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "45057",
+      "county": "Lancaster, SC",
+      "co2_kt": 665.7983127057777,
+      "private_musd_yr": 213.7622221828499,
+      "regional": 78.4,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "45055",
+      "county": "Kershaw, SC",
+      "co2_kt": 666.6044734824399,
+      "private_musd_yr": 212.31099649579508,
+      "regional": 37.3,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "45025",
+      "county": "Chesterfield, SC",
+      "co2_kt": 667.2948389056678,
+      "private_musd_yr": 189.19375743789797,
+      "regional": 0.0,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "53011",
+      "county": "Clark, WA",
+      "co2_kt": 678.2016664296762,
+      "private_musd_yr": 171.13321932193514,
+      "regional": 0.0,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "48141",
+      "county": "El Paso, TX",
+      "co2_kt": 840.1929504923139,
+      "private_musd_yr": 169.9032123724042,
+      "regional": NaN,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "22015",
+      "county": "Bossier, LA",
+      "co2_kt": 895.5335257746963,
+      "private_musd_yr": 161.548217378104,
+      "regional": NaN,
+      "bpa_80": null,
+      "bpa_132": null
+    },
+    {
+      "fips": "35009",
+      "county": "Curry, NM",
+      "co2_kt": 1000.4108390649113,
+      "private_musd_yr": 148.37647737158187,
+      "regional": NaN,
+      "bpa_80": null,
+      "bpa_132": null
+    }
+  ],
+  "sensitivities": [
+    {
+      "variant": "base",
+      "top_private": "35009",
+      "top_190": "53011",
+      "rank190_Grant": 92,
+      "rank190_Franklin": 2,
+      "rank190_Berkshire": 1546,
+      "share190_energy": 0.55,
+      "share190_carbon": 0.379,
+      "share190_water": -0.008,
+      "share190_hazard": 0.012,
+      "share190_time_to_power": 0.079,
+      "share190_moratorium": -0.014,
+      "share190_ttp_known_queue_only": 0.151
+    },
+    {
+      "variant": "dry everywhere",
+      "top_private": "35009",
+      "top_190": "53011",
+      "rank190_Grant": 63,
+      "rank190_Franklin": 2,
+      "rank190_Berkshire": 1545,
+      "share190_energy": 0.531,
+      "share190_carbon": 0.392,
+      "share190_water": -0.0,
+      "share190_hazard": 0.013,
+      "share190_time_to_power": 0.078,
+      "share190_moratorium": -0.014,
+      "share190_ttp_known_queue_only": 0.151
+    },
+    {
+      "variant": "water $3/kgal",
+      "top_private": "35009",
+      "top_190": "53011",
+      "rank190_Grant": 102,
+      "rank190_Franklin": 2,
+      "rank190_Berkshire": 1546,
+      "share190_energy": 0.551,
+      "share190_carbon": 0.376,
+      "share190_water": -0.004,
+      "share190_hazard": 0.012,
+      "share190_time_to_power": 0.079,
+      "share190_moratorium": -0.013,
+      "share190_ttp_known_queue_only": 0.151
+    },
+    {
+      "variant": "water $15/kgal",
+      "top_private": "35009",
+      "top_190": "53011",
+      "rank190_Grant": 74,
+      "rank190_Franklin": 2,
+      "rank190_Berkshire": 1544,
+      "share190_energy": 0.546,
+      "share190_carbon": 0.385,
+      "share190_water": -0.009,
+      "share190_hazard": 0.013,
+      "share190_time_to_power": 0.08,
+      "share190_moratorium": -0.014,
+      "share190_ttp_known_queue_only": 0.153
+    },
+    {
+      "variant": "delay $10M/mo",
+      "top_private": "35009",
+      "top_190": "36033",
+      "rank190_Grant": 35,
+      "rank190_Franklin": 1,
+      "rank190_Berkshire": 1552,
+      "share190_energy": 0.561,
+      "share190_carbon": 0.419,
+      "share190_water": -0.008,
+      "share190_hazard": 0.014,
+      "share190_time_to_power": 0.021,
+      "share190_moratorium": -0.007,
+      "share190_ttp_known_queue_only": 0.043
+    },
+    {
+      "variant": "delay $50M/mo",
+      "top_private": "35009",
+      "top_190": "53011",
+      "rank190_Grant": 255,
+      "rank190_Franklin": 10,
+      "rank190_Berkshire": 1510,
+      "share190_energy": 0.494,
+      "share190_carbon": 0.298,
+      "share190_water": -0.007,
+      "share190_hazard": 0.01,
+      "share190_time_to_power": 0.221,
+      "share190_moratorium": -0.014,
+      "share190_ttp_known_queue_only": 0.359
+    },
+    {
+      "variant": "moratorium 8 mo",
+      "top_private": "35009",
+      "top_190": "36033",
+      "rank190_Grant": 93,
+      "rank190_Franklin": 1,
+      "rank190_Berkshire": 1546,
+      "share190_energy": 0.543,
+      "share190_carbon": 0.383,
+      "share190_water": -0.007,
+      "share190_hazard": 0.012,
+      "share190_time_to_power": 0.079,
+      "share190_moratorium": -0.01,
+      "share190_ttp_known_queue_only": 0.151
+    },
+    {
+      "variant": "moratorium 20 mo",
+      "top_private": "35009",
+      "top_190": "53011",
+      "rank190_Grant": 74,
+      "rank190_Franklin": 5,
+      "rank190_Berkshire": 1546,
+      "share190_energy": 0.563,
+      "share190_carbon": 0.371,
+      "share190_water": -0.008,
+      "share190_hazard": 0.012,
+      "share190_time_to_power": 0.081,
+      "share190_moratorium": -0.018,
+      "share190_ttp_known_queue_only": 0.153
+    }
+  ],
+  "focus": {
+    "Grant, WA": {
+      "rank_private": 546,
+      "rank_190": 92,
+      "energy": 1882.8,
+      "water": 10.5,
+      "hazard": 103.4,
+      "time_to_power": 462.8,
+      "moratorium": 0.0,
+      "carbon_190_musd": 1550.8,
+      "co2_kt": 700
+    },
+    "Franklin, NY": {
+      "rank_private": 1309,
+      "rank_190": 2,
+      "energy": 2533.8,
+      "water": 9.1,
+      "hazard": 125.2,
+      "time_to_power": 0.0,
+      "moratorium": 300.0,
+      "carbon_190_musd": 576.5,
+      "co2_kt": 260
+    },
+    "Clinton, NY": {
+      "rank_private": 1337,
+      "rank_190": 4,
+      "energy": 2542.2,
+      "water": 11.4,
+      "hazard": 145.2,
+      "time_to_power": 0.0,
+      "moratorium": 300.0,
+      "carbon_190_musd": 578.4,
+      "co2_kt": 261
+    },
+    "Berkshire, MA": {
+      "rank_private": 1548,
+      "rank_190": 1546,
+      "energy": 5029.0,
+      "water": 13.7,
+      "hazard": 179.8,
+      "time_to_power": 0.0,
+      "moratorium": 0.0,
+      "carbon_190_musd": 1284.9,
+      "co2_kt": 580
+    },
+    "Dallas, TX": {
+      "rank_private": 58,
+      "rank_190": 142,
+      "energy": 1930.7,
+      "water": 8.2,
+      "hazard": 144.2,
+      "time_to_power": 0.0,
+      "moratorium": 0.0,
+      "carbon_190_musd": 1995.3,
+      "co2_kt": 901
+    }
+  },
+  "chart": "docs\\img\\cost_vs_co2.png"
+}

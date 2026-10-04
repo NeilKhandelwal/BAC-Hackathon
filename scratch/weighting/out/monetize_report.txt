@@ -1,0 +1,110 @@
+counties 1565, annuity factor 11.654, queue imputed 1072 (median 2.89 y), cooling {'evaporative': 826, 'dry': 739}, hazard check max diff 4.46e-04
+top10 private+carbon $0: ['Curry, NM 1.729', 'Bossier, LA 1.883', 'Richland, LA 1.906', 'Payne, OK 1.909', 'Choctaw, OK 1.911', 'St. Landry, LA 1.95', 'Noble, OK 1.951', 'Hansford, TX 1.958', 'Tulsa, OK 1.961', 'Pittsburg, OK 1.962']
+top10 private+carbon $51: ['Curry, NM 2.324', 'Clark, WA 2.397', 'Bossier, LA 2.415', 'Richland, LA 2.442', 'El Paso, TX 2.479', 'Grayson, TX 2.494', 'Robertson, TX 2.494', 'Houston, TX 2.494', 'Payne, OK 2.494', 'Choctaw, OK 2.5']
+top10 private+carbon $190: ['Clark, WA 3.496', 'Franklin, NY 3.545', 'Schuyler, NY 3.563', 'Clinton, NY 3.577', 'Chautauqua, NY 3.592', 'Tompkins, NY 3.644', 'Niagara, NY 3.674', 'Walla Walla, WA 3.678', 'Chesterfield, SC 3.682', 'Whitman, WA 3.741']
+top10 private+carbon $300: ['Franklin, NY 3.878', 'Schuyler, NY 3.898', 'Clinton, NY 3.912', 'Chautauqua, NY 3.928', 'Tompkins, NY 3.979', 'Niagara, NY 4.017', 'Saratoga, NY 4.139', 'Ontario, NY 4.142', 'Oneida, NY 4.143', 'Lewis, NY 4.147']
+top10 private: ['Curry, NM 1.729', 'Bossier, LA 1.883', 'Richland, LA 1.906', 'Payne, OK 1.909', 'Choctaw, OK 1.911', 'St. Landry, LA 1.95', 'Noble, OK 1.951', 'Hansford, TX 1.958', 'Tulsa, OK 1.961', 'Pittsburg, OK 1.962']
+
+variance shares (all counties):
+     energy  carbon  water  hazard  time_to_power  moratorium
+0     0.885   0.000 -0.010   0.006          0.106       0.013
+51    0.887  -0.002 -0.011   0.009          0.111       0.005
+190   0.550   0.379 -0.008   0.012          0.079      -0.014
+300   0.295   0.668 -0.005   0.010          0.048      -0.017
+variance shares (known queue age only, n=493):
+     energy  carbon  water  hazard  time_to_power  moratorium
+0     0.804   0.000 -0.008   0.005          0.191       0.008
+51    0.802   0.001 -0.009   0.007          0.196       0.003
+190   0.573   0.282 -0.008   0.009          0.151      -0.007
+300   0.360   0.545 -0.006   0.008          0.102      -0.010
+
+mean NPV by component, $B: {'energy': 2.205, 'water': 0.034, 'hazard': 0.153, 'time_to_power': 0.259, 'moratorium': 0.012, 'carbon_190': 2.123}
+std NPV by component, $B: {'energy': 0.509, 'water': 0.034, 'hazard': 0.06, 'time_to_power': 0.143, 'moratorium': 0.046, 'carbon_190': 0.455}
+
+focus: {
+"Grant, WA": {
+"rank_private": 546,
+"rank_190": 92,
+"energy": 1882.8,
+"water": 10.5,
+"hazard": 103.4,
+"time_to_power": 462.8,
+"moratorium": 0.0,
+"carbon_190_musd": 1550.8,
+"co2_kt": 700
+},
+"Franklin, NY": {
+"rank_private": 1309,
+"rank_190": 2,
+"energy": 2533.8,
+"water": 9.1,
+"hazard": 125.2,
+"time_to_power": 0.0,
+"moratorium": 300.0,
+"carbon_190_musd": 576.5,
+"co2_kt": 260
+},
+"Clinton, NY": {
+"rank_private": 1337,
+"rank_190": 4,
+"energy": 2542.2,
+"water": 11.4,
+"hazard": 145.2,
+"time_to_power": 0.0,
+"moratorium": 300.0,
+"carbon_190_musd": 578.4,
+"co2_kt": 261
+},
+"Berkshire, MA": {
+"rank_private": 1548,
+"rank_190": 1546,
+"energy": 5029.0,
+"water": 13.7,
+"hazard": 179.8,
+"time_to_power": 0.0,
+"moratorium": 0.0,
+"carbon_190_musd": 1284.9,
+"co2_kt": 580
+},
+"Dallas, TX": {
+"rank_private": 58,
+"rank_190": 142,
+"energy": 1930.7,
+"water": 8.2,
+"hazard": 144.2,
+"time_to_power": 0.0,
+"moratorium": 0.0,
+"carbon_190_musd": 1995.3,
+"co2_kt": 901
+}
+}
+
+frontier: ['Hamilton, NY', 'Essex, NY', 'Franklin, NY', 'Haywood, NC', 'Avery, NC', 'Susquehanna, PA', 'Buncombe, NC', 'Lancaster, SC', 'Kershaw, SC', 'Chesterfield, SC', 'Clark, WA', 'El Paso, TX', 'Bossier, LA', 'Curry, NM']
+grant variants ($M/yr private, kt): {'regional': (211, 700), 'bpa_80': (245, 236), 'bpa_132': (372, 236)}
+ fips           county      co2_kt  private_musd_yr  regional bpa_80 bpa_132
+36041     Hamilton, NY  259.462070       279.901205     156.2   None    None
+36031        Essex, NY  260.217458       279.384201     155.2   None    None
+36033     Franklin, NY  260.367723       254.696383      99.2   None    None
+37087      Haywood, NC  638.810117       225.547220     235.4   None    None
+37011        Avery, NC  639.672908       221.953181     179.6   None    None
+42115  Susquehanna, PA  643.604525       221.046408     176.0   None    None
+37021     Buncombe, NC  645.601687       213.834231      50.8   None    None
+45057    Lancaster, SC  665.798313       213.762222      78.4   None    None
+45055      Kershaw, SC  666.604473       212.310996      37.3   None    None
+45025 Chesterfield, SC  667.294839       189.193757       0.0   None    None
+53011        Clark, WA  678.201666       171.133219       0.0   None    None
+48141      El Paso, TX  840.192950       169.903212       NaN   None    None
+22015      Bossier, LA  895.533526       161.548217       NaN   None    None
+35009        Curry, NM 1000.410839       148.376477       NaN   None    None
+
+sensitivities:
+         variant top_private top_190  rank190_Grant  rank190_Franklin  rank190_Berkshire  share190_energy  share190_carbon  share190_water  share190_hazard  share190_time_to_power  share190_moratorium  share190_ttp_known_queue_only
+            base       35009   53011             92                 2               1546            0.550            0.379          -0.008            0.012                   0.079               -0.014                          0.151
+  dry everywhere       35009   53011             63                 2               1545            0.531            0.392          -0.000            0.013                   0.078               -0.014                          0.151
+   water $3/kgal       35009   53011            102                 2               1546            0.551            0.376          -0.004            0.012                   0.079               -0.013                          0.151
+  water $15/kgal       35009   53011             74                 2               1544            0.546            0.385          -0.009            0.013                   0.080               -0.014                          0.153
+   delay $10M/mo       35009   36033             35                 1               1552            0.561            0.419          -0.008            0.014                   0.021               -0.007                          0.043
+   delay $50M/mo       35009   53011            255                10               1510            0.494            0.298          -0.007            0.010                   0.221               -0.014                          0.359
+ moratorium 8 mo       35009   36033             93                 1               1546            0.543            0.383          -0.007            0.012                   0.079               -0.010                          0.151
+moratorium 20 mo       35009   53011             74                 5               1546            0.563            0.371          -0.008            0.012                   0.081               -0.018                          0.153
+chart: C:\Users\Vals\OneDrive\Documents\BAC-Hackathon\docs\img\cost_vs_co2.png
