@@ -30,6 +30,9 @@ Overwritten at every update.
   2. The featured-county decision (the recommendation is Grant).
   3. Whether to verify the exemption flags for SC, ID, UT, TX, and LA
      before the deck says anything about them.
+  4. Whether to merge current `main` into this branch and refresh the
+     engine-based tables (small drift; dollar results unchanged; see the
+     drift-check entry).
   Never merge PR #35. Don't rewrite history. No AI attribution in new
   commits or the PR body.
 - **Untracked files:** `scratch/analysis.py` and `scratch/lbnl_unmatched.py`
@@ -989,3 +992,35 @@ for three presentation changes, now made in `docs/weighting.md`:
 The audit also noted that `main` moved 28 commits past this branch's base
 (`1575003`), including a queue-semantics correction and a rebuilt county
 table. A drift check against current `main` follows.
+
+### 2026-10-04 04:52 UTC, drift check against current main (b7ddfe6)
+
+Ran every weighting script in a temporary worktree of `origin/main`
+(`b7ddfe6`, 28 commits past this branch's base), without merging. The
+worktree was removed afterwards.
+
+- **Monetized model: no drift.** 1,565 gate passers; the legacy queue age
+  column is unchanged. All 1,565 `total_190` values match to within $1M.
+  Clark, Grant, and Franklin are 365, 407, and 410 (base) and 14, 19, and
+  22 (refreshes taxed everywhere). The Grant-Clark gap is $46.2M and
+  Grant's break-even is 10.15 months. The recommendation is unaffected.
+- **Engine-based methods: small drift** from main's queue-semantics and
+  scoring changes. SMAA's self-check passes against main's
+  `results/balanced.csv`.
+
+| Measure | On this branch | On main |
+| --- | --- | --- |
+| Grant SMAA rank-1 / top-10, floor on | 12.4% / 50.5% | 11.5% / 50.5% |
+| Clark SMAA rank-1 / top-10, floor on | 6.7% / 29.6% | 6.9% / 30.6% |
+| Franklin SMAA rank-1 / top-10, floor off | 7.1% / 24.3% | 10.3% / 29.3% |
+| Balanced rank: Franklin, Berkshire | 986, 1,013 | 952, 1,047 |
+| CRITIC rank: Grant, Clark, Franklin | 12, 27, 64 | 11, 48, 34 |
+| Entropy rank: Grant, Clark, Franklin | 50, 338, 392 | 41, 462, 251 |
+| Revealed rank: Grant, Clark, Franklin | 120, 103, 548 | 148, 92, 452 |
+| Consensus (no entropy): Grant, Clark | 1, 7 | 1, 6 |
+| Consensus with entropy: #1 | Washington OR | Grant WA |
+
+If the branch merges `main` before the PR merges, rerun `smaa.py`,
+`critic.py`, `revealed.py`, `consensus.py`, and `revisions.py`, and
+refresh the engine-based tables in `docs/weighting.md`. Waiting on the user
+for that decision.
