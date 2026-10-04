@@ -4,6 +4,7 @@ import type { RunResult } from "../engine/run";
 import { topReasons } from "../engine/run";
 import type { Stability } from "../engine/rank";
 import { fmtInt, fmtPct, fmtScore, fmtThreshold, fmtValue, ordinal } from "../lib/format";
+import { ComparePicker } from "./ComparePicker";
 import { OutcomeBarStatic, OutcomeTable, outcomesOf, topNLabel } from "./OutcomeBar";
 
 interface Props {
@@ -21,8 +22,6 @@ interface Props {
   onToggle: () => void;
 }
 
-const LOUDOUN = "51107";
-
 export function FindingPanel({ data, result, stability, stabilityStale, idx, compare, onCompare, onClose, drawer, open, onToggle }: Props) {
   if (idx === null) {
     return (
@@ -34,7 +33,6 @@ export function FindingPanel({ data, result, stability, stabilityStale, idx, com
   const name = `${data.counties.name[idx]}, ${data.counties.state[idx]}`;
   const passed = !!result.gates.passed[idx];
   const rank = result.rankOf[idx]!;
-  const loudoun = data.counties.fips.indexOf(LOUDOUN);
   const cmp = compare !== null && compare !== idx ? compare : null;
 
   return (
@@ -56,16 +54,7 @@ export function FindingPanel({ data, result, stability, stabilityStale, idx, com
           </p>
         </div>
         <div className="finding-actions">
-          {cmp === null && loudoun >= 0 && loudoun !== idx && (
-            <button className="btn btn-quiet" onClick={() => onCompare(loudoun)}>
-              Compare with Loudoun, VA
-            </button>
-          )}
-          {cmp !== null && (
-            <button className="btn btn-quiet" onClick={() => onCompare(null)}>
-              Stop comparing
-            </button>
-          )}
+          <ComparePicker data={data} result={result} idx={idx} compare={cmp} onCompare={onCompare} />
           {drawer && (
             <button className="btn btn-quiet" aria-expanded={open} onClick={onToggle}>
               {open ? "Collapse" : "Expand"}
@@ -270,9 +259,11 @@ function Contributions({ data, result, idx, cmp }: { data: CockpitData; result: 
             return (
               <tr key={p.id} style={{ "--hue": `var(--p-${p.id}, var(--ink-2))` } as React.CSSProperties}>
                 <th scope="row">
-                  <span className="swatch" aria-hidden />
-                  {p.label}
-                  {below && <span className="flag-fail small"> below floor</span>}
+                  <span className="pillar-name" title={p.label}>
+                    <span className="swatch" aria-hidden />
+                    {p.label}
+                  </span>
+                  {below && <span className="flag-fail small pillar-flag">Below floor</span>}
                 </th>
                 <td className="num">{fmtPct(w)}</td>
                 <td>

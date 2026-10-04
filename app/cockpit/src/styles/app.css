@@ -360,10 +360,6 @@ select {
   color: var(--warn);
 }
 
-.badge-data.is-engine {
-  color: var(--pass);
-}
-
 /* ------------------------------------------------------------- left rail */
 
 .rail h2,
@@ -1636,10 +1632,11 @@ table {
   table-layout: fixed;
 }
 
-.contrib .c-pillar { width: 38%; }
-.contrib .c-weight { width: 11%; }
-.contrib .c-bar { width: 37%; }
-.contrib .c-adds { width: 14%; }
+/* Weight and Adds get fixed widths that fit their headers and values;
+   the pillar name takes what's left. */
+.contrib .c-weight { width: 4rem; }
+.contrib .c-bar { width: 34%; }
+.contrib .c-adds { width: 3.5rem; }
 
 .contrib tbody th {
   overflow: hidden;
@@ -1924,4 +1921,162 @@ table {
 
 .zoom-btn:focus-visible {
   outline-offset: -2px;
+}
+
+/* ------------------------------------------------------------- compare picker */
+
+.compare {
+  position: relative;
+}
+
+.compare-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  max-width: 22rem;
+}
+
+.compare-trigger.is-on {
+  border-color: var(--ink-2);
+  border-style: dashed;
+}
+
+.compare-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* matches the dashed comparison outline on the map */
+.compare-swatch {
+  flex: none;
+}
+
+.compare-swatch rect {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 2;
+}
+
+.compare-caret {
+  flex: none;
+}
+
+.compare-caret path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.compare-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 30;
+  width: 22rem;
+  padding: var(--s3);
+  background: var(--panel);
+  border: 1px solid var(--ink);
+  box-shadow: 0 8px 24px rgb(17 21 24 / 0.16);
+}
+
+.compare-h {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+.pick-list {
+  list-style: none;
+  margin: 0 0 var(--s3);
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.pick-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  width: 100%;
+  padding: 8px var(--s2);
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pick-btn:hover {
+  background: var(--ground);
+}
+
+.pick-btn:focus-visible {
+  outline-offset: -2px;
+}
+
+.pick-title {
+  font-weight: 650;
+}
+
+.pick-note {
+  font-size: var(--fs-fine);
+  color: var(--ink-3);
+}
+
+.pick-current {
+  position: absolute;
+  top: 8px;
+  right: var(--s2);
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  color: var(--ink-2);
+}
+
+.compare-row {
+  display: flex;
+  gap: var(--s2);
+}
+
+.compare-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 var(--s3);
+  border: 1px solid var(--rule-strong);
+  background: var(--panel);
+}
+
+.compare-row input::placeholder {
+  color: var(--ink-3);
+}
+
+.compare-row input[aria-invalid="true"] {
+  border-color: var(--fail);
+}
+
+.compare-err {
+  margin-top: 6px;
+  font-size: var(--fs-fine);
+  color: var(--fail);
+}
+
+.compare-stop {
+  margin-top: var(--s3);
+}
+
+.contrib tbody th .pillar-name {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.contrib .pillar-flag {
+  display: block;
+  padding-left: 16px;
+  line-height: 1.2;
 }

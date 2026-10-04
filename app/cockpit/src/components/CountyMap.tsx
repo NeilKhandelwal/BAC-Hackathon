@@ -7,6 +7,7 @@ import type { Feature, FeatureCollection, Geometry } from "geojson";
 import type { CockpitData } from "../data/types";
 import type { RunResult } from "../engine/run";
 import { fmtInt, fmtScore } from "../lib/format";
+import { useCountyLookup } from "../lib/countyLookup";
 
 const W = 1000;
 const H = 620;
@@ -387,26 +388,16 @@ function Legend({ breaks }: { breaks: number[] }) {
 }
 
 function CountySearch({ data, onSelect }: { data: CockpitData; onSelect: (i: number | null) => void }) {
-  const options = useMemo(
-    () => data.counties.fips.map((f, i) => ({ label: `${data.counties.name[i]}, ${data.counties.state[i]} (${f})`, i })),
-    [data],
-  );
-  const lookup = useMemo(() => new Map(options.map((o) => [o.label.toLowerCase(), o.i])), [options]);
+  const { options, resolve, isExact } = useCountyLookup(data);
   const [q, setQ] = useState("");
   const [miss, setMiss] = useState(false);
   const submit = (value: string) => {
-    const v = value.trim().toLowerCase();
-    let i = lookup.get(v);
-    if (i === undefined && /^\d{5}$/.test(v)) i = data.counties.fips.indexOf(v);
-    if (i === undefined || i < 0) {
-      const hit = options.find((o) => o.label.toLowerCase().startsWith(v));
-      i = hit?.i;
-    }
-    if (i !== undefined && i >= 0 && v) {
+    const i = resolve(value);
+    if (i !== null) {
       onSelect(i);
       setQ("");
       setMiss(false);
-    } else setMiss(v.length > 0);
+    } else setMiss(value.trim().length > 0);
   };
   return (
     <form
@@ -428,7 +419,7 @@ function CountySearch({ data, onSelect }: { data: CockpitData; onSelect: (i: num
         onChange={(e) => {
           setQ(e.target.value);
           setMiss(false);
-          if (lookup.has(e.target.value.toLowerCase())) submit(e.target.value);
+          if (isExact(e.target.value)) submit(e.target.value);
         }}
         aria-invalid={miss}
         aria-describedby={miss ? "search-miss" : undefined}

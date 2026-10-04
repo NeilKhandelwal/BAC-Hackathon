@@ -15,9 +15,11 @@ async function open(page: Page, query = "?preset=balanced", ready = ".rows .row"
 
 const topTen = (page: Page) => page.locator(".row .who-name").allInnerTexts();
 
-test("loads with the real engine badge and no console errors", async ({ page }, info) => {
+test("loads real engine data without a data badge, and no console errors", async ({ page }, info) => {
   const errors = await open(page);
-  await expect(page.getByText("Real engine data")).toBeVisible();
+  // the badge warns only about synthetic data; the engine export is the normal case
+  await expect(page.locator(".badge-data")).toHaveCount(0);
+  await expect(page.getByText("Real engine data")).toHaveCount(0);
   await expect(page.locator(".rows .row")).toHaveCount(10);
   await page.waitForTimeout(600);
   await page.screenshot({ path: `${SHOTS}/cockpit-${info.project.name}-start.png` });
@@ -351,4 +353,91 @@ test.describe("map zoom and pan", () => {
     await page.getByRole("button", { name: "Reset demo" }).click();
     await expect.poll(() => scale(page)).toBeCloseTo(1, 2);
   });
+});
+
+test.describe("compare picker", () => {
+  test("quick picks offer the current #1 and Loudoun, and search finds any county", async ({ page }) => {
+    await open(page);
+    const names = await topTen(page);
+    // view the #3 county
+    await page.locator(".row-btn").nth(2).click();
+    const trigger = page.getByRole("button", { name: "Compare with…" });
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: /Compare .+ with another county/ });
+    await expect(dialog).toBeVisible();
+    const first = dialog.getByRole("button", { name: new RegExp(`#1 · ${names[0]}`) });
+    await expect(first).toBeVisible();
+    await expect(first).toBeFocused(); // focus moves into the picker
+    await expect(dialog.getByRole("button", { name: /Loudoun, VA.*Industry benchmark/ })).toBeVisible();
+
+    // quick pick: the current leader
+    await first.click();
+    await expect(dialog).toBeHidden();
+    await expect(page).toHaveURL(/cmp=/);
+    await expect(page.getByRole("button", { name: new RegExp(`vs ${names[0]}`) })).toBeFocused();
+    await expect(page.locator(".cmp-legend")).toContainText(names[0]!);
+
+    // search by FIPS
+    await page.getByRole("button", { name: new RegExp(`vs ${names[0]}`) }).click();
+    await dialog.getByLabel("Any county").fill("17007");
+    await dialog.getByRole("button", { name: "Compare", exact: true }).click();
+    await expect(page.getByRole("button", { name: /vs Boone, IL/ })).toBeVisible();
+    await expect(page).toHaveURL(/cmp=17007/);
+
+    // the Loudoun quick pick
+    await page.getByRole("button", { name: /vs Boone, IL/ }).click();
+    await dialog.getByRole("button", { name: /Loudoun, VA/ }).click();
+    await expect(page).toHaveURL(/cmp=51107/);
+
+    // stop comparing
+    await page.getByRole("button", { name: /vs Loudoun, VA/ }).click();
+    await dialog.getByRole("button", { name: "Stop comparing" }).click();
+    await expect(page).not.toHaveURL(/cmp=/);
+    await expect(page.getByRole("button", { name: "Compare with…" })).toBeVisible();
+  });
+
+  test("the leader is offered the runner-up, and bad input explains itself", async ({ page }) => {
+    await open(page);
+    const names = await topTen(page);
+    await page.locator(".row-btn").first().click();
+    await page.getByRole("button", { name: "Compare with…" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByRole("button", { name: new RegExp(`#2 · ${names[1]}`) })).toBeVisible();
+    await expect(dialog.getByRole("button", { name: /#1 ·/ })).toHaveCount(0);
+    await dialog.getByLabel("Any county").fill("zzzz");
+    await dialog.getByRole("button", { name: "Compare", exact: true }).click();
+    await expect(dialog.getByRole("alert")).toHaveText(/No county matches/);
+    // Escape closes and returns focus to the trigger
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(page.getByRole("button", { name: "Compare with…" })).toBeFocused();
+  });
+
+  test("a press outside closes the picker", async ({ page }, info) => {
+    await open(page);
+    await page.locator(".row-btn").nth(1).click();
+    await page.getByRole("button", { name: "Compare with…" }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: `${SHOTS}/compare/picker-${info.project.name}.png` });
+    await page.locator(".topbar .brand").click();
+    await expect(page.getByRole("dialog")).toBeHidden();
+  });
+});
+
+test("pillar table headers and floor flags are not clipped", async ({ page }) => {
+  // Pottawatomie, KS against Grant, WA: Community sits below the floor
+  await open(page, "?preset=balanced&c=20149&cmp=53025");
+  await expect(page.locator(".contrib")).toBeVisible();
+  const heads = await page.$$eval(".contrib thead th", (ths) =>
+    ths.map((t) => ({ text: t.textContent, fits: t.scrollWidth <= t.clientWidth })),
+  );
+  for (const h of heads) expect(h, `${h.text} overflows its column`).toEqual({ text: h.text, fits: true });
+  const flags = page.locator(".contrib .pillar-flag");
+  if (await flags.count()) {
+    const clipped = await flags.evaluateAll((els) => els.filter((e) => e.scrollWidth > e.clientWidth).length);
+    expect(clipped).toBe(0);
+    await expect(flags.first()).toHaveText("Below floor");
+  }
 });

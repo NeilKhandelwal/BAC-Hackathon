@@ -199,8 +199,16 @@ map, finding, controls.
   the outcome bar is a separate button laid over its lower line.
 - **Evidence row:** pillar marker, metric label, observed value with unit,
   national percentile, source. A missing value prints "No data."
-- **Badge:** "Synthetic data" in `--p-energy` text on a white panel with a
-  1px border. It's always visible while fixture data is active.
+- **Badge:** "Synthetic data" in `--warn` text on a white panel with a 1px
+  border, visible only while fixture data is active. Real engine data, the
+  normal case, shows no badge.
+- **Compare picker:** a "Compare with…" button in the finding panel header
+  opens a small dialog. Quick picks offer the current #1 (or the runner-up
+  when the viewed county leads) and Loudoun, VA as the industry benchmark;
+  below them, a search takes any county name or FIPS. While comparing, the
+  button reads "vs County, ST" beside a dashed swatch that matches the
+  comparison outline on the map, and the dialog adds "Stop comparing".
+  Escape or a press outside closes it.
 
 No cards inside cards. Areas are separated by rules and whitespace, not
 shadows. The only shadow is the drawer at narrow widths: `0 -6px 20px
