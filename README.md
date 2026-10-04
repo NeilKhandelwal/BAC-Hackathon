@@ -7,9 +7,9 @@ be rerun with new conditions, new data, or a new region.
 ## Current result
 
 The balanced preset scores all 3,109 counties in the contiguous US for a
-300 MW campus. 1,565 counties pass the hard gates and 912 pass the pillar
-floor. The top five are Grant, WA (63.7), Wayne, TN (63.2), Whitman, WA
-(63.1), Mayes, OK (62.2), and Scott, IA (62.1).
+300 MW campus. 1,565 counties pass the hard gates and 883 pass the pillar
+floor. Grant, WA (63.70) and Whitman, WA (63.69) are level at the top, which
+is a tie. Benton, WA (62.69), Mayes, OK (62.03), and Payne, OK (61.97) follow.
 
 The deck features Grant County, WA. The case for it, and its limits, are in
 `research/impact.md`, `research/risk.md`, and `research/implementation.md`.
