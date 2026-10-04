@@ -6,14 +6,13 @@ Writes PNGs next to this file.
 
 Usage: python docs/figures/make_figures.py [--featured 53025]
 
-pick_story() also reads results/balanced.csv at tag data-freeze-2026-10-03
-through git, for the seven-pillar ranking the team started from.
+pick_story() also reads docs/figures/freeze_balanced_ranks.csv, the ranks from
+results/balanced.csv at tag data-freeze-2026-10-03 (the seven-pillar ranking the
+team started from), and global_table() reads results/global_balanced.csv.
 """
 import argparse
 import copy
-import io
 import json
-import subprocess
 import sys
 from pathlib import Path
 
@@ -275,9 +274,11 @@ def impact_compare(counties, featured="53025", baseline="51107"):
 def pick_story(df, conditions, pillars, counties):
     """How the pick changed: the seven-pillar ranking at the freeze tag, the same engine after the
     Massachusetts policy correction, and the eight-pillar engine with cost as its own pillar."""
-    frozen = pd.read_csv(io.StringIO(subprocess.run(["git", "show", f"{FREEZE_TAG}:results/balanced.csv"], cwd=ROOT,
-                                                    capture_output=True, text=True, check=True).stdout),
-                         dtype={"fips": str}).set_index("fips")["rank"]
+    path = OUT / "freeze_balanced_ranks.csv"
+    if not path.exists():
+        sys.exit(f"missing {path}: the ranks from results/balanced.csv at tag {FREEZE_TAG}. Restore it with "
+                 f"git show {FREEZE_TAG}:results/balanced.csv, keeping fips, county_name, state, rank, composite.")
+    frozen = pd.read_csv(path, dtype={"fips": str}).set_index("fips")["rank"]
     seven = copy.deepcopy(pillars)
     seven["grid_infrastructure"] = pillars["grid_infrastructure"] + pillars["cost"]
     del seven["cost"]
@@ -313,6 +314,74 @@ def pick_story(df, conditions, pillars, counties):
     ax.set_title("How the pick changed: balanced preset rank at each step", loc="left", color=INK)
     save(fig, "pick_story.png")
     return out
+
+
+def horizon_2050(featured, baseline="51107"):
+    """Cooling degree days and days above 95F, today and 2050 (RCP 8.5), two panels with their own axes."""
+    d = pd.read_parquet(TABLE).set_index("fips")
+    fips = [featured, baseline]
+    names = [f"{d.loc[f, 'county_name']}, {d.loc[f, 'state']}" for f in fips]
+    panels = (("Cooling degree days", "cdd_hist", "cdd_2050_rcp85", "{:,.0f}"),
+              ("Days above 95°F", "days_above_95f_hist", "days_above_95f_2050_rcp85", "{:,.1f}"))
+    today_c, later_c = BLUE_RAMP[2], BLUE_RAMP[5]  # one hue, light for today, dark for 2050
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5.6))
+    out = {}
+    for ax, (title, now_col, later_col, fmt) in zip(axes, panels):
+        now = [float(d.loc[f, now_col]) for f in fips]
+        later = [float(d.loc[f, later_col]) for f in fips]
+        out[title] = {n: {"today": round(a, 1), "2050": round(b, 1)} for n, a, b in zip(names, now, later)}
+        x = range(len(fips))
+        ax.bar([i - 0.19 for i in x], now, width=0.36, color=today_c, label="Today")
+        ax.bar([i + 0.19 for i in x], later, width=0.36, color=later_c, label="2050, RCP 8.5")
+        top = max(later)
+        for i, (a, b) in enumerate(zip(now, later)):
+            ax.text(i - 0.19, a + top * 0.015, fmt.format(a), ha="center", va="bottom", color=INK, fontsize=14)
+            ax.text(i + 0.19, b + top * 0.015, fmt.format(b), ha="center", va="bottom", color=INK, fontsize=14)
+        ax.set_xticks(list(x), names)
+        ax.set_ylim(0, top * 1.18)
+        ax.yaxis.grid(True, color=GRID, linewidth=0.8)
+        ax.set_axisbelow(True)
+        ax.spines["left"].set_visible(False)
+        ax.tick_params(axis="x", length=0)
+        ax.set_title(title, loc="left", color=INK)
+    axes[0].legend(frameon=False, loc="upper left")
+    fig.suptitle("Mid-century (CMRA, LOCA-downscaled CMIP5, 2036 to 2065) against the historical baseline",
+                 x=0.01, ha="left", color=INK_2, fontsize=13, y=1.01)
+    fig.tight_layout()
+    save(fig, "horizon_2050.png")
+    return out
+
+
+def global_table(us_row="USA"):
+    """Global country run: the top 10 plus the United States, from results/global_balanced.csv."""
+    g = pd.read_csv(ROOT / "results/global_balanced.csv")
+    report = json.loads((ROOT / "results/global_balanced_report.json").read_text())
+    show = pd.concat([g.head(10), g[g.iso3 == us_row]])
+    rows = [[int(r["rank"]), r.country, f"{r.composite:.1f}", f"{r.robustness:.0%}", "" if r.floor_ok else "fails"]
+            for _, r in show.iterrows()]
+    fig, ax = plt.subplots(figsize=(11, 6.2))
+    ax.set_axis_off()
+    t = ax.table(cellText=rows, colLabels=["Rank", "Country", "Composite", "Robustness", "Floor"], loc="center",
+                 cellLoc="left", colLoc="left", colWidths=[0.1, 0.36, 0.17, 0.19, 0.14])
+    t.auto_set_font_size(False)
+    t.set_fontsize(15)
+    t.scale(1, 1.7)
+    for (row, col), cell in t.get_celld().items():
+        cell.set_edgecolor(GRID)
+        cell.set_linewidth(0.8)
+        cell.visible_edges = "B"
+        if row == 0:
+            cell.set_text_props(color=INK_2, weight="bold")
+        elif row == len(rows):  # the United States row, set apart
+            cell.set_text_props(color=INK, weight="bold")
+    ax.set_title(f"Same engine, {report['counties']} countries: {report['passed']} pass the gates, "
+                 f"{report['floor_ok']} pass the floor", loc="left", color=INK)
+    save(fig, "global_table.png")
+    us = g[g.iso3 == us_row].iloc[0]
+    return {"countries": report["counties"], "passed": report["passed"], "floor_ok": report["floor_ok"],
+            "pillars": report["pillars"], "top3": list(g.country.head(3)),
+            "us": {"rank": int(us["rank"]), "of": len(g), "composite": round(float(us.composite), 1),
+                   "floor_ok": bool(us.floor_ok), "pillar_climate_resilience": round(float(us.pillar_climate_resilience), 1)}}
 
 
 def framework(conditions, report):
@@ -366,7 +435,7 @@ def weight_sensitivity(df, conditions, pillars, featured, top_n=10):
                                   for p, w in conditions["weights"].items()}}
 
 
-def facts(df, conditions, pillars, ranked, excluded, report, featured, story):
+def facts(df, conditions, pillars, ranked, excluded, report, featured, story, extra):
     """Every number the deck cites, written to facts.json so speaker notes can point at one committed file."""
     d = df.set_index("fips")
     name = lambda f: f"{d.loc[f, 'county_name']}, {d.loc[f, 'state']}"  # noqa: E731
@@ -433,6 +502,7 @@ def facts(df, conditions, pillars, ranked, excluded, report, featured, story):
     out["grant_ranges"] = grant_ranges(table, featured)
     out["energy_cost_musd_state_average"] = {impact(f, table=table)["county"]: round(energy_cost_musd(table, f))
                                              for f in (featured, "53075", "47181", "25003", "51107")}
+    out.update(extra)
     (OUT / "facts.json").write_text(json.dumps(out, indent=1, default=str))
     print(OUT / "facts.json")
 
@@ -457,7 +527,8 @@ def main():
     story = pick_story(df, conditions, pillars, {f: names[f] for f in list(dict.fromkeys([args.featured, "25003", "53075"]))[:3]})
     impact_compare([args.featured, "53075", "47181", "25003"], featured=args.featured)
     framework(conditions, report)
-    facts(df, conditions, pillars, ranked, excluded, report, args.featured, story)
+    extra = {"horizon_2050_figure": horizon_2050(args.featured), "global": global_table()}
+    facts(df, conditions, pillars, ranked, excluded, report, args.featured, story, extra)
 
 
 if __name__ == "__main__":
