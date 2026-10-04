@@ -131,3 +131,42 @@ parentheses):
   SMAA top-10 share with the column scored; and three options with their
   effects: (a) score it, (b) use it as a gate, as `docs/schema.md`
   describes, (c) context only.
+
+### 2026-10-04 05:42 UTC, Phase 2 adapters done; Phase 3 measured
+
+**Phase 2.**
+- `etl/adapters/pad_us.py` builds `pct_protected` (GAP 1-2) and
+  `pct_protected_gap1to3` from the USGS county table.
+- Checks built in: keys unique, all 3,109 counties matched, and USGS total
+  area within 5% of Census 2024 land plus water. Every county is within 2%
+  except Emporia city, VA, at 4.4%. That's a boundary-vintage difference;
+  its neighbor Greensville County is within 0.1%.
+- The download URL responds (HTTP 200, 4,086,817 bytes).
+- Both new columns' schema rows are in `docs/schema.md`, along with the
+  "screen, not a siting check" note.
+
+**Phase 3 measurement** (`scratch/sensitive_land/measure.py`, output in
+`scratch/sensitive_land/out/`):
+
+| | Committed (c: context only) | a: scored in the land pillar |
+| --- | --- | --- |
+| #1 | Grant WA | Whitman WA (Grant 0.87 behind) |
+| Grant, Clark, Franklin, Berkshire | 1, 7, 952, 1,047 | 4, 5, 1,011, 1,102 |
+| Grant SMAA rank-1 / top-10 (floor on) | 11.5% / 50.5% | 0.2% / 14.0% |
+| Clark SMAA rank-1 / top-10 | 6.9% / 30.6% | 8.3% / 31.9% |
+
+- **New top 10 under (a):** Whitman WA, Scott IA, Mayes OK, Grant WA, Clark
+  WA, Wayne TN, Payne OK, Washington AR, Grady OK, Benton WA.
+- **None of them has much protected or tribal land.** The highest GAP 1-2
+  shares are Grant 12.8% and Benton WA 9.9%. Every tribal share is 0;
+  Oklahoma statistical areas are excluded by definition.
+- **Land-only shares** barely differ from the total-area shares for these
+  counties. Grant is 13.4% land-only.
+- **Option b, a gate.** A 50% cap excludes 4 gate-passing counties (14
+  nationally); a 25% cap excludes 30 (124 nationally). Grant passes both,
+  and the top 10 is unchanged.
+- **Option a also cuts Grant's robustness hard.** SMAA top-10 falls from
+  50.5% to 14.0%. Grant is no longer among the most robust counties under
+  this scoring.
+
+The ship decision waits on Phase 1, per the decision rule.

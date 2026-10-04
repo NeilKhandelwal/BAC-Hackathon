@@ -114,10 +114,14 @@ inland, the ETL writes 0. "Insufficient Data" stays null.
 | `pct_developed` | float 0-1 | NLCD 2021 via NHGIS, or NLCD 2024 zonal | stretch | classes 21-24 |
 | `pct_cropland` | float 0-1 | NLCD | stretch | classes 81-82 |
 | `pct_forest_wetland` | float 0-1 | NLCD | stretch | classes 41-43, 90, 95 |
-| `pct_protected` | float 0-1 | USGS PAD-US GAP 1-2 | stretch | sensitive-area gate |
+| `pct_protected` | float 0-1 | USGS PAD-US 4.1 Summary Statistics, county table, GAP 1-2 acres over total county acres (`etl/adapters/pad_us.py`) | stretch | Scored in the land pillar when present (lower is better). Total area includes water, so lake and coastal counties read lower than a land-only share. Built and measured on `fix/sensitive-land`; not in the frozen table (see `docs/sensitive_land_log.md`). |
+| `pct_protected_gap1to3` | float 0-1 | same table, GAP 1-3 | stretch | context, not scored. GAP 3 is multiple-use land (most national forest and BLM land). |
+| `tribal_land_share` | float 0-1 | Census TIGER/Line 2024 AIANNH, classes D2, D3, D5, D8, unioned and intersected with county polygons in EPSG:5070 (`etl/adapters/tribal_lands.py`) | stretch | context, not scored. Area inside federally recognized reservations and off-reservation trust land; not tribal ownership. Excludes statistical areas such as Oklahoma tribal statistical areas. |
 
 Until the stretch columns land, land availability uses `pop_density_per_sqkm`
-and `land_area_sqkm` only.
+and `land_area_sqkm` only. County protected and tribal shares are a screen,
+not a siting check: a 150-acre campus can avoid protected land inside a
+county, so a parcel-level check belongs in feasibility.
 
 ## Community and economics
 
