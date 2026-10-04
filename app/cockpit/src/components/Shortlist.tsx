@@ -3,7 +3,8 @@ import type { CockpitData } from "../data/types";
 import type { RunResult } from "../engine/run";
 import type { Stability } from "../engine/rank";
 import type { RankChanges } from "../state/changes";
-import { fmtInt, fmtPct, fmtScore } from "../lib/format";
+import { fmtInt, fmtScore } from "../lib/format";
+import { CATEGORIES, OutcomeBar, outcomesOf, topNLabel } from "./OutcomeBar";
 
 interface Props {
   data: CockpitData;
@@ -52,7 +53,6 @@ export function Shortlist({ data, result, stability, stabilityStale, changes, se
     prevTops.current = next;
   }, [top.join(",")]);
 
-  const samples = stability?.samples ?? 0;
 
   return (
     <section className="shortlist" aria-labelledby="shortlist-h">
@@ -74,8 +74,8 @@ export function Shortlist({ data, result, stability, stabilityStale, changes, se
         <span>Rank</span>
         <span>County</span>
         <span className="num">Score</span>
-        <span>Rank stability</span>
       </div>
+      <StabilityLegend stability={stability} topN={result.topN} />
       {top.length === 0 ? (
         <EmptyShortlist data={data} result={result} />
       ) : (
@@ -83,8 +83,8 @@ export function Shortlist({ data, result, stability, stabilityStale, changes, se
           {top.map((i, r) => {
             const d = changes.delta.get(i);
             const isNew = changes.entered.has(i);
-            const share = stability?.share[i];
-            const tiers = stability?.tiers.get(i);
+            const o = outcomesOf(stability, i);
+            const name = `${data.counties.name[i]}, ${data.counties.state[i]}`;
             return (
               <li key={i} data-idx={i} className={`row${selected === i ? " is-selected" : ""}${compare === i ? " is-compare" : ""}`}>
                 <button className="row-btn" onClick={() => onSelect(i)} aria-pressed={selected === i}>
@@ -109,14 +109,17 @@ export function Shortlist({ data, result, stability, stabilityStale, changes, se
                     </span>
                   </span>
                   <span className="score num">{fmtScore(result.comp[i]!)}</span>
-                  <PillarStack result={result} i={i} />
-                  <span className={`stab${stabilityStale ? " is-stale" : ""}`}>
-                    {tiers ? <Barcode tiers={tiers} /> : <span className="barcode-empty" />}
-                    <span className="stab-share">
-                      {share === undefined || Number.isNaN(share) ? "—" : `Top 10 in ${fmtPct(share)}`}
-                    </span>
-                  </span>
                 </button>
+                <span className={`stab${stabilityStale ? " is-stale" : ""}`}>
+                  {o ? (
+                    <OutcomeBar o={o} county={name} above={r >= 6} onActivate={() => onSelect(i)} />
+                  ) : (
+                    <span className={`outcome-empty${stability ? "" : " is-pending"}`} aria-hidden />
+                  )}
+                  <span className={`stab-share${o ? "" : " is-muted"}`}>
+                    {o ? topNLabel(o.top3 + o.ranks4to10, o.samples, result.topN) : stability ? "Not computed" : "Computing"}
+                  </span>
+                </span>
               </li>
             );
           })}
@@ -141,12 +144,6 @@ export function Shortlist({ data, result, stability, stabilityStale, changes, se
           </ul>
         </div>
       )}
-      {stability && (
-        <p className="fine stab-def">
-          {stability.warning ??
-            `Rank stability: share of ${fmtInt(samples)} weight scenarios, sampled around the stated weights, that rank the county top ${result.topN}. Barcodes show the same ${stability.barcodeSamples} scenarios in order. Dark: top 3. Mid: 4 to 10. Pale: outside.`}
-        </p>
-      )}
     </section>
   );
 }
@@ -159,34 +156,23 @@ function Arrow({ up }: { up: boolean }) {
   );
 }
 
-export function Barcode({ tiers, tall = false }: { tiers: Uint8Array; tall?: boolean }) {
-  const cw = 3;
-  const gap = 1;
-  const h = tall ? 32 : 18;
-  const w = tiers.length * (cw + gap) - gap;
+function StabilityLegend({ stability, topN }: { stability: Stability | null; topN: number }) {
+  if (stability?.warning) return <p className="stab-legend fine">{stability.warning}</p>;
   return (
-    <svg className={`barcode${tall ? " is-tall" : ""}`} viewBox={`-1 -1 ${w + 2} ${h + 2}`} preserveAspectRatio="none" aria-hidden>
-      <rect x={-0.5} y={-0.5} width={w + 1} height={h + 1} className="barcode-frame" vectorEffect="non-scaling-stroke" />
-      {Array.from(tiers, (t, k) => (
-        <rect key={k} x={k * (cw + gap)} y={0} width={cw} height={h} className={`bar t${t}`} />
-      ))}
-    </svg>
-  );
-}
-
-function PillarStack({ result, i }: { result: RunResult; i: number }) {
-  // Each pillar's share of the composite: weight x score over available weight.
-  let den = 0;
-  for (const p of result.hs.pillars) if (!Number.isNaN(result.hs.pillarScore[p]![i]!)) den += result.weights[p]!;
-  return (
-    <span className="stack" aria-hidden>
-      {result.hs.pillars.map((p) => {
-        const s = result.hs.pillarScore[p]![i]!;
-        if (Number.isNaN(s) || den === 0) return null;
-        const c = (result.weights[p]! * s) / den; // points of composite
-        return <span key={p} className="stack-seg" style={{ width: `${c}%`, background: `var(--p-${p}, var(--ink-2))` }} />;
-      })}
-    </span>
+    <p className="stab-legend">
+      <span className="stab-legend-title">
+        Rank stability
+        {stability ? ` · rank in ${fmtInt(stability.samples)} weight scenarios` : ""}
+      </span>
+      <span className="stab-legend-keys">
+        {CATEGORIES.map((c) => (
+          <span key={c.key} className="stab-key">
+            <span className={`outcome-sw ${c.cls}`} aria-hidden />
+            {c.key === "outside" ? `Outside top ${topN}` : c.key === "ranks4to10" ? `Ranks 4–${topN}` : c.label}
+          </span>
+        ))}
+      </span>
+    </p>
   );
 }
 

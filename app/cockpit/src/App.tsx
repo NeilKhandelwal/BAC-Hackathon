@@ -72,10 +72,9 @@ function Cockpit({ data, topo }: { data: CockpitData; topo: Topology }) {
   // Rank stability is heavier; it follows the result after input settles.
   const [stab, setStab] = useState<{ for: RunResult; s: Stability } | null>(null);
   useEffect(() => {
-    const keep = [selected, compare].filter((x): x is number => x !== null);
-    const t = window.setTimeout(() => setStab({ for: result, s: stabilityFor(result, preset.robustness, keep) }), 140);
+    const t = window.setTimeout(() => setStab({ for: result, s: stabilityFor(result, preset.robustness) }), 140);
     return () => window.clearTimeout(t);
-  }, [result, selected, compare, preset]);
+  }, [result, preset]);
 
   // Rank movement since the previous result.
   const prev = useRef<RunResult | null>(null);
@@ -98,7 +97,9 @@ function Cockpit({ data, topo }: { data: CockpitData; topo: Topology }) {
   };
   const onCompare = (i: number | null) => setView((v) => ({ ...v, compare: i === null ? null : data.counties.fips[i]! }));
 
+  const [resetCount, setResetCount] = useState(0);
   const onReset = () => {
+    setResetCount((n) => n + 1);
     const start = decode(data, `?preset=${DEMO_START.preset}`).view;
     prev.current = null;
     setChanges(NO_CHANGES);
@@ -140,6 +141,7 @@ function Cockpit({ data, topo }: { data: CockpitData; topo: Topology }) {
           compare={compare}
           onSelect={onSelect}
           coveredBelow={drawer && selected !== null ? (drawerOpen ? 0.5 : 0.08) : 0}
+          resetKey={resetCount}
         />
         <FindingPanel
           data={data}

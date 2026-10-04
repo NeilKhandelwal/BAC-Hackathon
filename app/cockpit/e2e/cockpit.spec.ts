@@ -15,9 +15,11 @@ async function open(page: Page, query = "?preset=balanced", ready = ".rows .row"
 
 const topTen = (page: Page) => page.locator(".row .who-name").allInnerTexts();
 
-test("loads with the real engine badge and no console errors", async ({ page }, info) => {
+test("loads real engine data without a data badge, and no console errors", async ({ page }, info) => {
   const errors = await open(page);
-  await expect(page.getByText("Real engine data")).toBeVisible();
+  // the badge warns only about synthetic data; the engine export is the normal case
+  await expect(page.locator(".badge-data")).toHaveCount(0);
+  await expect(page.getByText("Real engine data")).toHaveCount(0);
   await expect(page.locator(".rows .row")).toHaveCount(10);
   await page.waitForTimeout(600);
   await page.screenshot({ path: `${SHOTS}/cockpit-${info.project.name}-start.png` });
@@ -189,4 +191,253 @@ test("nothing overflows or clips at this viewport", async ({ page }) => {
     return m;
   });
   expect(minFont).toBeGreaterThanOrEqual(12);
+});
+
+test.describe("rank stability outcome bars", () => {
+  test("replace the barcode and pillar strip, with a persistent legend", async ({ page }) => {
+    await open(page);
+    await expect(page.locator(".outcome-wrap .outcome")).toHaveCount(10);
+    await expect(page.locator(".barcode, svg.barcode, .barcode-empty")).toHaveCount(0);
+    await expect(page.locator(".stack, .stack-seg")).toHaveCount(0);
+    await expect(page.getByText(/Barcodes show/)).toHaveCount(0);
+    const legend = page.locator(".stab-legend");
+    await expect(legend).toBeVisible();
+    await expect(legend).toContainText("Top 3");
+    await expect(legend).toContainText("Ranks 4–10");
+    await expect(legend).toContainText("Outside top 10");
+    await expect(legend).toContainText("2,000 weight scenarios");
+    await expect(page.locator(".row .stab-share").first()).toHaveText(/^Top 10 in (\d+%|>99%|<1%)$/);
+  });
+
+  test("segments cover the whole bar and match the tooltip counts", async ({ page }) => {
+    await open(page);
+    await page.waitForTimeout(400);
+    const bars = page.locator(".row .outcome-wrap .outcome");
+    for (let k = 0; k < 10; k++) {
+      const bar = bars.nth(k);
+      const seg = await bar.evaluate((el) => {
+        const segs = [...el.querySelectorAll<HTMLElement>(".outcome-seg")];
+        const total = el.getBoundingClientRect().width;
+        const sum = segs.reduce((a, s) => a + s.getBoundingClientRect().width, 0);
+        return { total, sum, grow: segs.reduce((a, s) => a + Number(s.style.flexGrow), 0) };
+      });
+      expect(Math.abs(seg.sum - seg.total)).toBeLessThan(1); // segments fill 100% of the bar
+      expect(seg.grow).toBe(2000); // flex weights are the draw counts
+      const tipId = await bar.getAttribute("aria-describedby");
+      const rows = page.locator(`[id="${tipId}"] tbody tr`);
+      await expect(rows).toHaveCount(3);
+      const cells = await rows.evaluateAll((trs) =>
+        trs.map((tr) => [tr.querySelector("th")!.textContent!.trim(), ...[...tr.querySelectorAll("td")].map((td) => td.textContent!.trim())]),
+      );
+      expect(cells.map((c) => c[0])).toEqual(["Top 3", "Ranks 4–10", "Outside top 10"]);
+      const counts = cells.map((c) => Number(c[1]!.replace(/,/g, "")));
+      const pcts = cells.map((c) => parseFloat(c[2]!));
+      expect(counts.reduce((a, b) => a + b, 0)).toBe(2000);
+      expect(Math.round(pcts.reduce((a, b) => a + b, 0) * 10)).toBe(1000);
+      expect(counts[0]!).toBeLessThanOrEqual(counts[0]! + counts[1]!); // top 3 within top 10
+      expect(seg.grow).toBe(counts.reduce((a, b) => a + b, 0));
+    }
+  });
+
+  test("tooltip opens on hover, keyboard focus, and tap", async ({ page }, info) => {
+    await open(page);
+    const bar = page.locator(".row .outcome-wrap .outcome").first();
+    await expect(bar).toBeVisible();
+    const tip = page.locator(`[id="${await bar.getAttribute("aria-describedby")}"]`);
+    await expect(tip).toHaveAttribute("role", "tooltip");
+    await expect(tip).toBeHidden();
+    // hover
+    await bar.hover();
+    await expect(tip).toBeVisible();
+    await expect(tip).toContainText("Rank across 2,000 weight scenarios");
+    await page.mouse.move(5, 5);
+    await expect(tip).toBeHidden();
+    // keyboard: Tab from the row button reaches the bar
+    await page.locator(".row-btn").first().focus();
+    await page.keyboard.press("Tab");
+    await expect(bar).toBeFocused();
+    await expect(tip).toBeVisible();
+    await expect(bar).toHaveAttribute("aria-label", /Rank stability for .+: top 10 in/);
+    await page.keyboard.press("Escape");
+    await expect(tip).toBeHidden();
+    await page.locator("#county-search").focus();
+    // tap: the tooltip stays open and the county is selected, as a row click always did
+    await bar.click();
+    await page.mouse.move(5, 5);
+    await expect(tip).toBeVisible();
+    await expect(page.locator(".finding-head h2")).toBeVisible();
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: `${SHOTS}/stability/tooltip-${info.project.name}.png` });
+    await page.locator(".topbar .brand").click();
+    await expect(tip).toBeHidden();
+  });
+
+  test("clicking the label still selects the county", async ({ page }) => {
+    await open(page);
+    const name = (await topTen(page))[1]!;
+    // the label lets clicks through to the row button underneath
+    await page.locator(".row .stab-share").nth(1).click({ force: true });
+    await expect(page.locator(".finding-head h2")).toContainText(name);
+  });
+
+  test("unavailable stability renders cleanly", async ({ page }) => {
+    // On the committed engine export these gates leave 8 counties, fewer than
+    // the top 10, so rank stability cannot be computed.
+    await open(page, "?preset=balanced&g=min_population:50000,min_fiber_share_locations:0.6,max_grid_co2_lb_mwh:400");
+    const rows = await page.locator(".rows .row").count();
+    expect(rows).toBeGreaterThan(0);
+    expect(rows).toBeLessThanOrEqual(10);
+    await expect(page.locator(".stab-legend")).toContainText("not computed");
+    await expect(page.locator(".row .outcome-empty")).toHaveCount(rows);
+    await expect(page.locator(".row .outcome-wrap")).toHaveCount(0); // no tooltip trigger without data
+    await expect(page.locator(".row .stab-share").first()).toHaveText("Not computed");
+  });
+});
+
+test.describe("map zoom and pan", () => {
+  const scale = (page: Page) =>
+    page.locator(".map .zoom").evaluate((g) => new DOMMatrixReadOnly(getComputedStyle(g).transform).a);
+
+  test("wheel and pinch zoom around the pointer, drag pans, buttons step", async ({ page }) => {
+    await open(page);
+    const map = page.locator(".map");
+    const box = (await map.boundingBox())!;
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+    expect(await scale(page)).toBeCloseTo(1, 3);
+    await expect(page.getByRole("button", { name: "Zoom out" })).toBeDisabled();
+
+    // scroll wheel zooms in and the page does not scroll
+    await page.mouse.move(cx, cy);
+    await page.mouse.wheel(0, -400);
+    await expect.poll(() => scale(page)).toBeGreaterThan(1.5);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(page.getByRole("button", { name: "Show all counties" })).toBeVisible();
+
+    // trackpad pinch arrives as ctrl+wheel
+    const before = await scale(page);
+    await page.keyboard.down("Control");
+    await page.mouse.wheel(0, -60);
+    await page.keyboard.up("Control");
+    await expect.poll(() => scale(page)).toBeGreaterThan(before);
+
+    // drag pans, and the release does not select a county
+    const t0 = await page.locator(".map .zoom").evaluate((g) => new DOMMatrixReadOnly(getComputedStyle(g).transform).e);
+    await page.mouse.move(cx, cy);
+    await page.mouse.down();
+    await page.mouse.move(cx + 120, cy + 40, { steps: 6 });
+    await page.mouse.up();
+    const t1 = await page.locator(".map .zoom").evaluate((g) => new DOMMatrixReadOnly(getComputedStyle(g).transform).e);
+    expect(t1).not.toBeCloseTo(t0, 0);
+    await expect(page.locator(".finding-head")).toHaveCount(0);
+
+    // a plain click still selects
+    await page.mouse.click(cx, cy);
+    await expect.poll(() => new URL(page.url()).searchParams.get("c")).not.toBeNull();
+
+    // buttons step the zoom and stop at the limits
+    await page.getByRole("button", { name: "Show all counties" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1, 2);
+    await page.getByRole("button", { name: "Zoom in" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1.6, 1);
+    await page.getByRole("button", { name: "Zoom out" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1, 2);
+    await expect(page.getByRole("button", { name: "Zoom out" })).toBeDisabled();
+  });
+
+  test("Reset demo returns the map to the full view", async ({ page }) => {
+    await open(page);
+    await page.getByRole("button", { name: "Zoom in" }).click();
+    await page.getByRole("button", { name: "Zoom in" }).click();
+    await expect.poll(() => scale(page)).toBeGreaterThan(2);
+    await page.getByRole("button", { name: "Reset demo" }).click();
+    await expect.poll(() => scale(page)).toBeCloseTo(1, 2);
+  });
+});
+
+test.describe("compare picker", () => {
+  test("quick picks offer the current #1 and Loudoun, and search finds any county", async ({ page }) => {
+    await open(page);
+    const names = await topTen(page);
+    // view the #3 county
+    await page.locator(".row-btn").nth(2).click();
+    const trigger = page.getByRole("button", { name: "Compare with…" });
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: /Compare .+ with another county/ });
+    await expect(dialog).toBeVisible();
+    const first = dialog.getByRole("button", { name: new RegExp(`#1 · ${names[0]}`) });
+    await expect(first).toBeVisible();
+    await expect(first).toBeFocused(); // focus moves into the picker
+    await expect(dialog.getByRole("button", { name: /Loudoun, VA.*Industry benchmark/ })).toBeVisible();
+
+    // quick pick: the current leader
+    await first.click();
+    await expect(dialog).toBeHidden();
+    await expect(page).toHaveURL(/cmp=/);
+    await expect(page.getByRole("button", { name: new RegExp(`vs ${names[0]}`) })).toBeFocused();
+    await expect(page.locator(".cmp-legend")).toContainText(names[0]!);
+
+    // search by FIPS
+    await page.getByRole("button", { name: new RegExp(`vs ${names[0]}`) }).click();
+    await dialog.getByLabel("Any county").fill("17007");
+    await dialog.getByRole("button", { name: "Compare", exact: true }).click();
+    await expect(page.getByRole("button", { name: /vs Boone, IL/ })).toBeVisible();
+    await expect(page).toHaveURL(/cmp=17007/);
+
+    // the Loudoun quick pick
+    await page.getByRole("button", { name: /vs Boone, IL/ }).click();
+    await dialog.getByRole("button", { name: /Loudoun, VA/ }).click();
+    await expect(page).toHaveURL(/cmp=51107/);
+
+    // stop comparing
+    await page.getByRole("button", { name: /vs Loudoun, VA/ }).click();
+    await dialog.getByRole("button", { name: "Stop comparing" }).click();
+    await expect(page).not.toHaveURL(/cmp=/);
+    await expect(page.getByRole("button", { name: "Compare with…" })).toBeVisible();
+  });
+
+  test("the leader is offered the runner-up, and bad input explains itself", async ({ page }) => {
+    await open(page);
+    const names = await topTen(page);
+    await page.locator(".row-btn").first().click();
+    await page.getByRole("button", { name: "Compare with…" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByRole("button", { name: new RegExp(`#2 · ${names[1]}`) })).toBeVisible();
+    await expect(dialog.getByRole("button", { name: /#1 ·/ })).toHaveCount(0);
+    await dialog.getByLabel("Any county").fill("zzzz");
+    await dialog.getByRole("button", { name: "Compare", exact: true }).click();
+    await expect(dialog.getByRole("alert")).toHaveText(/No county matches/);
+    // Escape closes and returns focus to the trigger
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(page.getByRole("button", { name: "Compare with…" })).toBeFocused();
+  });
+
+  test("a press outside closes the picker", async ({ page }, info) => {
+    await open(page);
+    await page.locator(".row-btn").nth(1).click();
+    await page.getByRole("button", { name: "Compare with…" }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: `${SHOTS}/compare/picker-${info.project.name}.png` });
+    await page.locator(".topbar .brand").click();
+    await expect(page.getByRole("dialog")).toBeHidden();
+  });
+});
+
+test("pillar table headers and floor flags are not clipped", async ({ page }) => {
+  // Pottawatomie, KS against Grant, WA: Community sits below the floor
+  await open(page, "?preset=balanced&c=20149&cmp=53025");
+  await expect(page.locator(".contrib")).toBeVisible();
+  const heads = await page.$$eval(".contrib thead th", (ths) =>
+    ths.map((t) => ({ text: t.textContent, fits: t.scrollWidth <= t.clientWidth })),
+  );
+  for (const h of heads) expect(h, `${h.text} overflows its column`).toEqual({ text: h.text, fits: true });
+  const flags = page.locator(".contrib .pillar-flag");
+  if (await flags.count()) {
+    const clipped = await flags.evaluateAll((els) => els.filter((e) => e.scrollWidth > e.clientWidth).length);
+    expect(clipped).toBe(0);
+    await expect(flags.first()).toHaveText("Below floor");
+  }
 });
