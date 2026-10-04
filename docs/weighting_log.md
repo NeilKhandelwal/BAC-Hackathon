@@ -967,3 +967,25 @@ Franklin as conditional alternatives:
 - **Franklin** wins nationally if NY's exemption applies.
 - **Exempt-state counties** (Chesterfield SC, Kootenai ID) rank above all
   three, but on unverified flags: verify before switching.
+
+### 2026-10-04 04:51 UTC, audit of revision 1 and presentation fixes
+
+Neil's orchestrator session audited revision 1 at `6f1d766`. Every number
+it checked reproduced: the 27 non-negative share values; the
+time-to-power, cooling, hazard, and parcel-rate ranks; and Grant's
+break-even delays. It kept the recommendation (feature Grant) and asked
+for three presentation changes, now made in `docs/weighting.md`:
+
+1. The recommendation table no longer prints national ranks alone. It
+   shows costs. The text gives both bracketing cases: 365, 407, and 410
+   with other states' refreshes exempt (base); 14, 19, and 22 with
+   refreshes taxed everywhere. The Grant-Clark gap is $46M in both.
+2. The $4B tax base and the 5-year refresh are marked as unsourced
+   assumptions from the revision request.
+3. One paragraph explains that the $10B hazard asset value (whole
+   campus) and the $4B tax base (taxable equipment per purchase cycle)
+   measure different things.
+
+The audit also noted that `main` moved 28 commits past this branch's base
+(`1575003`), including a queue-semantics correction and a rebuilt county
+table. A drift check against current `main` follows.

@@ -20,11 +20,26 @@ other over 25 years at a $190/t carbon price. The dollar model can't
 separate them. The differences sit inside two uncertainties: the sales tax
 rate at Clark's parcel, and how long Grant waits for power.
 
-| County | 25-year cost at $190/t | Gate-passing rank |
-| --- | --- | --- |
-| Clark, WA (unincorporated, 8.0% sales tax) | $4.405B | 365 |
-| Grant, WA (12-month delay, from its own evidence) | $4.452B | 407 |
-| Franklin, NY (taxed) | $4.454B | 410 |
+| County | 25-year cost at $190/t |
+| --- | --- |
+| Clark, WA (unincorporated, 8.0% sales tax) | $4.405B |
+| Grant, WA (12-month delay, from its own evidence) | $4.452B |
+| Franklin, NY (taxed) | $4.454B |
+
+These costs and the gaps between the three don't depend on how other states
+are treated. Their national ranks do, and two treatments bracket them:
+
+- **Other states' refreshes exempt (base):** every state with an exemption
+  flag in the repo's hand-coded `data/processed/state_policy.csv` exempts
+  both initial and refresh purchases for 25 years. That's 91% of
+  gate-passing counties, and the flags are mostly medium or low confidence.
+  Clark, Grant, and Franklin rank 365th, 407th, and 410th.
+- **Refreshes taxed everywhere:** every state taxes refreshes the way
+  Washington's statute now does. The three rank 14th, 19th, and 22nd, and
+  Umatilla, OR ranks first.
+
+The Grant-Clark gap is $46M in both. Read the three-way comparison as solid
+and the national ranks as unverified.
 
 Grant is featured because it's the only one of the three whose power
 timeline and tax status are both sourced:
@@ -140,6 +155,18 @@ rural rates.
 - **Exempt counties** pay 0 on exempt purchases.
 - **Size:** at 8% and a 5-year refresh, a fully taxed county pays $910M
   in present value. Grant pays $604M on refreshes only.
+- **The tax base is an assumption.** $4B per purchase and a 5-year
+  refresh were set in the revision request. Neither is sourced. The refresh
+  cycle has 4- and 6-year sensitivities; the $4B base has none. Together
+  they drive a swing of up to about $1B per county, and sales tax is the
+  second-largest variance component at $0 carbon (0.24).
+- **How the tax base relates to the hazard asset value.** The hazard
+  component uses a $10B asset value: the whole campus exposed to physical
+  loss, including the building, cooling, and electrical plant. The tax
+  component uses $4B: the taxable IT and electrical equipment bought in one
+  purchase cycle, a subset of capex that is bought again at each refresh.
+  They measure different things, so they don't contradict. Both are
+  assumptions.
 - **Pillar:** the component maps to permitting, where the engine scores
   the exemption inside `state_policy_risk`. That mapping is a choice; it
   could also map to cost.
@@ -197,6 +224,10 @@ stand in for physical units:
   the dollar ranking.
 
 ## Neil's review items
+
+National ranks in this section use the base tax case, where other states'
+refreshes are exempt. Compare the three counties with each other, not with
+the national list.
 
 ### Variance shares that can't go negative
 
@@ -290,7 +321,7 @@ Top 10 and the ranks of four counties among the 1,565 gate passers:
 | Method | Top 10 | Grant | Clark | Franklin | Berkshire |
 | --- | --- | --- | --- | --- | --- |
 | Balanced | Grant WA, Wayne TN, Whitman WA, Mayes OK, Benton WA, Scott IA, Clark WA, Scott TN, Grady OK, Adair OK | 1 | 7 | 986 | 1,013 |
-| Monetized, $190/t with tax | Chesterfield SC, Kootenai ID, Marlboro SC, Florence SC, Aiken SC, Emery UT, El Paso TX, Grayson TX, Bossier LA, Houston TX | 407 | 365 | 410 | 1,552 |
+| Monetized, $190/t with tax (other states' refreshes exempt) | Chesterfield SC, Kootenai ID, Marlboro SC, Florence SC, Aiken SC, Emery UT, El Paso TX, Grayson TX, Bossier LA, Houston TX | 407 | 365 | 410 | 1,552 |
 | SMAA (rank-1, floor on) | Whitman WA, Grant WA, Wayne TN, Trumbull OH, Clark WA, Grady OK, Scott IA, Luzerne PA, Rock Island IL, Clearfield PA | 2 | 5 | never top 10 | never top 10 |
 | CRITIC | Washington OR, Rock Island IL, Dakota MN, Multnomah OR, St. Joseph IN, Scott IA, Monroe NY, Ramsey MN, Onondaga NY, Erie NY | 12 | 27 | 64 | 107 |
 | Entropy | Bexar TX, Milam TX, Salt Lake UT, Clark NV, Cook IL, Washington OR, El Paso CO, Berks PA, Wayne MI, St. Louis MO | 50 | 338 | 392 | 76 |
@@ -412,7 +443,8 @@ Chart: `docs/img/weights_by_method.png`.
   lb/MWh. Prices $0, $51, $190, and $300 per tonne.
 - **Water:** $7 per 1,000 gallons times (1 + water stress), unsourced.
 - **Hazard:** NRI v1.20 building loss rates over 17 hazards times a $10B
-  asset value ($3B as a sensitivity).
+  asset value ($3B as a sensitivity). The asset value is an assumption:
+  the whole campus, not the $4B taxable equipment base.
 - **Time to power:**
   - Queue age beyond 2 years at $25M per month, one-time.
   - Imputed counties take the national median of 2.89 years.
@@ -422,7 +454,8 @@ Chart: `docs/img/weights_by_method.png`.
   pushback 6 months at p=0.3.
 - **Sales tax:**
   - $4B of taxable equipment per purchase, refreshed every 5 years (4 and
-    6 as sensitivities).
+    6 as sensitivities). Both are assumptions from the revision request,
+    not sourced.
   - Rates as in Sales and use tax above.
   - WA exemption for rural counties on initial equipment only.
   - New York taxed in the base case.
