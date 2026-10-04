@@ -4,7 +4,8 @@ import type { RunResult } from "../engine/run";
 import { topReasons } from "../engine/run";
 import type { Stability } from "../engine/rank";
 import { fmtInt, fmtPct, fmtScore, fmtThreshold, fmtValue, ordinal } from "../lib/format";
-import { Barcode } from "./Shortlist";
+import { ComparePicker } from "./ComparePicker";
+import { OutcomeBarStatic, OutcomeTable, outcomesOf, topNLabel } from "./OutcomeBar";
 
 interface Props {
   data: CockpitData;
@@ -21,8 +22,6 @@ interface Props {
   onToggle: () => void;
 }
 
-const LOUDOUN = "51107";
-
 export function FindingPanel({ data, result, stability, stabilityStale, idx, compare, onCompare, onClose, drawer, open, onToggle }: Props) {
   if (idx === null) {
     return (
@@ -34,7 +33,6 @@ export function FindingPanel({ data, result, stability, stabilityStale, idx, com
   const name = `${data.counties.name[idx]}, ${data.counties.state[idx]}`;
   const passed = !!result.gates.passed[idx];
   const rank = result.rankOf[idx]!;
-  const loudoun = data.counties.fips.indexOf(LOUDOUN);
   const cmp = compare !== null && compare !== idx ? compare : null;
 
   return (
@@ -56,16 +54,7 @@ export function FindingPanel({ data, result, stability, stabilityStale, idx, com
           </p>
         </div>
         <div className="finding-actions">
-          {cmp === null && loudoun >= 0 && loudoun !== idx && (
-            <button className="btn btn-quiet" onClick={() => onCompare(loudoun)}>
-              Compare with Loudoun, VA
-            </button>
-          )}
-          {cmp !== null && (
-            <button className="btn btn-quiet" onClick={() => onCompare(null)}>
-              Stop comparing
-            </button>
-          )}
+          <ComparePicker data={data} result={result} idx={idx} compare={cmp} onCompare={onCompare} />
           {drawer && (
             <button className="btn btn-quiet" aria-expanded={open} onClick={onToggle}>
               {open ? "Collapse" : "Expand"}
@@ -114,8 +103,8 @@ function StabilityBlock({
   // not outlive the county's exclusion or floor failure.
   const eligible = !!result.gates.passed[idx] && !!result.floor[idx];
   const share = stability?.share[idx];
-  const tiers = stability?.tiers.get(idx);
-  const has = eligible && share !== undefined && !Number.isNaN(share);
+  const o = outcomesOf(stability, idx);
+  const has = eligible && o !== null && share !== undefined && !Number.isNaN(share);
   return (
     <div className={`block stab-block${stale && has ? " is-stale" : ""}`} aria-busy={stale}>
       <h3>
@@ -125,9 +114,10 @@ function StabilityBlock({
       {has ? (
         <>
           <p className="stab-big">
-            Top {result.topN} in <strong>{fmtPct(share!)}</strong> of {fmtInt(stability!.samples)} sampled weight scenarios
+            <strong>{topNLabel(o!.top3 + o!.ranks4to10, o!.samples, result.topN)}</strong> of {fmtInt(stability!.samples)} sampled weight scenarios
           </p>
-          {tiers && <Barcode tiers={tiers} tall />}
+          <OutcomeBarStatic o={o!} />
+          <OutcomeTable o={o!} />
           <p className="fine">
             {share! >= 0.9
               ? "Robust: the rank holds across most shifts in priorities."
@@ -269,9 +259,11 @@ function Contributions({ data, result, idx, cmp }: { data: CockpitData; result: 
             return (
               <tr key={p.id} style={{ "--hue": `var(--p-${p.id}, var(--ink-2))` } as React.CSSProperties}>
                 <th scope="row">
-                  <span className="swatch" aria-hidden />
-                  {p.label}
-                  {below && <span className="flag-fail small"> below floor</span>}
+                  <span className="pillar-name" title={p.label}>
+                    <span className="swatch" aria-hidden />
+                    {p.label}
+                  </span>
+                  {below && <span className="flag-fail small pillar-flag">Below floor</span>}
                 </th>
                 <td className="num">{fmtPct(w)}</td>
                 <td>

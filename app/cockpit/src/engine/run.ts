@@ -88,7 +88,7 @@ function weightsFor(c: Conditions, hs: HorizonScores): { w: Record<PillarId, num
 export function run(
   data: CockpitData,
   c: Conditions,
-  opts: { topN: number; robustness: { samples: number; concentration: number; seed: number }; keep?: number[]; withStability: boolean },
+  opts: { topN: number; robustness: { samples: number; concentration: number; seed: number }; withStability: boolean },
 ): RunResult {
   const hs = horizonScores(data, c.horizon, c.scenario);
   const { w, note } = weightsFor(c, hs);
@@ -111,9 +111,8 @@ export function run(
   let floorOkCount = 0;
   for (const i of ranked) floorOkCount += floor[i]!;
 
-  const keep = new Set<number>([...ranked.slice(0, Math.max(opts.topN, 12)), ...(opts.keep ?? [])]);
   const st = opts.withStability
-    ? stability(hs, w, floor, gates.passed, { ...opts.robustness, topN: opts.topN }, keep)
+    ? stability(hs, w, floor, gates.passed, { ...opts.robustness, topN: opts.topN })
     : null;
 
   return {
@@ -140,10 +139,8 @@ export function run(
 export function stabilityFor(
   r: RunResult,
   robustness: { samples: number; concentration: number; seed: number },
-  keep: number[],
 ): Stability {
-  const k = new Set<number>([...r.ranked.slice(0, Math.max(r.topN, 12)), ...keep]);
-  return stability(r.hs, r.weights, r.floor, r.gates.passed, { ...robustness, topN: r.topN }, k);
+  return stability(r.hs, r.weights, r.floor, r.gates.passed, { ...robustness, topN: r.topN });
 }
 
 export { topReasons };

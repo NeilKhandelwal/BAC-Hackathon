@@ -53,8 +53,7 @@ STRETCH = {
     "plant_capacity_mw_100km": "float64", "plant_clean_capacity_mw_100km": "float64",
     "industrial_price_cents_kwh": "float64",
     "saidi_minutes": "float64", "dist_ixp_km": "float64",
-    "pct_developed": "float64", "pct_cropland": "float64", "pct_forest_wetland": "float64",
-    "pct_protected": "float64", "greenhouse_acres": "float64",
+    "greenhouse_acres": "float64",
     "mfg_emp_share_2001": "float64", "mfg_loss_share_emp_2001": "float64",
     "unemployment_rate_pct_2023": "float64", "pop_change_pct_2010_2024": "float64",
     "coal_retired_mw": "float64",
@@ -110,9 +109,15 @@ STRETCH = {
     "queue_active_mw_clean_excl_storage": "float64", "queue_active_mw_storage_standalone": "float64",
     "queue_operational_mw_online_5y": "float64", "queue_operational_projects_online_5y": "Int64",
     "queue_operational_online_date_fallback_share": "float64",
+    # Land cover and sensitive land, appended to the frozen table after the v2 columns (PR #40), so every
+    # earlier column keeps its position. pct_developed, pct_cropland, and pct_protected score in land;
+    # pct_forest_wetland in permitting; the rest are context.
+    "pct_developed": "float64", "pct_cropland": "float64", "pct_forest_wetland": "float64",
+    "pct_protected": "float64", "pct_protected_gap1to3": "float64", "tribal_land_share": "float64",
+    "pct_cultivated_crops": "float64",
 }
 
 # STRETCH columns added by the ETL v2 port; the quality report and tests check them.
 # Of these, only SCORED_V2 appear in engine/pillars.yaml.
-V2_CONTEXT = list(STRETCH)[list(STRETCH).index("unemployment_rate_pct_2024"):]
+V2_CONTEXT = list(STRETCH)[list(STRETCH).index("unemployment_rate_pct_2024"):list(STRETCH).index("pct_developed")]
 SCORED_V2 = ["queue_active_mw_clean_excl_storage", "queue_operational_mw_online_5y"]

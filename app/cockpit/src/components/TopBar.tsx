@@ -87,9 +87,12 @@ export function TopBar({ data, conditions: c, edited, onPreset, onHorizon, onSce
       </div>
 
       <div className="topbar-end">
-        <span className={`badge-data ${data.meta.synthetic ? "is-synthetic" : "is-engine"}`} title={data.meta.label}>
-          {data.meta.synthetic ? "Synthetic data" : "Real engine data"}
-        </span>
+        {/* Only synthetic data needs a warning; the engine export is the normal case. */}
+        {data.meta.synthetic && (
+          <span className="badge-data is-synthetic" title={data.meta.label}>
+            Synthetic data
+          </span>
+        )}
         <button className="btn" onClick={onReset}>
           Reset demo
         </button>

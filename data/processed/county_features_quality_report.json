@@ -255,6 +255,21 @@
       "rows": 3109,
       "fips_not_in_table": [],
       "counties_without_data": 0
+    },
+    "pad_us": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "tribal_lands": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "nlcd_landcover": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
     }
   },
   "columns": {
@@ -1488,10 +1503,66 @@
       "median": 0.0,
       "max": 1.0,
       "zeros": 436
+    },
+    "pct_developed": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0020455646957202216,
+      "median": 0.0608288267394526,
+      "max": 0.9599487744271753,
+      "zeros": 0
+    },
+    "pct_cropland": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.24328536540269852,
+      "max": 0.9360267082229257,
+      "zeros": 5
+    },
+    "pct_forest_wetland": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 6.474246220022906e-05,
+      "median": 0.3768006376922128,
+      "max": 0.9463370963931084,
+      "zeros": 0
+    },
+    "pct_protected": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0184927285002824,
+      "max": 0.8988667892030422,
+      "zeros": 210
+    },
+    "pct_protected_gap1to3": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.04320796056260293,
+      "max": 0.971503104528707,
+      "zeros": 87
+    },
+    "tribal_land_share": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 0.9999614882315017,
+      "zeros": 2658
+    },
+    "pct_cultivated_crops": {
+      "dtype": "float64",
+      "nulls": 0,
+      "min": 0.0,
+      "median": 0.0875189229846,
+      "max": 0.9250928163528442,
+      "zeros": 108
     }
   },
   "core_columns": 55,
-  "stretch_columns_present": 113,
+  "stretch_columns_present": 120,
   "crosswalk_limitations": [
     "Connecticut: QCEW 2015/2019 and ERS economic typology codes exist only for the old counties, so CT manufacturing change columns and those flags are null.",
     "Municipal moratoria in incorporated places map to the county holding the place's 2024 Census internal point."

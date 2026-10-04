@@ -40,6 +40,8 @@ gates:
   max_permitting_risk: null             # needs permitting_discretionary_risk; no model ships, so keep null
   exclude_air_nonattainment: false
   min_population: 5000
+  max_pct_protected: null              # 0-1 share of the county in PAD-US GAP 1-2; null disables
+  max_tribal_land_share: null          # 0-1 share inside reservations or trust land; null disables
 
 weights:                               # cost 0.10, a little below balanced, others scaled by 0.90: a 24/7 carbon-free buyer pays a premium for clean power, so price matters less than carbon and water
   energy_carbon: 0.27

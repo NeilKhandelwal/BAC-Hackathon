@@ -103,6 +103,11 @@ const INFO: Record<string, [string, string, string, number]> = {
   air_nonattainment_count: ["Air quality nonattainment areas", "count", "EPA Green Book", 0],
   water_permit_risk: ["Water permit risk", "of 3", "State water regime", 0],
   state_policy_risk: ["State policy risk", "of 3", "State policy review", 0],
+  pct_developed: ["Developed land", "share", "NLCD", 2],
+  pct_cropland: ["Cropland", "share", "NLCD", 2],
+  pct_forest_wetland: ["Forest and wetland", "share", "NLCD", 2],
+  pct_protected: ["Protected land", "share", "USGS PAD-US", 2],
+  tribal_land_share: ["Tribal land", "share", "Census AIANNH", 2],
   moratorium_active: ["County moratorium active", "flag", "FracTracker", 0],
   moratorium_state_active: ["State moratorium active", "flag", "FracTracker", 0],
 };
@@ -240,6 +245,11 @@ const wp = stateInt(1, 3);
 const sp = stateInt(1, 3);
 col("water_permit_risk", (i) => wp(i));
 col("state_policy_risk", (i) => sp(i));
+col("pct_developed", (i) => +clamp(0.02 + values.pop_density_per_sqkm![i]! / 900 + rand() * 0.04, 0, 0.95).toFixed(3));
+col("pct_cropland", (i) => +clamp((lon[i]! > -104 && lon[i]! < -82 && lat[i]! > 36 ? 0.45 : 0.1) + gauss() * 0.15, 0, 0.95).toFixed(3));
+col("pct_forest_wetland", (i) => +clamp((lon[i]! > -95 ? 0.45 : 0.15) + gauss() * 0.15, 0, 0.95).toFixed(3));
+col("pct_protected", () => +clamp(rand() < 0.7 ? rand() * 0.04 : rand() * 0.5, 0, 1).toFixed(3));
+col("tribal_land_share", () => (rand() < 0.94 ? 0 : +(rand() * 0.8).toFixed(3)));
 col("moratorium_active", () => (rand() < 0.012 ? 1 : 0));
 const moratoriumStates = new Set(["GA"]);
 col("moratorium_state_active", (i) => (moratoriumStates.has(state[i]!) ? 1 : 0));
@@ -289,6 +299,8 @@ const gates: GateDef[] = [
   { key: "min_renewable_share", label: "Grid renewable share at least", column: "grid_renewable_share", kind: "min", unit: "share", range: { min: 0, max: 0.9, step: 0.05 }, editable: true },
   { key: "max_water_stress_if_evaporative", label: "Water stress at most, if evaporative", column: "water_stress_bws", kind: "evaporative_water", unit: "of 5", range: { min: 0, max: 5, step: 0.5 }, editable: true },
   { key: "min_population", label: "Population at least", column: "population", kind: "min", unit: "people", range: { min: 0, max: 50000, step: 1000 }, editable: true },
+  { key: "max_pct_protected", label: "Protected land at most", column: "pct_protected", kind: "max", unit: "share", range: { min: 0, max: 1, step: 0.05 }, editable: true },
+  { key: "max_tribal_land_share", label: "Tribal land at most", column: "tribal_land_share", kind: "max", unit: "share", range: { min: 0, max: 1, step: 0.05 }, editable: true },
   { key: "exclude_moratorium_active", label: "Exclude county moratoria", column: "moratorium_active", kind: "flag", unit: "", editable: true },
   { key: "exclude_moratorium_state_active", label: "Exclude state moratoria", column: "moratorium_state_active", kind: "flag", unit: "", editable: true },
   { key: "exclude_air_nonattainment", label: "Exclude air nonattainment", column: "air_nonattainment_count", kind: "flag", unit: "", editable: true },

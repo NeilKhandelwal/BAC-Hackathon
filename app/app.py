@@ -130,6 +130,12 @@ def sidebar():
             "Max queue median age (years)", g.get("max_queue_median_age_years"), 1, 10, 1, k + "queue")
         g["min_population"] = optional_slider(
             "Min population", g.get("min_population"), 0, 100_000, 1000, k + "pop")
+        g["max_pct_protected"] = optional_slider(
+            "Max protected land share", g.get("max_pct_protected"), 0.0, 1.0, 0.05, k + "protected",
+            help="Share of the county in PAD-US GAP 1-2 protected status. A county screen, not a siting check.")
+        g["max_tribal_land_share"] = optional_slider(
+            "Max tribal land share", g.get("max_tribal_land_share"), 0.0, 1.0, 0.05, k + "tribal",
+            help="Share of the county inside federally recognized reservations or trust land (Census TIGER).")
         g["exclude_moratorium_active"] = st.checkbox(
             "Exclude county moratoria", bool(g.get("exclude_moratorium_active")), key=k + "mor")
         g["exclude_moratorium_state_active"] = st.checkbox(
