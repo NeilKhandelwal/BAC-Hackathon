@@ -1,0 +1,159 @@
+counties 1565, annuity factor 11.654, queue imputed 1072 (median 2.89 y), cooling {'evaporative': 826, 'dry': 739}, hazard sum vs EAL/BUILDVALUE {'median_rel_diff': 7.660944182453552e-14, 'p95_rel_diff': 1.9402096780316365e-13, 'max_rel_diff': 0.07953805448949304, 'max_rel_diff_fips': '53037'}
+$190 head-to-head, $B: Chesterfield, SC 3.682, Kootenai, ID 3.750, Grant 4.452, Grant without time to power 4.152
+imputed queue share: top 50 at $190 0.24 overall 0.68
+top10 private+carbon $0: ['Bossier, LA 1.883', 'Richland, LA 1.906', 'Payne, OK 1.909', 'Choctaw, OK 1.911', 'St. Landry, LA 1.95', 'Noble, OK 1.951', 'Hansford, TX 1.958', 'Tulsa, OK 1.961', 'Pittsburg, OK 1.962', 'Beauregard, LA 1.965']
+top10 private+carbon $51: ['Bossier, LA 2.415', 'Richland, LA 2.442', 'El Paso, TX 2.479', 'Grayson, TX 2.494', 'Robertson, TX 2.494', 'Houston, TX 2.494', 'Payne, OK 2.494', 'Choctaw, OK 2.5', 'Beauregard, LA 2.504', 'Archer, TX 2.535']
+top10 private+carbon $190: ['Chesterfield, SC 3.682', 'Kootenai, ID 3.75', 'Marlboro, SC 3.753', 'Florence, SC 3.754', 'Aiken, SC 3.78', 'Emery, UT 3.822', 'El Paso, TX 3.84', 'Grayson, TX 3.848', 'Bossier, LA 3.865', 'Houston, TX 3.869']
+top10 private+carbon $300: ['Chesterfield, SC 4.538', 'Marlboro, SC 4.611', 'Florence, SC 4.615', 'Kootenai, ID 4.624', 'Aiken, SC 4.689', 'Emery, UT 4.704', 'Buncombe, NC 4.749', 'Spartanburg, SC 4.777', 'Franklin, NY 4.788', 'Kershaw, SC 4.805']
+top10 private: ['Bossier, LA 1.883', 'Richland, LA 1.906', 'Payne, OK 1.909', 'Choctaw, OK 1.911', 'St. Landry, LA 1.95', 'Noble, OK 1.951', 'Hansford, TX 1.958', 'Tulsa, OK 1.961', 'Pittsburg, OK 1.962', 'Beauregard, LA 1.965']
+
+variance shares (all counties):
+     energy  carbon  water  hazard  time_to_power  moratorium  sales_tax
+0     0.673   0.000 -0.009   0.004          0.072       0.019      0.241
+51    0.697  -0.024 -0.010   0.006          0.077       0.015      0.238
+190   0.545   0.230 -0.008   0.010          0.067      -0.001      0.156
+300   0.344   0.533 -0.006   0.010          0.047      -0.008      0.080
+variance shares (known queue age only, n=493):
+     energy  carbon  water  hazard  time_to_power  moratorium  sales_tax
+0     0.659   0.000 -0.007   0.004          0.138       0.012      0.195
+51    0.674  -0.014 -0.008   0.005          0.145       0.009      0.190
+190   0.561   0.177 -0.008   0.007          0.129       0.000      0.135
+300   0.399   0.428 -0.007   0.007          0.097      -0.004      0.080
+
+mean NPV by component, $B: {'energy': 2.205, 'water': 0.034, 'hazard': 0.153, 'time_to_power': 0.259, 'moratorium': 0.012, 'sales_tax': 0.075, 'carbon_190': 2.123}
+std NPV by component, $B: {'energy': 0.509, 'water': 0.034, 'hazard': 0.06, 'time_to_power': 0.143, 'moratorium': 0.046, 'sales_tax': 0.241, 'carbon_190': 0.455}
+
+focus: {
+"Grant, WA": {
+"rank_private": 1189,
+"rank_190": 407,
+"energy": 1882.8,
+"water": 10.5,
+"hazard": 103.4,
+"time_to_power": 300.0,
+"moratorium": 0.0,
+"sales_tax": 604.2,
+"carbon_190_musd": 1550.8,
+"co2_kt": 700
+},
+"Clark, WA": {
+"rank_private": 1192,
+"rank_190": 365,
+"energy": 1823.1,
+"water": 7.9,
+"hazard": 137.4,
+"time_to_power": 25.9,
+"moratorium": 0.0,
+"sales_tax": 909.5,
+"carbon_190_musd": 1501.7,
+"co2_kt": 678
+},
+"Franklin, NY": {
+"rank_private": 1493,
+"rank_190": 410,
+"energy": 2533.8,
+"water": 9.1,
+"hazard": 125.2,
+"time_to_power": 0.0,
+"moratorium": 300.0,
+"sales_tax": 909.5,
+"carbon_190_musd": 576.5,
+"co2_kt": 260
+},
+"Clinton, NY": {
+"rank_private": 1497,
+"rank_190": 522,
+"energy": 2542.2,
+"water": 11.4,
+"hazard": 145.2,
+"time_to_power": 0.0,
+"moratorium": 300.0,
+"sales_tax": 970.9,
+"carbon_190_musd": 578.4,
+"co2_kt": 261
+},
+"Berkshire, MA": {
+"rank_private": 1552,
+"rank_190": 1552,
+"energy": 5029.0,
+"water": 13.7,
+"hazard": 179.8,
+"time_to_power": 0.0,
+"moratorium": 0.0,
+"sales_tax": 710.6,
+"carbon_190_musd": 1284.9,
+"co2_kt": 580
+},
+"Dallas, TX": {
+"rank_private": 56,
+"rank_190": 108,
+"energy": 1930.7,
+"water": 8.2,
+"hazard": 144.2,
+"time_to_power": 0.0,
+"moratorium": 0.0,
+"sales_tax": 0.0,
+"carbon_190_musd": 1995.3,
+"co2_kt": 901
+}
+}
+
+frontier: ['Hamilton, NY', 'Essex, NY', 'Franklin, NY', 'Haywood, NC', 'Avery, NC', 'Susquehanna, PA', 'Buncombe, NC', 'Lancaster, SC', 'Kershaw, SC', 'Chesterfield, SC', 'Franklin, AR', 'Grayson, TX', 'El Paso, TX', 'Bossier, LA']
+grant variants ($M/yr private, kt): {'regional': (249, 700), 'bpa_80': (283, 236), 'bpa_132': (410, 236)}
+ fips           county     co2_kt  private_musd_yr  regional bpa_80 bpa_132
+36041     Hamilton, NY 259.462070       363.214266     259.2   None    None
+36031        Essex, NY 260.217458       362.697263     258.5   None    None
+36033     Franklin, NY 260.367723       332.741405     190.5   None    None
+37087      Haywood, NC 638.810117       225.547220       0.0   None    None
+37011        Avery, NC 639.672908       221.953181       0.0   None    None
+42115  Susquehanna, PA 643.604525       221.046408       0.0   None    None
+37021     Buncombe, NC 645.601687       213.834231       0.0   None    None
+45057    Lancaster, SC 665.798313       213.762222       0.0   None    None
+45055      Kershaw, SC 666.604473       212.310996       0.0   None    None
+45025 Chesterfield, SC 667.294839       189.193757       0.0   None    None
+05047     Franklin, AR 829.234457       179.849743       NaN   None    None
+48181      Grayson, TX 836.411281       171.322892       NaN   None    None
+48141      El Paso, TX 840.192950       169.903212       NaN   None    None
+22015      Bossier, LA 895.533526       161.548217       NaN   None    None
+
+sensitivities:
+             variant top_private top_190                                                                    top5_190  gap_1_to_2_pct  rank190_Grant  rank190_Franklin  rank190_Berkshire  share190_energy  share190_carbon  share190_water  share190_hazard  share190_time_to_power  share190_moratorium  share190_sales_tax  share190_ttp_known_queue_only
+                base       22015   45025       Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC            1.85            407               410               1552            0.545            0.230          -0.008            0.010                   0.067               -0.001               0.156                          0.129
+      dry everywhere       22015   16055        Kootenai, ID; Chesterfield, SC; Aiken, SC; Marlboro, SC; El Paso, TX            0.59            326               345               1552            0.532            0.239           0.000            0.011                   0.067               -0.001               0.152                          0.129
+       water $3/kgal       22015   45025       Chesterfield, SC; Marlboro, SC; Florence, SC; Kootenai, ID; Aiken, SC            1.63            428               432               1552            0.544            0.228          -0.004            0.010                   0.067               -0.000               0.156                          0.128
+      water $15/kgal       22015   16055          Kootenai, ID; Chesterfield, SC; Aiken, SC; Emery, UT; Florence, SC            0.66            363               364               1551            0.544            0.234          -0.012            0.011                   0.068               -0.001               0.156                          0.130
+       delay $10M/mo       22083   45025 Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Spartanburg, SC            1.85            376               381               1552            0.563            0.259          -0.009            0.012                   0.018               -0.001               0.158                          0.037
+       delay $50M/mo       22015   45025       Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC            1.85            450               454               1548            0.487            0.178          -0.008            0.008                   0.185                0.006               0.144                          0.310
+     moratorium 8 mo       22015   45025       Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC            1.85            410               321               1552            0.543            0.236          -0.008            0.011                   0.067               -0.001               0.152                          0.129
+    moratorium 20 mo       22015   45025       Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC            1.85            407               701               1552            0.547            0.218          -0.009            0.010                   0.067                0.003               0.163                          0.129
+   time to power off       22029   45073    Oconee, SC; Jackson, LA; Chesterfield, SC; Kershaw, SC; East Carroll, LA            0.01            342               798               1553            0.574            0.255          -0.009            0.012                   0.000               -0.000               0.169                          0.000
+queue baseline 1.5 y       22015   45025       Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Aiken, SC            1.85            281               285               1552            0.534            0.227          -0.008            0.010                   0.086               -0.001               0.152                          0.160
+queue baseline 2.5 y       22079   45025    Chesterfield, SC; Kootenai, ID; Marlboro, SC; Florence, SC; Buncombe, NC            1.85            603               606               1552            0.556            0.233          -0.008            0.011                   0.049               -0.000               0.160                          0.094
+clark bpa variants ($M/yr, kt): {'regional': (249, 678), 'bpa_80': (282, 228), 'bpa_132': (405, 228)}
+winning conditions: {
+ "clark_bpa_co2_t": 228085.14590186728,
+ "grant_bpa_co2_t": 235547.34837163534,
+ "franklin_co2_t": 260367.72302311525,
+ "clark_bpa_beats_franklin_below_usd_mwh": {
+  "0": 101.40670741052492,
+  "51": 102.10234127599186,
+  "100": 102.77069538202875,
+  "190": 103.99828455638216,
+  "300": 105.49867132503637
+ },
+ "grant_minus_clark_190_state_avg_usd": 46199663.155472755,
+ "grant_needs_months_less_delay_state_avg": 1.8479865262189101,
+ "grant_needs_usd_mwh_discount_state_avg": 1.6219611780731407,
+ "grant_minus_clark_190_bpa_usd": {
+  "80": 26135887.751436234,
+  "132": 73059399.42343712
+ },
+ "grant_needs_months_less_delay_bpa": {
+  "80": 1.0454355100574493,
+  "132": 2.922375976937485
+ },
+ "grant_time_to_power_months": 12.0,
+ "clark_time_to_power_months": 1.0349075975359323,
+ "franklin_new_load_rate": "none sourced; NY state average used"
+}
+chart: C:\Users\Vals\OneDrive\Documents\BAC-Hackathon\docs\img\cost_vs_co2.png

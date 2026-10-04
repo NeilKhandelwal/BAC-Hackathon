@@ -1,0 +1,761 @@
+{
+  "tax_status": {
+    "Clark, WA": {
+      "exempt": false,
+      "rate": 0.08,
+      "sales_tax_npv_musd": 909.5
+    },
+    "Franklin, NY": {
+      "exempt": false,
+      "rate": 0.08,
+      "sales_tax_npv_musd": 909.5
+    },
+    "Grant, WA": {
+      "exempt": true,
+      "rate": 0.082,
+      "sales_tax_npv_musd": 604.2
+    },
+    "Berkshire, MA": {
+      "exempt": false,
+      "rate": 0.0625,
+      "sales_tax_npv_musd": 710.6
+    }
+  },
+  "exempt_share_of_gate_passers": 0.9118210862619809,
+  "tax": {
+    "with_tax_5y": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 365,
+        "Franklin, NY": 410,
+        "Grant, WA": 407,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.405,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.452
+      }
+    },
+    "no_tax": {
+      "top5": [
+        "Clark, WA",
+        "Franklin, NY",
+        "Schuyler, NY",
+        "Clinton, NY",
+        "Chautauqua, NY"
+      ],
+      "ranks": {
+        "Clark, WA": 1,
+        "Franklin, NY": 2,
+        "Grant, WA": 32,
+        "Berkshire, MA": 1546
+      },
+      "totals_busd": {
+        "Clark, WA": 3.496,
+        "Franklin, NY": 3.545,
+        "Grant, WA": 3.847
+      }
+    },
+    "with_tax_4y": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 680,
+        "Franklin, NY": 752,
+        "Grant, WA": 755,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.643,
+        "Franklin, NY": 4.691,
+        "Grant, WA": 4.695
+      }
+    },
+    "with_tax_6y": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 296,
+        "Franklin, NY": 349,
+        "Grant, WA": 342,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.329,
+        "Franklin, NY": 4.378,
+        "Grant, WA": 4.373
+      }
+    },
+    "ny_exempt": {
+      "top5": [
+        "Franklin, NY",
+        "Schuyler, NY",
+        "Clinton, NY",
+        "Chautauqua, NY",
+        "Tompkins, NY"
+      ],
+      "ranks": {
+        "Clark, WA": 394,
+        "Franklin, NY": 1,
+        "Grant, WA": 436,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.405,
+        "Franklin, NY": 3.545,
+        "Grant, WA": 4.452
+      }
+    },
+    "refresh_taxed_everywhere": {
+      "top5": [
+        "Umatilla, OR",
+        "Big Horn, MT",
+        "Clackamas, OR",
+        "Kootenai, ID",
+        "Chesterfield, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 14,
+        "Franklin, NY": 22,
+        "Grant, WA": 19,
+        "Berkshire, MA": 1550
+      },
+      "totals_busd": {
+        "Clark, WA": 4.405,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.452
+      }
+    }
+  },
+  "shares": {
+    "0": {
+      "covariance": {
+        "energy": 0.6731533503123187,
+        "water": -0.008829246403746062,
+        "hazard": 0.0041516088214767054,
+        "time_to_power": 0.07150396260118305,
+        "moratorium": 0.01924599138313743,
+        "sales_tax": 0.2407743332856299,
+        "carbon": 0.0
+      },
+      "standalone_variance": {
+        "energy": 0.7523133287110562,
+        "water": 0.0034077751410053216,
+        "hazard": 0.010367545076829701,
+        "time_to_power": 0.05922278198735487,
+        "moratorium": 0.0060976790090125675,
+        "sales_tax": 0.16859089007474126,
+        "carbon": 0.0
+      },
+      "shapley_sd": {
+        "energy": 0.6109060548096829,
+        "water": 0.004165173184473015,
+        "hazard": 0.021212538937105382,
+        "time_to_power": 0.0957443015908684,
+        "moratorium": 0.026161082678693912,
+        "sales_tax": 0.24181084879917641,
+        "carbon": 0.0
+      },
+      "order_covariance": [
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "moratorium",
+        "hazard",
+        "carbon",
+        "water"
+      ],
+      "order_standalone": [
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "hazard",
+        "moratorium",
+        "water",
+        "carbon"
+      ],
+      "order_shapley_sd": [
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "moratorium",
+        "hazard",
+        "water",
+        "carbon"
+      ]
+    },
+    "51": {
+      "covariance": {
+        "energy": 0.6973735897274065,
+        "water": -0.009526883212145705,
+        "hazard": 0.0064258821642631395,
+        "time_to_power": 0.07692580210187763,
+        "moratorium": 0.015085993417217402,
+        "sales_tax": 0.23773433299559174,
+        "carbon": -0.024018717194210792
+      },
+      "standalone_variance": {
+        "energy": 0.721014875086636,
+        "water": 0.0032660016429922724,
+        "hazard": 0.009936224619777334,
+        "time_to_power": 0.05675893956319347,
+        "moratorium": 0.005843997575497144,
+        "sales_tax": 0.16157701174356173,
+        "carbon": 0.04160294976834197
+      },
+      "shapley_sd": {
+        "energy": 0.6103208333652834,
+        "water": 0.002944630040856555,
+        "hazard": 0.021527506008087605,
+        "time_to_power": 0.09445096683587757,
+        "moratorium": 0.02038711156398511,
+        "sales_tax": 0.22687306928305137,
+        "carbon": 0.023495882902858638
+      },
+      "order_covariance": [
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "moratorium",
+        "hazard",
+        "water",
+        "carbon"
+      ],
+      "order_standalone": [
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "carbon",
+        "hazard",
+        "moratorium",
+        "water"
+      ],
+      "order_shapley_sd": [
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "carbon",
+        "hazard",
+        "moratorium",
+        "water"
+      ]
+    },
+    "190": {
+      "covariance": {
+        "energy": 0.5449182732208228,
+        "water": -0.008406932287136052,
+        "hazard": 0.010405256693582731,
+        "time_to_power": 0.06732797504056454,
+        "moratorium": -0.0005074236004965938,
+        "sales_tax": 0.15610848520027396,
+        "carbon": 0.23015436573238868
+      },
+      "standalone_variance": {
+        "energy": 0.46946698790369384,
+        "water": 0.0021265580042850864,
+        "hazard": 0.006469671576222175,
+        "time_to_power": 0.036956863601653775,
+        "moratorium": 0.003805141937959979,
+        "sales_tax": 0.10520597513139389,
+        "carbon": 0.37596880184479115
+      },
+      "shapley_sd": {
+        "energy": 0.4627991332648248,
+        "water": 0.0029317388146044357,
+        "hazard": 0.021199037121137482,
+        "time_to_power": 0.07979214665843357,
+        "moratorium": 0.010909612663877683,
+        "sales_tax": 0.16034407205226914,
+        "carbon": 0.26202425942485275
+      },
+      "order_covariance": [
+        "energy",
+        "carbon",
+        "sales_tax",
+        "time_to_power",
+        "hazard",
+        "moratorium",
+        "water"
+      ],
+      "order_standalone": [
+        "energy",
+        "carbon",
+        "sales_tax",
+        "time_to_power",
+        "hazard",
+        "moratorium",
+        "water"
+      ],
+      "order_shapley_sd": [
+        "energy",
+        "carbon",
+        "sales_tax",
+        "time_to_power",
+        "hazard",
+        "moratorium",
+        "water"
+      ]
+    },
+    "300": {
+      "covariance": {
+        "energy": 0.34438790759921933,
+        "water": -0.005929236676499164,
+        "hazard": 0.010021412013435083,
+        "time_to_power": 0.04717075494591363,
+        "moratorium": -0.0081884689436548,
+        "sales_tax": 0.07968504494735473,
+        "carbon": 0.5328525861142313
+      },
+      "standalone_variance": {
+        "energy": 0.30068026131538084,
+        "water": 0.0013619999550680303,
+        "hazard": 0.004143640746390955,
+        "time_to_power": 0.023669820650779588,
+        "moratorium": 0.002437085251418418,
+        "sales_tax": 0.06738143662816228,
+        "carbon": 0.6003257554527999
+      },
+      "shapley_sd": {
+        "energy": 0.3351624799134233,
+        "water": 0.002943003185480454,
+        "hazard": 0.01817664820928777,
+        "time_to_power": 0.06293092082527764,
+        "moratorium": 0.006233479150889447,
+        "sales_tax": 0.11381678048012153,
+        "carbon": 0.4607366882355199
+      },
+      "order_covariance": [
+        "carbon",
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "hazard",
+        "water",
+        "moratorium"
+      ],
+      "order_standalone": [
+        "carbon",
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "hazard",
+        "moratorium",
+        "water"
+      ],
+      "order_shapley_sd": [
+        "carbon",
+        "energy",
+        "sales_tax",
+        "time_to_power",
+        "hazard",
+        "moratorium",
+        "water"
+      ]
+    }
+  },
+  "ttp_imputed_zero": {
+    "top5": [
+      "Oconee, SC",
+      "Jackson, LA",
+      "Chesterfield, SC",
+      "Kershaw, SC",
+      "East Carroll, LA"
+    ],
+    "ranks": {
+      "Clark, WA": 666,
+      "Franklin, NY": 726,
+      "Grant, WA": 721,
+      "Berkshire, MA": 1553
+    },
+    "totals_busd": {
+      "Clark, WA": 4.405,
+      "Franklin, NY": 4.454,
+      "Grant, WA": 4.452
+    }
+  },
+  "ttp_imputed_excluded": {
+    "top5": [
+      "Chesterfield, SC",
+      "Kootenai, ID",
+      "Marlboro, SC",
+      "Florence, SC",
+      "Aiken, SC"
+    ],
+    "ranks": {
+      "Clark, WA": 183,
+      "Franklin, NY": 192,
+      "Grant, WA": 191,
+      "Berkshire, MA": 485
+    },
+    "totals_busd": {
+      "Clark, WA": 4.405,
+      "Franklin, NY": 4.454,
+      "Grant, WA": 4.452
+    }
+  },
+  "imputed_count": 1072,
+  "grant_evidence": {
+    "evidence_central_12": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 365,
+        "Franklin, NY": 410,
+        "Grant, WA": 407,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.405,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.452
+      },
+      "grant_minus_clark_musd": 46.2,
+      "grant_minus_franklin_musd": -2.5,
+      "grant_needs_usd_mwh_below_clark": 1.62
+    },
+    "evidence_low_8": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 366,
+        "Franklin, NY": 410,
+        "Grant, WA": 316,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.405,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.352
+      },
+      "grant_minus_clark_musd": -53.8,
+      "grant_minus_franklin_musd": -102.5,
+      "grant_needs_usd_mwh_below_clark": -1.89
+    },
+    "evidence_high_18.5": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 365,
+        "Franklin, NY": 409,
+        "Grant, WA": 646,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.405,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.614
+      },
+      "grant_minus_clark_musd": 208.7,
+      "grant_minus_franklin_musd": 160.0,
+      "grant_needs_usd_mwh_below_clark": 7.33
+    },
+    "queue_proxy": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 365,
+        "Franklin, NY": 409,
+        "Grant, WA": 647,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.405,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.615
+      },
+      "grant_minus_clark_musd": 209.0,
+      "grant_minus_franklin_musd": 160.4,
+      "grant_needs_usd_mwh_below_clark": 7.34
+    }
+  },
+  "grant_proxy_months": 18.51334702258727,
+  "grant_breakeven_months_vs_clark": 10.15201347378109,
+  "grant_breakeven_months_vs_franklin": 12.098028874854203,
+  "clark_rate": {
+    "0.087": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 447,
+        "Franklin, NY": 409,
+        "Grant, WA": 406,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.485,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.452
+      }
+    },
+    "0.089": {
+      "top5": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC"
+      ],
+      "ranks": {
+        "Clark, WA": 473,
+        "Franklin, NY": 409,
+        "Grant, WA": 406,
+        "Berkshire, MA": 1552
+      },
+      "totals_busd": {
+        "Clark, WA": 4.508,
+        "Franklin, NY": 4.454,
+        "Grant, WA": 4.452
+      }
+    }
+  },
+  "clark_lead_over_franklin_musd": 48.7,
+  "dry_everywhere": {
+    "top5": [
+      "Kootenai, ID",
+      "Chesterfield, SC",
+      "Aiken, SC",
+      "Marlboro, SC",
+      "El Paso, TX"
+    ],
+    "ranks": {
+      "Clark, WA": 298,
+      "Franklin, NY": 345,
+      "Grant, WA": 326,
+      "Berkshire, MA": 1552
+    },
+    "totals_busd": {
+      "Clark, WA": 4.417,
+      "Franklin, NY": 4.469,
+      "Grant, WA": 4.452
+    },
+    "clark_minus_grant_musd": -34.9
+  },
+  "hazard_3B": {
+    "top5": [
+      "Chesterfield, SC",
+      "Florence, SC",
+      "Marlboro, SC",
+      "Kootenai, ID",
+      "Aiken, SC"
+    ],
+    "ranks": {
+      "Clark, WA": 383,
+      "Franklin, NY": 438,
+      "Grant, WA": 460,
+      "Berkshire, MA": 1551
+    },
+    "totals_busd": {
+      "Clark, WA": 4.309,
+      "Franklin, NY": 4.367,
+      "Grant, WA": 4.379
+    }
+  },
+  "hazard_10B": {
+    "top5": [
+      "Chesterfield, SC",
+      "Kootenai, ID",
+      "Marlboro, SC",
+      "Florence, SC",
+      "Aiken, SC"
+    ],
+    "ranks": {
+      "Clark, WA": 365,
+      "Franklin, NY": 410,
+      "Grant, WA": 407,
+      "Berkshire, MA": 1552
+    },
+    "totals_busd": {
+      "Clark, WA": 4.405,
+      "Franklin, NY": 4.454,
+      "Grant, WA": 4.452
+    }
+  },
+  "method_table": {
+    "balanced": {
+      "top10": [
+        "Grant, WA",
+        "Wayne, TN",
+        "Whitman, WA",
+        "Mayes, OK",
+        "Scott, IA",
+        "Benton, WA",
+        "Clark, WA",
+        "Scott, TN",
+        "Adair, OK",
+        "Grady, OK"
+      ],
+      "Clark, WA": 7,
+      "Franklin, NY": 952,
+      "Grant, WA": 1,
+      "Berkshire, MA": 1047
+    },
+    "monetized": {
+      "top10": [
+        "Chesterfield, SC",
+        "Kootenai, ID",
+        "Marlboro, SC",
+        "Florence, SC",
+        "Aiken, SC",
+        "Emery, UT",
+        "El Paso, TX",
+        "Grayson, TX",
+        "Bossier, LA",
+        "Houston, TX"
+      ],
+      "Clark, WA": 365,
+      "Franklin, NY": 410,
+      "Grant, WA": 407,
+      "Berkshire, MA": 1552
+    },
+    "smaa": {
+      "top10": [
+        "Whitman, WA",
+        "Grant, WA",
+        "Wayne, TN",
+        "Luzerne, PA",
+        "Clark, WA",
+        "Trumbull, OH",
+        "Scott, IA",
+        "Grady, OK",
+        "Rock Island, IL",
+        "Mayes, OK"
+      ],
+      "Clark, WA": 5,
+      "Franklin, NY": 280,
+      "Grant, WA": 2,
+      "Berkshire, MA": 280
+    },
+    "critic": {
+      "top10": [
+        "Rock Island, IL",
+        "St. Joseph, IN",
+        "Dakota, MN",
+        "Henry, IL",
+        "Washington, OR",
+        "Scott, IA",
+        "Ramsey, MN",
+        "Onondaga, NY",
+        "Cass, MI",
+        "Winnebago, IL"
+      ],
+      "Clark, WA": 48,
+      "Franklin, NY": 34,
+      "Grant, WA": 11,
+      "Berkshire, MA": 204
+    },
+    "entropy": {
+      "top10": [
+        "Clark, NV",
+        "Bexar, TX",
+        "Milam, TX",
+        "Berks, PA",
+        "Cook, IL",
+        "Mecklenburg, VA",
+        "Salt Lake, UT",
+        "St. Louis, MO",
+        "El Paso, CO",
+        "Will, IL"
+      ],
+      "Clark, WA": 462,
+      "Franklin, NY": 251,
+      "Grant, WA": 41,
+      "Berkshire, MA": 172
+    },
+    "revealed": {
+      "top10": [
+        "Maricopa, AZ",
+        "Dallas, TX",
+        "Hamilton, OH",
+        "Wayne, MI",
+        "Tarrant, TX",
+        "Montgomery, PA",
+        "Bexar, TX",
+        "Clark, NV",
+        "Salt Lake, UT",
+        "Allegheny, PA"
+      ],
+      "Clark, WA": 92,
+      "Franklin, NY": 452,
+      "Grant, WA": 148,
+      "Berkshire, MA": 974
+    },
+    "consensus": {
+      "top10": [
+        "Grant, WA",
+        "Scott, IA",
+        "Whitman, WA",
+        "Wayne, TN",
+        "Rock Island, IL",
+        "Clark, WA",
+        "Mayes, OK",
+        "Chesterfield, SC",
+        "Luzerne, PA",
+        "Grady, OK"
+      ],
+      "Clark, WA": 6,
+      "Franklin, NY": 82,
+      "Grant, WA": 1,
+      "Berkshire, MA": 82
+    },
+    "consensus_with_entropy": {
+      "top10": [
+        "Grant, WA",
+        "Scott, IA",
+        "Whitman, WA",
+        "Wayne, TN",
+        "Clark, NV",
+        "Bexar, TX",
+        "Rock Island, IL",
+        "Washington, OR",
+        "Clark, WA",
+        "Maricopa, AZ"
+      ],
+      "Clark, WA": 9,
+      "Franklin, NY": 90,
+      "Grant, WA": 1,
+      "Berkshire, MA": 90
+    }
+  }
+}

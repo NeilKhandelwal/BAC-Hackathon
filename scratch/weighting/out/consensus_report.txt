@@ -1,0 +1,59 @@
+consensus top 10, all six methods:
+                county  balanced  monetized  smaa  critic  entropy  revealed  borda_all
+fips                                                                                   
+53025        Grant, WA         1        407     2      11       41       148         49
+19163        Scott, IA         5        583     7       6      274       126         45
+53075      Whitman, WA         3        296     1      83      362       672         38
+47181        Wayne, TN         2        531     3     199      943      1478         37
+48029        Bexar, TX      1161        187   280     679        2         7         33
+32003        Clark, NV       618       1326    77      54        1         8         33
+17161  Rock Island, IL       210       1064     9       1      312       107         32
+41067   Washington, OR       234        624    96       5       13        14         31
+53011        Clark, WA         7        365     5      48      462        92         30
+04013     Maricopa, AZ      1418       1164   280    1035       11         1         30
+
+consensus top 10, without entropy:
+                 county  balanced  monetized  smaa  critic  entropy  revealed  borda_no_entropy
+fips                                                                                           
+53025         Grant, WA         1        407     2      11       41       148                49
+19163         Scott, IA         5        583     7       6      274       126                45
+53075       Whitman, WA         3        296     1      83      362       672                38
+47181         Wayne, TN         2        531     3     199      943      1478                37
+17161   Rock Island, IL       210       1064     9       1      312       107                32
+53011         Clark, WA         7        365     5      48      462        92                30
+40097         Mayes, OK         4        236    10     118       24       968                28
+45025  Chesterfield, SC        14          1    48     167      574       625                27
+42079       Luzerne, PA        27        256     4      12       55        45                26
+40051         Grady, OK        10        596     8     242      253       481                24
+
+focus: {"Clark, WA": {"balanced": 7, "monetized": 365, "smaa": 5, "critic": 48, "entropy": 462, "revealed": 92, "borda_all": 30, "borda_no_entropy": 30}, "Franklin, NY": {"balanced": 952, "monetized": 410, "smaa": 280, "critic": 34, "entropy": 251, "revealed": 452, "borda_all": 0, "borda_no_entropy": 0}, "Grant, WA": {"balanced": 1, "monetized": 407, "smaa": 2, "critic": 11, "entropy": 41, "revealed": 148, "borda_all": 49, "borda_no_entropy": 49}}
+
+engine with implied weights {'energy_carbon': 0.228, 'water': 0.0, 'climate_resilience': 0.01, 'grid_infrastructure': 0.066, 'land': 0.0, 'community': 0.0, 'permitting': 0.155, 'cost': 0.541}
+  top 10: ['Grady, OK', 'Caddo, OK', 'Garfield, OK', 'Oklahoma, OK', 'Beaver, OK', 'Payne, OK', 'Lincoln, OK', 'Woodward, OK', 'Murray, OK', 'Curry, NM']
+  NPV top 10: ['Chesterfield, SC', 'Kootenai, ID', 'Marlboro, SC', 'Florence, SC', 'Aiken, SC', 'Emery, UT', 'El Paso, TX', 'Grayson, TX', 'Bossier, LA', 'Houston, TX'] overlap 0
+
+shortlist (SMAA top-10 acceptability, floor off, >= 1%): 162 counties; focus in it: {'Clark, WA': True, 'Franklin, NY': True, 'Grant, WA': True} stage-2 ranks: {'Clark, WA': 73, 'Franklin, NY': 80, 'Grant, WA': 78}
+                  county  npv_190_busd  co2_kt  smaa_top10_floor_off  floor_ok  balanced_rank
+fips                                                                                         
+45025   Chesterfield, SC         3.682   667.0                0.0320      True             14
+45069       Marlboro, SC         3.753   669.0                0.0208      True             26
+45003          Aiken, SC         3.780   709.0                0.0102      True             46
+49015          Emery, UT         3.822   688.0                0.0878     False           1029
+48139          Ellis, TX         3.907   843.0                0.0444      True            160
+48503          Young, TX         3.934   840.0                0.0704     False            923
+37045      Cleveland, NC         3.950   686.0                0.0132      True            262
+48179           Gray, TX         3.952   854.0                0.0148     False            958
+22077  Pointe Coupee, LA         3.965   849.0                0.0116      True             66
+48227         Howard, TX         3.984   891.0                0.0560     False            936
+stage 2, private cost only, top 5: ['Payne, OK', 'Noble, OK', 'Tulsa, OK', 'Pittsburg, OK', 'Oklahoma, OK']
+
+weights:
+                      Balanced (judgment)  Monetized, $190/t (variance shares)  CRITIC (pillar sums)  Entropy (pillar sums)  Revealed preference
+energy_carbon                      0.153                                0.228                 0.185                  0.249                0.171
+water                              0.119                                0.000                 0.120                  0.038                0.123
+climate_resilience                 0.119                                0.010                 0.252                  0.094                0.224
+grid_infrastructure                0.153                                0.066                 0.150                  0.441                0.086
+land                               0.068                                0.000                 0.044                  0.008                0.156
+community                          0.085                                0.000                 0.136                  0.144                0.129
+permitting                         0.153                                0.155                 0.096                  0.024                0.053
+cost                               0.150                                0.541                 0.018                  0.002                0.058

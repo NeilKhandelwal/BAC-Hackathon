@@ -1,0 +1,20 @@
+self-check passed: True
+rank1_floor_on [('Whitman, WA', 0.129), ('Grant, WA', 0.115), ('Wayne, TN', 0.108), ('Luzerne, PA', 0.102), ('Clark, WA', 0.069), ('Trumbull, OH', 0.059), ('Scott, IA', 0.043), ('Grady, OK', 0.038), ('Rock Island, IL', 0.027), ('Mayes, OK', 0.027)]
+top10_floor_on [('Grant, WA', 0.505), ('Whitman, WA', 0.458), ('Wayne, TN', 0.424), ('Luzerne, PA', 0.364), ('Clark, WA', 0.306), ('Trumbull, OH', 0.274), ('Clearfield, PA', 0.229), ('Benton, WA', 0.226), ('Scott, TN', 0.208), ('Scott, IA', 0.205)]
+rank1_floor_off [('Franklin, NY', 0.103), ('Hamilton, OH', 0.074), ('Wayne, TN', 0.072), ('Grant, WA', 0.069), ('Whitman, WA', 0.062), ('Clark, WA', 0.053), ('Luzerne, PA', 0.047), ('Trumbull, OH', 0.045), ('Caddo, OK', 0.042), ('Beaver, OK', 0.035)]
+top10_floor_off [('Grant, WA', 0.342), ('Whitman, WA', 0.313), ('Wayne, TN', 0.305), ('Franklin, NY', 0.293), ('Lewis, NY', 0.265), ('Luzerne, PA', 0.262), ('Trumbull, OH', 0.211), ('Caddo, OK', 0.211), ('Clark, WA', 0.209), ('Hamilton, OH', 0.172)]
+central_floor_on
+   Whitman, WA (53075) 0.129 {'energy_carbon': 0.169, 'water': 0.186, 'climate_resilience': 0.088, 'grid_infrastructure': 0.073, 'land': 0.191, 'community': 0.057, 'cost': 0.119, 'permitting': 0.116}
+   Grant, WA (53025) 0.115 {'energy_carbon': 0.155, 'water': 0.059, 'climate_resilience': 0.093, 'grid_infrastructure': 0.215, 'land': 0.17, 'community': 0.128, 'cost': 0.081, 'permitting': 0.098}
+   Wayne, TN (47181) 0.108 {'energy_carbon': 0.049, 'water': 0.091, 'climate_resilience': 0.096, 'grid_infrastructure': 0.126, 'land': 0.115, 'community': 0.101, 'cost': 0.141, 'permitting': 0.283}
+   Luzerne, PA (42079) 0.102 {'energy_carbon': 0.151, 'water': 0.204, 'climate_resilience': 0.108, 'grid_infrastructure': 0.111, 'land': 0.077, 'community': 0.23, 'cost': 0.042, 'permitting': 0.077}
+   Clark, WA (53011) 0.069 {'energy_carbon': 0.1, 'water': 0.26, 'climate_resilience': 0.145, 'grid_infrastructure': 0.055, 'land': 0.04, 'community': 0.111, 'cost': 0.171, 'permitting': 0.117}
+central_floor_off
+   Franklin, NY (36033) 0.103 {'energy_carbon': 0.2, 'water': 0.236, 'climate_resilience': 0.086, 'grid_infrastructure': 0.097, 'land': 0.121, 'community': 0.089, 'cost': 0.038, 'permitting': 0.131}
+   Hamilton, OH (39061) 0.074 {'energy_carbon': 0.052, 'water': 0.106, 'climate_resilience': 0.156, 'grid_infrastructure': 0.332, 'land': 0.053, 'community': 0.13, 'cost': 0.094, 'permitting': 0.077}
+   Wayne, TN (47181) 0.072 {'energy_carbon': 0.049, 'water': 0.092, 'climate_resilience': 0.081, 'grid_infrastructure': 0.133, 'land': 0.116, 'community': 0.098, 'cost': 0.14, 'permitting': 0.292}
+   Grant, WA (53025) 0.069 {'energy_carbon': 0.131, 'water': 0.062, 'climate_resilience': 0.096, 'grid_infrastructure': 0.23, 'land': 0.173, 'community': 0.129, 'cost': 0.082, 'permitting': 0.096}
+   Whitman, WA (53075) 0.062 {'energy_carbon': 0.144, 'water': 0.192, 'climate_resilience': 0.087, 'grid_infrastructure': 0.073, 'land': 0.185, 'community': 0.057, 'cost': 0.168, 'permitting': 0.095}
+focus: {"Clark, WA": {"rank1_floor_on": 0.0694, "top10_floor_on": 0.3062, "rank1_floor_off": 0.0526, "top10_floor_off": 0.2092, "floor_ok": true}, "Franklin, NY": {"rank1_floor_on": 0.0, "top10_floor_on": 0.0, "rank1_floor_off": 0.103, "top10_floor_off": 0.2926, "floor_ok": false}, "Grant, WA": {"rank1_floor_on": 0.1146, "top10_floor_on": 0.5054, "rank1_floor_off": 0.0688, "top10_floor_off": 0.3422, "floor_ok": true}}
+Franklin failing pillars: {'cost': 6.5} floor 10
+energy_carbon boundary (floor off): {'Franklin vs Grant': {'weight': 0.49, 'valid': True, 'franklin_ahead_above': True, 'balanced_energy_carbon': 0.153}, 'Franklin vs Clark': {'weight': 0.304, 'valid': True, 'franklin_ahead_above': True, 'balanced_energy_carbon': 0.153}}
