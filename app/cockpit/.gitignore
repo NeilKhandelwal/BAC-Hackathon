@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.tsbuildinfo
+public/data/*
+!public/data/counties.topo.json
+!public/data/engine-export.json
+test-results/
+playwright-report/
