@@ -2,7 +2,7 @@
  "balanced": {
   "counties": 3109,
   "passed": 1565,
-  "floor_ok": 915,
+  "floor_ok": 912,
   "moratorium_state_active_ranked": 30
  },
  "top10": [
@@ -19,39 +19,39 @@
    "fips": "47181",
    "county": "Wayne, TN",
    "composite": 63.2,
-   "robustness": 0.995,
+   "robustness": 0.998,
    "state_moratorium": false
   },
   {
    "rank": 3,
    "fips": "53075",
    "county": "Whitman, WA",
-   "composite": 63.0,
-   "robustness": 0.955,
+   "composite": 63.1,
+   "robustness": 0.971,
    "state_moratorium": false
   },
   {
    "rank": 4,
    "fips": "40097",
    "county": "Mayes, OK",
-   "composite": 62.3,
-   "robustness": 0.947,
+   "composite": 62.2,
+   "robustness": 0.935,
    "state_moratorium": false
   },
   {
    "rank": 5,
-   "fips": "53005",
-   "county": "Benton, WA",
+   "fips": "19163",
+   "county": "Scott, IA",
    "composite": 62.1,
-   "robustness": 0.842,
+   "robustness": 0.832,
    "state_moratorium": false
   },
   {
    "rank": 6,
-   "fips": "19163",
-   "county": "Scott, IA",
+   "fips": "53005",
+   "county": "Benton, WA",
    "composite": 62.1,
-   "robustness": 0.809,
+   "robustness": 0.869,
    "state_moratorium": false
   },
   {
@@ -59,7 +59,7 @@
    "fips": "53011",
    "county": "Clark, WA",
    "composite": 61.9,
-   "robustness": 0.688,
+   "robustness": 0.736,
    "state_moratorium": false
   },
   {
@@ -67,27 +67,27 @@
    "fips": "47151",
    "county": "Scott, TN",
    "composite": 61.7,
-   "robustness": 0.759,
+   "robustness": 0.805,
    "state_moratorium": false
   },
   {
    "rank": 9,
-   "fips": "40051",
-   "county": "Grady, OK",
+   "fips": "40001",
+   "county": "Adair, OK",
    "composite": 61.1,
-   "robustness": 0.501,
+   "robustness": 0.498,
    "state_moratorium": false
   },
   {
    "rank": 10,
-   "fips": "40001",
-   "county": "Adair, OK",
-   "composite": 61.1,
-   "robustness": 0.433,
+   "fips": "40051",
+   "county": "Grady, OK",
+   "composite": 61.0,
+   "robustness": 0.506,
    "state_moratorium": false
   }
  ],
- "gap_first_to_second": 0.6,
+ "gap_first_to_second": 0.5,
  "featured": {
   "fips": "53025",
   "county": "Grant, WA",
@@ -107,7 +107,7 @@
    "land_area_sqkm"
   ],
   "pillars": {
-   "energy_carbon": 70.8,
+   "energy_carbon": 70.4,
    "water": 49.4,
    "climate_resilience": 51.2,
    "grid_infrastructure": 72.2,
@@ -137,7 +137,7 @@
  "corrections": {
   "old_inputs": {
    "passed": 1573,
-   "floor_ok": 925,
+   "floor_ok": 926,
    "top10": [
     "Douglas, WA",
     "Wayne, TN",
@@ -158,23 +158,23 @@
    },
    "Berkshire, MA": {
     "old": "excluded: hazard_percentile_max.nri_inland_flood_score",
-    "corrected": 1013
+    "corrected": 1047
    },
    "Bennington, VT": {
-    "old": 960,
-    "corrected": 1058
+    "old": 958,
+    "corrected": 1051
    },
    "Polk, IA": {
     "old": "excluded: hazard_percentile_max.nri_inland_flood_score",
-    "corrected": 23
+    "corrected": 38
    },
    "Dallas, TX": {
     "old": "excluded: hazard_percentile_max.nri_inland_flood_score",
-    "corrected": 179
+    "corrected": 293
    },
    "Maricopa, AZ": {
     "old": "excluded: hazard_percentile_max.nri_inland_flood_score;hazard_percentile_max.nri_wildfire_score",
-    "corrected": 1421
+    "corrected": 1418
    }
   },
   "vermont_grid": {
@@ -192,8 +192,8 @@
    "dc_existing_count": 3
   },
   "Luzerne, PA": {
-   "rank": 54,
-   "rank_without_dc_existing_count": 108,
+   "rank": 27,
+   "rank_without_dc_existing_count": 56,
    "dc_existing_count": 1
   }
  },
@@ -213,12 +213,12 @@
    0.733,
    0.756,
    0.778,
-   0.778,
    0.733,
    0.778,
-   0.733,
    0.778,
-   0.733
+   0.733,
+   0.733,
+   0.778
   ],
   "scored_columns_present": 35,
   "scored_columns_mapped": 45,
@@ -228,7 +228,7 @@
  "presets": {
   "balanced": {
    "passed": 1565,
-   "floor_ok": 915,
+   "floor_ok": 912,
    "floor": 10,
    "top3": [
     "Grant, WA",
@@ -238,7 +238,7 @@
   },
   "speed_to_power": {
    "passed": 779,
-   "floor_ok": 489,
+   "floor_ok": 487,
    "floor": 10,
    "top3": [
     "Wayne, TN",
@@ -253,7 +253,7 @@
    "top3": [
     "Whitman, WA",
     "Benton, WA",
-    "Washington, OR"
+    "Luzerne, PA"
    ]
   }
  },
@@ -293,17 +293,17 @@
   "ranks": {
    "Grant, WA": [
     7,
-    6,
+    9,
     1
    ],
    "Berkshire, MA": [
     1,
-    2,
-    1013
+    5,
+    1047
    ],
    "Whitman, WA": [
     8,
-    7,
+    10,
     3
    ]
   }
@@ -320,13 +320,13 @@
    "cost": 0.15
   },
   "equal_weights_featured_rank": 1,
-  "equal_weights_top10_overlap": 8,
+  "equal_weights_top10_overlap": 7,
   "uniform_weightings_top10_share": {
    "Grant, WA": 0.505,
-   "Whitman, WA": 0.447,
-   "Wayne, TN": 0.421,
-   "Trumbull, OH": 0.324,
-   "Clark, WA": 0.296
+   "Whitman, WA": 0.458,
+   "Wayne, TN": 0.424,
+   "Luzerne, PA": 0.364,
+   "Clark, WA": 0.306
   },
   "default_weight_sd": {
    "energy_carbon": 0.028,
@@ -342,7 +342,8 @@
  "grant_ranges": {
   "facility_mwh": 2444212,
   "co2_tonnes": {
-   "bpa": 235550,
+   "bpa": 235547,
+   "bpa_rate_lb_mwh": 212.458,
    "nwpp_table": 700390
   },
   "energy_cost_musd": {
@@ -357,5 +358,52 @@
   "Wayne, TN": 158,
   "Berkshire, MA": 435,
   "Loudoun, VA": 226
+ },
+ "horizon_2050_figure": {
+  "Cooling degree days": {
+   "Grant, WA": {
+    "today": 655.1,
+    "2050": 1176.8
+   },
+   "Loudoun, VA": {
+    "today": 1132.1,
+    "2050": 1887.5
+   }
+  },
+  "Days above 95\u00b0F": {
+   "Grant, WA": {
+    "today": 14.5,
+    "2050": 35.9
+   },
+   "Loudoun, VA": {
+    "today": 5.0,
+    "2050": 30.3
+   }
+  }
+ },
+ "global": {
+  "countries": 196,
+  "passed": 83,
+  "floor_ok": 55,
+  "pillars": [
+   "energy_carbon",
+   "water",
+   "climate_resilience",
+   "grid_infrastructure",
+   "community",
+   "governance"
+  ],
+  "top3": [
+   "Sweden",
+   "Switzerland",
+   "Norway"
+  ],
+  "us": {
+   "rank": 58,
+   "of": 83,
+   "composite": 59.5,
+   "floor_ok": false,
+   "pillar_climate_resilience": 16.2
+  }
  }
 }

@@ -67,7 +67,27 @@ python -m etl.build_features   # downloads to data/raw/, writes the county table
 `build_features` caches every download. Pass `--no-fetch` to rebuild from
 `data/raw/` without network calls. Delete a file under `data/raw/` to refetch it.
 
-Engine and app commands are added as they're built.
+The build also writes `county_features_quality_report.json` (validation
+checks and column profiles) and `brownfield_sites.parquet` (gitignored). The
+BLS LAUS host refuses requests without a contact address, so set
+`BLS_CONTACT_EMAIL=you@example.com` before the first online build. Cached
+files need nothing.
+
+The committed county table and `results/` are frozen hackathon artifacts.
+A rebuild is semantically reproducible but not always byte-identical, and
+it can swap tied counties outside the leading results. Reproduce exact
+rankings from the committed table. See "Frozen artifacts and
+reproducibility" in `docs/schema.md`.
+
+Run the app with `streamlit run app/app.py`. After a county's ranking detail,
+the app shows **Industrial reuse and community transition**. This unscored,
+post-ranking screening covers economic transition, industrial reuse,
+infrastructure context, and EPA brownfield properties, and offers a
+downloadable screening brief. The property table needs
+`data/processed/brownfield_sites.parquet`, which the ETL generates and git
+ignores. Without it, the app explains that and still shows county totals
+from the committed table. See `docs/industrial_reuse.md` and the Boone
+County walkthrough in `docs/demo_script.md`.
 
 ## Data notes
 

@@ -9,7 +9,8 @@ research write-ups from PRs #29 and #30. Figures and
 `docs/figures/facts.json` come from `python docs/figures/make_figures.py`,
 which reads only committed files and makes no network calls.
 
-**Featured county.** Grant County, WA (53025). To swap it, run
+**Featured county.** Grant County, WA (53025). Slide 12 covers the global
+country run. To swap the featured county, run
 `python docs/figures/make_figures.py --featured <fips>` and update slides 1,
 6, 7, 8, and 9 from the new `facts.json` and research files.
 
@@ -26,7 +27,7 @@ sustainable AI campus: first of 1,565 qualifying counties, and in the top 10
 under 99.9% of weight resamples.
 
 - Grant ranks first with a composite of 63.7, ahead of Wayne TN (63.2) and
-  Whitman WA (63.0). Its lead is 0.6 points, so the robustness number
+  Whitman WA (63.1). Its lead is 0.5 points, so the robustness number
   carries the claim, not the rank.
 - **Why it wins:** cheap power, favorable state policy, room to build, and an
   existing data center cluster with 99% fiber coverage.
@@ -57,7 +58,7 @@ strength.
   county below the 10th percentile on any pillar ranks after every county
   that isn't.
 - **The weights are stated judgments, not fitted values.** Grant is also first
-  under equal weights, sharing 8 of the top 10. Across uniformly random
+  under equal weights, sharing 7 of the top 10. Across uniformly random
   weightings it lands in the top 10 50.5% of the time, more than any other
   county.
 
@@ -76,7 +77,7 @@ sources, and the proxies are labeled as proxies.
 - 3,109 counties in the contiguous US by 83 columns. 35 of the 45 mapped
   columns are populated, so coverage is 0.73 to 0.78 across the top 10.
 - Sources by pillar:
-  - **Energy and carbon:** eGRID2023 subregions, the LBNL interconnection queue, the NREL WIND Toolkit, and eGRID plants within 100 km.
+  - **Energy and carbon:** eGRID2023 subregions, the LBNL interconnection queue (clean generation excluding storage, and capacity delivered 2021-2025), the NREL WIND Toolkit, and eGRID plants within 100 km.
   - **Water:** the Drought Monitor, FEMA NRI, WRI Aqueduct 4.0, and CMRA.
   - **Climate:** FEMA NRI loss rates and CMRA projections.
   - **Grid:** the LBNL queue, FCC fiber, FracTracker, and EIA-860.
@@ -105,10 +106,10 @@ means.
 
 - **Seven pillars:** with price as one of seven grid columns (2.6% of the
   composite), Berkshire County, MA ranked first at 18.19 cents/kWh, and Grant
-  seventh. Correcting a closed Massachusetts tax exemption moved Berkshire to
-  second and Grant to sixth.
+  seventh. Correcting a closed Massachusetts tax exemption, recomputed with
+  today's queue measures, moves Berkshire to fifth and Grant to ninth.
 - **Cost as its own pillar:** at 15%, cost moved Grant to first and Berkshire
-  to 1,013th. Berkshire would pay $435M a year for power against Loudoun's
+  to 1,047th. Berkshire would pay $435M a year for power against Loudoun's
   $226M and Grant's $162M.
 - **Then feasibility:** research found that $162M uses a state average price
   a new load won't get. At BPA's new-load rate the same energy costs $196M to
@@ -171,7 +172,8 @@ of Loudoun's, and dry cooling cuts its water to 28 million gallons.
 **Speaker note:**
 - Formulas, ranges, and limits: `research/impact.md`.
 - New-load rates: `research/implementation.md`.
-- Figure values are recomputed from `etl/impact.py` into `docs/figures/facts.json` (`grant_ranges`, `impact`).
+- The BPA rate is `BPA_CO2_LB_MWH` (212.458 lb/MWh, eGRID2023 BPAT) in `etl/impact.py`.
+- Figure values are recomputed with `etl/impact.py` into `docs/figures/facts.json` (`grant_ranges`, `impact`).
 
 ## 7. Risk assessment
 
@@ -220,22 +222,23 @@ sources marked [C], [P], or [U] are in `research/implementation.md`.
 ## 9. The 2050 view
 
 **Headline:** The shortlist holds through 2050. What changes is heat: by
-mid-century Grant's cooling load matches Loudoun's today.
+mid-century Grant's cooling load matches Loudoun's today, and Grant already
+has more days above 95°F.
 
 - Grant's cooling degree days rise from 655 to 1,177 under RCP 8.5 at
-  mid-century, about Loudoun's 1,132 today. Days above 95°F go from 14.5 to
-  35.9 a year.
+  mid-century, about Loudoun's 1,132 today; Loudoun rises to 1,888. But
+  Grant has more peak heat: 14.5 days above 95°F today against Loudoun's
+  5.0, and 35.9 against 30.3 by 2050.
 - Under the 2050 horizon, no top-10 county moves more than one place.
 - Water stress barely moves: 727 of 1,254 US basins have the same Aqueduct
   score in 2050, all at 0 or the cap of 5, and Grant stays at 3.6. Cooling
   degree days and days above 95°F carry the horizon story. Design cooling
   for 2050 design days.
 
-**Figure:** none yet. A two-bar figure of Grant 2050 against Loudoun today,
-in cooling degree days, would land the point.
+**Figure:** `docs/figures/horizon_2050.png`
 
 **Speaker note:** County values are in `docs/figures/facts.json`
-(`featured.horizon_2050_raw`). Rank movement is in `results/balanced.csv`
+(`horizon_2050_figure`). Rank movement is in `results/balanced.csv`
 (`rank_delta_2050`), Loudoun's cooling degree days in `research/impact.md`,
 and the basin saturation in the manifest notes.
 
@@ -255,9 +258,10 @@ new 300 MW load gets neither, so the feasibility study has the last word.
   - Retired coal is 0 in 2,884 counties and acts like a yes/no flag. Counties can rise on population decline, a stated value choice.
 - **Judgment and cutoffs:**
   - The weights are judgments. The default robustness test varies each by only about 0.03; under uniformly random weights Grant is in the top 10 50.5% of the time.
-  - First place leads by 0.6 points.
+  - First place leads by 0.5 points.
   - Indiana County PA, with Homer City and 2,230 MW of retired coal, misses the 0.2 fiber gate at 0.1996.
   - Loudoun VA fails our queue age gate.
+  - Delivered queue capacity uses the actual online date where LBNL has one and the proposed date otherwise, which covers every ISO-NE project and 82% in the West. It's evidence the queue delivers, not capacity available to a new load.
 
 **Figure:** none. Text slide.
 
@@ -288,3 +292,27 @@ Take it from the live demo; the click path is in `docs/demo_script.md`.
 **Speaker note:** Preset counts are in `results/*_report.json` and
 `docs/figures/facts.json` (`presets`). The conditions format is in
 `docs/conditions.md`.
+
+## 12. The engine carries to another region
+
+**Headline:** The same engine ranked 196 countries after about 40 lines of
+change. That shows it carries to another region; it isn't a country
+recommendation.
+
+- **What changed:** only the row identity. An optional `unit` block names the
+  key, name, and group columns. Gates, percentiles, pillar means, weights,
+  the floor, and robustness are the same code. The US presets still
+  reproduce their results byte for byte.
+- **Result:** 83 of 196 countries pass the gates and 55 pass the floor.
+  Sweden, Switzerland, and Norway lead, with robustness 100%.
+- **Why it isn't a recommendation:**
+  - There's no cost pillar, because no open global industrial power price exists.
+  - The United States ranks 58th of 83 because a national hazard average (climate pillar 16.2) fails the floor. That says nothing about a site in Ohio.
+  - A country isn't a site. Use it to choose which country's sub-national data to build next.
+
+**Figure:** `docs/figures/global_table.png`
+
+**Speaker note:** The method, sources, and the United States explanation are
+in `docs/global.md`. The ranks are in `results/global_balanced.csv` and
+`results/global_balanced_report.json`, and `docs/figures/facts.json`
+(`global`) has the counts.
