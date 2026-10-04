@@ -14,7 +14,7 @@ import pandas as pd
 import pytest
 import yaml
 
-from engine.explain import COLUMN_LABELS, explain
+from engine.explain import COLUMN_LABELS, explain, format_text
 from engine.rank import load_features, load_yaml, rank
 from etl.adapters.lbnl_queue_alt import clean_generation_mw, is_standalone_storage
 from etl.schema import CORE
@@ -160,6 +160,10 @@ def test_explanations_label_scored_storage_and_legacy_measures(table):
     assert {COLUMN_LABELS["queue_active_mw_storage_standalone"], COLUMN_LABELS["queue_active_mw_clean"],
             COLUMN_LABELS["queue_operational_mw_5y"]} <= set(e["context"])
     assert all("not scored" in k for k in e["context"])
+    text = format_text(e)  # the CLI path: labels, raw column names, and the unscored block
+    assert "Clean generation in the queue, excluding storage (MW)" in text
+    assert "queue_operational_mw_online_5y" in text and "unscored queue context:" in text
+    assert "top reasons:" in text
 
 
 # --- FracTracker findings (documented follow-ups, not changed here) ---------------------

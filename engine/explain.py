@@ -87,7 +87,7 @@ def explain(df, conditions, pillars, fips, result=None):
         "robustness": None if row is None else _num(row["robustness"]),
         "coverage": _num(sc.scores.at[i, "coverage"]),
         "pillar_floor_exempt": exempt,
-        "facts": {label: _flag(df, i, col) for label, col in FACTS.items() if col in df.columns},
+        "facts": {name: _flag(df, i, col) for name, col in FACTS.items() if col in df.columns},
         "warnings": [MORATORIUM_WARNING] if _flag(df, i, "moratorium_state_active") else [],
         "top_reasons": None if row is None else [r for r in row["top_reasons"].split(";") if r],
         "context": {label(c): _num(df.at[i, c]) for c in QUEUE_CONTEXT if c in df.columns},
@@ -131,8 +131,8 @@ def format_text(e, u=DEFAULT_UNIT):
         lines.append(f"unknown (null, not excluded): {', '.join(e['unknown_gates'])}")
     for w in e["warnings"]:
         lines.append(f"warning: {w}")
-    for label, v in e["facts"].items():
-        lines.append(f"{label}: {'n/a' if v is None else 'yes' if v else 'no'}")
+    for name, v in e["facts"].items():
+        lines.append(f"{name}: {'n/a' if v is None else 'yes' if v else 'no'}")
     if e["pillar_floor_exempt"]:
         lines.append(f"exempt from the floor: {', '.join(e['pillar_floor_exempt'])}")
     for p, d in e["pillars"].items():
