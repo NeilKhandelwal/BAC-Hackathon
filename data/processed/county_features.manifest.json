@@ -246,6 +246,35 @@
       "resolution": "county",
       "adapter": "lbnl_queue_alt",
       "fetched_at": "2026-10-03T20:59:51+00:00"
+    },
+    {
+      "name": "USGS Protected Areas Database of the United States (PAD-US) 4.1, Summary Statistics",
+      "version": "PAD-US 4.1 Vector Analysis, counties clipped to Census 2022 boundaries",
+      "url": "https://www.sciencebase.gov/catalog/file/get/6759b69fd34edfeb8710a3ea?f=__disk__29%2F74%2F0b%2F29740bfde5519713b02c6190b07c47e965ce5d23",
+      "item": "https://www.sciencebase.gov/catalog/item/6759b69fd34edfeb8710a3ea",
+      "license": "public domain, U.S. Geological Survey",
+      "resolution": "USGS flattened polygons summarized to county, acres by GAP status",
+      "adapter": "pad_us",
+      "fetched_at": "2026-10-04T05:36:07+00:00"
+    },
+    {
+      "name": "Census TIGER/Line American Indian/Alaska Native/Native Hawaiian Areas",
+      "version": "2024",
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/AIANNH/tl_2024_us_aiannh.zip",
+      "license": "public domain, US Census Bureau",
+      "resolution": "TIGER/Line legal boundaries, intersected with cartographic county polygons in EPSG:5070",
+      "adapter": "tribal_lands",
+      "fetched_at": "2026-10-04T05:27:27+00:00"
+    },
+    {
+      "name": "IPUMS NHGIS land cover summaries (NLCD)",
+      "version": "NLCD 2021, 2020 county boundaries (TIGER/Line 2020)",
+      "url": "https://secure-assets.ipums.org/nhgis/environmental/nhgis_county2020_tl2020_nlcd_timebycolumn.zip",
+      "license": "IPUMS NHGIS terms: free account, cite, don't redistribute (https://www.nhgis.org/citation-and-use-nhgis-data)",
+      "citation": "Manson, S., Schroeder, J., Van Riper, D., Knowles, K., Kugler, T., Roberts, F., and Ruggles, S. IPUMS National Historical Geographic Information System. Minneapolis, MN: IPUMS.",
+      "resolution": "NLCD 30 m classes summarized to county polygons by NHGIS (exactextractr)",
+      "adapter": "nlcd_landcover",
+      "fetched_at": "2026-10-04T06:29:10+00:00"
     }
   ],
   "columns_present": [
@@ -414,7 +443,14 @@
     "queue_active_mw_storage_standalone",
     "queue_operational_mw_online_5y",
     "queue_operational_projects_online_5y",
-    "queue_operational_online_date_fallback_share"
+    "queue_operational_online_date_fallback_share",
+    "pct_developed",
+    "pct_cropland",
+    "pct_forest_wetland",
+    "pct_protected",
+    "pct_protected_gap1to3",
+    "tribal_land_share",
+    "pct_cultivated_crops"
   ],
   "columns_missing": [
     "permitting_discretionary_risk",
@@ -423,10 +459,6 @@
     "grid_water_gal_mwh",
     "saidi_minutes",
     "dist_ixp_km",
-    "pct_developed",
-    "pct_cropland",
-    "pct_forest_wetland",
-    "pct_protected",
     "greenhouse_acres"
   ],
   "null_counts": {
@@ -554,7 +586,14 @@
     "queue_active_mw_clean (legacy, not scored) counts mw_1 of every active project whose components are all in etl/schema.py CLEAN_SOURCES, which includes battery and other storage.",
     "queue_active_mw_storage_standalone (not scored) is mw_1 of active projects whose every component is storage: Battery, Pumped Storage, Storage, or Other Storage.",
     "queue_operational_mw_online_5y (scored) counts operational projects dated to 2021-2025 by their actual online date (on_date), or by their proposed online date (prop_date) only when on_date is blank. queue_operational_online_date_fallback_share is the share of each county's counted projects dated by prop_date. The fallback is substantial where LBNL lacks on_date: 100% of operational ISO-NE projects and 82% in the West. The measure is evidence that the queue delivers, not proof of capacity available to a new data center.",
-    "queue_operational_mw_5y (legacy, not scored) counts operational projects that entered the queue in 2019 or later (q_year), which measures queue entry rather than delivery."
+    "queue_operational_mw_5y (legacy, not scored) counts operational projects that entered the queue in 2019 or later (q_year), which measures queue entry rather than delivery.",
+    "pct_protected is the share of the county's total area (land and water) in PAD-US 4.1 GAP status 1 or 2, which USGS describes as managed primarily for biodiversity. pct_protected_gap1to3 adds GAP 3, managed for multiple uses including conservation and extraction; it is context and not scored. Both come from USGS's county summary of the PAD-US 4.1 Vector Analysis layer, which USGS flattened 'to remove overlaps, avoiding overestimation in protected area statistics', so a wilderness inside a national forest counts once.",
+    "The denominator is the county's total area in the same USGS table. It matches Census 2024 land plus water within 2% for every county but one (Emporia city, VA, 4.4%, a boundary-vintage difference), so counties with large lakes or coastal water read lower than a land-only share would.",
+    "American Indian lands are GAP 4 in PAD-US, so pct_protected and tribal_land_share don't double count. County shares are a screen, not a siting check: a 150-acre campus can avoid protected land inside a county, so a parcel-level check belongs in feasibility.",
+    "tribal_land_share is the share of the county polygon inside federally recognized American Indian reservations or off-reservation trust land (TIGER 2024 AIANNH classes D2, D3, D5, D8), unioned so overlaps count once. It measures area inside legal boundaries, not tribal ownership: reservations can contain non-tribal fee land. Statistical areas such as Oklahoma tribal statistical areas are excluded. TIGER/Line tribal edges against generalized cartographic county edges leave slivers below 0.01% in some counties (Grant WA reads about 0.0001%). Context only; not scored.",
+    "pct_cropland is the share of the county in NLCD 2021 classes 81 (pasture/hay) and 82 (cultivated crops); pct_cultivated_crops is class 82 alone and is context only. pct_developed is classes 21-24 and pct_forest_wetland classes 41-43, 90, and 95. Shares are of the whole county polygon, water included, as NHGIS computes them.",
+    "The NHGIS summaries use 2020 county boundaries, so Connecticut appears as its 8 old counties. Each planning region takes the shares of the county it mostly overlaps (etl/fips.py CT_REGION_TO_OLD).",
+    "NLCD measures land cover, not soil quality: cropland is not the same as prime farmland, which needs NRCS soil survey data. The raw file requires a free IPUMS NHGIS account and is not redistributed."
   ],
   "joins": {
     "nri": {
@@ -701,6 +740,21 @@
       "rows": 3109,
       "fips_not_in_table": [],
       "counties_without_data": 0
+    },
+    "pad_us": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "tribal_lands": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
+    },
+    "nlcd_landcover": {
+      "rows": 3109,
+      "fips_not_in_table": [],
+      "counties_without_data": 0
     }
   },
   "errors": {},
@@ -710,5 +764,25 @@
   "artifacts": [
     "data/processed/brownfield_sites.parquet"
   ],
-  "quality_report": "data/processed/county_features_quality_report.json"
+  "quality_report": "data/processed/county_features_quality_report.json",
+  "patches": [
+    {
+      "at": "2026-10-04T06:52:22+00:00",
+      "adapters": [
+        "pad_us",
+        "tribal_lands",
+        "nlcd_landcover"
+      ],
+      "columns_added": [
+        "pct_protected",
+        "pct_protected_gap1to3",
+        "tribal_land_share",
+        "pct_cropland",
+        "pct_cultivated_crops",
+        "pct_developed",
+        "pct_forest_wetland"
+      ],
+      "rule": "frozen-artifact policy: existing columns unchanged"
+    }
+  ]
 }

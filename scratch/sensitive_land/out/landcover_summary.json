@@ -1,0 +1,182 @@
+{
+  "shares": {
+    "Grant, WA": {
+      "pct_cropland": 0.429,
+      "pct_cultivated_crops": 0.419,
+      "pct_developed": 0.044,
+      "pct_forest_wetland": 0.018
+    },
+    "Clark, WA": {
+      "pct_cropland": 0.162,
+      "pct_cultivated_crops": 0.004,
+      "pct_developed": 0.287,
+      "pct_forest_wetland": 0.445
+    },
+    "Franklin, NY": {
+      "pct_cropland": 0.081,
+      "pct_cultivated_crops": 0.025,
+      "pct_developed": 0.035,
+      "pct_forest_wetland": 0.828
+    },
+    "Berkshire, MA": {
+      "pct_cropland": 0.059,
+      "pct_cultivated_crops": 0.006,
+      "pct_developed": 0.09,
+      "pct_forest_wetland": 0.825
+    },
+    "Whitman, WA": {
+      "pct_cropland": 0.711,
+      "pct_cultivated_crops": 0.681,
+      "pct_developed": 0.033,
+      "pct_forest_wetland": 0.018
+    }
+  },
+  "committed": {
+    "top10": [
+      "Grant, WA (63.68)",
+      "Wayne, TN (63.19)",
+      "Whitman, WA (63.06)",
+      "Mayes, OK (62.22)",
+      "Scott, IA (62.08)",
+      "Benton, WA (62.05)",
+      "Clark, WA (61.91)",
+      "Scott, TN (61.74)",
+      "Adair, OK (61.12)",
+      "Grady, OK (61.02)"
+    ],
+    "ranks": {
+      "Grant, WA": 1,
+      "Clark, WA": 7,
+      "Franklin, NY": 952,
+      "Berkshire, MA": 1047,
+      "Whitman, WA": 3
+    },
+    "grant_land_pillar": 75.0,
+    "grant_permitting_pillar": 53.2,
+    "gap_first_to_grant": 0.0,
+    "passed": 1565,
+    "floor_ok": 912
+  },
+  "cropland": {
+    "top10": [
+      "Wayne, TN (63.12)",
+      "Grant, WA (62.70)",
+      "Clark, WA (62.65)",
+      "Scott, TN (62.62)",
+      "Unicoi, TN (62.16)",
+      "Mayes, OK (61.69)",
+      "Benton, WA (61.58)",
+      "Whitman, WA (61.51)",
+      "Payne, OK (61.47)",
+      "Fentress, TN (61.23)"
+    ],
+    "ranks": {
+      "Grant, WA": 2,
+      "Clark, WA": 3,
+      "Franklin, NY": 892,
+      "Berkshire, MA": 973,
+      "Whitman, WA": 8
+    },
+    "grant_land_pillar": 60.7,
+    "grant_permitting_pillar": 53.2,
+    "gap_first_to_grant": 0.42,
+    "passed": 1565,
+    "floor_ok": 848
+  },
+  "cultivated": {
+    "top10": [
+      "Wayne, TN (63.33)",
+      "Clark, WA (63.07)",
+      "Scott, TN (62.77)",
+      "Mayes, OK (62.55)",
+      "Grant, WA (62.51)",
+      "Unicoi, TN (62.49)",
+      "Adair, OK (62.18)",
+      "Fentress, TN (61.66)",
+      "Washington, AR (61.64)",
+      "Whitman, WA (61.45)"
+    ],
+    "ranks": {
+      "Grant, WA": 5,
+      "Clark, WA": 2,
+      "Franklin, NY": 923,
+      "Berkshire, MA": 994,
+      "Whitman, WA": 10
+    },
+    "grant_land_pillar": 57.9,
+    "grant_permitting_pillar": 53.2,
+    "gap_first_to_grant": 0.82,
+    "passed": 1565,
+    "floor_ok": 869
+  },
+  "all_nlcd": {
+    "top10": [
+      "Grant, WA (64.42)",
+      "Whitman, WA (63.45)",
+      "Benton, WA (63.15)",
+      "Clark, WA (61.75)",
+      "Mayes, OK (61.70)",
+      "Grady, OK (61.38)",
+      "Payne, OK (61.36)",
+      "Wayne, TN (61.02)",
+      "Marshall, IA (60.94)",
+      "Hutchinson, TX (60.86)"
+    ],
+    "ranks": {
+      "Grant, WA": 1,
+      "Clark, WA": 4,
+      "Franklin, NY": 976,
+      "Berkshire, MA": 1104,
+      "Whitman, WA": 2
+    },
+    "grant_land_pillar": 63.4,
+    "grant_permitting_pillar": 63.2,
+    "gap_first_to_grant": 0.0,
+    "passed": 1565,
+    "floor_ok": 863
+  },
+  "full_land": {
+    "top10": [
+      "Grant, WA (63.70)",
+      "Whitman, WA (63.69)",
+      "Benton, WA (62.69)",
+      "Mayes, OK (62.03)",
+      "Payne, OK (61.97)",
+      "Clark, WA (61.89)",
+      "Grady, OK (61.66)",
+      "Marshall, IA (61.40)",
+      "Hutchinson, TX (61.14)",
+      "Walla Walla, WA (60.72)"
+    ],
+    "ranks": {
+      "Grant, WA": 1,
+      "Clark, WA": 6,
+      "Franklin, NY": 1048,
+      "Berkshire, MA": 1164,
+      "Whitman, WA": 2
+    },
+    "grant_land_pillar": 52.8,
+    "grant_permitting_pillar": 63.2,
+    "gap_first_to_grant": 0.0,
+    "passed": 1565,
+    "floor_ok": 883
+  },
+  "smaa_grant": {
+    "committed": {
+      "rank1": 0.1146,
+      "top10": 0.5054
+    },
+    "cropland": {
+      "rank1": 0.0352,
+      "top10": 0.2952
+    },
+    "all_nlcd": {
+      "rank1": 0.1298,
+      "top10": 0.544
+    },
+    "full_land": {
+      "rank1": 0.0316,
+      "top10": 0.358
+    }
+  }
+}

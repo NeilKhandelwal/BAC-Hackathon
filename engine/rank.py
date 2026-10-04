@@ -21,6 +21,9 @@ SIMPLE_GATES = {
     "min_fiber_share_locations": ("fiber_share_locations", lambda v, t: v < t),
     "max_permitting_risk": ("permitting_discretionary_risk", lambda v, t: v > t),
     "min_population": ("population", lambda v, t: v < t),
+    # Sensitive land. Off unless a conditions file sets them. County shares are a screen, not a siting check.
+    "max_pct_protected": ("pct_protected", lambda v, t: v > t),
+    "max_tribal_land_share": ("tribal_land_share", lambda v, t: v > t),
     "min_electricity_generation_twh": ("electricity_generation_twh", lambda v, t: v < t),
 }
 FLAG_GATES = {

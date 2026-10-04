@@ -29,7 +29,9 @@ ADAPTERS = ["tiger_acs", "nri", "cmra", "lbnl_queue", "fcc_fiber", "egrid", "dro
             "pop_history", "bea_manufacturing", "netl_energy_communities",
             # ETL v2 context adapters. They only add STRETCH columns and leave the ones above alone.
             "bls_laus", "bls_qcew", "usda_ers", "epa_brownfields", "nri_context", "aqueduct_context",
-            "cmra_context", "fcc_context", "fractracker_context", "lbnl_queue_alt"]  # tiger_acs must be first: it defines the rows
+            "cmra_context", "fcc_context", "fractracker_context", "lbnl_queue_alt",
+            # Sensitive land and land cover. nlcd_landcover is OPTIONAL: its raw file needs an NHGIS account.
+            "pad_us", "tribal_lands", "nlcd_landcover"]  # tiger_acs must be first: it defines the rows
 
 
 def _mtime(path):

@@ -1,0 +1,201 @@
+PROTECTED LAND, TRIBAL, AND CULTURAL-RESOURCE SCREEN: GRANT WA, CLARK WA, FRANKLIN NY
+
+METHOD (applies to every distance below)
+- Distances are straight-line, nearest polygon edge to the reference point, computed in a local azimuthal equidistant projection centered on the point. "inside" means the point is within the polygon. Treat as +/-0.5 km (geometry generalized to ~30 m).
+- "In county" is the polygon's area intersecting the TIGER county polygon.
+- Layers queried live (2026-10-04):
+  - PAD-US 4.1, USGS ArcGIS Online: https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/PADUS_Protection_Status_by_GAP_Status_Code/FeatureServer/0
+  - Census TIGERweb ACS 2024 (AIANNH layers 36 federal reservations, 38 off-reservation trust land, 40 state reservations; layer 82 counties): https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_ACS2024/MapServer
+  - USFS EDW administrative forest boundaries and basic ownership: https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/1 and https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BasicOwnership_02/MapServer/0
+  - Adirondack Park Blue Line polygon (APA-digitized): https://services2.arcgis.com/8krRUWgifzA4cgL3/ArcGIS/rest/services/BluelinePolygon/FeatureServer/0
+  - TIGERweb areal hydrography: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Hydro/MapServer/1
+- Where PAD-US and the managing agency's own layer disagree (USFS units in Clark), the agency layer is used and the gap noted.
+- WA DNR "State Resource Management Area" in PAD-US is DNR trust land managed for revenue. It is NOT a conservation designation and is not counted as protected below (nearest: 4.8 km from Quincy; 7.0 km from Vancouver).
+
+======================================================================
+1. GRANT COUNTY, WA (53025). Reference point: Quincy, 47.234 N, 119.852 W
+======================================================================
+
+Feature | Type | Manager | In Grant Co.? | Distance, bearing | Source
+--- | --- | --- | --- | --- | ---
+Columbia Basin Wildlife Area, unnamed complex parcels | State wildlife area | WDFW | Yes (158 km2) | 5.8 km W | PAD-US; https://wdfw.wa.gov/places-to-go/wildlife-areas/columbia-basin-wildlife-area
+BLM Wenatchee Field Office parcels | BLM public land | BLM | Yes (211 km2) | 7.2 km NE | PAD-US
+Quincy Lakes Unit, Columbia Basin WA | State wildlife area unit | WDFW | Yes (9,351 ac) | 8.6 km S | PAD-US; WDFW page above
+Columbia River reach (TIGER "Columbia Riv"; TIGER "Wanapum Lk" polygon at 29.0 km) | Priest Rapids Project water (county PUD project under FERC license P-2114, not a federal dam) | Grant PUD | County line runs along river | 10.6 km W | TIGER hydro; FERC EA (not fetched) https://cms.ferc.gov/sites/default/files/2021-01/p-2114-finalEA.pdf
+Colockum Wildlife Area | State wildlife area | WDFW | No (Kittitas/Chelan side) | 12.0 km W | PAD-US
+Winchester Reservoir Unit | State wildlife area unit | WDFW | Yes | 15.9 km SE | PAD-US; WDFW
+Rock Island Canyon ACEC | BLM ACEC | BLM | No (Douglas Co.) | 22.0 km NW | PAD-US
+Desert Unit, Columbia Basin WA | State wildlife area unit | WDFW | Yes (54,808 ac) | 22.6 km SE | PAD-US; WDFW
+Upper Dry Gulch Natural Area Preserve | DNR NAP | WA DNR | No (Douglas Co.) | 23.6 km NW | PAD-US
+Ginkgo Petrified Forest State Park | State park | WA State Parks | No (Kittitas Co., Vantage) | 28.5 km SW | PAD-US; https://parks.wa.gov/find-parks/state-parks/ginkgo-petrified-forest-state-park
+Moses Lake (BOR lands) | Columbia Basin Project land | Bureau of Reclamation | Yes | 31.1 km E | PAD-US
+Okanogan-Wenatchee NF, administrative boundary | National forest | USFS | No | 30.8 km W (NFS-owned land 32.1 km W) | USFS EDW
+Lake Lenore area | State wildlife land (PAD-US labels it "Lenore Game Range", USFWS; see unverified) | WDFW (likely) | Yes | 33.7 km NE | PAD-US
+Sun Lakes-Dry Falls State Park | State park | WA State Parks | Yes | 35.8 km NE | PAD-US
+Gloyd Seeps Unit | State wildlife area unit | WDFW | Yes | 36.9 km E | PAD-US; WDFW
+Lower Crab Creek Unit | State wildlife area unit | WDFW | Yes | 38.3 km S | PAD-US; WDFW
+Columbia National Wildlife Refuge | NWR | USFWS | Partly (62 of 107 km2 of PAD-US fee polygons; rest Adams Co.) | 41.0 km S | PAD-US; https://www.fws.gov/refuge/columbia
+Potholes Reservoir (BOR lands) | Columbia Basin Project land | Bureau of Reclamation | Yes | 42.0 km SE | PAD-US
+Two-Steppe Natural Area Preserve | DNR NAP | WA DNR | No (Douglas Co.) | 42.9 km N | PAD-US
+Potholes State Park | State park | WA State Parks | Yes | 46.2 km SE | PAD-US
+Priest Rapids Unit | State wildlife area unit | WDFW | Yes | 52.8 km S | PAD-US; WDFW
+Seep Lakes Unit | State wildlife area unit | WDFW | Yes | 52.9 km SE | PAD-US; WDFW
+Hanford Reach National Monument | National monument (Wahluke area) | USFWS | Yes (281 km2 of 791) | 54.3 km SE | PAD-US
+Banks Lake (BOR lands) | Columbia Basin Project land | Bureau of Reclamation | Yes | 58.6 km NE | PAD-US
+Steamboat Rock State Park | State park | WA State Parks | Yes | 59.8 km NE | PAD-US
+Alpine Lakes Wilderness | Wilderness (nearest of any kind) | USFS | No | 67.3 km W | PAD-US
+Colville Off-Reservation Trust Land | Tribal trust land | Colville Tribes / BIA | No | 74.7 km N | TIGER AIANNH 2024
+Colville Reservation | Federal reservation | Colville Tribes | No | 86.4 km N | TIGER AIANNH 2024
+Yakama Nation Reservation | Federal reservation | Yakama Nation | No | 90.7 km SW | TIGER AIANNH 2024
+Lake Roosevelt National Recreation Area | NPS unit (nearest) | NPS | Touches (2.2 km2 in Grant per PAD-US) | 101.1 km NE | PAD-US
+Spokane Reservation | Federal reservation | Spokane Tribe | No | 135.3 km NE | TIGER
+Umatilla Off-Reservation Trust Land | Tribal trust land | CTUIR | No | 152.3 km S | TIGER
+
+Specific confirmations (Grant):
+- Columbia NWR: CONFIRMED. 41 km S of Quincy. The Grant/Adams split comes from the PAD-US intersection; the FWS page does not state counties. FWS page: "Comprising nearly 30,000 acres". FWS page gives the office at 51 South Morgan Lake Road; Othello is the nearest city per secondary sources.
+- Potholes and Desert wildlife areas: Desert is a current WDFW unit (22.6 km SE). WDFW's 13 Columbia Basin units are Banks Lake, Beezley Hills, Billy Clapp Lake, Desert, Gloyd Seeps, Lower Crab Creek, Priest Rapids, Quincy Lakes, Seep Lakes, Sprague Lake, Sun Lakes, Upland Restoration, Winchester Reservoir. "Potholes" is not a separate WDFW unit; Potholes Reservoir is BOR land (42 km) with Potholes State Park (46 km).
+- Quincy Lakes: CONFIRMED as the "Quincy Lakes Unit" of the Columbia Basin Wildlife Area, 8.6 km S. There is no separate current "Quincy Wildlife Area".
+- Ginkgo Petrified Forest SP: CONFIRMED in Kittitas County near Vantage, 28.5 km SW, 0 km2 in Grant.
+- Sun Lakes-Dry Falls SP: CONFIRMED in Grant County, 35.8 km NE.
+- Colville Reservation: 86.4 km N (trust parcel 74.7 km N). Yakama Reservation: 90.7 km SW. No TIGER AIANNH land inside Grant County.
+- Okanogan-Wenatchee NF: nearest administrative boundary 30.8 km W; no NFS land in Grant County.
+- National park / wilderness within 50 km: NONE. Nearest wilderness is Alpine Lakes (67 km W). Nearest NPS unit is Lake Roosevelt NRA (101 km NE), which touches the northern tip of Grant County.
+- Not asked, but in county: Hanford Reach National Monument (281 km2 in Grant, 54 km SE).
+
+======================================================================
+2. CLARK COUNTY, WA (53011). Reference point: Vancouver, 45.639 N, 122.661 W
+======================================================================
+A real campus would likely be in unincorporated north or east county. Use the bearings to judge which features matter for a given parcel.
+
+Feature | Type | Manager | In Clark Co.? | Distance, bearing | Source
+--- | --- | --- | --- | --- | ---
+Fort Vancouver National Historic Site | NPS unit | NPS | Yes | 1.2 km S | PAD-US
+Shillapoo Wildlife Area (Mount St. Helens-Shillapoo complex) | State wildlife area | WDFW | Yes (11 km2) | 4.1 km NW | PAD-US
+Sauvie Island Wildlife Area | State wildlife area | ODFW (Oregon) | No | 11.6 km NW | PAD-US
+Ridgefield National Wildlife Refuge | NWR | USFWS | Yes (~4,850 ac fee) | 13.3 km NW | PAD-US
+Columbia River Gorge National Scenic Area | National scenic area | USFS (federal land) and Gorge Commission (non-federal land) | Yes, ~31 km2 per USFS boundary (PAD-US: 24.5 km2) | 21.6 km E | USFS EDW; https://clark.wa.gov/community-planning/columbia-river-gorge-national-scenic-area
+Battle Ground Lake State Park | State park | WA State Parks | Yes | 21.8 km NE | PAD-US
+Cowlitz Reservation | Federal reservation | Cowlitz Indian Tribe | Yes | 23.2 km N | TIGER AIANNH 2024; https://www.federalregister.gov/documents/2015/11/13/2015-28805/proclaiming-certain-lands-as-reservation-for-the-cowlitz-indian-tribe
+Cowlitz Off-Reservation Trust Land | Tribal trust land | Cowlitz Indian Tribe | Yes | 23.2 km N | TIGER AIANNH 2024
+Paradise Point State Park | State park | WA State Parks | Yes | 25.1 km N | PAD-US
+Steigerwald Lake National Wildlife Refuge | NWR | USFWS | Yes (~1,314 ac) | 26.0 km E | PAD-US
+Washougal Oaks NAP and NRCA | DNR NAP / NRCA | WA DNR | Yes | 30.4-31.1 km E | PAD-US
+Tualatin River NWR | NWR | USFWS | No (Oregon) | 30.1 km S | PAD-US
+Gifford Pinchot National Forest | National forest | USFS | Yes, ~4.9 km2 of NFS land per USFS (PAD-US: 0.5 km2) | 32.6 km E | USFS EDW
+Columbia Falls NAP | DNR NAP | WA DNR | No (Skamania) | 40.2 km E | PAD-US
+Mt. Hood National Forest | National forest | USFS | No (Oregon) | 42.6 km SE | PAD-US / USFS EDW
+Franz Lake NWR | NWR | USFWS | No (Skamania) | 43.6 km E | PAD-US
+Mark O. Hatfield Wilderness | Wilderness (nearest) | USFS | No (Oregon) | 43.8 km E | PAD-US
+Trapper Creek Wilderness | Wilderness (nearest in WA) | USFS | No (Skamania) | 54.2 km NE | PAD-US
+Mount St. Helens National Volcanic Monument | National monument | USFS | No | 56.0 km NE | PAD-US
+Siletz Off-Reservation Trust Land | Tribal trust land | Siletz | No (Oregon) | 76.2 km S | TIGER
+
+Specific confirmations (Clark):
+- Gifford Pinchot NF: CONFIRMED that a small part lies in Clark County. USFS EDW shows ~4.9 km2 (about 1,200 ac) of USFS-owned land inside Clark, nearest 32.6 km E of the reference point, on the Skamania line.
+- Ridgefield NWR: in Clark, 13.3 km NW. Steigerwald Lake NWR: in Clark, 26.0 km E.
+- Columbia River Gorge NSA: CONFIRMED to include part of Clark County. Clark County: the NSA "includes parts of three Washington counties (Clark, Skamania, and Klickitat) and three Oregon counties". USFS boundary puts ~31 km2 in the far east of the county, 21.6 km E. Only ~0.1 km2 of that is USFS-owned. The rest is non-federal land under the Gorge Commission management plan, implemented through a Clark County ordinance (adopted 1994, revised 2005).
+- Mount St. Helens NVM: 56 km NE, not in Clark County.
+- Cowlitz Reservation: CONFIRMED in Clark County, 23.2 km N of the reference point (La Center area). Proclaimed in November 2015 (Federal Register doc 2015-28805), 156.401 ac. This is per a search summary; federalregister.gov redirected and the page was not read. BIA signed the trust acquisition on March 9, 2015 (The Columbian, https://www.columbian.com/news/2015/mar/09/cowlitz-tribe-feds-have-established-our-reservatio/).
+- Battle Ground Lake SP: in Clark, 21.8 km NE.
+- NPS within 50 km: YES. Fort Vancouver NHS, 1.2 km S, inside Vancouver.
+
+======================================================================
+3. FRANKLIN COUNTY, NY (36033). Reference point: Malone, 44.848 N, 74.295 W
+======================================================================
+
+Feature | Type | Manager | In Franklin Co.? | Distance, bearing | Source
+--- | --- | --- | --- | --- | ---
+Adirondack Park (Blue Line) | State park boundary; APA land-use jurisdiction | NYS APA / DEC | 67.8% of county area (2,980 of 4,396 km2) | 6.1 km (Malone is OUTSIDE) | APA BluelinePolygon vs TIGER county
+Deer River State Forest | State forest | NYSDEC | Yes | 10.3 km SW | PAD-US
+Chazy Highlands Wild Forest | Forest Preserve, Wild Forest | NYSDEC | Partly (87 of 193 km2) | 10.6 km SE | PAD-US
+Titusville Mountain State Forest | State forest | NYSDEC | Yes | 12.6 km S | PAD-US
+Trout River State Forest | State forest | NYSDEC | Yes | 13.3 km N | PAD-US
+Debar Mountain Wild Forest | Forest Preserve, Wild Forest | NYSDEC | Yes (326 km2) | 17.3 km S | PAD-US
+Sable Highlands easement | Forest stewardship easement on private land, not Forest Preserve | NYSDEC (easement) | Mostly | 18.4 km E | PAD-US
+Deer River Primitive Area | Forest Preserve, Primitive | NYSDEC | Yes | 18.7 km S | PAD-US
+Santa Clara easement | Forest stewardship easement, not Forest Preserve | NYSDEC (easement) | Mostly | 19.2 km SW | PAD-US
+Lower Chateaugay Lake | Lake | n/a | Yes | 20.9 km E | TIGER hydro
+St. Regis Mohawk Off-Reservation Trust Land | Tribal trust land | Saint Regis Mohawk Tribe | Yes | 21.7 km NW | TIGER AIANNH 2024
+Bombay State Forest | State forest | NYSDEC | Yes | 22.6 km W | PAD-US
+St. Regis Mohawk Reservation (US Akwesasne) | Federal reservation | Saint Regis Mohawk Tribe | Yes (TIGER: essentially all of the 54 km2 polygon; a sliver in St. Lawrence Co.) | 24.8 km NW | TIGER AIANNH 2024
+St. Regis River State Forest | State forest | NYSDEC | Yes | 25.4 km SW | PAD-US
+Upper Chateaugay Lake | Lake | n/a | No (Clinton Co.) | 26.1 km SE | TIGER hydro
+Kushaqua easement | Forest stewardship easement, not Forest Preserve | NYSDEC (easement) | Yes | 29.8 km S | PAD-US
+Madawaska Flow-Quebec Brook Primitive Area | Forest Preserve, Primitive | NYSDEC | Yes | 35.6 km S | PAD-US
+Taylor Pond Wild Forest | Forest Preserve, Wild Forest | NYSDEC | Partly | 41.9 km SE | PAD-US
+St. Regis Canoe Area | Forest Preserve, Canoe Area | NYSDEC | Yes | 45.7 km S | PAD-US
+Saranac Lakes Wild Forest | Forest Preserve, Wild Forest | NYSDEC | Mostly (248 of 327 km2) | 46.0 km S | PAD-US
+Ganienkeh lands | Mohawk community land (non-recognized status per general knowledge; unverified) | Ganienkeh | No (Clinton Co.) | 47.7 km E | PAD-US
+McKenzie Mountain Wilderness | Forest Preserve, Wilderness (nearest) | NYSDEC | No per PAD-US | 53.5 km SE | PAD-US
+High Peaks Wilderness | Forest Preserve, Wilderness | NYSDEC | Partly (232 of 1,114 km2) | 62.8 km S | PAD-US
+Missisquoi NWR | NWR (nearest) | USFWS | No (Vermont) | 86.2 km E | PAD-US
+
+Specific confirmations (Franklin):
+- Adirondack Park: about 68% of the county's TIGER area (land and water) is inside the Blue Line. Malone is outside, 6.1 km from the line.
+- Forest Preserve units in the county, from PAD-US: Debar Mountain WF, Chazy Highlands WF (part), Taylor Pond WF (part), Saranac Lakes WF (most), Horseshoe Lake WF (part), Deer River and Madawaska Flow-Quebec Brook Primitive Areas, St. Regis Canoe Area, High Peaks Wilderness (part). The large Sable Highlands, Santa Clara, and Kushaqua tracts are easements on private timberland, not Forest Preserve.
+- Upper and Lower Chateaugay Lakes: Lower is in Franklin County (20.9 km E). Upper is in Clinton County (26.1 km SE). DEC's Chazy Highlands WMA is "Town of Dannemora, Clinton County" and includes underwater lands of Upper Chateaugay Lake. DEC classifies the adjacent parcels bought in Bellmont, Franklin County, as Forest Preserve, not WMA (https://dec.ny.gov/places/chazy-highlands-wildlife-management-area).
+- NYSDEC WMAs: PAD-US shows none in Franklin County within 50 km. Not confirmed against DEC's full county list.
+- Saint Regis Mohawk Reservation: in Franklin County, 24.8 km NW. Trust parcel at 21.7 km NW.
+- National wildlife refuge nearby: NONE within 50 km. Nearest is Missisquoi NWR, Vermont, 86 km E.
+- NPS unit within 50 km: NONE. PAD-US shows no NPS unit within 130 km.
+
+======================================================================
+TASK 2. TRIBAL CULTURAL RESOURCES AND CONSULTATION
+======================================================================
+
+Grant County / mid-Columbia
+- Yakama Nation, ceded area (Treaty with the Yakima, June 9, 1855, Art. I; https://treaties.okstate.edu/treaties/treaty-with-the-yakima-1855-0698). The boundary runs from the Lake Chelan/Methow divide to the Columbia, "thence, crossing the Columbia on a true east course, to a point whose longitude is ... (119° 10')", "thence in a true south course to the forty-seventh (47°) parallel of latitude: thence east on said parallel to the main Palouse River", down to the Snake and Columbia, then "up the Columbia to the 'White Banks' below the Priest's Rapids". Quincy (119.85 W, 47.23 N) lies east of the Columbia, west of 119°10', and north of 47 N. By my reading of the treaty text, Quincy is INSIDE the Yakama ceded area, as is most of western and central Grant County. I did not check this against an official ceded-area map. Practical effect: the Yakama Nation is an "affected tribe" for Section 106, EO 21-02, and SEPA notice. Ceded land is not reservation land and carries no tribal land-use authority over private parcels.
+- Wanapum. Grant PUD (https://www.grantpud.org/the-wanapum): "Brought together in the 1950s with the federal licensing of Priest Rapids and Wanapum dams, Grant PUD and the Wanapum Band of Native Americans committed to a long-lasting relationship". The Wanapum Heritage Center was "Completed in 2015" at 29086 WA-243, Mattawa, "next to the Wanapum ancestral village and Priest Rapids Dam". The FERC EA for P-2114 places the "Priest Rapids Band of the Wanapum ... Indian Village" inside the project boundary. Non-recognized status: unverified (see list).
+- Priest Rapids Project, FERC No. 2114, licensed to Grant PUD. These are not federal dams. They are a county PUD project, and the FERC license is the federal nexus. Per a search summary of the FERC EA (page not fetched), there are two developments, Wanapum (14,680-ac reservoir, 735 MW) and Priest Rapids (7,725-ac reservoir, 675 MW), across Grant, Yakima, Kittitas, Douglas, Benton, and Chelan counties. Section 106 applies to anything needing a FERC license amendment or use of project lands. TIGER hydrography puts the river reach labeled "Columbia Riv" 10.6 km W of the Quincy reference point and the polygon labeled "Wanapum Lk" 29.0 km away. I did not compute distances to the dam sites.
+- Confederated Tribes of the Colville Reservation. The 12 constituent bands include Moses-Columbia, Wenatchi, Entiat, Chelan, and Palus. The Moses Lake School District land acknowledgement places that district in "the historical homeland of the škwáxčənəxw people (Moses-Columbia or Sinkiuse) of the Confederated Tribes of the Colville Reservation" (https://www.mlsd161.org/land). That is a secondary source; I fetched no Colville primary source. Expect Colville to be a consulting party for Grant County.
+- CTUIR (Umatilla): nearest CTUIR trust land is 152 km S. I found no source tying Grant County to CTUIR ceded lands. Relevance is unverified.
+
+Consultation triggers (Washington)
+- Section 106, NHPA. ACHP (https://www.achp.gov/protecting-historic-properties/section-106-process/introduction-section-106): it "requires federal agencies to consider the effects on historic properties of projects they carry out, assist, fund, permit, license, or approve". A privately funded campus on private land triggers 106 only through a federal nexus. Typical examples: an Army Corps Section 404 permit, a BPA interconnection, FERC action on hydro project lands, or federal funding or loan guarantees. Regulations are 36 CFR Part 800. I did not fetch the tribal-consultation section.
+- Governor's Executive Order 21-02, signed April 7, 2021 (https://governor.wa.gov/sites/default/files/exe_order/eo_21-02.pdf). Agencies "shall consult with DAHP and affected tribes on the potential effects of projects on cultural resources proposed in state-funded construction or acquisition projects that will not undergo Section 106 review ... including grant or pass-through funding". It applies only where state funds are involved. A purely private data center is not covered unless state grants, loans, or pass-through funds are used. Consultation must finish "prior to the expenditure of any state funds". It superseded EO 05-05.
+- DAHP. DAHP reviews archaeological predeterminations and surveys under the county processes (Clark County page). Its WISAARD database and project-review role: page not fetched.
+- SEPA. Clark County requires archaeological predetermination for SEPA-reviewed applications in its higher-probability areas. SEPA statute and checklist text: not fetched.
+
+Clark County
+- Cowlitz Indian Tribe: reservation in the county, 23.2 km N of Vancouver. It is the clearest consulting party.
+- Chinook Indian Nation: not federally recognized. It was recognized January 3, 2001, and the recognition was revoked in 2002. Headquarters: Bay Center, WA. A Ninth Circuit dismissal (June 2025) was followed by a petition to the US Supreme Court (September 15, 2025), which denied review per Chinook Justice (https://chinookjustice.org/our-fight-continues-after-supreme-court-setback/). Sources are secondary and advocacy pages. A non-recognized tribe has no Section 106 consulting-party right, though it can be invited.
+- Yakama ceded area. Per the treaty text, the western end runs "down the Columbia River to midway between the mouths of White Salmon and Wind Rivers". Those river mouths are in Skamania and Klickitat counties, east of Clark, so Clark County is OUTSIDE the ceded area. Yakama treaty fishing interests on the lower Columbia are a separate matter that I did not research.
+- Clark County archaeological review (https://clark.wa.gov/community-development/archaeological-review). The county adopts the statewide Archaeological Predictive Model by reference. Predetermination is required for SEPA-reviewed development "within a 21-100% predictive probability area ... and have a high impact of ground disturbance or are within a 41-100% predictive probability area ... and have a moderate impact", or within 1,320 ft of a registered site or 500 ft of a known site. The chapter number is unverified. Codepublishing shows 40.570 as the SEPA chapter (40.570.080 "SEPA and County Decisions") and 40.460.520 as the shoreline archaeology section. The page returned 403, so I could not confirm "40.570 Archaeological Resource Protection".
+
+Franklin County, NY
+- Saint Regis Mohawk Tribe. Its THPO operates under NHPA and NAGPRA (https://www.srmt-nsn.gov/programs/tribal-historic-preservation-office), and Section 106 consultations go to the THPO. Land claim: the Akwesasne Mohawk Land Claim Settlement involves New York State, Franklin and St. Lawrence counties, the towns of Bombay and Fort Covington, and NYPA. It provides near-immediate reservation status for 3,500 ac and a path to up to 14,000 ac in the claim areas (Hogansburg/Bombay Triangle). H.R. 2916 (119th Congress) passed the House on December 9, 2025. The Senate companion S. 3475 had a hearing on June 3, 2026. I found no evidence it has been enacted. The claim area lies NW of Malone, around 20-30 km, not at Malone.
+- NY SHPO (https://parks.ny.gov/shpo/environmental-review/). Reviews run under "Section 106 of the National Historic Preservation Act and Section 14.09 of the New York State Historic Preservation Act" for projects "undertaken, funded, licensed, or approved by state or federal agencies". A campus needing state permits (for example DEC) or NYPA or ESD involvement would trigger 14.09.
+- Adirondack Park Agency. It issues permits under Section 809 of the APA Act and 9 NYCRR Parts 570-588, keyed to private land-use classes (Hamlet, Moderate Intensity, Low Intensity, Rural Use, Resource Management, Industrial Use), as shown in APA permit documents (for example https://apa.ny.gov/files/permits/issued/2024/P2024-0061-Permit-Final.pdf). APA land-use jurisdiction applies only inside the Blue Line, so not at Malone.
+
+======================================================================
+TASK 3. ASSESSMENT
+======================================================================
+
+Grant County / Quincy: no blocking protected-land or tribal-land conflict. The nearest protected fee land is WDFW's Columbia Basin Wildlife Area, 5.8 km W, with the Quincy Lakes Unit 8.6 km S. There is no federal conservation designation (NWR, NPS unit, wilderness, national forest) within 30 km; BLM multiple-use parcels begin 7.2 km NE. There is no wilderness or NPS unit within 50 km, and no reservation or trust land within 74 km. Quincy already hosts a cluster of hyperscale data centers. Search snippets of SEC filings list Microsoft (~204 ac), Dell/NTT (80+ ac), Vantage, Oath/Yahoo, H5 (ex-Intuit), and Sabey; secondary sources add CyrusOne. Existing permitted precedent on the same land type is the strongest evidence that a 300 MW campus is permittable here. The real constraint is procedural, not locational. Quincy appears to fall inside the Yakama 1855 ceded area. Colville (Moses-Columbia) and the Wanapum have documented interests along the mid-Columbia. Any federal nexus (BPA interconnection, Corps 404, FERC P-2114 project lands) brings Section 106 consultation with these tribes. State money brings EO 21-02. Upland irrigated farmland in the Quincy industrial area is lower archaeological risk than land near the Columbia, Crab Creek, or the coulees. These are "nearby but not a conflict" for a parcel in the existing industrial zone. The binding constraints for 300 MW at Quincy are more likely power allocation from Grant PUD and transmission, which are outside this screen.
+
+Clark County / Vancouver: no blocking conflict for a well-sited parcel, but the county has more sensitive features and they are closer. A site at the reference point itself is implausible: it is urban, and Fort Vancouver NHS is 1.2 km away. For unincorporated north or east county, avoid four things. The Ridgefield NWR lowlands (13 km NW). The Shillapoo/Vancouver Lake lowlands (4 km NW). The Columbia River Gorge NSA, which covers ~31 km2 at the far east end; NSA rules would seriously constrain an industrial campus there, so treat it as a real constraint. The Cowlitz Reservation near La Center (23 km N). Gifford Pinchot NF (~5 km2) and the DNR NAP/NRCA at Washougal Oaks are small. The Cowlitz Tribe is the primary consulting party. Clark County's code-based archaeological predetermination, keyed to the predictive model, adds a survey step for most SEPA-reviewed parcels in moderate or high probability areas. That costs time, not a veto. Clark is outside the Yakama ceded area per the treaty text. Rating: siting constraint, not a blocker.
+
+Franklin County / Malone: no protected-land or tribal-land conflict at Malone itself. Malone is 6.1 km outside the Adirondack Blue Line, so APA land-use jurisdiction does not apply. Nearest Forest Preserve (Chazy Highlands WF) is 10.6 km SE. Nearest state forest (Deer River) is 10.3 km SW. The St. Regis Mohawk Reservation is 24.8 km NW. No NWR or NPS unit is within 50 km. Two real constraints exist at county scale. First, about 68% of the county is inside the Park. Any site south of the Blue Line needs an APA permit, and large-scale industrial use is limited to specific private land-use classes. Many such sites also sit next to Forest Preserve lands. Treat that as a serious constraint. I did not check APA's land-use map for Industrial Use or Hamlet areas in the county's park towns. Second, the Akwesasne land claim settlement is pending in Congress as of the latest evidence (House passed December 2025; Senate hearing June 2026). It could restore reservation status to land in Bombay and Fort Covington, 20-30 km NW. That matters for sites in that direction, not at Malone. The Saint Regis Mohawk THPO would be a Section 106 consulting party for any federal nexus. NY SHPO 14.09 applies to any state funding, permit, or approval. Rating at Malone: nearby but not a conflict.
+
+======================================================================
+UNVERIFIED (I could not confirm these in this session)
+======================================================================
+1. Wanapum non-federally-recognized status. Not stated on the Grant PUD page. I did not check the BIA list of federally recognized tribes.
+2. Whether the Columbia River reach 10.6 km W of Quincy is inside the FERC P-2114 project boundary. Upstream extent of the Wanapum pool (to Rock Island Dam) not confirmed.
+3. That Quincy falls inside the Yakama ceded area is my reading of the treaty boundary text. Not checked against an official map such as Royce Area 364.
+4. That Clark County is outside the Yakama ceded area depends on the White Salmon and Wind river mouths being east of Clark County. I did not GIS-check this, though it matches the treaty text.
+5. Colville (Moses-Columbia) territory in Grant County. Only a secondary school-district land acknowledgement; no Colville primary source fetched.
+6. CTUIR interest in Grant County or in the Priest Rapids Project: not verified.
+7. PAD-US labels "Colockum Game Range" and "Lenore Game Range" as USFWS. These are likely federal-aid attribution artifacts on WDFW land. Not verified.
+8. Columbia NWR's Grant/Adams split (62 of 107 km2) comes from PAD-US fee polygons. The FWS page fetched gives no county split. Othello as nearest town comes from secondary sources.
+9. Clark County Code chapter for archaeological review. "40.570 Archaeological Resource Protection" not confirmed; codepublishing returned 403. The county page confirms the process but not the section number.
+10. DAHP WISAARD and project-review page, the SEPA statute (RCW 43.21C / WAC 197-11), and the tribal-consultation part of 36 CFR 800. Not fetched.
+11. NYSDEC WMAs in Franklin County. PAD-US shows none within 50 km. DEC's full county list not checked.
+12. Akwesasne land claim enactment status after the June 3, 2026 Senate hearing. No evidence of enactment found; exact claim-area footprint not mapped.
+13. Quincy data-center tenant list and acreages come from search-result snippets of SEC filings and press. I did not open the primary filing or a Port of Quincy page.
+14. Lake Roosevelt NRA's presence in Grant County (2.2 km2) is from PAD-US only. Not checked on nps.gov.
+15. Gifford Pinchot NF acreage in Clark (~4.9 km2) is from USFS EDW. PAD-US shows only 0.5 km2. No USFS narrative page confirms the Clark acreage.
+16. Whether St. Regis Mohawk Reservation land extends into St. Lawrence County beyond a sliver. TIGER shows almost all of it in Franklin.
+17. Ganienkeh's non-federally-recognized status. Not fetched.
+18. Cowlitz Federal Register details (156.401 ac, November 2015) and the FERC EA county list and reservoir acreages for P-2114. Both come from search summaries; the pages were not read.
+19. NY Constitution Article XIV ("forever wild") status of Forest Preserve. Not fetched, though it is the basis for the Forest Preserve classifications listed.
