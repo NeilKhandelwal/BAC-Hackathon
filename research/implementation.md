@@ -35,12 +35,31 @@ Order 658. Numbers without a marker come from this repo.
    water can feed process heat, and it shares its tax base and hiring with a
    county where data centers already pay most of Quincy's property taxes.
 
+**The cost headline.** Grant's cheap power belongs to existing customers. A
+new campus is a new large single load, so federal power comes at BPA's New
+Resources rate of about $80 to $132 per MWh, or the campus funds its own
+supply. Energy then costs $196 million to $323 million a year, against the
+$162 million that today's 6.61 cents/kWh implies and $226 million in Loudoun
+County, VA. The engine's cost column can't see this, because it uses today's
+average industrial price. Above about $92.50 per MWh, Grant costs more than
+Loudoun.
+
 ## Why Grant County
 
-The team picked Grant County after adding an electricity-cost pillar to the
-ranking. Under the frozen balanced preset, Grant ranks 7th of 1,565 counties
-(composite 61.4, robustness 0.65). From `python -m engine explain --conditions
-engine/conditions/balanced.yaml --fips 53025`:
+Grant's rank depends on whether electricity cost is scored on its own:
+
+- Under the seven-pillar balanced preset at the data-freeze tag, Grant ranks
+  7th of 1,565 gate-passing counties (composite 61.4, robustness 0.65).
+- With cost as an eighth pillar, weighted 0.15 (PR #28), Grant ranks 1st
+  (composite 63.7, robustness 1.00).
+
+The team picked Grant because of that second ranking. A site-selection lead
+pays the power bill, and a ranking that ignores it put Berkshire County, MA,
+at 18.19 cents/kWh, first. The cost pillar uses today's average industrial
+price, which a new load won't get (see the cost headline above).
+
+From `python -m engine explain --conditions engine/conditions/balanced.yaml
+--fips 53025`. The per-column percentiles are the same under both presets:
 
 | Factor | Grant County | Engine percentile (higher is better) |
 | --- | --- | --- |
@@ -60,8 +79,9 @@ stress is above the gate.
 
 From `research/impact.md` and team research: the campus draws about 2,444,000
 MWh a year (300 MW IT, load factor 0.8, dry-cooling PUE 1.163). That is about
-279 average MW (aMW). At today's 6.61 cents/kWh it costs about $162 million a
-year, $64 million less than Loudoun County, VA.
+279 average MW (aMW). At today's 6.61 cents/kWh it would cost about $162
+million a year, $64 million less than Loudoun County, VA. That is a floor; the
+cost headline above gives the range a new load faces.
 
 ## Phases
 
