@@ -634,3 +634,36 @@ weights):
   down-weights them by about 3 to 7% against the mean column weight
   (0.0286), because one high correlation among 34 barely moves the
   conflict sum.
+
+### 2026-10-04 01:52 UTC, advisor consulted on Phase 3 and the next two designs
+
+**Phase 3.** The entropy result is a method artifact; keep it, don't tune
+it. Changes made to the Phase 3 entry: entropy's dependence on how a
+column is coded, the corrected reading of the density and population pair
+(CRITIC up-weights it), the note that median imputation shrinks queue
+age's weight, and the heading time.
+
+**Phase 4 guards adopted.** Fit the imputer and scaler inside stratified
+5-fold cross validation. Lead with the AUC lift over a population-only
+model, since population alone will likely clear 0.65. Call a column a
+sign conflict only if its univariate correlation with the outcome has the
+same sign as its coefficient. Report how much of each pillar's revealed
+weight comes from sign-conflicting columns. "Five biggest disagreements"
+means the largest rank differences among gate passers in the combined top
+20 of revealed preference and monetized $190/t.
+
+**BPA fairness Monte Carlo design adopted.** One BPA rate per draw for
+Clark and Grant (one tariff), reusing the same seed and BPA draws so the
+run pairs with the original; report how many draws change winner. BPA
+carbon fixed at `BPA_CO2_LB_MWH` with no multiplier. Self-check: with
+Clark and Grant at the WA average times the WA multiplier and at NWPP
+times its multiplier, totals must match the original run. Clark at
+212 lb/MWh may emit less than Franklin, which would remove the $200/t
+crossover; compute the Clark-Franklin breakeven BPA rate as a function of
+carbon price. Report both runs side by side as bounds: BPA's whole range
+sits above WA's $66/MWh average while Franklin keeps NY's average, and
+other WA counties keep the WA average. Also compute what Grant needs to
+beat Clark (shorter delay or a lower rate).
+
+**Phase 5 heads-up.** Land isn't monetized, and Clark's land pillar is at
+the 22nd percentile. The recommendation must address it.
