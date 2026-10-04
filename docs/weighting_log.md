@@ -9,7 +9,7 @@ the bottom is append-only and timestamped.
 
 Overwritten at every update.
 
-- **Updated:** 2026-10-04 01:38 UTC
+- **Updated:** 2026-10-04 01:40 UTC
 - **Branch:** `feat/weighting-methods`, based on `main` at `1575003`.
 - **Pull request:** draft PR #35,
   https://github.com/NeilKhandelwal/BAC-Hackathon/pull/35. To edit its
@@ -17,21 +17,22 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** Phase 2 done. Phase 3 (CRITIC and entropy) not
-  started.
+- **Phase and step:** Phase 3 (CRITIC and entropy), starting. The user
+  approved running Phases 3 and 4 back to back without a check-in unless
+  something blocks.
 - **Done:** Phase 0. Phase 1 (`monetize.py`). Monte Carlo
   (`montecarlo.py`). Phase 2 (`smaa.py`). `docs/weighting.md` stub with
   the hazard-downtime and floor notes. Results are in the history.
-- **In progress:** nothing.
-- **Exact next action:** write `scratch/weighting/critic.py` per approved
-  decision 4: primary CRITIC and entropy on gate-passing counties' raw
-  values for every scored column, winsorized at the 1st and 99th
-  percentiles, then min-max scaled with the pillar direction applied;
-  percentile version as the sensitivity. Apply the weights at the column
-  level in a scratch composite (keep the floor on and off as in Phase 2).
-  Report column weights, pillar-summed weights for comparison with the
-  column-count bias noted, the top 10 under each, and column pairs with
-  |r| above 0.8.
+- **In progress:** Phase 3.
+- **Exact next action:** in order, per approved decisions 13 to 16:
+  1. `scratch/weighting/critic.py`: raw-value CRITIC and entropy only
+     (winsorize 1st/99th, min-max, direction applied, column-level
+     weights). No percentile sensitivity. 30-minute timebox. Report the
+     top 10 under each and where Clark, Franklin, and Grant land.
+  2. `scratch/weighting/revealed.py`: Phase 4 as specified.
+  3. Fairness fix: BPA new-load scenario for Clark as well as Grant in
+     `monetize.py`, then a BPA Monte Carlo run.
+  4. Phase 5: consult the advisor before writing the recommendation.
 - **Reproduce:** from the repo root, after fetching raw NRI (below):
   `.venv/Scripts/python.exe scratch/weighting/monetize.py`, then
   `.venv/Scripts/python.exe scratch/weighting/montecarlo.py`, then
@@ -98,6 +99,26 @@ Overwritten at every update.
       moratorium U(8, 20) months, carbon price U($100, $300). Report each
       county's share of draws at #1 and in the top 3. Note in
       `docs/weighting.md` that hazard costs exclude downtime.
+  13. Phase 3 (2026-10-04 01:40 UTC): raw-value CRITIC and entropy only,
+      column-level weights, 30-minute timebox. Skip the percentile
+      sensitivity. Report the top 10 under each and the ranks of Clark,
+      Franklin, and Grant. Then go straight into Phase 4 as specified.
+  14. Fairness fix before Phase 5: Clark WA gets the same BPA new-load
+      range as Grant ($80 to $132/MWh) and the same BPA-like supply carbon
+      option. Franklin NY stays at the state average, flagged as having no
+      sourced new-load rate. Don't invent one. Rerun the 1,000-draw Monte
+      Carlo with Clark and Grant both drawing from the BPA range; report #1
+      and top-3 shares for Clark, Franklin, and Grant.
+  15. Phase 5 framing: two stages. The engine screens and shortlists
+      (gates and scores), then the monetized model ranks the shortlist in
+      dollars and tonnes, with Monte Carlo and SMAA as robustness tests.
+      Use the Franklin versus Grant carbon example (2.7 times real gap
+      against 97th versus 94th percentile) as the reason dollars are the
+      ranking stage.
+  16. Phase 5 recommendation: consult the advisor first and log what it
+      said. Name one featured county and two alternatives, each with the
+      condition under which it would win (for example, carbon price above
+      X or new-load rate below Y).
   12. Phase 2 additions: run SMAA with the floor on and off. Report which
       pillar fails Franklin's floor and by how much. Report rank-1 and
       top-10 acceptability for Clark WA, Franklin NY, and Grant WA under
