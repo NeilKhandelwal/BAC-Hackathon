@@ -75,6 +75,16 @@ SECTIONS = {
     ],
 }
 NUMERIC = {"pct", "pct_signed", "frac", "frac_signed", "pp", "count", "signed", "mw", "acres"}
+# Percentiles rank the raw value, not how favorable it is. Where that is easy to misread, say how.
+DECLINE = "Low percentile = steeper decline"
+READING = {"unemployment_rate_pct_2024": "High percentile = more unemployment",
+           "unemployment_rate_pct_3yr_2022_2024": "High percentile = more unemployment",
+           "mfg_emp_change_2015_2024": DECLINE, "mfg_emp_pct_change_2015_2024": DECLINE,
+           "mfg_emp_share_change_1969_2022": DECLINE, "pop_change_pct_since_peak": DECLINE,
+           "queue_operational_online_date_fallback_share": "High percentile = more reliance on proposed dates"}
+PERCENTILE_NOTE = ("National percentile ranks the raw value from lowest (0) to highest (100), counting ties as "
+                   "half. It isn't a score: for a decline measure, the 1st percentile is one of the steepest "
+                   "losses in the country, not a good result.")
 # A share with nothing to divide is undefined, not missing: (column it divides by, what to show).
 UNDEFINED_WHEN_ZERO = {"bf_acreage_reporting_share": ("bf_site_count", "no properties"),
                        "dc_existing_mw_reporting_share": ("dc_existing_count", "no facilities"),
@@ -171,7 +181,7 @@ def profile(df, fips, stats=None):
             if raw is not None and not isinstance(raw, str) and pd.isna(raw):
                 raw = None
             item = {"column": col, "label": label, "value": raw, "display": fmt(raw, kind),
-                    "national_median": None, "national_percentile": None}
+                    "national_median": None, "national_percentile": None, "reading": READING.get(col, "")}
             if kind in NUMERIC and col in stats:
                 item["national_median"] = fmt(stats[col]["median"], kind)
                 if raw is not None:
@@ -291,7 +301,9 @@ def brief(e, p, sites=None):
     """Plain Markdown screening brief for download."""
     lines = [f"# County screening brief: {p['county']} ({p['fips']})", "",
              f"> {SUPPORT_DISCLAIMER}", "",
-             f"Conditions: {e.get('conditions')}, horizon {e.get('horizon')}.", ""]
+             f"Conditions: {e.get('conditions')}, horizon {e.get('horizon')}.", "",
+             "Stage 2 is unscored, post-ranking screening. It doesn't change this county's rank.", "",
+             PERCENTILE_NOTE, ""]
     if e["passed_gates"]:
         lines.append(f"**Rank {e['rank']} of {e['of']}**, composite {e['composite']:.1f}, "
                      f"robustness {'n/a' if e['robustness'] is None else format(e['robustness'], '.0%')}, "
@@ -304,11 +316,11 @@ def brief(e, p, sites=None):
         n = "n/a" if d["national_percentile"] is None else f"{d['national_percentile']:.0f}"
         lines.append(f"| {pillar.replace('_', ' ')} | {s} | {n} | {d['weight']:.0%} |")
     for section, rows in p["sections"].items():
-        lines += ["", f"## {section}", "", "| Measure | County | National median | National percentile |",
-                  "| --- | ---: | ---: | ---: |"]
+        lines += ["", f"## {section}", "", "| Measure | County | National median | National percentile | How to read |",
+                  "| --- | ---: | ---: | ---: | --- |"]
         for r in rows:
             pct = "" if r["national_percentile"] is None else str(r["national_percentile"])
-            lines.append(f"| {r['label']} | {r['display']} | {r['national_median'] or ''} | {pct} |")
+            lines.append(f"| {r['label']} | {r['display']} | {r['national_median'] or ''} | {pct} | {r['reading']} |")
     if sites is not None and len(sites):
         lines += ["", f"Candidate brownfield properties: {len(sites)} (site list exported separately).",
                   "", BROWNFIELD_CAVEAT]

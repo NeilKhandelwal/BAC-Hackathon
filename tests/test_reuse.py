@@ -191,3 +191,52 @@ def test_app_renders_the_site_table_and_map_options_on_the_real_table(monkeypatc
     for option in reuse.MAP_OPTIONS:
         next(s for s in at.selectbox if s.label == "Color the map by").set_value(option).run()
         assert not at.exception, (option, at.exception)
+
+
+# --- readability -------------------------------------------------------------------
+
+def test_decline_percentiles_say_how_to_read_them(table, stats):
+    i = items(reuse.profile(table, "17007", stats))
+    assert i["mfg_emp_change_2015_2024"]["national_percentile"] <= 2
+    assert i["mfg_emp_change_2015_2024"]["reading"] == "Low percentile = steeper decline"
+    assert i["unemployment_rate_pct_2024"]["reading"].startswith("High percentile = more unemployment")
+    assert "not a good result" in reuse.PERCENTILE_NOTE
+
+
+def test_brief_states_stage2_is_unscored_post_ranking_screening(table, stats):
+    df, _ = load_features(TABLE)
+    e = explain(df, {**load_yaml("engine/conditions/balanced.yaml"), "robustness": {"samples": 0}},
+                load_yaml("engine/pillars.yaml"), "17007")
+    text = reuse.brief(e, reuse.profile(table, "17007", stats))
+    assert "unscored, post-ranking screening" in text and reuse.PERCENTILE_NOTE in text
+    assert "| How to read |" in text and "Low percentile = steeper decline" in text
+
+
+def _open(at, fips):
+    search = next(s for s in at.selectbox if s.label == "Find a county")
+    search.set_value(next(o for o in search.options if f"({fips})" in o)).run()
+    assert not at.exception, (fips, at.exception)
+
+
+def test_app_tables_show_labels_once_and_state_the_scope(monkeypatch):
+    monkeypatch.setenv("BAC_SITES", str(Path("absent_sites.parquet").resolve()))
+    at = AppTest.from_file(APP, default_timeout=300).run()
+    assert not at.exception, at.exception
+    captions = [c.value for c in at.caption]
+    assert any("Unscored, post-ranking screening" in c and "any county" in c for c in captions)
+    assert reuse.SITES_ABSENT in [i.value for i in at.info]  # works without the site file
+    scored = [d.value for d in at.dataframe if {"column", "raw", "percentile"} <= set(d.value.columns)]
+    assert scored, "expected the permitting and every-scored-column tables"
+    for df in scored:
+        if "label" in df.columns:  # a label appears only where it differs from the raw name
+            assert not (df["label"] == df["column"]).any()
+            assert set(df.loc[df["label"] != "", "column"]) <= set(reuse_labels())
+    _open(at, "09110")  # Connecticut planning region: partial economic data
+    assert reuse.SUPPORT_DISCLAIMER in [w.value for w in at.warning]
+    econ = next(d.value for d in at.dataframe if "Measure" in d.value.columns)
+    assert (econ["County"] == "not available").any() and "How to read" in econ.columns
+
+
+def reuse_labels():
+    from engine.explain import COLUMN_LABELS
+    return COLUMN_LABELS

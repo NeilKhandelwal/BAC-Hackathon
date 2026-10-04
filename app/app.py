@@ -246,28 +246,38 @@ def show_detail(e, path, mtime, conditions):
             st.dataframe(raw_2050_rows(e), hide_index=True, width="stretch")
         if "permitting" in e["pillars"]:
             st.markdown("**Permitting**")
-            st.dataframe(pd.DataFrame(e["pillars"]["permitting"]["columns"]), hide_index=True,
+            st.dataframe(_scored_columns(e["pillars"]["permitting"]["columns"]), hide_index=True,
                          width="stretch")
 
     with st.expander("Every scored column"):
-        rows = [{"pillar": p, **c} for p, d in e["pillars"].items() for c in d["columns"]]
-        st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+        st.dataframe(pd.concat([_scored_columns(d["columns"], p) for p, d in e["pillars"].items()], ignore_index=True)
+                     .fillna({"label": ""}), hide_index=True, width="stretch")
 
 
 def _table(items):
     return pd.DataFrame([{"Measure": i["label"], "County": i["display"],
                           "National median": i["national_median"] or "",
-                          "National percentile": "" if i["national_percentile"] is None else str(i["national_percentile"])}
+                          "National percentile": "" if i["national_percentile"] is None else str(i["national_percentile"]),
+                          "How to read": i["reading"]}
                          for i in items])
+
+
+def _scored_columns(columns, pillar=None):
+    """Scored-column rows with the label shown only where it differs from the raw column name."""
+    rows = [{**({"pillar": pillar} if pillar else {}), "column": c["column"],
+             "label": c.get("label", c["column"]) if c.get("label", c["column"]) != c["column"] else "",
+             **{k: v for k, v in c.items() if k not in ("column", "label")}} for c in columns]
+    df = pd.DataFrame(rows)
+    return df.drop(columns="label") if (df.get("label", pd.Series(dtype=str)) == "").all() else df
 
 
 def show_reuse(df, e, path, mtime):
     """Stage 2: industrial reuse and community transition. Explains; never changes the ranking."""
     st.divider()
     st.header("Industrial reuse and community transition")
-    st.caption("Stage 2 screening for a shortlisted county. These measures aren't scored and don't change its rank. "
-               "National percentile: the share of counties below this value, counting ties as half. "
-               "Blank where the measure doesn't apply.")
+    st.caption("Unscored, post-ranking screening. Use it on counties the national model shortlists; it opens for "
+               "any county, including ones that rank low or fail a gate, and never changes a rank.")
+    st.caption(reuse.PERCENTILE_NOTE + " Blank where the measure doesn't apply.")
     st.warning(reuse.SUPPORT_DISCLAIMER)
     p = reuse.profile(df, e["fips"], reuse_stats(path, mtime))
     for section, items in p["sections"].items():
