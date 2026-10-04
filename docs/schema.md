@@ -43,10 +43,12 @@ Rules:
 | `grid_renewable_share_state` | float 0-1 | eGRID2023 ST sheet `STTRPR` | stretch | for comparison only; not scored |
 | `queue_active_mw_total` | float | LBNL Queued Up 2026, `q_status == active` | core | sum of `mw_1` |
 | `queue_active_count` | int | LBNL, number of projects with `q_status == active` | stretch | sample size behind the queue statistics |
-| `queue_active_mw_clean` | float | LBNL, active and every component of `type_clean` is clean | core | decarbonization signal. Clean means carbon-free generation or storage: solar, wind, hydro, nuclear, geothermal, battery, other storage. |
+| `queue_active_mw_clean` | float | LBNL, active and every component of `type_clean` is clean | core | **legacy, not scored** since the queue-semantics correction. Clean here means carbon-free generation or storage: solar, wind, hydro, nuclear, geothermal, battery, other storage. Kept for traceability and as a permitting-model input (`etl/permitting.py`). Scoring uses `queue_active_mw_clean_excl_storage`. |
+| `queue_active_mw_clean_excl_storage` | float | LBNL, active, clean-generation components only | stretch, **scored** | clean generation in the queue excluding storage. See "Queue measures" below. |
 | `queue_median_age_years` | float | LBNL, active projects, years since `q_date` | core | congestion proxy. Higher is worse. Null when fewer than 3 active projects have a queue date. |
 | `queue_withdrawal_rate` | float 0-1 | LBNL, withdrawn / (withdrawn + active + operational), `q_year >= 2019` | core | higher is worse. Null when the denominator is under 3. |
-| `queue_operational_mw_5y` | float | LBNL, operational with `q_year >= 2019`, or with no `q_year` and `on_date` in 2021 or later | core | evidence the queue delivers |
+| `queue_operational_mw_5y` | float | LBNL, operational with `q_year >= 2019`, or with no `q_year` and `on_date` in 2021 or later | core | **legacy, not scored**. `q_year` is the year a project entered the queue, so this measures queue entry, not delivery. Scoring uses `queue_operational_mw_online_5y`. |
+| `queue_operational_mw_online_5y` | float | LBNL, operational and dated to 2021-2025 by `on_date`, else `prop_date` | stretch, **scored** | delivered or estimated-online capacity. See "Queue measures" below. |
 | `solar_ghi_kwh_m2_day` | float | NREL NSRDB annual raster, zonal mean | stretch | |
 | `wind_speed_100m_ms` | float | NREL WIND Toolkit 100 m raster, zonal mean | stretch | source is already m/s |
 
@@ -100,7 +102,7 @@ inland, the ETL writes 0. "Insufficient Data" stays null.
 | `dc_proposed_count` | int | FracTracker, status in Proposed, Approved, Pre-proposal | core | |
 | `dc_proposed_mw` | float | FracTracker, same filter | core | |
 | `plant_capacity_mw_100km` | float | eGRID2023 PLNT sheet `NAMEPCAP`, `LAT`, `LON` | stretch | nameplate MW of power plants within 100 km (great circle) of the county internal point. A naive check that the nearby grid can carry the facility. |
-| `plant_clean_capacity_mw_100km` | float | eGRID2023 PLNT sheet, `PLFUELCT` is clean | stretch | same radius, by plant primary fuel category. Same definition of clean as `queue_active_mw_clean`; eGRID has no storage category. |
+| `plant_clean_capacity_mw_100km` | float | eGRID2023 PLNT sheet, `PLFUELCT` is clean | stretch | same radius, by plant primary fuel category. eGRID has no storage category, so this is clean generation only, consistent with the scored queue measure. |
 | `industrial_price_cents_kwh` | float | EIA-861 state historical tables, 2024, industrial sector, total electric industry | stretch | state average retail price, the same for every county in a state. Lower is better. Scored as the cost pillar. |
 | `saidi_minutes` | float | EIA-861 reliability, customer-weighted | stretch | |
 | `dist_ixp_km` | float | PeeringDB, nearest internet exchange | stretch | backbone proxy |
@@ -162,8 +164,10 @@ here; it's scored in grid and infrastructure.
 
 ## Context columns (ETL v2)
 
-Context columns ported from the ETL v2 branch. All are **stretch** and
-none is mapped in `engine/pillars.yaml`, so they don't change scores,
+Context columns ported from the ETL v2 branch. All are **stretch**. Two
+are scored since the queue-semantics correction:
+`queue_active_mw_clean_excl_storage` and `queue_operational_mw_online_5y`.
+The rest aren't mapped in `engine/pillars.yaml` and don't change scores,
 gates, or results. Each comes from a separate adapter that reads its own
 raw file or main's, and never rewrites a column above. Shares are 0-1;
 columns ending `_pct` are 0-100.
@@ -271,23 +275,32 @@ this.
 | `moratorium_state_pending` | bool | state rows, pending, moratorium or ban | stretch | |
 | `county_dc_restriction_active` | bool | county rows, active, category other than moratorium or ban | stretch | zoning restriction, curative amendment |
 
-### Alternative queue measures (`etl/adapters/lbnl_queue_alt.py`)
+### Queue measures (`etl/adapters/lbnl_queue_alt.py`)
 
-Not scored and not gate inputs. Same county placement as `lbnl_queue.py`.
+Two of these are the scored queue columns in `energy_carbon`. They replaced
+`queue_active_mw_clean` and `queue_operational_mw_5y`, which stay in the
+table, unscored, for traceability. None is a gate input. County placement
+is the same as `lbnl_queue.py`. The evidence is in
+`research/etl_semantics_audit.md`.
 
-| Column | Type | Differs from | Notes |
+| Column | Type | Scored | Notes |
 | --- | --- | --- | --- |
-| `queue_active_mw_clean_excl_storage` | float | `queue_active_mw_clean` | excludes standalone storage, which `CLEAN_SOURCES` includes, and counts a hybrid's first clean-generation component once (`mw_1` if `type_1` is clean generation, else `mw_2`/`mw_3` when given; a Battery+Solar row without `mw_2` adds 0) |
-| `queue_active_mw_storage_standalone` | float | | `mw_1` of active Battery, Pumped Storage, or Storage projects |
-| `queue_operational_mw_online_5y`, `queue_operational_projects_online_5y` | float, int | `queue_operational_mw_5y` | keyed on completion: operational projects with `on_date` in 2021-2025, falling back to `prop_date` when `on_date` is blank. `queue_operational_mw_5y` keys on `q_year >= 2019`, which is queue entry, not completion. |
-| `queue_operational_online_date_fallback_share` | float 0-1 | | share of those projects dated by `prop_date`. `on_date` is about 99% filled in PJM, CAISO, and MISO but 18% in the West and 0% in ISO-NE. |
+| `queue_active_mw_clean_excl_storage` | float | yes | Clean generation in the queue, excluding storage. Sums each clean-generation component's separately reported MW (solar, wind, offshore wind, hydro, geothermal, nuclear) once per project: `mw_1` for `type_1`, `mw_2` for `type_2`, `mw_3` for `type_3`. A component with no reported MW adds 0, so the measure is conservative (233 Solar+Battery rows list only battery capacity). A clean component of a gas or other hybrid counts when its MW is reported. Storage is excluded: it can help integrate renewables, but it isn't clean generation, because its emissions depend on what charges it. National total: 993.2 GW, against 1,420.0 GW for the legacy measure. |
+| `queue_active_mw_storage_standalone` | float | no | `mw_1` of active projects whose every component is storage: Battery, Pumped Storage, Storage, or Other Storage. National total: 391.4 GW. |
+| `queue_operational_mw_online_5y` | float | yes | Delivered or estimated-online capacity: operational projects dated to 2021-2025 by their actual online date (`on_date`), or by their proposed online date (`prop_date`) only when `on_date` is blank. National total: 152.3 GW from 1,224 projects, against 72.0 GW for the legacy measure. Evidence the queue delivers, not proof of capacity available to a new data center. |
+| `queue_operational_projects_online_5y` | int | no | project count behind it |
+| `queue_operational_online_date_fallback_share` | float 0-1 | no | uncertainty indicator: share of the county's counted projects dated by `prop_date`. The fallback is substantial where LBNL lacks `on_date`: every operational ISO-NE project and 82% in the West, against under 1% in PJM and ERCOT. Nationally, 214 of the 1,224 projects (22.9 GW) use it. |
 
 ## Frozen artifacts and reproducibility
 
 `data/processed/county_features.parquet` and the committed files in
 `results/` are the canonical frozen hackathon artifacts. The committed table
 keeps main's original 83 columns exactly as they were at `1575003` and
-appends 85 context columns that no pillar or gate uses.
+appends 85 context columns. Two of them are scored queue measures (see
+"Queue measures"); no gate uses any of them. The queue-semantics
+correction updated only `queue_active_mw_clean_excl_storage` and
+`queue_active_mw_storage_standalone` in the frozen table, and every other
+column kept its frozen value.
 
 A fresh build, online or `--no-fetch`, is semantically reproducible but may
 not be byte-identical to the frozen table. Spatial calculations depend on
@@ -299,12 +312,14 @@ context columns.
 
 Many counties tie exactly on water stress, at 0 or 5. Differences that small
 can break those ties, which changes percentile ranks and swaps adjacent
-counties outside the leading results. In validation on 2026-10-03, a fresh
-build kept every gate, gate count, winner, top-ten list, pillar ordering,
-and core conclusion. It swapped 40 adjacent pairs in `balanced` (best
-affected rank 142) and 2 in `speed_to_power` (ranks 83 and 84), and moved
-some water pillar scores by up to 0.43 points. One displayed top-25 value
-changed by 0.01 (Monroe County, PA's 2050 shift in `sustainability_first`).
+counties outside the leading results. In validation with the corrected
+queue measures, a fresh build kept every gate, gate count, winner, top-ten
+list, pillar ordering, and core conclusion. It moved 60 counties into
+adjacent swaps in `balanced` (best affected rank 273) and swapped one pair
+in `speed_to_power` (rank 747), and moved some water pillar scores by up to
+0.43 points. Two displayed top-25 values changed by 0.01: Overton County,
+TN's water pillar in `speed_to_power` and Monroe County, PA's 2050 shift in
+`sustainability_first`.
 
 To reproduce the exact committed rankings, run the engine on the committed
 table, not on a rebuilt one:
