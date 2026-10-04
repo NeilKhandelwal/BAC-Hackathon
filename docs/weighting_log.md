@@ -18,23 +18,17 @@ Overwritten at every update.
   `gh pr view 35 --json body --jq .body > pr_body.md`, edit the Results
   and Checklist sections, then run `gh pr edit 35 --body-file pr_body.md`.
   Keep the body file outside the repo.
-- **Phase and step:** revision round 1 done. PR #35 is open, ready for
-  review, not merged.
-- **Done:** sales tax component (sourced rates, WA and NY eligibility),
-  Grant's evidence-based time to power as its base row, Neil's review
-  items (`scratch/weighting/revisions.py`), tagged Monte Carlo runs,
-  rewritten `docs/weighting.md`, PR comments to Neil. The recommendation
-  changed from Clark to Grant (see the history).
-- **In progress:** nothing.
-- **Exact next action:** waiting on Neil and the team:
-  1. Neil's answer on a squash merge with a clean message.
-  2. The featured-county decision (the recommendation is Grant).
-  3. Whether to verify the exemption flags for SC, ID, UT, TX, and LA
-     before the deck says anything about them.
-  (Done: current `main` merged and engine-based tables refreshed; see
-  the merge entry in the history.)
-  Never merge PR #35. Don't rewrite history. No AI attribution in new
-  commits or the PR body.
+- **Phase and step:** finished. The weighting task is closed. PR #35 is
+  open, ready for review, mergeable, and not merged; merging is Neil's
+  call.
+- **Done:** Phases 0 to 5, revision round 1, the audit fixes, and a merge
+  of current `main` with the engine-based tables refreshed.
+- **In progress:** nothing. Follow-on work (sensitive and protected land)
+  continues on branch `fix/sensitive-land` with its own log,
+  `docs/sensitive_land_log.md`.
+- **Exact next action:** none on this branch unless Neil asks for changes.
+  Open items for Neil are the squash-merge question on PR #35 and whether
+  to verify the SC, ID, UT, TX, and LA exemption flags.
 - **Untracked files:** `scratch/analysis.py` and `scratch/lbnl_unmatched.py`
   stay uncommitted.
 - **Reproduce:** from the repo root, after fetching raw NRI (below):

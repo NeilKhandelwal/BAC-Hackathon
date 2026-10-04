@@ -1,0 +1,404 @@
+{
+  "committed_top10": [
+    "Grant, WA",
+    "Wayne, TN",
+    "Whitman, WA",
+    "Mayes, OK",
+    "Scott, IA",
+    "Benton, WA",
+    "Clark, WA",
+    "Scott, TN",
+    "Adair, OK",
+    "Grady, OK"
+  ],
+  "committed_focus": {
+    "Grant, WA": 1,
+    "Clark, WA": 7,
+    "Franklin, NY": 952,
+    "Berkshire, MA": 1047
+  },
+  "a_scored": {
+    "top10": [
+      {
+        "county": "Whitman, WA",
+        "composite": 63.09,
+        "pct_protected": 0.002,
+        "pct_protected_land_only": 0.002,
+        "pct_protected_gap1to3": 0.032,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Scott, IA",
+        "composite": 62.63,
+        "pct_protected": 0.024,
+        "pct_protected_land_only": 0.024,
+        "pct_protected_gap1to3": 0.024,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Mayes, OK",
+        "composite": 62.59,
+        "pct_protected": 0.009,
+        "pct_protected_land_only": 0.009,
+        "pct_protected_gap1to3": 0.009,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Grant, WA",
+        "composite": 62.22,
+        "pct_protected": 0.128,
+        "pct_protected_land_only": 0.134,
+        "pct_protected_gap1to3": 0.234,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Clark, WA",
+        "composite": 62.19,
+        "pct_protected": 0.028,
+        "pct_protected_land_only": 0.029,
+        "pct_protected_gap1to3": 0.184,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Wayne, TN",
+        "composite": 62.04,
+        "pct_protected": 0.091,
+        "pct_protected_land_only": 0.091,
+        "pct_protected_gap1to3": 0.097,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Payne, OK",
+        "composite": 61.88,
+        "pct_protected": 0.0,
+        "pct_protected_land_only": 0.0,
+        "pct_protected_gap1to3": 0.0,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Washington, AR",
+        "composite": 61.51,
+        "pct_protected": 0.0,
+        "pct_protected_land_only": 0.0,
+        "pct_protected_gap1to3": 0.036,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Grady, OK",
+        "composite": 61.36,
+        "pct_protected": 0.003,
+        "pct_protected_land_only": 0.003,
+        "pct_protected_gap1to3": 0.004,
+        "tribal_land_share": 0.0
+      },
+      {
+        "county": "Benton, WA",
+        "composite": 61.08,
+        "pct_protected": 0.099,
+        "pct_protected_land_only": 0.102,
+        "pct_protected_gap1to3": 0.152,
+        "tribal_land_share": 0.0
+      }
+    ],
+    "focus": {
+      "Grant, WA": 4,
+      "Clark, WA": 5,
+      "Franklin, NY": 1011,
+      "Berkshire, MA": 1102
+    },
+    "passed": 1565,
+    "floor_ok": 911,
+    "gap_first_to_grant": 0.87,
+    "smaa": {
+      "focus": {
+        "Grant, WA": {
+          "rank1": 0.0024,
+          "top10": 0.1404
+        },
+        "Clark, WA": {
+          "rank1": 0.083,
+          "top10": 0.3192
+        },
+        "Franklin, NY": {
+          "rank1": 0.0,
+          "top10": 0.0
+        },
+        "Berkshire, MA": {
+          "rank1": 0.0,
+          "top10": 0.0
+        }
+      },
+      "top10_by_top10_acceptability": [
+        [
+          "Whitman, WA",
+          0.439
+        ],
+        [
+          "Luzerne, PA",
+          0.341
+        ],
+        [
+          "Clark, WA",
+          0.319
+        ],
+        [
+          "Trumbull, OH",
+          0.241
+        ],
+        [
+          "Grady, OK",
+          0.234
+        ],
+        [
+          "Milam, TX",
+          0.229
+        ],
+        [
+          "Scott, IA",
+          0.223
+        ],
+        [
+          "Mayes, OK",
+          0.222
+        ],
+        [
+          "Cuyahoga, OH",
+          0.218
+        ],
+        [
+          "Henry, IL",
+          0.198
+        ]
+      ],
+      "top5_by_rank1": [
+        [
+          "Whitman, WA",
+          0.18
+        ],
+        [
+          "Luzerne, PA",
+          0.091
+        ],
+        [
+          "Clark, WA",
+          0.083
+        ],
+        [
+          "Henry, IL",
+          0.053
+        ],
+        [
+          "Scott, IA",
+          0.051
+        ]
+      ]
+    }
+  },
+  "focus_shares": {
+    "Grant, WA": {
+      "pct_protected": 0.1282,
+      "pct_protected_land_only": 0.1336,
+      "pct_protected_gap1to3": 0.2344,
+      "tribal_land_share": 0.0,
+      "pct_protected_national_percentile": 89.3
+    },
+    "Clark, WA": {
+      "pct_protected": 0.028,
+      "pct_protected_land_only": 0.0293,
+      "pct_protected_gap1to3": 0.1843,
+      "tribal_land_share": 0.0004,
+      "pct_protected_national_percentile": 58.8
+    },
+    "Franklin, NY": {
+      "pct_protected": 0.3196,
+      "pct_protected_land_only": 0.333,
+      "pct_protected_gap1to3": 0.5012,
+      "tribal_land_share": 0.0123,
+      "pct_protected_national_percentile": 98.2
+    },
+    "Berkshire, MA": {
+      "pct_protected": 0.1795,
+      "pct_protected_land_only": 0.1833,
+      "pct_protected_gap1to3": 0.3478,
+      "tribal_land_share": 0.0,
+      "pct_protected_national_percentile": 93.4
+    }
+  },
+  "other_presets": {
+    "speed_to_power": {
+      "committed_first": "Wayne, TN",
+      "scored_first": "Wayne, TN",
+      "committed_focus": {
+        "Grant, WA": null,
+        "Clark, WA": null,
+        "Franklin, NY": null,
+        "Berkshire, MA": null
+      },
+      "scored_focus": {
+        "Grant, WA": null,
+        "Clark, WA": null,
+        "Franklin, NY": null,
+        "Berkshire, MA": null
+      },
+      "scored_top5": [
+        "Wayne, TN",
+        "Mayes, OK",
+        "Payne, OK",
+        "Giles, TN",
+        "Scott, TN"
+      ]
+    },
+    "sustainability_first": {
+      "committed_first": "Whitman, WA",
+      "scored_first": "Whitman, WA",
+      "committed_focus": {
+        "Grant, WA": 5,
+        "Clark, WA": null,
+        "Franklin, NY": 74,
+        "Berkshire, MA": null
+      },
+      "scored_focus": {
+        "Grant, WA": 6,
+        "Clark, WA": null,
+        "Franklin, NY": 70,
+        "Berkshire, MA": null
+      },
+      "scored_top5": [
+        "Whitman, WA",
+        "Luzerne, PA",
+        "Benton, WA",
+        "Clearfield, PA",
+        "Washington, OR"
+      ]
+    }
+  },
+  "b_gate": {
+    "0.5": {
+      "excluded_gate_passers": 4,
+      "excluded_nationally": 14,
+      "grant_passes": true,
+      "top10": [
+        "Grant, WA",
+        "Wayne, TN",
+        "Whitman, WA",
+        "Mayes, OK",
+        "Scott, IA",
+        "Benton, WA",
+        "Clark, WA",
+        "Scott, TN",
+        "Adair, OK",
+        "Grady, OK"
+      ]
+    },
+    "0.25": {
+      "excluded_gate_passers": 30,
+      "excluded_nationally": 124,
+      "grant_passes": true,
+      "top10": [
+        "Grant, WA",
+        "Wayne, TN",
+        "Whitman, WA",
+        "Mayes, OK",
+        "Scott, IA",
+        "Benton, WA",
+        "Clark, WA",
+        "Scott, TN",
+        "Adair, OK",
+        "Grady, OK"
+      ]
+    }
+  },
+  "c_context_only": {
+    "focus": {
+      "Grant, WA": 1,
+      "Clark, WA": 7,
+      "Franklin, NY": 952,
+      "Berkshire, MA": 1047
+    },
+    "note": "ranking unchanged",
+    "smaa": {
+      "focus": {
+        "Grant, WA": {
+          "rank1": 0.1146,
+          "top10": 0.5054
+        },
+        "Clark, WA": {
+          "rank1": 0.0694,
+          "top10": 0.3062
+        },
+        "Franklin, NY": {
+          "rank1": 0.0,
+          "top10": 0.0
+        },
+        "Berkshire, MA": {
+          "rank1": 0.0,
+          "top10": 0.0
+        }
+      },
+      "top10_by_top10_acceptability": [
+        [
+          "Grant, WA",
+          0.505
+        ],
+        [
+          "Whitman, WA",
+          0.458
+        ],
+        [
+          "Wayne, TN",
+          0.424
+        ],
+        [
+          "Luzerne, PA",
+          0.364
+        ],
+        [
+          "Clark, WA",
+          0.306
+        ],
+        [
+          "Trumbull, OH",
+          0.274
+        ],
+        [
+          "Clearfield, PA",
+          0.229
+        ],
+        [
+          "Benton, WA",
+          0.226
+        ],
+        [
+          "Scott, TN",
+          0.208
+        ],
+        [
+          "Scott, IA",
+          0.205
+        ]
+      ],
+      "top5_by_rank1": [
+        [
+          "Whitman, WA",
+          0.129
+        ],
+        [
+          "Grant, WA",
+          0.115
+        ],
+        [
+          "Wayne, TN",
+          0.108
+        ],
+        [
+          "Luzerne, PA",
+          0.102
+        ],
+        [
+          "Clark, WA",
+          0.069
+        ]
+      ]
+    }
+  }
+}

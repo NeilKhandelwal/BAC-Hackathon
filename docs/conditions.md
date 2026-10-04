@@ -43,6 +43,8 @@ gates:                            # hard exclusions, applied before scoring
   max_permitting_risk: null       # needs permitting_discretionary_risk; no model ships, so keep null
   exclude_air_nonattainment: false   # true excludes counties with any ozone or PM2.5 nonattainment
   min_population: 5000            # proxy for workforce until a labor layer exists
+  max_pct_protected: null         # 0-1, PAD-US GAP 1-2 share of the county; null disables
+  max_tribal_land_share: null     # 0-1, share inside federally recognized reservations or trust land; null disables
 
 weights:                          # must sum to 1; the engine renormalizes and warns
   energy_carbon: 0.153

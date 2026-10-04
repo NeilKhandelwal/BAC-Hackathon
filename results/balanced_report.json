@@ -1,16 +1,12 @@
 {
   "warnings": [
-    "manifest lists 11 missing columns: permitting_discretionary_risk, permitting_drivers, solar_ghi_kwh_m2_day, grid_water_gal_mwh, saidi_minutes, dist_ixp_km, pct_developed, pct_cropland, pct_forest_wetland, pct_protected, greenhouse_acres",
+    "manifest lists 7 missing columns: permitting_discretionary_risk, permitting_drivers, solar_ghi_kwh_m2_day, grid_water_gal_mwh, saidi_minutes, dist_ixp_km, greenhouse_acres",
     "energy_carbon: column solar_ghi_kwh_m2_day missing, skipped",
     "water: column grid_water_gal_mwh missing, skipped",
     "grid_infrastructure: column saidi_minutes missing, skipped",
     "grid_infrastructure: column dist_ixp_km missing, skipped",
-    "land: column pct_developed missing, skipped",
-    "land: column pct_protected missing, skipped",
-    "land: column pct_cropland missing, skipped",
     "community: column greenhouse_acres missing, skipped",
-    "permitting: column permitting_discretionary_risk missing, skipped",
-    "permitting: column pct_forest_wetland missing, skipped"
+    "permitting: column permitting_discretionary_risk missing, skipped"
   ],
   "counties": 3109,
   "passed": 1565,
@@ -32,7 +28,7 @@
     "hazard_percentile_max.nri_wildfire_score": 3109,
     "hazard_percentile_max.nri_hurricane_score": 2225
   },
-  "floor_ok": 912,
+  "floor_ok": 883,
   "moratorium_state_active_ranked": 30,
   "pillars": [
     "energy_carbon",
