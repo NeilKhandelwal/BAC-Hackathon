@@ -18,7 +18,7 @@ for Q&A or a swap.
   - Attribution: Washington Data Center Workgroup, Preliminary Report, Dec. 2025
   - Location: Data Center Workgroup: Preliminary Report (Executive Order 25-05), Finding 19, p. 13
   - Link: https://dor.wa.gov/sites/default/files/2025-12/2025DataCntrWrkgrpPrelimReport.pdf
-- **Slide 7:** “…service cannot always be provided as quickly as customers or developers may prefer.”
+- **Unused (slide 7 notes):** “…service cannot always be provided as quickly as customers or developers may prefer.”
   - Attribution: Grant County PUD, Data Center FAQs, Aug. 28, 2026
   - Location: Grant PUD & Data Centers: FAQs, Q6
   - Link: https://www.grantpud.org/blog/data-center-faqs
@@ -75,7 +75,11 @@ Not used, and why:
 
 ## Images
 
-- `docs/figures/map_composite.png` (slide 2): team figure from `docs/figures/make_figures.py`.
+- `docs/figures/map_composite.png` (slide 2): team figure from `docs/figures/make_figures.py`, with
+  editable overlays (title band, ring on Grant, legend line) drawn on top in PowerPoint.
+- `docs/deck/img/cockpit_cooling_switch.png` (slide 9): team cockpit screenshot, headless Chrome at
+  2x, `?preset=balanced&cool=evaporative&c=53025`, built from main `23bb71c`. Two contiguous pieces
+  of the county panel (header and hard gates) are stacked; nothing inside them is edited.
 - Every other chart is a native PowerPoint chart built from repo data, so its numbers can be edited.
 
 Openly licensed photos, checked on each Commons file page on 2026-10-04. None is placed on a
@@ -96,6 +100,6 @@ line if you add one.
 - Slide 4: Washington Clean Energy Transformation Act, RCW 19.405.040 and 19.405.050, https://app.leg.wa.gov/RCW/default.aspx?cite=19.405
 - Slide 4: Washington Data Center Workgroup, Preliminary Report, Finding 19, p. 13, https://dor.wa.gov/sites/default/files/2025-12/2025DataCntrWrkgrpPrelimReport.pdf
 - Slide 7: Grant PUD data center FAQ, 2026-08-28, https://www.grantpud.org/blog/data-center-faqs
-- Slide 7: PAD-US 4.1 and tribal land checks: research/risk.md and research/sensitive_land.md on branch fix/sensitive-land, commit d2ed911
+- Slide 7: PAD-US 4.1 and tribal land checks: research/risk.md and research/sensitive_land.md on branch fix/sensitive-land, commit 12a8127
 - Slide 7: Washington Data Center Workgroup, Preliminary Report, Findings 6 and 19c, https://dor.wa.gov/sites/default/files/2025-12/2025DataCntrWrkgrpPrelimReport.pdf
 - Slide 8: Grant PUD Data Center FAQs, Q5, https://www.grantpud.org/blog/data-center-faqs

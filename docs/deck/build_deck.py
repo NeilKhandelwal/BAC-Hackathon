@@ -104,7 +104,7 @@ QUOTE_BANK = [
          who="Washington Data Center Workgroup, Preliminary Report, Dec. 2025", cite="Washington Data Center Workgroup, Dec. 2025",
          source="Data Center Workgroup: Preliminary Report (Executive Order 25-05), Finding 19, p. 13",
          url="https://dor.wa.gov/sites/default/files/2025-12/2025DataCntrWrkgrpPrelimReport.pdf"),
-    dict(key="pud_speed", slide="7",
+    dict(key="pud_speed", slide="unused (slide 7 notes)",
          text="…service cannot always be provided as quickly as customers or developers may prefer.",
          who="Grant County PUD, Data Center FAQs, Aug. 28, 2026", cite="Grant County PUD, Aug. 2026",
          source="Grant PUD & Data Centers: FAQs, Q6",
@@ -457,7 +457,7 @@ def frame(prs, tag, headline, source, number, notes, checks=(), sources=()):
     bg.solid()
     bg.fore_color.rgb = WHITE
     rect(slide, MX, Inches(0.42), Inches(0.5), Inches(0.07), fill=NAVY, name="Accent")
-    textbox(slide, MX, Inches(0.52), Inches(9), Inches(0.35), tag.upper(), size=13, color=NAVY, bold=True, name="Section tag")
+    textbox(slide, MX, Inches(0.52), Inches(9), Inches(0.35), tag.upper(), size=14, color=NAVY, bold=True, name="Section tag")
     textbox(slide, MX, Inches(0.88), CW, Inches(1.2), headline, size=30, color=INK, bold=True, name="Headline",
             anchor=MSO_ANCHOR.TOP)
     hline(slide, MX, Inches(6.86), CW)
@@ -552,6 +552,12 @@ def build():
     app_sources(prs)
     app_limits(prs)
     app_extends(prs)
+    cp = prs.core_properties  # clear the library template's defaults
+    cp.title = "Sustainable AI data center site selection: pitch"
+    cp.author = ""
+    cp.last_modified_by = ""
+    cp.comments = ""
+    cp.revision = 1
     out = DECK / "pitch_template.pptx"
     prs.save(out)
     write_checks()
@@ -612,8 +618,8 @@ def slide_answer(prs):
 Our answer is Grant County, Washington, home of the Quincy data center cluster. Of
 {fmt(B['counties'])} counties, {fmt(B['passed'])} pass every hard gate, and Grant leads them at
 today's average power prices. It makes the top 10 under half of all possible weightings,
-more than any other county. In 25-year dollars it ties Clark, Washington and Franklin, New
-York; we feature Grant because its power timeline and tax status are sourced. The condition:
+more than any other county. At today's prices its 25-year cost ties Clark, Washington and
+Franklin, New York; we feature Grant because its power timeline and tax status are sourced. The condition:
 sited next to hydro, powered by new clean supply the project funds.
 """,
         checks=[("Counties scored", fmt(B["counties"]), "docs/figures/facts.json", "balanced.counties", True),
@@ -625,18 +631,43 @@ sited next to hydro, powered by new clean supply the project funds.
                 ("Three-county 25-year cost spread", "within 1.1%", "docs/weighting.md", "Recommendation", True)],
         sources=["Grant PUD data center FAQ, 2026-08-28, https://www.grantpud.org/blog/data-center-faqs"],
     )
-    picture_fit(s, FIG / "map_composite.png", MX, TOP - Inches(0.05), Inches(6.4), Inches(4.8))
+    pic = picture_fit(s, FIG / "map_composite.png", MX, TOP - Inches(0.05), Inches(6.4), Inches(4.6))
+    map_overlays(s, pic)
     x = MX + Inches(6.75)
     w = CW - Inches(6.75)
     box = rect(s, x, TOP, w, Inches(1.55), fill=NAVY, name="Condition")
-    shape_text(box, [[("THE CONDITION", {"size": 13, "bold": True, "color": PALE})],
+    shape_text(box, [[("THE CONDITION", {"size": 14, "bold": True, "color": PALE})],
                      [("Sited next to hydro, powered by new clean supply the project funds.",
                        {"size": 21, "bold": True, "color": WHITE})]],
                align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.MIDDLE, margin=0.2)
-    bullets(s, x, TOP + Inches(1.85), w, Inches(2.9),
+    bullets(s, x, TOP + Inches(1.85), w, Inches(2.6),
             [f"Leads {fmt(B['passed'])} gate-passing counties at today's average power prices.",
-             f"Top 10 in {pct(smaa('53025', 'top10_floor_on'), 0)} of all weightings, more than any county.",
-             "Ties Clark WA and Franklin NY within 1.1% over 25 years."], size=20, gap=12)
+             f"Top 10 in {pct(smaa('53025', 'top10_floor_on'))} of all weightings, more than any county.",
+             "Ties Clark WA, Franklin NY within 1.1% at today's prices."], size=20, gap=12)
+
+
+MAP_BG = RGBColor(0xFC, 0xFC, 0xFB)  # background of docs/figures/map_composite.png
+MAP_PX = (1309, 1031)  # its size in pixels; the overlay positions below are in these pixels
+
+
+def map_overlays(slide, pic):
+    """Readable, editable labels over the team map: a larger title, a ring on Grant, and a legend line."""
+    sx, sy = pic.width / MAP_PX[0], pic.height / MAP_PX[1]
+
+    def at(px, py):
+        return pic.left + int(px * sx), pic.top + int(py * sy)
+
+    x, y = at(0, 0)
+    title = rect(slide, x, y, pic.width, int(66 * sy), fill=MAP_BG, name="Map title")
+    shape_text(title, "Counties that pass the gates; Grant, WA circled",
+               size=16, bold=True, color=INK, align=PP_ALIGN.LEFT, margin=0.08)
+    cx, cy = at(220, 188)
+    d = Inches(0.62)
+    rect(slide, cx - d // 2, cy - d // 2, d, d, line=EMBER, line_w=3, shape=MSO_SHAPE.OVAL, name="Grant ring")
+    lx, ly = at(18, 842)
+    legend = rect(slide, lx, ly, int(840 * sx), int(62 * sy), fill=MAP_BG, name="Map legend")
+    shape_text(legend, "Grey: excluded by a hard gate", size=14, color=INK2,
+               align=PP_ALIGN.LEFT, margin=0.04)
 
 
 def slide_framework(prs):
@@ -664,7 +695,7 @@ delay, and tax, and tells us what must be true for each one to win.
         (fmt(B["counties"]), "contiguous US counties"),
         (fmt(B["passed"]), "pass every hard gate"),
         (fmt(B["floor_ok"]), "clear the pillar floor"),
-        ("$ and t", "25-year cost and carbon price the leaders"),
+        ("Cost", "25-year dollars and tonnes price the leaders"),
         ("Research", "power, water, and tax decide"),
     ]
     n = len(steps)
@@ -676,7 +707,7 @@ delay, and tax, and tells us what must be true for each one to win.
         x = MX + i * (bw + gap)
         fill = NAVY if i < 3 else BLUE
         b = rect(s, x, y, bw, bh, fill=fill, shape=MSO_SHAPE.ROUNDED_RECTANGLE, name=f"Step {i + 1}")
-        big_size = 32 if big[0].isdigit() else 24
+        big_size = 32 if big[0].isdigit() else 26
         shape_text(b, [[(big, {"size": big_size, "bold": True, "color": WHITE})],
                        [(small, {"size": 16, "color": WHITE})]])
         if i < n - 1:
@@ -691,9 +722,9 @@ delay, and tax, and tells us what must be true for each one to win.
         c = rect(s, MX + i * (cwid + cg), cy, cwid, Inches(0.95), fill=hue, shape=MSO_SHAPE.ROUNDED_RECTANGLE,
                  name=f"Pillar {label}")
         shape_text(c, [[(label, {"size": 14, "bold": True, "color": WHITE})],
-                       [(f"{W8['balanced'][key] * 100:.0f}%", {"size": 20, "bold": True, "color": WHITE})]], margin=0.04)
+                       [(f"{int(W8['balanced'][key] * 100 + 0.5)}%", {"size": 20, "bold": True, "color": WHITE})]], margin=0.04)
     textbox(s, MX, cy + Inches(1.1), CW, Inches(0.4),
-            "Not machine learning: stated weights, tested for robustness on slide 6.", size=15, color=INK3)
+            "Not machine learning: stated weights, rounded half up as in the app, tested on slide 6.", size=15, color=INK3)
 
 
 def slide_impact(prs):
@@ -704,7 +735,7 @@ def slide_impact(prs):
     cut = 1 - gi["water_million_gal_dry"] / gi["water_million_gal_evap"]
     s = frame(
         prs, "Sustainability impact",
-        f"Dry cooling cuts water {cut * 100:.0f}%. State law forces power clean by 2045.",
+        f"Dry cooling cuts water {cut * 100:.0f}%. Carbon depends on the supply we fund.",
         "Sources: etl/impact.py and research/impact.md (300 MW IT, load factor 0.8; PUE and WUE from Lei and Masanet); "
         "eGRID2023; RCW 19.405; Washington Data Center Workgroup Preliminary Report (Dec. 2025), Finding 19, p. 13.",
         4,
@@ -715,7 +746,7 @@ Here's the sustainability case. Water first: an evaporative campus in Grant woul
 energy. Washington's own data center workgroup flags water as a real concern. Carbon depends
 on which power serves us. Before our funded supply arrives, it's {co2_bpa / 1000:.0f} to
 {co2_nw / 1000:.0f} thousand tons a year, against Loudoun's {lou['co2_tonnes_dry'] / 1000:.0f}
-thousand. State law then requires the utility's power to be fully clean by 2045.
+thousand. Then Washington law requires fully clean retail power by 2045.
 
 IF ASKED:
 - Why not zero carbon? The utility's hydro rate of 0 lb/MWh describes its existing customers.
@@ -724,6 +755,9 @@ IF ASKED:
   so it's a reference, not a candidate.
 - State law detail: utility sales must be greenhouse-gas neutral by 2030 (up to 20% through
   alternative compliance) and 100% renewable or non-emitting by 2045 (RCW 19.405.040, .050).
+- Isn't 2045 an edge over Loudoun? No. Virginia's Clean Economy Act (2020) also sets a 2045
+  carbon-free target for Dominion, which serves Loudoun (not verified for this deck). Our edge
+  is the supply we fund, not the statute.
 """,
         checks=[("Grant water, evaporative", f"{gi['water_million_gal_evap']} M gal/yr", "docs/figures/facts.json", "impact['Grant, WA'].water_million_gal_evap", True),
                 ("Grant water, dry", f"{gi['water_million_gal_dry']} M gal/yr", "docs/figures/facts.json", "impact['Grant, WA'].water_million_gal_dry", True),
@@ -746,28 +780,31 @@ IF ASKED:
               ["Loudoun VA", "Grant, Northwest average", "Grant, BPA's mix"],
               [lou["co2_tonnes_dry"] / 1000, co2_nw / 1000, co2_bpa / 1000],
               [GREY, BLUE, NAVY], title="CO2, thousand metric tons a year", max_val=850, cat_size=15)
-    quote_block(s, MX, TOP + Inches(3.25), half, Inches(1.25), QUOTES["wa_water"], 4, "water use concerns", size=17)
+    quote_block(s, MX, TOP + Inches(3.22), half, Inches(1.38), QUOTES["wa_water"], 4, "water use concerns", size=17)
     bullets(s, MX + half + Inches(0.5), TOP + Inches(3.35), half, Inches(1.1),
-            ["Shown before funded supply. State law: 100% clean by 2045."], size=19)
+            ["Shown before the clean supply we fund comes online."], size=19)
 
 
 def slide_pick(prs):
     r = PS["ranks"]
     s = frame(
         prs, "How the pick changed",
-        "Corrections moved our pick. The last one cut against Grant.",
+        "Corrections moved our pick. The price check cuts against Grant.",
         "Sources: docs/figures/facts.json (pick_story; same data as docs/figures/pick_story.png); research/implementation.md (BPA new-load rate, "
         "BP-26 rate schedules); research/permitting_model.md; data/processed/permitting_validation.json.",
         5,
         notes=f"""
-We didn't start at Grant. With seven pillars, Berkshire County, Massachusetts ranked first
-and Grant seventh. Massachusetts closed the tax exemption Berkshire relied on, and it fell
-to fifth. Then we made power cost its own pillar. Grant
-rose to first, and Berkshire fell to {fmt(r['Berkshire, MA'][2])}th. The last correction cut
-against us. A new 300 megawatt load doesn't get today's average price, so Grant's bill is 196
-to 323 million dollars a year, not 162. And we dropped a permitting model that failed out of sample.
+With seven pillars, Berkshire County, Massachusetts ranked first and Grant seventh.
+Massachusetts closed the tax exemption Berkshire relied on, and it fell to fifth. Then we
+made power cost its own pillar, and Grant rose to first. The last check cut against us. A new
+300 megawatt load doesn't get today's average price. Reprice only Washington at BPA's
+new-load rate, and Grant falls to {PRICE_RERUN[80]}th. No other state's new-load rate is sourced,
+so that's lopsided, but it's real. We also dropped a permitting model that failed out of sample.
 
-IF ASKED: why doesn't Grant get cheap hydro? BPA's rule for a new large single load: "{QUOTES['bpa_nlsl']['text']}"
+IF ASKED:
+- The bill: at BPA's $80 to $132/MWh, Grant's energy costs $196M to $323M a year, not $162M.
+  At $132/MWh, with only Washington repriced, Grant falls to {fmt(PRICE_RERUN[132])}th.
+- Why doesn't Grant get cheap hydro? BPA's rule for a new large single load: "{QUOTES['bpa_nlsl']['text']}"
 ({QUOTES['bpa_nlsl']['who']}). Whether the rule binds a Grant PUD load depends on the utility's BPA contract; not checked.
 """,
         checks=[("Berkshire ranks by stage", " / ".join(map(str, r["Berkshire, MA"])), "docs/figures/facts.json", "pick_story.ranks['Berkshire, MA']", True),
@@ -775,25 +812,29 @@ IF ASKED: why doesn't Grant get cheap hydro? BPA's rule for a new large single l
                 ("Grant energy cost at state average", f"${GR['energy_cost_musd']['state_average']}M/yr", "docs/figures/facts.json", "grant_ranges.energy_cost_musd.state_average", True),
                 ("Grant energy cost at BPA new-load rate", f"${GR['energy_cost_musd']['new_load_low']}M to ${GR['energy_cost_musd']['new_load_high']}M/yr",
                  "docs/figures/facts.json", "grant_ranges.energy_cost_musd.new_load_low/high", True),
-                ("Permitting model AUC without facility counts", "0.48 to 0.585 (bar 0.60)", "research/permitting_model.md; data/processed/permitting_validation.json", None, True)],
+                ("Permitting model AUC without facility counts", "0.48 to 0.585 (bar 0.60)", "research/permitting_model.md; data/processed/permitting_validation.json", None, True),
+                ("Grant rank with only WA at BPA's $80 / $132 per MWh", f"{PRICE_RERUN[80]} / {fmt(PRICE_RERUN[132])}",
+                 "docs/deck_build_log.md", "step 1, price sensitivity (scratchpad rerun of the balanced preset)", True)],
     )
     g, bk = r["Grant, WA"], r["Berkshire, MA"]
     off = 25  # Berkshire's last rank (1,047) is drawn at the bottom edge and labeled
+    g_bpa = PRICE_RERUN[80]
     rank_chart(s, MX, TOP - Inches(0.1), Inches(6.9), Inches(4.75),
-               ["Seven pillars", "MA exemption closed", "Cost as a pillar"],
-               [("Berkshire, MA", [bk[0], bk[1], min(bk[2], off)], EMBER,
+               ["Seven pillars", "MA exemption closed", "Cost as a pillar", "What if WA pays $80/MWh"],
+               [("Berkshire, MA", [bk[0], bk[1], min(bk[2], off), None], EMBER,
                  [f"Berkshire #{bk[0]}", f"#{bk[1]}", f"#{fmt(bk[2])}"], ["above", "above", "left"]),
-                ("Grant, WA", g, NAVY, [f"Grant #{g[0]}", f"#{g[1]}", f"Grant #{g[2]}"], ["below", "below", "above"])],
+                ("Grant, WA", g + [min(g_bpa, off)], NAVY,
+                 [f"Grant #{g[0]}", f"#{g[1]}", f"Grant #{g[2]}", f"#{g_bpa}"], ["below", "below", "above", "right"])],
                title="Balanced-preset rank at each step", max_rank=off + 1)
     x = MX + Inches(7.2)
     w = CW - Inches(7.2)
     bullets(s, x, TOP + Inches(0.1), w, Inches(3.2),
             ["Massachusetts closed a tax exemption: Berkshire fell to 5th.",
              f"Power cost as its own pillar: Grant {r['Grant, WA'][1]}th to 1st.",
-             f"New-load power prices raise Grant's bill to ${GR['energy_cost_musd']['new_load_low']}–{GR['energy_cost_musd']['new_load_high']}M."],
+             f"Repricing only Washington at BPA's $80/MWh: Grant falls to {PRICE_RERUN[80]}th."],
             size=20, gap=14)
     box = rect(s, x, TOP + Inches(3.35), w, Inches(1.3), fill=GROUND, name="Dropped")
-    shape_text(box, [[("TESTED AND DROPPED", {"size": 13, "bold": True, "color": EMBER})],
+    shape_text(box, [[("TESTED AND DROPPED", {"size": 14, "bold": True, "color": EMBER})],
                      [("Permitting ML model: out-of-sample AUC 0.48–0.59, below our 0.60 bar.", {"size": 17})]],
                align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.MIDDLE, margin=0.18)
 
@@ -810,19 +851,19 @@ def slide_robust(prs):
         "(scratch/weighting/out/smaa_acceptability.csv; docs/weighting.md); results/balanced.csv (robustness).",
         6,
         notes=f"""
-The obvious question: did we pick weights that make Grant win? So we stopped choosing. We
-drew 5,000 random weightings of the eight pillars and counted how often each county makes
-the top 10. Grant does in {pct(smaa('53025', 'top10_floor_on'), 1)} of them, more than any
-other county. No county wins most weightings; the top three each come first in 11 to 13
-percent. Near our own weights, Grant stays in the top 10 in {pct(GRANT['robustness'], 1)}.
-We didn't tune the weights to get our answer. We tested whether our answer depends on them.
+Did we pick weights that make Grant win? We stopped choosing. We drew 5,000 random
+weightings of the eight pillars and counted how often each county makes the top 10. Grant
+does in {pct(smaa('53025', 'top10_floor_on'), 1)} of them, more than any other county. No county
+wins most weightings; the top three each come first in 11 to 13 percent. We didn't tune the
+weights to get our answer. We tested whether our answer depends on them. It's robust to
+weights. It isn't robust to price, which brings us to the risk.
 """,
         checks=[(f"SMAA top-10 share, {n}", f"{v:.1f}%", "scratch/weighting/out/smaa_acceptability.csv", "top10_floor_on", True)
                 for n, v in zip(names, vals)]
         + [(f"SMAA rank-1 share, {r['county']}", pct(float(r['rank1_floor_on'])), "scratch/weighting/out/smaa_acceptability.csv", "rank1_floor_on", True) for r in r1]
         + [("Robustness near balanced weights", pct(GRANT["robustness"]), "docs/figures/facts.json", "featured.robustness (2,000 draws, sd about 0.03)", True)],
     )
-    bar_chart(s, MX, TOP, Inches(6.6), Inches(4.0), names, vals, colors,
+    bar_chart(s, MX, TOP - Inches(0.05), Inches(6.6), Inches(3.85), names, vals, colors,
               title="Top 10 in this share of random weightings", fmt_code='0.0"%"', max_val=65, cat_size=16)
     x = MX + Inches(6.95)
     w = CW - Inches(6.95)
@@ -833,7 +874,7 @@ We didn't tune the weights to get our answer. We tested whether our answer depen
              f"No county wins most: the top three each win {lo:.0f}–{hi:.0f}%.",
              f"Near our weights, Grant stays top 10 in {pct(GRANT['robustness'])}."],
             size=20, gap=14)
-    band = rect(s, MX, TOP + Inches(4.15), CW, Inches(0.6), fill=GROUND, name="Line")
+    band = rect(s, MX, TOP + Inches(3.95), CW, Inches(0.6), fill=GROUND, name="Line")
     shape_text(band, "We didn't tune the weights to get our answer. We tested whether our answer depends on them.",
                size=19, bold=True, color=NAVY)
 
@@ -842,20 +883,30 @@ def slide_risk(prs):
     p = PUD
     s = frame(
         prs, "Risk and win condition",
-        "Grant's case rests on one thing: full power by about 2029.",
+        "Grant's case rests on power: full load by 2029, near today's price.",
         "Sources: Grant PUD data center FAQ (2026-08-28); research/risk.md; docs/weighting.md; protected land and tribal rows "
-        "from research/risk.md on branch fix/sensitive-land (d2ed911, not yet on main; PAD-US 4.1).",
+        "from research/risk.md on branch fix/sensitive-land (12a8127, not yet on main; PAD-US 4.1).",
         7,
         notes=f"""
 One risk is high: power. Grant PUD's share of its dams averages about
 {p['hydro_share_amw']} average megawatts, already below its {p['load_2025_amw']} load. We'd add
-{p['campus_amw']}, and about {p['queued_mw']} megawatts are queued ahead of us. So we
-fund new supply and phase in behind the 2027 and 2029 transmission lines. Timing is the win
-condition: in 25-year dollars Grant ties Clark and Franklin, and each month of delay costs
-about 25 million dollars. Heat is a medium risk. Protected land and tribal sites are low,
-checked by hand, with early consultation.
+{p['campus_amw']}, and about {p['queued_mw']} megawatts are queued ahead of us. So we fund new
+supply and phase in behind the 2027 and 2029 transmission lines. That's the win condition:
+full power by about late 2029, near today's price. Later or pricier, Clark or Franklin costs
+less. Heat is a medium risk. We consult tribes early, and no protected land sits within
+5 kilometers of Quincy.
 
 IF ASKED (not in the 35 seconds):
+- Timing math: each month of delay is priced at $25M, an assumption (docs/weighting.md). Grant
+  breaks even with Clark at 10.2 months and Franklin at 12.1 months past a 2-year baseline from
+  October 2026; its evidence-based estimate is 12 months (8 to 18.5).
+- The utility's own words (verified): "{QUOTES['pud_speed']['text']}" {QUOTES['pud_speed']['who']}.
+- Tribal and protected land: the sensitive-land branch rates both rows Low residual (PAD-US 4.1:
+  nearest protected parcels 5.8 km W and 8.6 km S; no tribal land in the county; Quincy appears
+  to sit in the Yakama Nation's 1855 ceded area). Section 106 consultation is triggered by a federal
+  connection (Army Corps permit, BPA interconnection, federal funding, FERC project lands); state
+  funding triggers Executive Order 21-02 review. We show consultation as an early action, not a
+  low rating, because of the fisheries point below.
 - Price: with Washington at BPA's new-load rate and other states at their averages, Grant
   falls to {PRICE_RERUN[80]}th at $80/MWh and {fmt(PRICE_RERUN[132])}th at $132/MWh. No other state's
   new-load rate is sourced, so that comparison is lopsided, but Grant's #1 rests on today's
@@ -876,29 +927,28 @@ IF ASKED (not in the 35 seconds):
                  "docs/figures/facts.json", "featured.horizon_2050_raw.days_above_95f_hist", True),
                 ("Grant rank with WA at BPA's $80 and $132/MWh", f"{PRICE_RERUN[80]} and {fmt(PRICE_RERUN[132])}",
                  "docs/deck_build_log.md", "step 1, price sensitivity (scratchpad rerun, not committed)", True),
-                ("Protected land and tribal rows", "residual Low", "research/risk.md on origin/fix/sensitive-land (d2ed911)", "Protected and sensitive land; Tribal consultation", True)],
+                ("Protected land within 5 km of Quincy", "none (nearest 5.8 km)", "research/risk.md on origin/fix/sensitive-land (12a8127)", "Protected and sensitive land", True)],
         sources=["Grant PUD data center FAQ, 2026-08-28, https://www.grantpud.org/blog/data-center-faqs",
-                 "PAD-US 4.1 and tribal land checks: research/risk.md and research/sensitive_land.md on branch fix/sensitive-land, commit d2ed911",
+                 "PAD-US 4.1 and tribal land checks: research/risk.md and research/sensitive_land.md on branch fix/sensitive-land, commit 12a8127",
                  f"Washington Data Center Workgroup, Preliminary Report, Findings 6 and 19c, {QUOTES['wa_load_growth']['url']}"],
     )
-    bar_chart(s, MX, TOP - Inches(0.05), Inches(5.6), Inches(2.45),
+    bar_chart(s, MX, TOP - Inches(0.05), Inches(5.6), Inches(3.5),
               ["Utility's share of its dams", "Utility load, 2025", "Load plus our campus"],
               [p["hydro_share_amw"], p["load_2025_amw"], p["load_2025_amw"] + p["campus_amw"]],
-              [BLUE, GREY, EMBER], title="Grant PUD, average megawatts", max_val=1300, cat_size=15, label_size=17, gap=35)
-    quote_block(s, MX, TOP + Inches(2.5), Inches(5.6), Inches(1.0), QUOTES["pud_speed"], 7, "Grant PUD on new large loads", size=16)
+              [BLUE, GREY, EMBER], title="Grant PUD, average megawatts", max_val=1300, cat_size=16, label_size=18)
     x = MX + Inches(5.95)
     w = CW - Inches(5.95)
-    rows = [("HIGH", EMBER, f"Power: no spare hydro; ~{p['queued_mw']} MW of requests queued ahead."),
+    rows = [("HIGH", EMBER, f"Power: no spare hydro; ~{p['queued_mw']} MW queued; new-load price unset."),
             ("MEDIUM", AMBER, "Heat: days above 95°F rise from 14 to 36 by 2050."),
-            ("LOW", GREEN, "Protected land, tribal sites: checked by hand; consult early.")]
+            ("ACT EARLY", NAVY, "Consult tribes early; no protected land within 5 km.")]
     for i, (lvl, c, text) in enumerate(rows):
         y = TOP + i * Inches(1.17)
-        chip = rect(s, x, y + Inches(0.2), Inches(1.2), Inches(0.5), fill=c, shape=MSO_SHAPE.ROUNDED_RECTANGLE, name=f"Risk {lvl}")
+        chip = rect(s, x, y + Inches(0.2), Inches(1.4), Inches(0.5), fill=c, shape=MSO_SHAPE.ROUNDED_RECTANGLE, name=f"Risk {lvl}")
         shape_text(chip, lvl, size=14, bold=True, color=WHITE)
-        textbox(s, x + Inches(1.4), y, w - Inches(1.4), Inches(0.95), text, size=19, color=INK, anchor=MSO_ANCHOR.MIDDLE)
+        textbox(s, x + Inches(1.6), y, w - Inches(1.6), Inches(0.95), text, size=19, color=INK, anchor=MSO_ANCHOR.MIDDLE)
     box = rect(s, MX, TOP + Inches(3.65), CW, Inches(0.9), fill=NAVY, name="Win condition")
     shape_text(box, [[("WIN CONDITION  ", {"size": 14, "bold": True, "color": PALE}),
-                      ("In 25-year dollars Grant ties Clark WA and Franklin NY. Each month of power delay costs about $25M.",
+                      ("Full 300 MW by about late 2029, near today's power price. Later or pricier, the three-way tie breaks against Grant.",
                        {"size": 19, "bold": True, "color": WHITE})]],
                align=PP_ALIGN.LEFT, margin=0.25)
 
@@ -955,7 +1005,7 @@ coolers, sized for 2050's hotter days. Heat: we site next to a food processor an
         rect(s, MX + i * (cwid + cg), cy, cwid, Inches(0.07), fill=NAVY, name="Card rule")
         shape_text(c, [[(head, {"size": 14, "bold": True, "color": NAVY})], [(text, {"size": 19})]],
                    align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.MIDDLE, margin=0.22)
-    quote_block(s, MX, TOP + Inches(3.5), CW, Inches(1.0), QUOTES["pud_pays"], 8, "Grant PUD on who pays for new supply", size=17)
+    quote_block(s, MX, TOP + Inches(3.45), CW, Inches(1.15), QUOTES["pud_pays"], 8, "Grant PUD on who pays for new supply", size=17)
 
 
 def slide_engine(prs):
@@ -963,8 +1013,8 @@ def slide_engine(prs):
     s = frame(
         prs, "The engine is the product",
         "Change one condition and the engine gives a new, explained answer.",
-        "Sources: engine/conditions/balanced.yaml with cooling: evaporative (rerun in docs/deck_build_log.md step 1); "
-        "docs/demo_script.md; WRI Aqueduct 4.0 water stress.",
+        "Sources: engine/conditions/balanced.yaml with cooling: evaporative (docs/deck_build_log.md step 1); WRI Aqueduct 4.0. "
+        "Screenshot (cropped): team cockpit (app/cockpit), ?preset=balanced&cool=evaporative&c=53025, main 23bb71c.",
         9,
         notes=f"""
 The deliverable isn't one county. It's the engine. Conditions go in as one plain file,
@@ -981,16 +1031,22 @@ ALTERNATIVE CLOSE (verified quote): "{QUOTES['wa_siting']['text']}" {QUOTES['wa_
                 ("Grant water stress", f"{GRANT['horizon_2050_raw']['water_stress_bws']['today']:.1f} of 5", "docs/figures/facts.json", "featured.horizon_2050_raw.water_stress_bws.today", True),
                 ("New leader under evaporative cooling", EVAP["first"], "docs/deck_build_log.md step 1", None, True)],
     )
-    bar_chart(s, MX, TOP, Inches(5.6), Inches(3.3), ["Dry cooling", "Evaporative cooling"],
-              [B["passed"], EVAP["passed"]], [NAVY, BLUE], title="Counties that pass the gates", max_val=2000, cat_size=17)
-    x = MX + Inches(5.95)
-    w = CW - Inches(5.95)
-    bullets(s, x, TOP + Inches(0.1), w, Inches(2.9),
+    shot = DECK / "img/cockpit_cooling_switch.png"
+    pic = picture_fit(s, shot, MX, TOP - Inches(0.05), Inches(4.3), Inches(3.45), align="left")
+    pic.line.color.rgb = RULE
+    pic.line.width = Pt(1)
+    cx = pic.left + pic.width + Inches(0.3)
+    bar_chart(s, cx, TOP - Inches(0.05), Inches(3.7), Inches(3.45), ["Dry cooling", "Evaporative"],
+              [B["passed"], EVAP["passed"]], [NAVY, BLUE], title="Counties that pass the gates", max_val=2100,
+              cat_size=16, horizontal=False, gap=70)
+    x = cx + Inches(4.0)
+    w = MX + CW - x
+    bullets(s, x, TOP + Inches(0.1), w, Inches(3.2),
             ["Evaporative cooling switches on a water-stress gate.",
-             f"Grant (water stress {GRANT['horizon_2050_raw']['water_stress_bws']['today']:.1f} of 5) drops out.",
-             "One conditions file in; ranked, explained shortlist out."],
-            size=20, gap=14)
-    band = rect(s, MX, TOP + Inches(3.55), CW, Inches(1.15), fill=NAVY, name="Hand-off")
+             f"Grant ({GRANT['horizon_2050_raw']['water_stress_bws']['today']:.1f} of 5) drops out; the app says why.",
+             f"{EVAP['first']} leads instead."],
+            size=19, gap=12)
+    band = rect(s, MX, TOP + Inches(3.55), CW, Inches(0.98), fill=NAVY, name="Hand-off")
     if q:
         shape_text(band, [[("“" + q["text"] + "”  ", {"size": 20, "bold": True, "color": WHITE}),
                            (q.get("cite", q["who"]), {"size": 15, "color": PALE})]], align=PP_ALIGN.LEFT, margin=0.3)
@@ -1035,7 +1091,7 @@ thousand tons, below Franklin.
     bar_chart(s, MX + half + Inches(0.5), TOP, half, Inches(3.4), ["Franklin, NY", "Grant, WA"],
               [FRANKLIN_CO2 / 1000, co2_g / 1000], [BLUE, NAVY],
               title="CO2, thousand metric tons a year", max_val=850, cat_size=17)
-    bullets(s, MX, TOP + Inches(3.6), CW, Inches(1.1),
+    bullets(s, MX, TOP + Inches(3.55), CW, Inches(0.98),
             ["The pillar blends grid rate with nearby clean capacity.",
              f"With BPA-like supply, Grant is {GR['co2_tonnes']['bpa'] / 1000:.0f}k t, below Franklin."], size=19, gap=8)
 
@@ -1043,7 +1099,7 @@ thousand tons, below Franklin.
 def app_tie(prs):
     s = frame(
         prs, "Appendix A2 · Three-county tie",
-        "In 25-year dollars, three counties tie within 1.1%. Each has a win condition.",
+        "At today's prices, three counties tie within 1.1% over 25 years.",
         "Sources: docs/weighting.md (Recommendation; What each county needs to win; With and without tax), "
         "scratch/weighting/out/monetize_summary.json and montecarlo_summary*.json. 300 MW IT, 25 years at 7%, $190/t CO2.",
         "A2",
@@ -1060,14 +1116,14 @@ states price cheaper nationally. Those flags are unverified, so checking them co
            ("Shortlist ranks with tax: Clark, Grant, Franklin", "73, 78, 80 of 162", "docs/weighting.md", "The framework", True),
            ("Monte Carlo #1 with tax", "Chesterfield SC 21.8% of draws", "scratch/weighting/out/montecarlo_summary.json", "p_first_top", True)],
     )
-    rows = [("County", "25-year cost", "Wins when"),
+    rows = [("County", "25-year cost, today's prices", "Wins when"),
             ("Grant, WA (featured)", f"${TIE['Grant, WA']}B", "Full 300 MW within about 10 to 12 months of a 2-year baseline."),
             ("Clark, WA", f"${TIE['Clark, WA']}B", "Parcel outside the transit district (8.0% sales tax) and power in about 2.25 years."),
             ("Franklin, NY", f"${TIE['Franklin, NY']}B", "New York's data center sales tax exemption applies to the campus.")]
     table(s, MX, TOP, CW, Inches(2.9), rows, [Inches(3.0), Inches(2.2), CW - Inches(5.2)], size=17)
-    bullets(s, MX, TOP + Inches(3.15), CW, Inches(1.6),
+    bullets(s, MX, TOP + Inches(3.15), CW, Inches(1.3),
             ["With tax, full-exemption states price cheaper; those flags are unverified.",
-             "Shortlist ranks with tax: Clark 73, Grant 78, Franklin 80."], size=19, gap=8)
+             "Ranks among 162 shortlisted: Clark 73, Grant 78, Franklin 80."], size=19, gap=8)
 
 
 def app_weights(prs):
@@ -1096,7 +1152,7 @@ right, which is why we report SMAA over every possible weighting instead of defe
     cd.categories = [lbl for _, lbl, _ in PILLARS]
     for i, m in enumerate(methods):
         cd.add_series(m, [table_w[k][i] * 100 for k, _, _ in PILLARS])
-    gf = s.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, MX, TOP, CW, Inches(4.7), cd)
+    gf = s.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, MX, TOP - Inches(0.05), CW, Inches(4.6), cd)
     ch = gf.chart
     ch.font.name = FONT
     ch.font.size = Pt(15)
@@ -1149,7 +1205,7 @@ the top 10 is 73 to 78 percent, because 10 of 45 mapped columns aren't in the ta
                 ("Coverage, top 10", f"{min(F['limitations']['coverage_top10']):.2f} to {max(F['limitations']['coverage_top10']):.2f}",
                  "docs/figures/facts.json", "limitations.coverage_top10", True)],
     )
-    table(s, MX, TOP, CW, Inches(4.7), rows, [Inches(3.2), CW - Inches(3.2)], size=16)
+    table(s, MX, TOP - Inches(0.05), CW, Inches(4.3), rows, [Inches(3.2), CW - Inches(3.2)], size=15)
 
 
 def app_limits(prs):
@@ -1192,7 +1248,7 @@ def app_extends(prs):
     s = frame(
         prs, "Appendix A6 · The engine extends",
         "Same engine, new region or new question: countries, and industrial reuse.",
-        "Sources: docs/global.md; results/global_balanced.csv; docs/figures/global_table.png; docs/industrial_reuse.md; "
+        "Sources: docs/global.md; results/global_balanced.csv; docs/figures/facts.json (global); docs/industrial_reuse.md; "
         "docs/demo_script.md (Boone County, IL; BLS QCEW private manufacturing jobs).",
         "A6",
         notes=f"""
@@ -1285,7 +1341,11 @@ def write_sources():
               "- No verified source sentence says siting choices matter “for decades”. The slide 1 headline",
               "  is the team's claim, not a quote.", "",
               "## Images", "",
-              "- `docs/figures/map_composite.png` (slide 2): team figure from `docs/figures/make_figures.py`.",
+              "- `docs/figures/map_composite.png` (slide 2): team figure from `docs/figures/make_figures.py`, with",
+              "  editable overlays (title band, ring on Grant, legend line) drawn on top in PowerPoint.",
+              "- `docs/deck/img/cockpit_cooling_switch.png` (slide 9): team cockpit screenshot, headless Chrome at",
+              "  2x, `?preset=balanced&cool=evaporative&c=53025`, built from main `23bb71c`. Two contiguous pieces",
+              "  of the county panel (header and hard gates) are stacked; nothing inside them is edited.",
               "- Every other chart is a native PowerPoint chart built from repo data, so its numbers can be edited.", "",
               "Openly licensed photos, checked on each Commons file page on 2026-10-04. None is placed on a",
               "slide yet; every main slide already carries a chart. Print the credit line in the slide's source",

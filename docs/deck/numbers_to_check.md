@@ -32,6 +32,7 @@ notes as stable and aren't repeated here.
 | 5 | Grant energy cost at state average | $162M/yr | `docs/figures/facts.json` | grant_ranges.energy_cost_musd.state_average |
 | 5 | Grant energy cost at BPA new-load rate | $196M to $323M/yr | `docs/figures/facts.json` | grant_ranges.energy_cost_musd.new_load_low/high |
 | 5 | Permitting model AUC without facility counts | 0.48 to 0.585 (bar 0.60) | `research/permitting_model.md; data/processed/permitting_validation.json` |  |
+| 5 | Grant rank with only WA at BPA's $80 / $132 per MWh | 79 / 1,146 | `docs/deck_build_log.md` | step 1, price sensitivity (scratchpad rerun of the balanced preset) |
 | 6 | SMAA top-10 share, Grant, WA | 50.5% | `scratch/weighting/out/smaa_acceptability.csv` | top10_floor_on |
 | 6 | SMAA top-10 share, Whitman, WA | 45.8% | `scratch/weighting/out/smaa_acceptability.csv` | top10_floor_on |
 | 6 | SMAA top-10 share, Wayne, TN | 42.4% | `scratch/weighting/out/smaa_acceptability.csv` | top10_floor_on |
@@ -47,7 +48,7 @@ notes as stable and aren't repeated here.
 | 7 | Grant break-even vs Clark / Franklin | 10.2 / 12.1 months past a 2-year baseline | `docs/weighting.md` | Grant's row |
 | 7 | Days above 95°F | 14.5 today, 35.9 by 2050 | `docs/figures/facts.json` | featured.horizon_2050_raw.days_above_95f_hist |
 | 7 | Grant rank with WA at BPA's $80 and $132/MWh | 79 and 1,146 | `docs/deck_build_log.md` | step 1, price sensitivity (scratchpad rerun, not committed) |
-| 7 | Protected land and tribal rows | residual Low | `research/risk.md on origin/fix/sensitive-land (d2ed911)` | Protected and sensitive land; Tribal consultation |
+| 7 | Protected land within 5 km of Quincy | none (nearest 5.8 km) | `research/risk.md on origin/fix/sensitive-land (12a8127)` | Protected and sensitive land |
 | 8 | New solar to match annual use | about 1 GW (1,030 MW at 27% capacity factor) | `research/implementation.md` | Where new clean supply comes from |
 | 8 | Dry cooling water | 27.8 M gal/yr | `docs/figures/facts.json` | impact['Grant, WA'].water_million_gal_dry |
 | 9 | Counties passing, dry | 1,565 | `docs/figures/facts.json` | balanced.passed |
