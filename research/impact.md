@@ -113,6 +113,18 @@ need (its data center FAQ, 2026-08-28). So the first row is not available
 to a new load. Use the middle row as the working estimate and show the
 range. The county table and the engine keep the subregion value.
 
+Energy cost has the same dependence on supply. The same 2,444,212 MWh:
+
+| Price assumption | $/MWh | Energy cost, $M/yr | vs Loudoun |
+| --- | --- | --- | --- |
+| Washington average industrial price (the county table's value) | 66 | 162 | -64 |
+| BPA rate for a new large load, low end | 80 | 196 | -30 |
+| BPA rate for a new large load, high end | 132 | 323 | +97 |
+
+Grant costs more than Loudoun above about $92 per MWh. The BPA range is
+from `research/implementation.md`, which cites BPA's rule for new large
+single loads and its BP-26 rate schedules.
+
 ## Results in 2050
 
 Same grid rate as today. Only the climate changes.

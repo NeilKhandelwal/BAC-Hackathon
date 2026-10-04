@@ -33,14 +33,14 @@ $64M less than in Loudoun County, VA.
 | Water stress | `water_stress_bws` 3.62 (high), worse than 84%, flat to 2050. `water_permit_risk` 1. Managed groundwater status was not researched for Washington. | Evaporative cooling would use 210 million gallons a year, 333 by 2050. The engine's own gate excludes evaporative cooling above a score of 2. | Dry cooling: 28 million gallons a year, for 2% more energy. | Low with dry cooling |
 | Grid carbon | `grid_co2_lb_mwh` 632 is the Northwest average. The PUD's own generation is 100% hydro at 0 lb/MWh (eGRID balancing authority sheet). | The carbon claim depends on which power serves the new load: 0 tons a year at the PUD's rate, 236,000 at BPA's, 700,000 at the regional average. Loudoun: 675,455. | Contract new clean supply and report hourly matching. Don't claim the existing hydro. | Medium |
 | Tax and state policy | `state_policy_risk` 0. The sales tax exemption is open to a new project in a rural county. A 2026 law ended it for replacement servers. A state proceeding on large loads is open. | Servers are replaced every few years, so most of the exemption's value over 30 years is gone. | Model the project with the exemption on the first build only. | Medium |
-| Power price | `industrial_price_cents_kwh` 6.61, a state average, worse than 21%. | The $162M annual cost assumes that price, so it is a floor. PUD staff have proposed data center rate classes for 2027. `research/implementation.md` covers the rate a new large load would pay. | Negotiate the rate with the service agreement. | Medium |
+| Power price | `industrial_price_cents_kwh` 6.61, a state average, worse than 21%. | The $162M annual cost assumes that price, so it is a floor. At BPA's rate for a new large load, about $80 to $132 per MWh, the same energy costs $196M to $323M. Above about $92 per MWh, Grant costs more than Loudoun's $226M. PUD staff have proposed data center rate classes for 2027. | Negotiate the rate with the service agreement. Fund dedicated generation if it beats the BPA rate. | Medium |
 | Cluster record | `dc_existing_count` 3 and `dc_existing_mw` 82 in FracTracker, which undercounts the Quincy cluster. `dc_pushback_count` 0. `fiber_share_locations` 0.99. | An existing cluster means fiber, contractors, and a utility that knows the load. No recorded opposition. | None needed. | Low |
 | Flood, hurricane, tornado | `nri_inland_flood_score` 23.3. `nri_hurricane_score` 0. `nri_tornado_score` 8.7. | Low exposure. | Site above the mapped floodplain. | Low |
 
 ## Comparison
 
 The two counties that follow Grant once electricity cost is its own
-pillar. The order is provisional until that change merges.
+pillar. PR #28 gives the order: Grant 63.7, Wayne 63.2, Whitman 63.0.
 
 - **Wayne County, TN (47181).** Worst three: inland flooding (83.1, worse
   than 83%), hurricane (57.7, worse than 69%), workforce (population
@@ -103,6 +103,11 @@ Primary:
 
 Secondary:
 
+- BPA rule for new large single loads (primary):
+  https://www.bpa.gov/-/media/Aep/about/publications/fact-sheets/fs-202011-New-Large-Single-Load.pdf
+- BPA's rate range of about $80 to $132 per MWh: BP-26 power rate
+  schedules, as cited in `research/implementation.md`. Not opened for this
+  document.
 - Grant PUD's 2024 queue, 2,897 MW across 75 applicants:
   https://www.publicpower.org/periodical/article/grant-county-pud-details-queue-power-service-requests-large-load-customers
 - Grant PUD load-growth limits for data centers, March 2025:
