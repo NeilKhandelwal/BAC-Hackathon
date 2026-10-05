@@ -1,99 +1,190 @@
-# Data center location decision engine
+# Site Selection Cockpit
 
-A tool that ranks US counties as sites for a sustainable AI data center,
-given a user's conditions. It returns a ranked, explained shortlist and can
-be rerun with new conditions, new data, or a new region.
+An interactive, explainable decision tool for screening U.S. counties for a large AI data center. The cockpit combines hard feasibility gates, eight weighted decision pillars, future climate scenarios, and rank-stability analysis to turn 39 populated metrics into an auditable shortlist.
 
-## User
+![Site Selection Cockpit showing the balanced preset, county map, Grant County detail, and rank-stability results](docs/img/cockpit.jpg)
 
-A site-selection lead at a data center developer or hyperscaler. Input is a
-conditions file: facility size, online year, cooling type, carbon limit,
-hazard tolerance, and weights. Output is a shortlist with the reasons for
-each rank and each exclusion.
+The committed demo models a **300 MW campus targeting 2029**. Under the balanced preset, 1,565 of 3,109 contiguous U.S. counties pass the hard gates; Grant County, Washington leads the current shortlist, narrowly followed by Whitman and Benton counties.
 
-## How it works
+## What the cockpit does
 
-1. **Data.** ETL adapters build one table with a row per county and a
-   column per metric. See `docs/schema.md`.
-2. **Gates.** Counties that fail a hard condition, such as a flood
-   percentile or an active moratorium, are excluded and logged.
-3. **Scores.** Each metric becomes a national percentile. Metrics average
-   into eight pillars: energy and carbon, water, climate resilience, grid
-   and infrastructure, land, community, permitting, cost. See `engine/pillars.yaml`.
-4. **Composite.** Weighted sum of pillars. A county below the 10th
-   percentile on any pillar (in the balanced preset) ranks below every
-   county that isn't.
-5. **Robustness.** Weights are resampled 2,000 times. Each county gets the
-   share of samples where it ranked top 10.
-6. **Output.** Ranked list with pillar breakdown, robustness, permitting
-   pathway, and gate log. CLI, CSV, and a Streamlit app.
+- Screens all 3,109 counties in the contiguous United States.
+- Applies explicit hard gates for hazards, grid capacity, queue timing, fiber, population, moratoria, water stress, and sensitive land.
+- Scores eight pillars: energy and carbon, water, climate resilience, grid and infrastructure, land, community, permitting, and cost of power.
+- Recalculates the national ranking immediately when a user changes a weight, gate, facility assumption, preset, or horizon.
+- Compares today's conditions with mid-century heat and water projections.
+- Runs 2,000 Dirichlet weight scenarios and shows how often each county remains in the top 3, ranks 4–10, or outside the top 10.
+- Explains each result with pillar contributions, strongest and weakest evidence, gate outcomes, and county-to-county comparison.
+- Keeps the current configuration in the URL so a finding can be reopened or shared.
 
-Conditions format and presets: `docs/conditions.md`, `engine/conditions/`.
+## Decision method
 
-## Where ML is used
+The shipped ranking is deterministic and transparent; it does not use machine learning.
 
-Nowhere in the shipped ranking. A model that predicts whether a project in
-a county meets opposition was trained on FracTracker outcomes and validated
-leave-one-state-out. It failed: its skill came from features that encode
-how the labels are built. The permitting pillar uses three sourced columns
-instead, and every score is transparent. Findings:
-`research/permitting_model.md`. Method: `docs/permitting.md`.
+1. **Gate:** Remove counties that violate non-negotiable facility conditions.
+2. **Normalize:** Convert each metric to a national percentile, respecting whether higher or lower values are better.
+3. **Aggregate:** Average available metrics into eight pillar scores.
+4. **Rank:** Calculate a weighted composite using the selected preset or user-adjusted weights.
+5. **Protect against hidden weaknesses:** Place counties below the preset's pillar floor behind counties that clear it.
+6. **Test stability:** Draw 2,000 weight vectors from a Dirichlet distribution centered on the stated weights and rerank the eligible counties.
 
-## Plan
+The weights are declared business preferences rather than fitted coefficients. The repository also evaluates equal weights, uniformly random weights, monetized 25-year cost, CRITIC, entropy, revealed preference, and a cross-method consensus. See [Pillar weighting: methods and results](docs/weighting.md).
 
-Build procedure, roles, phases, and cut list: `docs/plan.md`.
+### Presets
 
-## Repo
+| Preset | Intended decision | Key emphasis |
+| --- | --- | --- |
+| Balanced | Default 2029 siting screen | Long-term feasibility and economic viability |
+| Speed to power | Developer targeting 2028 | Grid readiness, permitting, and power cost |
+| Sustainability first | Hyperscaler with 24/7 clean-energy and water goals | Energy and carbon, water, stricter gates, and the 2050 horizon |
 
+The 2050 view is a scenario stress test, not a complete forecast. It replaces present-day cooling-degree days, extreme-heat days, and water stress with CMRA and WRI Aqueduct mid-century projections. Other inputs remain at their current values.
+
+## Architecture
+
+```text
+Public data sources
+        |
+        v
+Python geospatial ETL  -->  county_features.parquet + manifest
+        |                              |
+        v                              v
+Python reference engine       browser data export
+        |                              |
+        v                              v
+results/*.csv              React + TypeScript cockpit
+                                      |
+                                      v
+                         in-browser ranking and explanation
 ```
-docs/             plan.md, schema.md, conditions.md, permitting.md
-engine/           pillars.yaml, conditions/ presets, engine code
-etl/              data adapters and scripts
-research/         data inventory, source verification, label notes
-data/raw/         downloads (gitignored)
-data/processed/   county table, labels, lookup tables
-app/              Streamlit UI
-```
 
-## Run
+The production cockpit is a static React application. It does not require a running API server: the Python pipeline prepares the county data, and a parity-tested TypeScript implementation reruns the ranking in the browser.
+
+## Technology
+
+| Layer | Tools |
+| --- | --- |
+| Frontend | React, TypeScript, Vite, D3 Geo, TopoJSON, custom CSS |
+| Decision engine | Python, NumPy, pandas, PyYAML; TypeScript browser port |
+| Geospatial ETL | GeoPandas, Shapely, Rasterio, rasterstats, PyArrow |
+| Analytical prototype | Streamlit, Plotly |
+| Testing | pytest, Vitest, Playwright, Python/TypeScript parity tests |
+| Data formats | Parquet, CSV, JSON, GeoJSON, TopoJSON, YAML |
+
+## Run the React cockpit
+
+Requirements: Node.js and npm.
 
 ```bash
-pip install -r requirements.txt
-python etl/fetch_fractracker.py
-python etl/build_seed_labels.py
-python -m etl.build_features   # downloads to data/raw/, writes the county table and manifest
+cd app/cockpit
+npm ci
+npm run dev
 ```
 
-`build_features` caches every download. Pass `--no-fetch` to rebuild from
-`data/raw/` without network calls. Delete a file under `data/raw/` to refetch it.
+Open [http://127.0.0.1:5173/?preset=balanced](http://127.0.0.1:5173/?preset=balanced). The committed `engine-export.json` and county geometry are enough to run the final hackathon build.
 
-The build also writes `county_features_quality_report.json` (validation
-checks and column profiles) and `brownfield_sites.parquet` (gitignored). The
-BLS LAUS host refuses requests without a contact address, so set
-`BLS_CONTACT_EMAIL=you@example.com` before the first online build. Cached
-files need nothing.
+Build and test the frontend:
 
-The committed county table and `results/` are frozen hackathon artifacts.
-A rebuild is semantically reproducible but not always byte-identical, and
-it can swap tied counties outside the leading results. Reproduce exact
-rankings from the committed table. See "Frozen artifacts and
-reproducibility" in `docs/schema.md`.
+```bash
+cd app/cockpit
+npm run typecheck
+npm test
+npm run build
+npm run e2e
+```
 
-Run the app with `streamlit run app/app.py`. After a county's ranking detail,
-the app shows **Industrial reuse and community transition**. This unscored,
-post-ranking screening covers economic transition, industrial reuse,
-infrastructure context, and EPA brownfield properties, and offers a
-downloadable screening brief. The property table needs
-`data/processed/brownfield_sites.parquet`, which the ETL generates and git
-ignores. Without it, the app explains that and still shows county totals
-from the committed table. See `docs/industrial_reuse.md` and the Boone
-County walkthrough in `docs/demo_script.md`.
+## Run the Python engine
 
-## Data notes
+Requirements: Python 3 and a virtual environment.
 
-- Source URLs, formats, and county joins: `research/data_inventory.md`.
-- FEMA NRI v1.20 renamed riverine flooding to inland flooding (`IFLD_*`).
-- Climate projections come from CMRA and are CMIP5 LOCA, not CMIP6.
-- Opposition labels: `research/opposition_labels.md`. Values ending in `?`
-  are inferred, not verified.
-- FracTracker Alliance data is free for non-commercial use with credit.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+python -m engine rank \
+  --conditions engine/conditions/balanced.yaml \
+  --features data/processed/county_features.parquet \
+  --out results/balanced.csv
+
+pytest -q
+```
+
+The original Streamlit analytical interface remains available:
+
+```bash
+streamlit run app/app.py
+```
+
+## Rebuild the data export
+
+The repository includes the frozen data and results used for the demo. To rebuild from source data:
+
+```bash
+source .venv/bin/activate
+export BLS_CONTACT_EMAIL=you@example.com
+python -m etl.build_features
+
+cd app/cockpit
+npm run data
+```
+
+`etl.build_features` caches downloads under `data/raw/`, writes the processed county table and quality report, and records provenance in `data/processed/county_features.manifest.json`. A new source download should be semantically reproducible, but it may not be byte-identical to the frozen hackathon artifact.
+
+Whenever the Python engine, its presets, or the feature table changes, regenerate the browser export and run the parity suite before publishing the cockpit.
+
+## Data foundations
+
+The county table combines about 20 documented public sources, including:
+
+- EPA eGRID and Green Book
+- EIA electricity prices and generating-plant capacity
+- LBNL Queued Up interconnection data
+- FEMA National Risk Index
+- WRI Aqueduct 4.0
+- Climate Mapping for Resilience and Adaptation (CMRA)
+- FCC Broadband Data Collection
+- Census, BLS, and BEA demographic and workforce data
+- USGS PAD-US and NLCD land-cover data
+- NREL wind-resource data
+- U.S. Drought Monitor
+- FracTracker Alliance data-center and moratorium records
+
+Source URLs, formats, joins, coverage, and known caveats are recorded in [research/data_inventory.md](research/data_inventory.md) and [docs/schema.md](docs/schema.md).
+
+## Repository map
+
+```text
+app/cockpit/       React production cockpit and browser-side engine
+app/app.py         Original Streamlit analytical interface
+engine/            Python ranking engine, pillar definitions, and presets
+etl/               Source adapters, geospatial joins, and quality checks
+data/processed/    Frozen county table, manifest, and lookup tables
+results/           Reproducible preset rankings
+research/          Source verification, assumptions, and risk research
+docs/              Methodology, demo script, figures, and decision logs
+tests/             Python engine, ETL, application, and regression tests
+```
+
+## Important limitations
+
+- This is a national county screen, not a parcel recommendation or an interconnection study.
+- State electricity prices and grid-subregion emissions are broad proxies; a new 300 MW load would negotiate a project-specific tariff and supply agreement.
+- County averages can hide parcel-level land, cultural-resource, transmission, water, and permitting constraints.
+- Default weights and several thresholds are stated value judgments. The controls and stability analysis expose their effect rather than presenting them as objective truth.
+- The 2050 switch projects selected climate and water variables only; it does not project future prices, population, permitting policy, fiber, or generation infrastructure.
+- Missing values never exclude a county by themselves. The engine reports coverage and renormalizes over available information.
+
+The project explicitly tested a permitting-opposition classifier and rejected it after validation showed that its apparent performance came from label construction. The final ranking uses sourced, inspectable columns instead. See [research/permitting_model.md](research/permitting_model.md).
+
+## Further reading
+
+- [Conditions, presets, gates, and robustness](docs/conditions.md)
+- [Data contract and provenance](docs/schema.md)
+- [Weighting methods and sensitivity analysis](docs/weighting.md)
+- [Sustainability-impact assumptions](research/impact.md)
+- [Grant County implementation plan](research/implementation.md)
+- [Sensitive-land review](research/sensitive_land.md)
+- [Demo walkthrough](docs/demo_script.md)
+
+FracTracker Alliance data is used with attribution and is available for non-commercial use. Review each upstream source's terms before commercial reuse.
